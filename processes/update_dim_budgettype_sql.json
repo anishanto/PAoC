@@ -1,0 +1,46 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_budgettype_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_budgettype_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"kM>rmKaYnESlPk700nmzLa5fl9]L@?oj4_UCnA<<\\C]c5o]ye3YQf\\GpV[cSf_b4Ydf2AgCWjdl09rMr<AP[[F:r:kmYQ^2iVhCD]3A[PX@fnxr9y]O[p=1I<9J]ZXP6rDfNA\\;:vhRce?PXPVl>4c5<zu0l^ZGnFf<9LomNpUzcqCIc[5vgTV;\\L`1^auvd:FdssRj",
+		"query":"SELECT 1",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pEmail",
+			"Prompt":"Enter Email Address that should recieve the issue logs",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"bDebug",
+			"Prompt":"1 to generage log files",
+			"Value":1,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"BUType",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

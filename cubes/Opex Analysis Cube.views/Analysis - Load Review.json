@@ -1,0 +1,149 @@
+{
+	"@type":"NativeView",
+	"Name":"Analysis - Load Review",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('Total Months')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M01')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M02')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M03')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M04')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M05')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M06')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M07')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M08')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M09')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M10')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M11')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M12')"
+					}
+				]
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Subsets('VersionsDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('All Hierarchies CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('All GL Account CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency')/Hierarchies('Currency')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency')/Hierarchies('Currency')/Elements('All Currency')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Analysis Measures')/Hierarchies('Analysis Measures')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Analysis Measures')/Hierarchies('Analysis Measures')/Elements('Total Amount')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Elements('No Scale')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}

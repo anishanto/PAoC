@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TenureTypeExpanded",
+	"Expression":"{TM1SUBSETALL( [Tenure Type] )}"
+}

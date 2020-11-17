@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zDimMgmtUnassigned",
+	"Expression":"{TM1SORT( {FILTER( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}, [GL_Accounts].[UnCount] = \"1\")}, ASC)}"
+}

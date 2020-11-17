@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zDimMgmtUnassigned",
+	"Expression":"{TM1FILTERBYLEVEL( {FILTER( {TM1SubsetBasis()}, [Tenure ID].[UnCount] = \"1\")}, 0)}"
+}

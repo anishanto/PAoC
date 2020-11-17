@@ -1,0 +1,236 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+
+TenureID=pTenureID;
+Version=pVersion;
+Currency=pCurrency;
+Company=pCompany;
+SubAccount=pSubAccount;
+GLAccount=pGLAccount;
+BusUnits=pBusUnits;
+
+TenureDim='Tenure ID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+PortfolioAssumptionsCube='Leases Portfolio Assumptions';
+LeaseCube='Leases Cube';
+
+## Set up view for zeroing at Data ##
+CubeName=PortfolioAssumptionsCube;
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+ViewNameTarget2 =  'VE-' | CubeName | '-Load' ;
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Years', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions Measures', ViewNameTarget);
+
+# Create views and subsets to Zero out
+SubsetCreate ('Versions_PM', ViewNameTarget);
+SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, Version, 1);
+
+#Create Fiscal Years
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Years] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create Portfolio Assumptions
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Portfolio Assumptions] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create Portfolio Assumptions Measures
+SubsetCreate('Portfolio assumptions Measures', ViewNameTarget);
+SubsetElementInsert('Portfolio Assumptions Measures', ViewNameTarget, 'Budget Region Validation',0);
+SubsetElementInsert('Portfolio Assumptions Measures', ViewNameTarget, 'Budget Building Type Validation',0);
+SubsetElementInsert('Portfolio Assumptions Measures', ViewNameTarget, 'Cost Category Type Validation',0);
+SubsetElementInsert('Portfolio Assumptions Measures', ViewNameTarget, 'Lease Type Validation',0);
+SubsetElementInsert('Portfolio Assumptions Measures', ViewNameTarget, 'Tenure Type Validation',0);
+SubsetElementInsert('Portfolio Assumptions Measures', ViewNameTarget, 'Event Type Validation',0);
+
+#Create View
+ViewCreate( CubeName, ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Fiscal Years', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Portfolio Assumptions', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Portfolio Assumptions Measures', ViewNameTarget);
+
+CubeName=PortfolioAssumptionsCube;
+ViewZeroOut(CubeName, ViewNameTarget);
+
+## Attr by Tenure ##
+
+BudgetRegion=AttrS(TenureDim, TenureID, 'Budget Region');
+BudgetBuildingType=AttrS(TenureDim, TenureID, 'BUType');
+CostCategoryType=CellGetS('Leases Cube', Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BUsUnits, TenureID, 'CostCategoryType');
+CostEndDate=CellGetS('Leases Cube', Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BUsUnits, TenureID, 'CostEndDate');
+LeaseEndDate=AttrS(TenureDim, TenureID, 'LeaseEndDate');
+LeaseStartDAte=AttrS(TenureDim, TenureID, 'LeaseStartDate');
+TenureType=AttrS(TenureDim, TenureID, 'TenureType');
+LeaseType=AttrS(TenureDim, TenureID, 'LeaseType');
+EventType=AttrS(TenureDim, TenureID, 'EventType');
+
+## Loop by Portfolio Assumption (& Year) ## _A sufix for assumtions
+
+sDimYear = 'Fiscal Month Year'; 
+sSubYear = 'FiscalYear';
+nMaxYear = SubsetGetSize(sDimYear,sSubYear);
+nCtrYear = 1;
+WHILE(nCtrYear <= nMaxYear);
+
+	sYear=SubsetGetElementName(sDimYear,sSubYear,nCtrYear); 
+	
+	IF(pVersion@='Forecast');
+		sYearCalendar=AttrS(sDimYear, sYear, 'YearCalendarF');
+		sYearStartYear=StringtoNumber(AttrS(sDimYear,'M01'|sYear, 'YearCalendarF'));
+		sYearEndYear=StringtoNumber(AttrS(sDimYear, 'M12'|sYear, 'YearCalendarF'));
+	ELSE;
+		sYearCalendar=AttrS(sDimYear, sYear, 'YearCalendar');
+		sYearStartYear=StringtoNumber(AttrS(sDimYear,'M01'|sYear, 'YearCalendar'));
+		sYearEndYear=StringtoNumber(AttrS(sDimYear, 'M12'|sYear, 'YearCalendar'));
+	ENDIF;
+
+	sLeaseStartYear=StringtoNumber(Subst(LeaseStartDate, 1, 4 ));
+	sLeaseEndYear=StringtoNumber(Subst(LeaseEndDate, 1, 4));
+
+	IF(sLeaseStartYear <= sYearStartYear & sLeaseEndYear>=sYearEndYear);
+		
+		sDim_PA = 'Portfolio Assumptions'; 
+		sSub_PA = 'ValuationPortfolio';
+		nMax_PA = SubsetGetSize(sDim_PA,sSub_PA);
+		nCtr_PA = 1;
+		WHILE(nCtr_PA <= nMax_PA);
+
+			PortfolioAssumption = SubsetGetElementName(sDim_PA,sSub_PA,nCtr_PA);
+
+			BudgetRegion_A=CellGetS(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Budget Region');
+			IF (BudgetRegion_A@='All' % BUdgetRegion_A@=BudgetRegion);
+				CellPutN(1, PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Budget Region Validation');
+			ENDIF;
+			BudgetBuildingType_A=CellGetS(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Budget Building Type');
+			IF (BudgetBuildingType_A@='All' % BudgetBuildingType_A@=BudgetBuildingType);
+				CellPutN(1, PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Budget Building Type Validation');
+			ENDIF;
+			CostCategoryType_A=CellGetS(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Cost Category Type');
+			IF (CostCategoryType_A@='All' % CostCategoryType_A@=CostCategoryType);
+				CellPutN(1, PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Cost Category Type Validation');
+			ENDIF;
+			LeaseType_A=CellGetS(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Lease Type');
+			IF (LeaseType_A@='All' % LeaseType_A@=LeaseType);
+				CellPutN(1, PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Lease Type Validation');
+			ENDIF;
+			TenureType_A=CellGetS(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Tenure Type');
+			IF (TenureType_A@='All' % TenureType_A@=TenureType);
+				CellPutN(1, PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Tenure Type Validation');
+			ENDIF;
+			EventType_A=CellGetS(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Event Type');
+			IF (EventType_A@='All' % EventType_A@=EventType);
+				CellPutN(1, PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Event Type Validation');
+			ENDIF;
+			## Final Evaluation ##
+			Valuation=CellGetN(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Total Validation');
+			IF(Valuation=6);
+				nMax_PA=nCtr_PA;
+				PortfolioAssumption=PortfolioAssumption;
+			ELSE;
+				PortfolioAssumption='';
+			ENDIF;
+		
+			nCtr_PA = nCtr_PA + 1;
+		END;
+	  
+		## Put into Cube ##
+
+		IF(Valuation<>6);
+			IF(EventType@='Rent Review (CPI/Indexation)');
+				PortfolioAssumption='Default CPI';
+			ELSEIF(EventType@='Rent Review (Negotiation)');
+				PortfolioAssumption='Default Market';
+			ENDIF;
+		ENDIF;
+
+		IF(PortfolioAssumption@<>'');
+			EventYEar=sYearCalendar;
+			EventDate=EventYear|SubSt(LeaseStartDate, 5, 6); 
+			EventMonthName=AttrS('Calendar Months', Subst(LeaseStartDate,6,2), 'MonthName');
+
+			Start_Month= StringtoNumber(DimensionElementPrincipalName('Calendar Months', AttrS('Fiscal Months', 'M01', 'Name')));
+			sLease_Start_Month=StringtoNumber(Subst(LeaseStartDate, 6, 2 ));
+
+			IF(Start_Month <= sLease_Start_Month & Start_Month <>1);
+				EventYear=NumbertoString( StringtoNumber(EventYear)-1);
+				EventDate=Numbertostring(StringtoNumber(EventYear))|SubSt(LeaseStartDate, 5, 6); 
+
+			ENDIF;
+
+			nLeaseStartYear=StringtoNumber(SubSt(LeaseStartDate,1,4));
+			nEventYear=StringtoNumber(SubSt(EventDate,1,4));
+			nLeaseEndYear=StringtoNumber(SubSt(LeaseEndDate,1,4));
+			nLeaseEndMonth=StringtoNumber(SubSt(LeaseEndDate,6,2));
+			nEventMonth=StringtoNumber(SubSt(EventDate,6,2));
+			IF(pVersion@='Forecast');
+				EventMapMonth_Text=EventMonthName|' '|EventYear|'F';
+				LeaseStartMapMonth=DimensionElementPrincipalName(sDimYear, EventMonthName|' '|Subst(LeaseStartDate,1,4)|'F');
+				LeaseEndMapMonth=DimensionElementPrincipalName(sDimYear, AttrS('Calendar Months',SubSt(LeaseEndDate,6,2),'MonthName')|' '|Subst(LeaseEndDate,1,4)|'F');
+			ELSE;
+				EventMapMonth_Text=EventMonthName|' '|EventYear;
+				LeaseStartMapMonth=DimensionElementPrincipalName(sDimYear, EventMonthName|' '|Subst(LeaseStartDate,1,4));
+				LeaseEndMapMonth=DimensionElementPrincipalName(sDimYear, AttrS('Calendar Months',SubSt(LeaseEndDate,6,2),'MonthName')|' '|Subst(LeaseEndDate,1,4));
+				
+			ENDIF;
+			EventMapMonth=DimensionElementPrincipalName(sDimYear,EventMapMonth_Text);
+
+			IF(LeaseStartMapMonth@=EventMapMonth % LeaseEndMapMonth@=EventMapMonth);
+
+			ELSEIF(dimix(sDimYear,EventMapMonth)<>0 & (nLeaseStartYear <= nEventYear & (nLeaseEndYear>nEventYear % (nLeaseEndYear=nEventYear & nLeaseEndMonth >nEventMonth)))
+				);
+				CellPutS(PortfolioAssumption, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Assumption Category');  
+				CellPutS(EventType, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Event Type');
+				CellPutS(EventDate, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Event Dates');
+				Rate=CellGetN(PortfolioAssumptionsCube, Version, sYearCalendar, PortfolioAssumption, 'Valid Rate');
+				CellPutS(NUmbertostring(Rate*100)|'%', LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Assumption Rate');
+				CellPutN(Rate, LeaseCube, Version, Currency, EventMapMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			ENDIF;
+
+		ENDIF;
+
+	ENDIF;
+
+	nCtrYear = nCtrYear+1;
+
+	
+END;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+CubeName=PortfolioAssumptionsCube;
+ViewZeroOut(CubeName, ViewNameTarget);
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Years', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions Measures', ViewNameTarget);
+#endregion

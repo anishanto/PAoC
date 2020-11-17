@@ -1,0 +1,34 @@
+{
+	"@type":"Process",
+	"Name":"Utility_SwapGroups",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Utility_SwapGroups.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ASCII",
+		"asciiDecimalSeparator":".",
+		"asciiDelimiterChar":",",
+		"asciiDelimiterType":"Character",
+		"asciiHeaderRecords":0,
+		"asciiQuoteCharacter":"\"",
+		"asciiThousandSeparator":",",
+		"dataSourceNameForClient":"\\\\data\\s\\prod\\tm1\\groups.txt",
+		"dataSourceNameForServer":"\\\\data\\s\\prod\\tm1\\groups.txt"
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"vGroup",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

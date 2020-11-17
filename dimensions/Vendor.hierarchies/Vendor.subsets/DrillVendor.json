@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"DrillVendor",
+	"Expression":"EXCEPT({TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Vendor] )} ) }, 0)}, ASC)}, {[Vendor].[All Vendor and Other]})"
+}

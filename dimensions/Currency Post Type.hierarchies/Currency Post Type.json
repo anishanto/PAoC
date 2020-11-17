@@ -1,0 +1,12 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Currency Post Type",
+	"Elements":
+	[
+		{
+			"Name":"Opex",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}

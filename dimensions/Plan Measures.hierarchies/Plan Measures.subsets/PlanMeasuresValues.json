@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"PlanMeasuresValues",
+	"Expression":"{TM1SORT( {FILTER( {TM1SUBSETALL( [Plan Measures] )}, [Plan Measures].[MeasureType] = \"Value\")}, ASC)}+ {[Plan Measures].[Total Amount]}"
+}

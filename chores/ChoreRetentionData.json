@@ -1,0 +1,25 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreRetentionData",
+	"StartTime":"2019-03-02T00:00Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P365DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"pCube",
+					"Value":""
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('update_data_delete_history_main')"
+			}
+		}
+	]
+}

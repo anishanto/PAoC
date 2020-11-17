@@ -1,0 +1,47 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Tenure Type",
+	"Elements":
+	[
+		{
+			"Name":"All TenureType",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"All",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Main Lease",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Sub Lease",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All TenureType",
+			"ComponentName":"All",
+			"Weight":0
+		},
+		{
+			"ParentName":"All TenureType",
+			"ComponentName":"Main Lease",
+			"Weight":1
+		},
+		{
+			"ParentName":"All TenureType",
+			"ComponentName":"Sub Lease",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Tenure Type.subsets/Level0.json",
+		"Tenure Type.subsets/TenureTypeDetail.json",
+		"Tenure Type.subsets/TenureTypeExpanded.json"
+	]
+}

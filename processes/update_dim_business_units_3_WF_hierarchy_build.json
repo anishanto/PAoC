@@ -1,0 +1,17 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_business_units_3_WF_hierarchy_build",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_business_units_3_WF_hierarchy_build.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"IgnoredInputVarName=BusUnits\fVarType=32\fColType=1165\f"
+	],
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

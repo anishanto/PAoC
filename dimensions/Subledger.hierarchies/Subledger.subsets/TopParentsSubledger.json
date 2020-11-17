@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TopParentsSubledger",
+	"Expression":"{{TM1SORT( {[Subledger].[SH1],[Subledger].[AH1],[Subledger].[AH2],[Subledger].[AH3],[Subledger].[AHIT]}, ASC)},[Subledger].[All Subledger and Other]},"
+}

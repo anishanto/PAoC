@@ -1,0 +1,69 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_vendor_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_vendor_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarName=CON\fVarType=32\fColType=827\fVarFormula=CON='SH1';:\fVarFormulaDestination=BOTH\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"kiyUJ:DO]?alO_@z7Nec>mgvreW?RDc1Y_HGtF7?g3RD9cMaNYw@dT8?mF8T46b4;P8>qllfnq:kt@aph;G4R[Ak4GgOdNx:u9TXJpxm9kLv:msriWXePiDy?6CUDss5C31g>YY<GLQAa>F2k4QNOFDd0LJI^1;WQTjL^<aEeo7vdA>Jwf=Kp<aS7e3Mhl5qD\\VJ^`;V",
+		"query":"SELECT 1,2,3",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pEmail",
+			"Prompt":"Enter Email Address that should recieve the issue logs",
+			"Value":"TM1Admin@am.jll.com",
+			"Type":"String"
+		},
+		{
+			"Name":"bDebug",
+			"Prompt":"1 to generage log files",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pCompany",
+			"Prompt":"Base Vendor List on Company",
+			"Value":"All Companies",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"GLCO",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"GLAN8",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"ABDC",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

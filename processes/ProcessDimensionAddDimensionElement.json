@@ -1,0 +1,63 @@
+{
+	"@type":"Process",
+	"Name":"ProcessDimensionAddDimensionElement",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessDimensionAddDimensionElement.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pUser",
+			"Prompt":"User Name?",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pValidationFlag",
+			"Prompt":"Validation Flag?",
+			"Value":"TRUE",
+			"Type":"String"
+		},
+		{
+			"Name":"pElement",
+			"Prompt":"Element Name",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pElementAlias",
+			"Prompt":"Element Alias",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pElementParent",
+			"Prompt":"Element Parent",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimension",
+			"Prompt":"Dimension",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pNumericValidation",
+			"Prompt":"Number of digits",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pElementParentAH",
+			"Prompt":"Element Parent AH",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

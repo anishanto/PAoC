@@ -1,0 +1,1015 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#############################################################Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cFileName = 'BusinessUnit_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cDimName = 'BusUnits';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+pSH1 = 1;
+pAH1 = 1;
+
+
+###########################################################Create Dimension if it doesn't exist
+IF(DimensionExists(cDimName) = 0);
+    DImensionCreate(cDimName);
+EndIf;
+
+##############################################################Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+######################################################################Standard Attributes
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            BUID                      : '| BUID);
+   AsciiOutput( sDebugFile, '            Name                     : '| Name);
+   AsciiOutput( sDebugFile, '            SquareFeet            : '| SquareFeet);
+   AsciiOutput( sDebugFile, '            FacStatus               : '| FacStatus);
+   AsciiOutput( sDebugFile, '            FacType                  : '| FacType);
+   AsciiOutput( sDebugFile, '            FacMgr                     : '| FacMgr);
+   AsciiOutput( sDebugFile, '            FacSrMgr                  : '|FacSrMgr);
+   AsciiOutput( sDebugFile, '            FacRegMgr              : '| FacRegMgr);
+   AsciiOutput( sDebugFile, '            SH1Parent1            : '| SH1Parent1);
+   AsciiOutput( sDebugFile, '            SH1Parent2            : '| SH1Parent2);
+   AsciiOutput( sDebugFile, '            SH1Parent3            : '| SH1Parent3);
+   AsciiOutput( sDebugFile, '            SH1Parent4            : '| SH1Parent4);
+   AsciiOutput( sDebugFile, '            SH1Parent5            : '| SH1Parent5);
+   AsciiOutput( sDebugFile, '            HierarchyStatus    : '| HierarchyStatus);
+   AsciiOutput( sDebugFile, '            AH1Parent1            : '| AH1Parent1);
+   AsciiOutput( sDebugFile, '            AH1Parent2            : '| AH1Parent2);
+   AsciiOutput( sDebugFile, '            AH1Parent3            : '| AH1Parent3);
+   AsciiOutput( sDebugFile, '            AH1Parent4            : '| AH1Parent4);
+   AsciiOutput( sDebugFile, '            AH1Parent5            : '| AH1Parent5);
+   AsciiOutput( sDebugFile, '            AH2Parent1            : '| AH2Parent1);
+   AsciiOutput( sDebugFile, '            AH2Parent2            : '| AH2Parent2);
+   AsciiOutput( sDebugFile, '            AH2Parent3            : '| AH2Parent3);
+   AsciiOutput( sDebugFile, '            AH2Parent4            : '| AH2Parent4);
+   AsciiOutput( sDebugFile, '            AH2Parent5            : '| AH2Parent5);
+   AsciiOutput( sDebugFile, '            AH3Parent1            : '| AH3Parent1);
+   AsciiOutput( sDebugFile, '            AH3Parent2            : '| AH3Parent2);
+   AsciiOutput( sDebugFile, '            AH3Parent3            : '| AH3Parent3);
+   AsciiOutput( sDebugFile, '            AH3Parent4            : '| AH3Parent4);
+   AsciiOutput( sDebugFile, '            AH3Parent5            : '| AH3Parent5);
+   AsciiOutput( sDebugFile, '            AH4Parent1            : '| AH4Parent1);
+   AsciiOutput( sDebugFile, '            AH4Parent2            : '| AH4Parent2);
+   AsciiOutput( sDebugFile, '            AH4Parent3            : '| AH4Parent3);
+   AsciiOutput( sDebugFile, '            AH4Parent4            : '| AH4Parent4);
+   AsciiOutput( sDebugFile, '            AH4Parent5            : '| AH4Parent5);
+   AsciiOutput( sDebugFile, '            AH5Parent1            : '| AH5Parent1);
+   AsciiOutput( sDebugFile, '            AH5Parent2            : '| AH5Parent2);
+   AsciiOutput( sDebugFile, '            AH5Parent3            : '| AH5Parent3);
+   AsciiOutput( sDebugFile, '            AH5Parent4            : '| AH5Parent4);
+   AsciiOutput( sDebugFile, '            AH5Parent5            : '| AH5Parent5);
+   AsciiOutput( sDebugFile, '            AH6Parent1            : '| AH6Parent1);
+   AsciiOutput( sDebugFile, '            AH6Parent2            : '| AH6Parent2);
+   AsciiOutput( sDebugFile, '            AH6Parent3            : '| AH6Parent3);
+   AsciiOutput( sDebugFile, '            AH6Parent4            : '| AH6Parent4);
+   AsciiOutput( sDebugFile, '            AH6Parent5            : '| AH6Parent5);
+   AsciiOutput( sDebugFile, '            AH7Parent1            : '| AH7Parent1);
+   AsciiOutput( sDebugFile, '            AH7Parent2            : '| AH7Parent2);
+   AsciiOutput( sDebugFile, '            AH7Parent3            : '| AH7Parent3);
+   AsciiOutput( sDebugFile, '            AH7Parent4            : '| AH7Parent4);
+   AsciiOutput( sDebugFile, '            AH7Parent5            : '| AH7Parent5);
+   AsciiOutput( sDebugFile, '            AH8Parent1            : '| AH8Parent1);
+   AsciiOutput( sDebugFile, '            AH8Parent2            : '| AH8Parent2);
+   AsciiOutput( sDebugFile, '            AH8Parent3            : '| AH8Parent3);
+   AsciiOutput( sDebugFile, '            AH8Parent4            : '| AH8Parent4);
+   AsciiOutput( sDebugFile, '            AH8Parent5            : '| AH8Parent5);
+   AsciiOutput( sDebugFile, '            AH9Parent1            : '| AH9Parent1);
+   AsciiOutput( sDebugFile, '            AH9Parent2            : '| AH9Parent2);
+   AsciiOutput( sDebugFile, '            AH9Parent3            : '| AH9Parent3);
+   AsciiOutput( sDebugFile, '            AH9Parent4            : '| AH9Parent4);
+   AsciiOutput( sDebugFile, '            AH9Parent5            : '| AH9Parent5);
+   AsciiOutput( sDebugFile, '            AH10Parent1            : '| AH10Parent1);
+   AsciiOutput( sDebugFile, '            AH10Parent2            : '| AH10Parent2);
+   AsciiOutput( sDebugFile, '            AH10Parent3            : '| AH10Parent3);
+   AsciiOutput( sDebugFile, '            AH10Parent4            : '| AH10Parent4);
+   AsciiOutput( sDebugFile, '            AH10Parent5            : '| AH10Parent5);
+   AsciiOutput( sDebugFile, '            AL1Parent1            : '| AL1Parent1);
+   AsciiOutput( sDebugFile, '            AL1Parent2            : '| AL1Parent2);
+   AsciiOutput( sDebugFile, '            AL1Parent3            : '| AL1Parent3);
+   AsciiOutput( sDebugFile, '            AL1Parent4            : '| AL1Parent4);
+   AsciiOutput( sDebugFile, '            AL1Parent5            : '| AL1Parent5);
+   AsciiOutput( sDebugFile, '            AO2Parent1            : '| AO2Parent1);
+   AsciiOutput( sDebugFile, '            AO2Parent2            : '| AO2Parent2);
+   AsciiOutput( sDebugFile, '            AO2Parent3            : '| AO2Parent3);
+   AsciiOutput( sDebugFile, '            AO2Parent4            : '| AO2Parent4);
+   AsciiOutput( sDebugFile, '            AO2Parent5            : '| AO2Parent5);
+   AsciiOutput( sDebugFile, '            AO3Parent1            : '| AO3Parent1);
+   AsciiOutput( sDebugFile, '            AO3Parent2            : '| AO3Parent2);
+   AsciiOutput( sDebugFile, '            AO3Parent3            : '| AO3Parent3);
+   AsciiOutput( sDebugFile, '            AO3Parent4            : '| AO3Parent4);
+   AsciiOutput( sDebugFile, '            AO3Parent5            : '| AO3Parent5);
+   #AsciiOutput( sDebugFile, '            AlternateE1BU            : '| AlternateE1BU);
+   #AsciiOutput( sDebugFile, '            PropertyID            : '| PropertyID);
+   #AsciiOutput( sDebugFile, '            PropertyName            : '| PropertyName);
+   #AsciiOutput( sDebugFile, '            LeasedOrOwned            : '| LeasedOrOwned);
+   #AsciiOutput( sDebugFile, '            OccupiedOrVacant            : '| OccupiedOrVacant);
+   #AsciiOutput( sDebugFile, '            PropertySubType            : '| PropertySubType);
+   #AsciiOutput( sDebugFile, '            PropertyType            : '| PropertyType);
+   #AsciiOutput( sDebugFile, '            PropertyStatus            : '| PropertyStatus);
+   #AsciiOutput( sDebugFile, '            PropertySize            : '| PropertySize);
+   #AsciiOutput( sDebugFile, '            Campus            : '| Campus);
+   #AsciiOutput( sDebugFile, '            City            : '| City);
+   #AsciiOutput( sDebugFile, '            Post            : '| Post);
+   #AsciiOutput( sDebugFile, '            Country            : '| Country);
+   #AsciiOutput( sDebugFile, '            FMHub            : '| FMHub);
+  #AsciiOutput( sDebugFile, '            LastUpdate            : '| LastUpdate);
+  #AsciiOutput( sDebugFile, '            SecurityGrp            : '| SecurityGrp);
+
+
+ENDIF;
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check to make sure file path exists
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+
+
+##############################################################Check if Dimension Constant Exists
+   IF( Trim( cDimName ) @=' ');
+     nErrors = 1;
+     sMessage = 'No dimension named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+####################Build Dimension if it doesn't exist
+
+IF( DIMENSIONEXISTS(cDimName) = 0);
+     DIMENSIONCREATE(cDimName);
+EndIF;
+
+
+####################Delete All Elements
+
+IF( pDeleteAllElements = 1);
+    DIMENSIONDELETEALLELEMENTS(cDimName);
+Endif;
+
+
+#############################Delete All Attributes If Deleting All Elements
+
+IF( pDeleteAllElements = 1);
+######################################################################Standard Attributes
+   #ATTRDELETE(cDimName,'Name');
+   ATTRDELETE(cDimName,'Company');
+   ATTRDELETE(cDimName,'SquareFeet');
+   ATTRDELETE(cDimName,'FacStatus');
+   ATTRDELETE(cDimName,'FacType');
+   ATTRDELETE(cDimName,'FacMgr');
+   ATTRDELETE(cDimName,'FacSrMgr');
+   ATTRDELETE(cDimName,'FacRegMgr');
+   ATTRDELETE(cDimName,'SH1Parent1');
+   ATTRDELETE(cDimName,'SH1Parent2');
+   ATTRDELETE(cDimName,'SH1Parent3');
+   ATTRDELETE(cDimName,'SH1Parent4');
+   ATTRDELETE(cDimName,'SH1Parent5');
+   ATTRDELETE(cDimName,'HierarchyStatus');
+   ATTRDELETE(cDimName,'AH1Parent1');
+   ATTRDELETE(cDimName,'AH1Parent2');
+   ATTRDELETE(cDimName,'AH1Parent3');
+   ATTRDELETE(cDimName,'AH1Parent4');
+   ATTRDELETE(cDimName,'AH1Parent5');
+   ATTRDELETE(cDimName,'AH2Parent1');
+   ATTRDELETE(cDimName,'AH2Parent2');
+   ATTRDELETE(cDimName,'AH2Parent3');
+   ATTRDELETE(cDimName,'AH2Parent4');
+   ATTRDELETE(cDimName,'AH2Parent5');
+   ATTRDELETE(cDimName,'AH3Parent1');
+   ATTRDELETE(cDimName,'AH3Parent2');
+   ATTRDELETE(cDimName,'AH3Parent3');
+   ATTRDELETE(cDimName,'AH3Parent4');
+   ATTRDELETE(cDimName,'AH3Parent5');
+   ATTRDELETE(cDimName,'AH4Parent1');
+   ATTRDELETE(cDimName,'AH4Parent2');
+   ATTRDELETE(cDimName,'AH4Parent3');
+   ATTRDELETE(cDimName,'AH4Parent4');
+   ATTRDELETE(cDimName,'AH4Parent5');
+   ATTRDELETE(cDimName,'AH5Parent1');
+   ATTRDELETE(cDimName,'AH5Parent2');
+   ATTRDELETE(cDimName,'AH5Parent3');
+   ATTRDELETE(cDimName,'AH5Parent4');
+   ATTRDELETE(cDimName,'AH5Parent5');
+   ATTRDELETE(cDimName,'AH6Parent1');
+   ATTRDELETE(cDimName,'AH6Parent2');
+   ATTRDELETE(cDimName,'AH6Parent3');
+   ATTRDELETE(cDimName,'AH6Parent4');
+   ATTRDELETE(cDimName,'AH6Parent5');
+   ATTRDELETE(cDimName,'AH7Parent1');
+   ATTRDELETE(cDimName,'AH7Parent2');
+   ATTRDELETE(cDimName,'AH7Parent3');
+   ATTRDELETE(cDimName,'AH7Parent4');
+   ATTRDELETE(cDimName,'AH7Parent5');
+   ATTRDELETE(cDimName,'AH8Parent1');
+   ATTRDELETE(cDimName,'AH8Parent2');
+   ATTRDELETE(cDimName,'AH8Parent3');
+   ATTRDELETE(cDimName,'AH8Parent4');
+   ATTRDELETE(cDimName,'AH8Parent5');
+   ATTRDELETE(cDimName,'AH9Parent1');
+   ATTRDELETE(cDimName,'AH9Parent2');
+   ATTRDELETE(cDimName,'AH9Parent3');
+   ATTRDELETE(cDimName,'AH9Parent4');
+   ATTRDELETE(cDimName,'AH9Parent5');
+   ATTRDELETE(cDimName,'AH10Parent1');
+   ATTRDELETE(cDimName,'AH10Parent2');
+   ATTRDELETE(cDimName,'AH10Parent3');
+   ATTRDELETE(cDimName,'AH10Parent4');
+   ATTRDELETE(cDimName,'AH10Parent5');
+   ATTRDELETE(cDimName,'AL1Parent1');
+   ATTRDELETE(cDimName,'AL1Parent2');
+   ATTRDELETE(cDimName,'AL1Parent3');
+   ATTRDELETE(cDimName,'AL1Parent4');
+   ATTRDELETE(cDimName,'AL1Parent5');
+   ATTRDELETE(cDimName,'AO2Parent1');
+   ATTRDELETE(cDimName,'AO2Parent2');
+   ATTRDELETE(cDimName,'AO2Parent3');
+   ATTRDELETE(cDimName,'AO2Parent4');
+   ATTRDELETE(cDimName,'AO2Parent5');
+   ATTRDELETE(cDimName,'AO3Parent1');
+   ATTRDELETE(cDimName,'AO3Parent2');
+   ATTRDELETE(cDimName,'AO3Parent3');
+   ATTRDELETE(cDimName,'AO3Parent4');
+   ATTRDELETE(cDimName,'AO4Parent5');
+######################################################################Derived Standard Attributes not in file
+   ATTRDELETE(cDimName,'LastUpdate');
+   ATTRDELETE(cDimName,'SecurityGrp');
+
+
+########################################################################Standard Attributes
+########Newly Added attributes Detail Cube
+  # ATTRDELETE(cDimName,'AlternateE1BU');
+  # ATTRDELETE(cDimName,'PropertyID');
+  # ATTRDELETE(cDimName,'PropertyName');
+  # ATTRDELETE(cDimName,'LeasedOrOwned');
+  # ATTRDELETE(cDimName,'OccupiedOrVacant');
+  #ATTRDELETE(cDimName,'PropertySubType');
+  # ATTRDELETE(cDimName,'PropertyType');
+  # ATTRDELETE(cDimName,'PropertyStatus');
+  # ATTRDELETE(cDimName,'PropertySize');
+  # ATTRDELETE(cDimName,'Campus');
+   #ATTRDELETE(cDimName,'City');
+   #ATTRDELETE(cDimName,'Post');
+   #ATTRDELETE(cDimName,'Country');
+   #ATTRDELETE(cDimName,'FMHub');
+
+
+ENDIF;
+
+############################################################################Insert Base Element Attributes
+IF( DIMIX(cDimName2,'Name')=0);
+   ATTRINSERT(cDimName,'','Name','S');
+EndIf;
+   ATTRINSERT(cDimName,'','Company','S');
+   ATTRINSERT(cDimName,'','SquareFeet','S');
+   ATTRINSERT(cDimName,'','FacStatus','S');
+   ATTRINSERT(cDimName,'','FacType','S');
+   ATTRINSERT(cDimName,'','FacMgr','S');
+   ATTRINSERT(cDimName,'','FacSrMgr','S');
+   ATTRINSERT(cDimName,'','FacRegMgr','S');
+   ATTRINSERT(cDimName,'','HierarchyStatus','S');
+   ATTRINSERT(cDimName,'','DisplayNameCustom','A');
+   ATTRINSERT(cDimName,'','DisplayName','A');
+   ATTRINSERT(cDimName,'','NameCode','A');
+   ATTRINSERT(cDimName,'','CodeName','A');
+
+########################################################################Non Standard Attributes
+ ########Newly Added attributes Detail Cube
+   #ATTRINSERT(cDimName,'','AlternateE1BU','S');
+   #ATTRINSERT(cDimName,'','PropertyID','S');
+   #ATTRINSERT(cDimName,'','PropertyName','S');
+   #ATTRINSERT(cDimName,'','LeasedOrOwned','S');
+   #ATTRINSERT(cDimName,'','OccupiedOrVacant','S');
+   #ATTRINSERT(cDimName,'','PropertySubType','S');
+   #ATTRINSERT(cDimName,'','PropertyType','S');
+   #ATTRINSERT(cDimName,'','PropertyStatus','S');
+   #ATTRINSERT(cDimName,'','PropertySize','S');
+   #ATTRINSERT(cDimName,'','Campus','S');
+   #ATTRINSERT(cDimName,'','City','S');
+   #ATTRINSERT(cDimName,'','Post','S');
+   #ATTRINSERT(cDimName,'','Country','S');
+   #ATTRINSERT(cDimName,'','FMHub','S');
+
+
+   ATTRINSERT(cDimName,'','LastUpdate','S');
+   ATTRINSERT(cDimName,'','SecurityGrp','S');
+
+
+
+########################################################################Set Element Sort Order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+#### Assign DataSource 
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+##################################################################Continue Debug
+If( pDebug >=1 );
+
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Metadata.debug';
+EndIf;
+
+##################################################################Continue Check from Prolog
+
+If( nErrors > 0 );
+   ProcessBreak;
+EndIf;
+
+
+#####################################################################Add child level dimension elements
+IF( pDebug <=1 );
+   DIMENSIONELEMENTINSERT(cDimName,'',BUID,'n');
+EndIf;
+
+IF( pDebug >=1 );
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , BUID,' For Dimension ',cDimName);
+Endif;
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+ ######Continue Debug
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Data.debug';
+EndIf;
+
+######################################################Attributes rules for Business Units Removed from attribute cube 
+
+sCompany = SUBST(BUID,1,5);
+sNameCode = TRIM(Name) | ' - ' | BUID;
+sCodeName = BUID | ' - ' | TRIM(Name);
+sDisplayName = BUID | ' -' | TRIM(Name);
+sDisplayNameCustom = SUBST(BUID | '-' | TRIM(Name),1,35);
+
+
+
+
+#############################################################Load Standard Attributes
+
+   ATTRPUTS(Name,cDimName,BUID,'Name');
+   ATTRPUTS(sCompany,cDimName,BUID,'Company');
+   ATTRPUTS(SquareFeet,cDimName,BUID,'SquareFeet');
+   ATTRPUTS(FacStatus,cDimName,BUID,'FacStatus');
+   ATTRPUTS(FacType,cDimName,BUID,'FacType');
+   ATTRPUTS(FacMgr,cDimName,BUID,'FacMgr');
+   ATTRPUTS(FacSrMgr,cDimName,BUID,'FacSrMgr');
+   ATTRPUTS(FacRegMgr,cDimName,BUID,'FacRegMgr');
+
+###################NONSTANDARD CM 81217
+
+##########Newly Added Attributes
+   #ATTRPUTS(AlternateE1BU,cDimName,BUID,'AlternateE1BU');
+   #ATTRPUTS(PropertyID,cDimName,BUID,'PropertyID');
+   #ATTRPUTS(PropertyName,cDimName,BUID,'PropertyName');
+   #ATTRPUTS(LeasedOrOwned,cDimName,BUID,'LeasedOrOwned');
+   #ATTRPUTS(OccupiedOrVacant,cDimName,BUID,'OccupiedOrVacant');
+   #ATTRPUTS(PropertySubType,cDimName,BUID,'PropertySubType');
+   #ATTRPUTS(PropertyType,cDimName,BUID,'PropertyType');
+   #ATTRPUTS(PropertyStatus,cDimName,BUID,'PropertyStatus');
+   #ATTRPUTS(PropertySize,cDimName,BUID,'PropertySize');
+   #ATTRPUTS(Campus,cDimName,BUID,'Campus');
+   #ATTRPUTS(City,cDimName,BUID,'City');
+   #ATTRPUTS(Post,cDimName,BUID,'Post');
+   #ATTRPUTS(Country,cDimName,BUID,'Country');
+   #ATTRPUTS(FMHub,cDimName,BUID,'FMHub');
+
+
+  #ATTRPUTS(LastUpdate,cDimName,BUID,'LastUpdate');
+   #ATTRPUTS(SecurityGrp,cDimName,BUID,'SecurityGrp');
+
+  # ATTRPUTS(BUType,cDimName,BUID,'BUType');
+##################
+
+
+ IF( SH1Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','SH1Parent1','S');
+   ATTRPUTS(SH1Parent1,cDimName,BUID,'SH1Parent1');
+ENDIF;
+ IF( SH1Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','SH1Parent2','S');
+   ATTRPUTS(SH1Parent2,cDimName,BUID,'SH1Parent2');
+ENDIF;
+ IF( SH1Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','SH1Parent3','S');
+   ATTRPUTS(SH1Parent3,cDimName,BUID,'SH1Parent3');
+ENDIF;
+ IF( SH1Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','SH1Parent4','S');
+   ATTRPUTS(SH1Parent4,cDimName,BUID,'SH1Parent4');
+ENDIF;
+ IF( SH1Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','SH1Parent5','S');
+   ATTRPUTS(SH1Parent5,cDimName,BUID,'SH1Parent5');
+ENDIF;
+
+   ATTRPUTS(HierarchyStatus,cDimName,BUID,'HierarchyStatus');
+
+
+ IF( AH1Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH1Parent1','S');
+   ATTRPUTS(AH1Parent1,cDimName,BUID,'AH1Parent1');
+ENDIF;
+ IF( AH1Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH1Parent2','S');
+   ATTRPUTS(AH1Parent2,cDimName,BUID,'AH1Parent2');
+ENDIF;
+ IF( AH1Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH1Parent3','S');
+   ATTRPUTS(AH1Parent3,cDimName,BUID,'AH1Parent3');
+ENDIF;
+ IF( AH1Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH1Parent4','S');
+   ATTRPUTS(AH1Parent4,cDimName,BUID,'AH1Parent4');
+ENDIF;
+ IF( AH1Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH1Parent5','S');
+   ATTRPUTS(AH1Parent5,cDimName,BUID,'AH1Parent5');
+ENDIF;
+
+
+##################################################################Insert Conditional Attributes
+#####################################These Atttributes will only be loaded if a value exists in the load file
+ 
+#############################################################
+ ######Include Conditional Hierarchies
+######################################AH2 Hierarchy Parameter Hierarchy
+IF( pAH2 = 1);
+ IF( AH2Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH2Parent1','S');
+   ATTRPUTS(AH2Parent1,cDimName,BUID,'AH2Parent1');
+ENDIF;
+
+ IF( AH2Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH2Parent2','S');
+   ATTRPUTS(AH2Parent2,cDimName,BUID,'AH2Parent2');
+ENDIF;
+
+ IF( AH2Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH2Parent3','S');
+   ATTRPUTS(AH2Parent3,cDimName,BUID,'AH2Parent3');
+ENDIF;
+
+ IF( AH2Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH2Parent4','S');
+   ATTRPUTS(AH2Parent4,cDimName,BUID,'AH2Parent4');
+ENDIF;
+
+ IF( AH2Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH2Parent5','S');
+   ATTRPUTS(AH2Parent5,cDimName,BUID,'AH2Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH3 Hierarchy Parameter Hierarchy
+
+IF( pAH3 = 1);
+ IF( AH3Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH3Parent1','S');
+   ATTRPUTS(AH3Parent1,cDimName,BUID,'AH3Parent1');
+ENDIF;
+
+ IF( AH3Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH3Parent2','S');
+   ATTRPUTS(AH3Parent2,cDimName,BUID,'AH3Parent2');
+ENDIF;
+
+ IF( AH3Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH3Parent3','S');
+   ATTRPUTS(AH3Parent3,cDimName,BUID,'AH3Parent3');
+ENDIF;
+
+ IF( AH3Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH3Parent4','S');
+   ATTRPUTS(AH3Parent4,cDimName,BUID,'AH3Parent4');
+ENDIF;
+
+ IF( AH3Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH3Parent5','S');
+   ATTRPUTS(AH3Parent5,cDimName,BUID,'AH3Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH4 Hierarchy Parameter Hierarchy
+
+IF( pAH4 = 1);
+ IF( AH4Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH4Parent1','S');
+   ATTRPUTS(AH4Parent1,cDimName,BUID,'AH4Parent1');
+ENDIF;
+
+ IF( AH4Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH4Parent2','S');
+   ATTRPUTS(AH4Parent2,cDimName,BUID,'AH4Parent2');
+ENDIF;
+
+ IF( AH4Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH4Parent3','S');
+   ATTRPUTS(AH4Parent3,cDimName,BUID,'AH4Parent3');
+ENDIF;
+
+ IF( AH4Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH4Parent4','S');
+   ATTRPUTS(AH4Parent4,cDimName,BUID,'AH4Parent4');
+ENDIF;
+
+ IF( AH4Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH4Parent5','S');
+   ATTRPUTS(AH4Parent5,cDimName,BUID,'AH4Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH5 Hierarchy Parameter Hierarchy
+
+IF( pAH5 = 1);
+ IF( AH5Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH5Parent1','S');
+   ATTRPUTS(AH5Parent1,cDimName,BUID,'AH5Parent1');
+ENDIF;
+
+ IF( AH5Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH5Parent2','S');
+   ATTRPUTS(AH5Parent2,cDimName,BUID,'AH5Parent2');
+ENDIF;
+
+ IF( AH5Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH5Parent3','S');
+   ATTRPUTS(AH5Parent3,cDimName,BUID,'AH5Parent3');
+ENDIF;
+
+ IF( AH5Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH5Parent4','S');
+   ATTRPUTS(AH5Parent4,cDimName,BUID,'AH5Parent4');
+ENDIF;
+
+ IF( AH5Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH5Parent5','S');
+   ATTRPUTS(AH5Parent5,cDimName,BUID,'AH5Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH6 Hierarchy Parameter Hierarchy
+
+IF( pAH6 = 1);
+ IF( AH6Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH6Parent1','S');
+   ATTRPUTS(AH6Parent1,cDimName,BUID,'AH6Parent1');
+ENDIF;
+
+ IF( AH6Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH6Parent2','S');
+   ATTRPUTS(AH6Parent2,cDimName,BUID,'AH6Parent2');
+ENDIF;
+
+ IF( AH6Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH6Parent3','S');
+   ATTRPUTS(AH6Parent3,cDimName,BUID,'AH6Parent3');
+ENDIF;
+
+ IF( AH6Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH6Parent4','S');
+   ATTRPUTS(AH6Parent4,cDimName,BUID,'AH6Parent4');
+ENDIF;
+
+ IF( AH6Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH6Parent5','S');
+   ATTRPUTS(AH6Parent5,cDimName,BUID,'AH6Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH7 Hierarchy Parameter Hierarchy
+
+IF( pAH7 = 1);
+ IF( AH7Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH7Parent1','S');
+   ATTRPUTS(AH7Parent1,cDimName,BUID,'AH7Parent1');
+ENDIF;
+
+ IF( AH7Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH7Parent2','S');
+   ATTRPUTS(AH7Parent2,cDimName,BUID,'AH7Parent2');
+ENDIF;
+
+ IF( AH7Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH7Parent3','S');
+   ATTRPUTS(AH7Parent3,cDimName,BUID,'AH7Parent3');
+ENDIF;
+
+ IF( AH7Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH7Parent4','S');
+   ATTRPUTS(AH7Parent4,cDimName,BUID,'AH7Parent4');
+ENDIF;
+
+ IF( AH7Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH7Parent5','S');
+   ATTRPUTS(AH7Parent5,cDimName,BUID,'AH7Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH8 Hierarchy Parameter Hierarchy
+
+IF( pAH8 = 1);
+ IF( AH8Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH8Parent1','S');
+   ATTRPUTS(AH8Parent1,cDimName,BUID,'AH8Parent1');
+ENDIF;
+
+ IF( AH8Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH8Parent2','S');
+   ATTRPUTS(AH8Parent2,cDimName,BUID,'AH8Parent2');
+ENDIF;
+
+ IF( AH8Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH8Parent3','S');
+   ATTRPUTS(AH8Parent3,cDimName,BUID,'AH8Parent3');
+ENDIF;
+
+ IF( AH8Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH8Parent4','S');
+   ATTRPUTS(AH8Parent4,cDimName,BUID,'AH8Parent4');
+ENDIF;
+
+ IF( AH8Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH8Parent5','S');
+   ATTRPUTS(AH8Parent5,cDimName,BUID,'AH8Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH9 Hierarchy Parameter Hierarchy
+
+IF( pAH9 = 1);
+ IF( AH9Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH9Parent1','S');
+   ATTRPUTS(AH9Parent1,cDimName,BUID,'AH9Parent1');
+ENDIF;
+
+ IF( AH9Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH9Parent2','S');
+   ATTRPUTS(AH9Parent2,cDimName,BUID,'AH9Parent2');
+ENDIF;
+
+ IF( AH9Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH9Parent3','S');
+   ATTRPUTS(AH9Parent3,cDimName,BUID,'AH9Parent3');
+ENDIF;
+
+ IF( AH9Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH9Parent4','S');
+   ATTRPUTS(AH9Parent4,cDimName,BUID,'AH9Parent4');
+ENDIF;
+
+ IF( AH9Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH9Parent5','S');
+   ATTRPUTS(AH9Parent5,cDimName,BUID,'AH9Parent5');
+ENDIF;
+ENDIF;
+
+######################################AH10 Hierarchy Parameter Hierarchy
+
+IF( pAH10 = 1);
+ IF( AH10Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AH10Parent1','S');
+   ATTRPUTS(AH10Parent1,cDimName,BUID,'AH10Parent1');
+ENDIF;
+
+ IF( AH10Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AH10Parent2','S');
+   ATTRPUTS(AH10Parent2,cDimName,BUID,'AH10Parent2');
+ENDIF;
+
+ IF( AH10Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AH10Parent3','S');
+   ATTRPUTS(AH10Parent3,cDimName,BUID,'AH10Parent3');
+ENDIF;
+
+ IF( AH10Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AH10Parent4','S');
+   ATTRPUTS(AH10Parent4,cDimName,BUID,'AH10Parent4');
+ENDIF;
+
+ IF( AH10Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AH10Parent5','S');
+   ATTRPUTS(AH10Parent5,cDimName,BUID,'AH10Parent5');
+ENDIF;
+ENDIF;
+
+####################Added Attributes Non Standard. 
+
+ IF( ELLEV(cDimName,BUID) = 0);
+      ATTRPUTS(sCompany,cDimName,BUID,'Company');
+   ENDIF;
+
+
+######################################AL1 Hierarchy Parameter Hierarchy
+
+#####AL1######
+ IF( AL1Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AL1Parent1','S');
+   ATTRPUTS(AL1Parent1,cDimName,BUID,'AL1Parent1');
+ENDIF;
+ IF( AL1Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AL1Parent2','S');
+   ATTRPUTS(AL1Parent2,cDimName,BUID,'AL1Parent2');
+ENDIF;
+ IF( AL1Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AL1Parent3','S');
+   ATTRPUTS(AL1Parent3,cDimName,BUID,'AL1Parent3');
+ENDIF;
+ IF( AL1Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AL1Parent4','S');
+   ATTRPUTS(AL1Parent4,cDimName,BUID,'AL1Parent4');
+ENDIF;
+ IF( AL1Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AL1Parent5','S');
+   ATTRPUTS(AL1Parent5,cDimName,BUID,'AL1Parent5');
+ENDIF;
+
+####AO2#######
+  IF( AO2Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AO2Parent1','S');
+   ATTRPUTS(AO2Parent1,cDimName,BUID,'AO2Parent1');
+ENDIF;
+ IF( AO2Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AO2Parent2','S');
+   ATTRPUTS(AO2Parent2,cDimName,BUID,'AO2Parent2');
+ENDIF;
+ IF( AO2Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AO2Parent3','S');
+   ATTRPUTS(AO2Parent3,cDimName,BUID,'AO2Parent3');
+ENDIF;
+ IF( AO2Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AO2Parent4','S');
+   ATTRPUTS(AO2Parent4,cDimName,BUID,'AO2Parent4');
+ENDIF;
+ IF( AO2Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AO2Parent5','S');
+   ATTRPUTS(AO2Parent5,cDimName,BUID,'AO2Parent5');
+ENDIF;
+
+#####AO3###########
+ IF( AO3Parent1 @<>' ');
+   ATTRINSERT(cDimName,'','AO3Parent1','S');
+   ATTRPUTS(AO3Parent1,cDimName,BUID,'AO3Parent1');
+ENDIF;
+ IF( AO3Parent2 @<>' ');
+   ATTRINSERT(cDimName,'','AO3Parent2','S');
+   ATTRPUTS(AO3Parent2,cDimName,BUID,'AO3Parent2');
+ENDIF;
+ IF( AO3Parent3 @<>' ');
+   ATTRINSERT(cDimName,'','AO3Parent3','S');
+   ATTRPUTS(AO3Parent3,cDimName,BUID,'AO3Parent3');
+ENDIF;
+ IF( AO3Parent4 @<>' ');
+   ATTRINSERT(cDimName,'','AO3Parent4','S');
+   ATTRPUTS(AO3Parent4,cDimName,BUID,'AO3Parent4');
+ENDIF;
+ IF( AO3Parent5 @<>' ');
+   ATTRINSERT(cDimName,'','AO3Parent5','S');
+   ATTRPUTS(AO3Parent5,cDimName,BUID,'AO3Parent5');
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######################################Create Standard Hierarchy
+
+IF(pCreateAllHierarchies  = 1);
+
+IF( pSH1 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','SH1',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+IF( pAH1 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH1',
+       'pEmailFile','No',
+        'pSendTo','ChrisA.Malone@am.jll.com'
+);
+EndIf;    
+
+IF( pAH2 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH2',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+
+EndIf;
+
+IF( pAH3 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH3',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+
+EndIf;
+
+If( pAH4 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH4',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+If( pAH5 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH5',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+If( pAH6 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH6',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+If( pAH7 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH7',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+If( pAH8 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH8',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+If( pAH9 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH9',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+If( pAH10 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH10',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+
+########Leases Hierarchies###########
+If( pAL1 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AL1',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+If( pAO2 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AO2',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+
+If( pAO3 = 1);
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AO3',
+       'pEmailFile',' ',
+        'pSendTo',' '
+);
+EndIf;
+
+#Create / Update AC1 Hierarchy
+cEnablePlanningLevel=DIMIX('Global Control Items','Select Level of Planning');
+IF(cEnablePlanningLevel<>0);
+	cConsolidatePlanning = CellGetS('Global Control','Consolidated level planning','String');
+	cPlanningLevel=CellGetS('Global Control','Select Level of Planning','String');
+ENDIF;
+IF(cPlanningLevel@<>'' & cConsolidatePlanning@='Yes');
+	ExecuteProcess('update_dim_business_units_2_hierarchy_build_2_AC1',
+	'pHierarchy', 'AC1',
+	'pEmailFile', 'no',
+	'pSendTo', 'tm1admin@am.jll.com',
+	'pDeleteAllElements', 1
+	);
+endif;
+
+
+EndIf;
+
+
+#####Set Element Sort Order
+
+IF(pDebug >= 1 );  
+
+   #Set the Debug File for Epilog
+   sDebugFile = cDebugFile | 'Epilog.debug';
+
+   #Check for Errors
+   IF( nErrors <> 0 );
+      ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   EndIf;
+
+  #Log Finish Time
+  ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+####################################### If Errors occurred terminate process with error status
+  IF( nErrors <> 0 );
+       ProcessQuit;
+Endif;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endregion

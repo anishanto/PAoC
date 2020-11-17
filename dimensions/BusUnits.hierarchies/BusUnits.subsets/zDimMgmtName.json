@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zDimMgmtName",
+	"Expression":"{[}ElementAttributes_BusUnits].[Name],[}ElementAttributes_BusUnits].[NameCode],[}ElementAttributes_BusUnits].[CodeName],[}ElementAttributes_BusUnits].[DisplayNameCustom],[}ElementAttributes_BusUnits].[DisplayName],[}ElementAttributes_BusUnits].[PropertyID],[}ElementAttributes_BusUnits].[CodeName - Property ID],[}ElementAttributes_BusUnits].[PropertyName],[}ElementAttributes_BusUnits].[CodeName - Property Name]}\r\r\r\r\r\r"
+}

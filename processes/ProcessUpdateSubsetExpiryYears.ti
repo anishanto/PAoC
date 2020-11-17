@@ -1,0 +1,49 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+LeaseNumberOfYears=CellGetN('Global Control', 'Lease Number of Years Projection', 'Value'); 
+LeaseBaseYear=StringtoNumber(CellGetS('Global Control', 'Lease Base Year', 'String')); 
+
+sDim = 'Expiry Years';
+sSub1='ExpiryYearsNumber';
+
+# Create subset
+IF(SubsetExists(sDim, sSub1)=0);
+	SubsetCreate(sDim, sSub1);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub1);
+ENDIF;
+
+nMax = LeaseNumberOfYears;
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sEl = DIMNM(sDim, nCtr);
+  	sLev=ELLEV(sDim, sEl);
+
+	SubsetElementInsert(sDim, sSub1, sEl, 0);
+
+	nCtr = nCtr + 1;
+END;
+
+# Assign Subset Alias	
+sAlias='AltName';
+SubsetAliasSet( sDim, sSub1, sAlias );
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

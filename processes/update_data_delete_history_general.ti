@@ -1,0 +1,218 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############ Constants
+
+	#cClient = CELLGETS('Global Control', 'Client Name', 'String');
+	#cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+	cProcessName = GetProcessName();
+	#cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+		#sRandomInt = NumbertoString( INT( RAND() * 1000));
+	#cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+	
+		#sMonth = 'M03';
+		#sMonthP = DimensionElementPrincipalName('Fiscal Months','M01');
+
+	sMonth = CELLGETS('Global Control', 'Retention Month', 'String');
+	sMonthP = DimensionElementPrincipalName('Fiscal Months',sMonth);
+	sMonthName = ATTRS('Fiscal Months',sMonthP,'Name');
+	sMonthM01Name = ATTRS('Fiscal Months','M01','RetentionEnglishName');
+
+	sZeroData = cProcessName|' Zero';
+
+############ Define Time
+
+	sCurrentYearTODAY = SUBST(TODAY(1),1,4);	
+	sNextYearTODAY = STR(NUMBR(SUBST(today(1),1,4))+1,4,0);
+
+	IF(sMonthM01Name@='Jan');
+		sCurrentYear = sCurrentYearTODAY;
+	Else;
+    		sCurrentYear = sNextYearTODAY;
+	EndIf;
+
+	sYearToKeepFrom = STR(NUMBR(sCurrentYear) - NUMBR(CELLGETS('Global Control', IF(pType@='Detail','Detail Cube - Retention Number of Years','Balance Cube - Retention Number of Years'), 'String')),4,0);
+	
+############ Destroy Process Views, if they exist
+	
+	IF(ViewExists(pCube, sZeroData ) = 1);
+     		ViewDestroy(pCube, sZeroData);
+	EndIf;
+
+############ Define Subsets to delete data from
+
+####### Subset Parameters
+
+	# Iterates for every dimension of the cube being processed and creates the MDX subset, which will be later used in the view that deletes the data
+
+	sCube = pCube;
+	vDimCount = CubeDimensionCountGet(sCube);
+
+	counterD = 1;
+	WHILE (counterD <=vDimCount);
+
+	        # Gets the name of the dimension
+		sDim=TABDIM(sCube,counterD);
+
+		IF(SubsetExists(sDim, sZeroData) = 1);
+			SubsetDestroy(sDim, sZeroData);
+		EndIf;
+
+	        # Fiscal Year Dimension MDX expression
+		IF (sDim @= 'Fiscal Years');
+			sMDX = '';
+			counterY = 2;
+			WHILE (counterY < DIMIX (sDim,sYearToKeepFrom));
+				sElement = DimensionElementPrincipalName(sDim,DIMNM(sDim,counterY));
+				sMDX = sMDX | '[' | sDim | '].[' | sElement |'],';
+				counterY = counterY + 1;
+			END;
+			
+			## Adds the curly brackets and trims the last comma.
+			sMDX = '{' | SUBST(sMDX,1,LONG(sMDX)-1) | '}';
+
+	        # Measure Dimensions MDX expression
+		ELSEIF (SCAN('Measure',sDim) <> 0);
+			sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [' | sDim | '] )} ) }, 0)}, ASC)}';
+
+	        # Other Dimensions MDX expression
+		ELSE;
+			sMDX = '{TM1SUBSETALL( [' | sDim | '] )}';
+		ENDIF;
+
+	        # Generates subset with the MDX expression for the dimension being processed
+		SubsetCreatebyMDX( sZeroData, sMDX);
+
+		counterD = counterD+1;
+	END;
+			
+############### View Setup and ZeroOut
+
+	      #### Destroy View if preent
+
+		IF(ViewExists(sCube, sZeroData ) = 1);
+   			ViewDestroy(sCube, sZeroData);
+		EndIf;
+
+	      #### CreateView
+
+		ViewCreate(sCube, sZeroData);
+		ViewExtractSkipZeroesSet (sCube, sZeroData, 1);
+		ViewExtractSkipRuleValuesSet (sCube, sZeroData, 1);
+		ViewRowSuppressZeroesSet(sCube, sZeroData, 1);
+		ViewColumnSuppressZeroesSet(sCube, sZeroData, 1);
+		ViewSuppressZeroesSet(sCube, sZeroData, 1);
+
+		ViewSubsetAssign (sCube, sZeroData,pDim1, sZeroData);
+		ViewSubsetAssign (sCube, sZeroData,pDim2, sZeroData);
+		IF (pDim3@<>'');
+			ViewSubsetAssign (sCube, sZeroData,pDim3, sZeroData);
+			IF (pDim4@<>'');
+				ViewSubsetAssign (sCube, sZeroData,pDim4, sZeroData);
+				IF (pDim5@<>'');
+					ViewSubsetAssign (sCube, sZeroData,pDim5, sZeroData);
+					IF (pDim6@<>'');
+						ViewSubsetAssign (sCube, sZeroData,pDim6, sZeroData);
+						IF (pDim7@<>'');
+							ViewSubsetAssign (sCube, sZeroData,pDim7, sZeroData);
+							IF (pDim8@<>'');
+								ViewSubsetAssign (sCube, sZeroData,pDim8, sZeroData);
+								IF (pDim9@<>'');	
+									ViewSubsetAssign (sCube, sZeroData,pDim9, sZeroData);
+									IF (pDim10@<>'');		
+										ViewSubsetAssign (sCube, sZeroData,pDim10, sZeroData);
+										IF (pDim11@<>'');
+											ViewSubsetAssign (sCube, sZeroData,pDim11, sZeroData);
+											IF (pDim12@<>'');
+												ViewSubsetAssign (sCube, sZeroData,pDim12, sZeroData);
+											ENDIF;
+										ENDIF;
+									ENDIF;
+								ENDIF;
+							ENDIF;
+						ENDIF;
+					ENDIF;
+				ENDIF;
+			ENDIF;
+		ENDIF;
+
+		ViewColumnDimensionSet(sCube, sZeroData, pDim1,1);
+
+		ViewRowDimensionSet(sCube, sZeroData, pDim2,1);
+		IF (pDim3@<>'');
+			ViewRowDimensionSet(sCube, sZeroData, pDim3,2);
+			IF (pDim4@<>'');
+				ViewRowDimensionSet(sCube, sZeroData, pDim4,3);
+				IF (pDim5@<>'');
+					ViewRowDimensionSet(sCube, sZeroData, pDim5,4);
+					IF (pDim6@<>'');
+						ViewRowDimensionSet(sCube, sZeroData, pDim6,5);
+						IF (pDim7@<>'');
+							ViewRowDimensionSet(sCube, sZeroData, pDim7,6);
+							IF (pDim8@<>'');
+								ViewRowDimensionSet(sCube, sZeroData, pDim8,6);
+								IF (pDim9@<>'');
+									ViewRowDimensionSet(sCube, sZeroData, pDim9,7);
+									IF (pDim10@<>'');
+										ViewRowDimensionSet(sCube, sZeroData, pDim10,8);
+										IF (pDim11@<>'');
+											ViewRowDimensionSet(sCube, sZeroData, pDim11,9);
+											IF (pDim12@<>'');
+												ViewRowDimensionSet(sCube, sZeroData, pDim12,10);
+											ENDIF;
+										ENDIF;
+									ENDIF;
+								ENDIF;
+							ENDIF;
+						ENDIF;
+					ENDIF;
+				ENDIF;
+			ENDIF;
+		ENDIF;	
+
+		
+	# ViewZeroOut	
+
+	VIEWZEROOUT(sCube,sZeroData);
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##### Delete cube view and subsets
+
+	IF( ViewExists(sCube, sZeroData ) = 1);
+     		ViewDestroy(sCube, sZeroData );
+	EndIf;
+
+	# Iterates for every dimension of the cube being processed and creates the MDX subset, which will be later used in the view that deletes the data
+
+	counterD = 1;
+	WHILE (counterD <=vDimCount);
+
+	        # Gets the name of the dimension
+		sDim=TABDIM(sCube,counterD);
+
+		IF(SubsetExists(sDim, sZeroData) = 1);
+			SubsetDestroy(sDim, sZeroData);
+		EndIf;
+
+		counterD = counterD+1;
+	END;
+
+#endregion

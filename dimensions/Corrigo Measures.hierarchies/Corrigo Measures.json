@@ -1,0 +1,128 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Corrigo Measures",
+	"Elements":
+	[
+		{
+			"Name":"Work Order Id",
+			"Type":"String"
+		},
+		{
+			"Name":"Property Name",
+			"Type":"String"
+		},
+		{
+			"Name":"Type Category",
+			"Type":"String"
+		},
+		{
+			"Name":"Type",
+			"Type":"String"
+		},
+		{
+			"Name":"Due Date",
+			"Type":"String"
+		},
+		{
+			"Name":"Scheduled Start",
+			"Type":"String"
+		},
+		{
+			"Name":"Date Time Completed - First",
+			"Type":"String"
+		},
+		{
+			"Name":"Date Time Completed - Last",
+			"Type":"String"
+		},
+		{
+			"Name":"Created By",
+			"Type":"String"
+		},
+		{
+			"Name":"Priority",
+			"Type":"String"
+		},
+		{
+			"Name":"Vendor Invoice Number",
+			"Type":"String"
+		},
+		{
+			"Name":"Vendor Invoice Total",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Vendor NTE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Total Spot Purchase Cost",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Asset ID",
+			"Type":"String"
+		},
+		{
+			"Name":"Asset Model",
+			"Type":"String"
+		},
+		{
+			"Name":"Asset Type",
+			"Type":"String"
+		},
+		{
+			"Name":"Asset",
+			"Type":"String"
+		},
+		{
+			"Name":"Task",
+			"Type":"String"
+		},
+		{
+			"Name":"Description",
+			"Type":"String"
+		},
+		{
+			"Name":"Work Description",
+			"Type":"String"
+		},
+		{
+			"Name":"Comments",
+			"Type":"String"
+		},
+		{
+			"Name":"Date Time Last Action",
+			"Type":"String"
+		},
+		{
+			"Name":"Corrigo Work Orders",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Corrigo Closed WO",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Corrigo Open WO",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"Corrigo Work Orders",
+			"ComponentName":"Corrigo Closed WO",
+			"Weight":1
+		},
+		{
+			"ParentName":"Corrigo Work Orders",
+			"ComponentName":"Corrigo Open WO",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Corrigo Measures.subsets/Default.json"
+	]
+}

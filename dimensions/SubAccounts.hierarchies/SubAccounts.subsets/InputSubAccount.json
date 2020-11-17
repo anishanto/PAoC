@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"InputSubAccount",
+	"Expression":"{TM1DRILLDOWNMEMBER( {[SubAccounts].[SH1]}, ALL, RECURSIVE )}"
+}

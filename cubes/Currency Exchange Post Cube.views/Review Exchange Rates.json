@@ -1,0 +1,101 @@
+{
+	"@type":"NativeView",
+	"Name":"Review Exchange Rates",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthDetail')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Post')/Hierarchies('Post')/Subsets('children.post')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency From')/Hierarchies('Currency From')/Subsets('CurrencyFromDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency To')/Hierarchies('Currency To')/Subsets('CurrencyToDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail - AltName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2018')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Subsets('VersionDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Actuals')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Elements('Opex')"
+					},
+					{
+						"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Elements('Restatement')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Elements('Opex')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')/Elements('Rate')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')/Elements('Rate')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.#########"
+}

@@ -1,0 +1,164 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Budget Type",
+	"Elements":
+	[
+		{
+			"Name":"All Budget Type",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"All",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Antenna Area",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Car Parking",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"General Office",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Health Care Facility",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Industrial Area",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Mixed Use",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Other Land",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Other Retail",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Recreation",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Residence",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Retail",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Storage",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"TBC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Unknown",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Warehouse",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"All",
+			"Weight":0
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Antenna Area",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Car Parking",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"General Office",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Health Care Facility",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Industrial Area",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Mixed Use",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Other Land",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Other Retail",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Recreation",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Residence",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Retail",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Storage",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"TBC",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Unknown",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Type",
+			"ComponentName":"Warehouse",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Budget Type.subsets/BudgetTypeDetail.json",
+		"Budget Type.subsets/BudgetTypeExpanded.json",
+		"Budget Type.subsets/Level0.json"
+	]
+}

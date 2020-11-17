@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CurrencyDetail",
+	"Expression":"{TM1SUBSETALL( [Currency_PM] )}"
+}

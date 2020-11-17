@@ -1,0 +1,16 @@
+{
+	"@type":"Subset",
+	"Name":"Indicator",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Indicator_Leases')/Hierarchies('Indicator_Leases')/Elements('No')"
+		},
+		{
+			"@id":"Dimensions('Indicator_Leases')/Hierarchies('Indicator_Leases')/Elements('Local')"
+		},
+		{
+			"@id":"Dimensions('Indicator_Leases')/Hierarchies('Indicator_Leases')/Elements('Local_Portfolio')"
+		}
+	]
+}

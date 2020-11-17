@@ -1,0 +1,759 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#############################################Prolog relaced Dynamic Subsets with Static to allow delete to be added. 1/4/17
+###########################Constants 1/4/17
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'BusUnits';
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_BusUnits';
+cDimName2 = '}ElementAttributes_BusUnits';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExport = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImport = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cMetadataFileName = 'BusUnitSH1.csv';
+cDataFileName = 'BusUnitsdNames.csv';
+cMetadataPath = cExport | cMetadataFileName;
+cDataPath = cExport | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+
+
+
+
+#######################################Create Global Control Subsets
+
+sDim1 = 'Fiscal Years';
+sSub1 = 'FiscalYearDetail';
+sDim2 = 'Fiscal Months';
+sSub2 = 'FiscalMonthDetail';
+sDim3 = 'Versions';
+sSub3 = 'VersionDetail';
+sDim4 = 'SubAccounts';
+sSub4 = 'Global SubAccount Selection';
+sDim5 = 'Currency';
+sSub5 = 'CurrencyDetail';
+sDim6 = 'Analysis Measures';
+sSub6 = 'AnalysisMeasuresValuesTotal';
+sDim7 = '}ElementAttributes_GL_Accounts';
+sSub7 = 'Global GLA Selection';
+
+
+###Fiscal Year
+IF(SubsetExists(sDim1,sSub1)=0);
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( ['| sDim1 |'] )}, 0)}';
+SubsetCreatebyMDX(sSub1, sMDX);
+EndIF;
+
+###Fiscal Months
+IF(SubsetExists(sDim2,sSub2)=0);
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( ['| sDim2 |'] )}, 0)}';
+SubsetCreatebyMDX(sSub2, sMDX);
+EndIF;
+
+###Versions
+IF(SubsetExists(sDim3,sSub3)=0);
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( ['| sDim3 |'] )}, 0)}';
+SubsetCreatebyMDX(sSub3, sMDX);
+EndIF;
+
+###SubAccounts
+IF(SubsetExists(sDim4,sSub4)=0);
+sMDX = '{['| sDim4 |'] .[SH1]}+{['| sDim4 |'] .[AH1]}+{['| sDim4 |'] .[AHIT]} ';
+SubsetCreatebyMDX(sSub4, sMDX);
+EndIF;
+
+###Currency
+IF(SubsetExists(sDim5,sSub5)=0);
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( ['| sDim5 |'] )}, 0)}';
+SubsetCreatebyMDX(sSub5, sMDX);
+EndIF;
+
+###Analysis Measures
+IF(SubsetExists(sDim6,sSub6)=0);
+sMDX = '{TM1SORT( {FILTER( {TM1SUBSETALL( ['| sDim6 |']  )}, ['| sDim6 |'] .[MeasureType] = "Value")}, ASC)}+ {['| sDim6 |'] .[Total Amount]}';
+SubsetCreatebyMDX(sSub6, sMDX);
+EndIF;
+
+###}ElementAttributes_GL_Accounts
+IF(SubsetExists(sDim7,sSub7)=0);
+sMDX = '{TM1FILTERBYPATTERN( {TM1SUBSETALL( ['| sDim7 |'] )}, "*Parent1")}+{ ['| sDim7 |'].[InputTemplate]}';
+SubsetCreatebyMDX(sSub7, sMDX);
+EndIF;
+
+
+
+
+
+
+
+######################Create Workflow Subsets for Business Unit Dimension
+
+######Delete Vanilla WF - This is for creating a new client.
+sAppSubv = 'Approval Vanilla WF';
+IF(SubsetExists(cDimName, sAppSubv)= 1);
+     SubsetDestroy (cDimName, sAppSubv);
+ENDIF;
+
+#Re-Create Approval WF subset
+sAppSub = 'Approval ' | cClientName | ' WF';
+
+IF(SubsetExists(cDimName, sAppSub)= 1);
+     SubsetDestroy (cDimName, sAppSub);
+ENDIF;
+
+  sMDX = '{TM1DRILLDOWNMEMBER( {[BusUnits].[AH1]}, ALL, RECURSIVE )}';
+  SubsetCreatebyMDX(sAppSub, sMDX);
+ SubsetMDXSet(cDimName, sAppSub, ''); 
+ SubsetAliasSet(cDimName, sAppSub, 'DisplayName' );
+
+
+############################################################################################################################################LoadRule Dimension Management
+RULELOADFROMFILE('}ElementSecurity_}ElementAttributes_BusUnits',' ');
+
+RULELOADFROMFILE('}CellSecurity_}ElementAttributes_BusUnits',' ');
+
+
+############################################################################################################################################Create Subsets for Dimensoin Management for Business Units
+
+cDim1 = 'BusUnits';
+cDim1a = '}ElementAttributes_BusUnits';
+sSubTop1 = 'TopParentBU';
+sSubPar1 = 'SH1ParentsBU';
+sSubPar2 = 'AH1ParentsBU';
+sSubPar3 = 'AH2ParentsBU';
+sSubPar4 = 'AH3ParentsBU';
+sSubPar5 = 'AH4ParentsBU';
+sSubPar6 = 'AH5ParentsBU';
+sSubPar7 = 'AH6ParentsBU';
+sSubPar8 = 'AH7ParentsBU';
+sSubPar9 = 'AH8ParentsBU';
+sSubPar10 = 'AH9ParentsBU';
+sSubPar11 = 'AH10ParentsBU';
+sSubChild1 = 'SH1ChildrenBU';
+sSubChild2 = 'AH1ChildrenBU';
+sSubChild3 = 'AllBUAttributes';
+
+
+######################################Create for BusUnits Attribute
+
+
+
+###############################################################Create Subset for BU Control Object
+
+##########SH1
+IF(SubsetExists(cDim1a, sSubChild3)= 1);
+     SubsetDestroy (cDim1a, sSubChild3);
+ENDIF;
+
+ sMDX = '{FILTER( {TM1SORT( {TM1SUBSETALL( [}ElementAttributes_BusUnits] )}, ASC)}, [}ElementAttributes_BusUnits].[Input] = "D")}+{FILTER( {TM1SORT( {TM1SUBSETALL( [}ElementAttributes_BusUnits] )}, ASC)}, [}ElementAttributes_BusUnits].[Input] = "Y")}';
+ SubsetCreatebyMDX(sSubChild3, sMDX);
+
+
+
+
+#####################################################################################################################Top Parent for iniital selection - This wil be a simple list due to
+
+IF(SubsetExists(cDim1, sSubTop1)= 1);
+     SubsetDestroy (cDim1, sSubTop1);
+ENDIF;
+
+sMDX = '{[BusUnits].[SH1] ,  [BusUnits].[AH1] , [BusUnits].[AH2] , [BusUnits].[AH3] , [BusUnits].[AH4] , [BusUnits].[AH5] , [BusUnits].[AH6] , [BusUnits].[AH7] , [BusUnits].[AH8] , [BusUnits].[AH9] , [BusUnits].[AH10]}';
+ SubsetCreatebyMDX(sSubTop1, sMDX);
+ SubsetAliasSet(cDim1,sSubTop1, 'DisplayName' );
+
+###################################################################################################################All Parents Except Level 0
+
+##################################SH1
+
+IF(SubsetExists(cDim1, sSubPar1)= 1);
+     SubsetDestroy (cDim1, sSubPar1);
+ENDIF;
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='SH1');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[SH1])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar1, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar1, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH1
+
+
+# loop through dimension
+
+IF(SubsetExists(cDim1, sSubPar2)= 1);
+     SubsetDestroy (cDim1, sSubPar2);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH1');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH1])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar2, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar2, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH2
+
+IF(SubsetExists(cDim1, sSubPar3)= 1);
+     SubsetDestroy (cDim1, sSubPar3);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH2');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH2])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar3, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar3, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH3
+
+IF(SubsetExists(cDim1, sSubPar4)= 1);
+     SubsetDestroy (cDim1, sSubPar4);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH3');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH3])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar4, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar4, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH4
+
+IF(SubsetExists(cDim1, sSubPar5)= 1);
+     SubsetDestroy (cDim1, sSubPar5);
+ENDIF;
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH4');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH4])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar5, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar5, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH5
+
+IF(SubsetExists(cDim1, sSubPar6)= 1);
+     SubsetDestroy (cDim1, sSubPar6);
+ENDIF;
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH5');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH5])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar6, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar6, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH6
+
+IF(SubsetExists(cDim1, sSubPar7)= 1);
+     SubsetDestroy (cDim1, sSubPar7);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH6');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH6])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar7, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar7, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH7
+
+IF(SubsetExists(cDim1, sSubPar8)= 1);
+     SubsetDestroy (cDim1, sSubPar8);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH7');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH7])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar8, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar8, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH8
+
+
+IF(SubsetExists(cDim1, sSubPar9)= 1);
+     SubsetDestroy (cDim1, sSubPar9);
+ENDIF;
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH8');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH8])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar9, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar9, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH9
+
+IF(SubsetExists(cDim1, sSubPar10)= 1);
+     SubsetDestroy (cDim1, sSubPar10);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH9');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH9])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar10, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar10, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH10
+
+IF(SubsetExists(cDim1, sSubPar11)= 1);
+     SubsetDestroy (cDim1, sSubPar11);
+ENDIF;
+
+nCounter = 1;
+nMaximum = DimSiz(cDim1);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim1, nCounter);
+ IF(sElName@='AH10');
+   sMDX1 = '{EXCEPT({descendants ([BusUnits].[AH10])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar11, sMDX1);
+ SubsetAliasSet(cDim1,sSubPar11, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################################################################################################All Parents Level 0
+##########SH1
+
+IF(SubsetExists(cDim1, sSubChild1)= 1);
+     SubsetDestroy (cDim1, sSubChild1);
+ENDIF;
+
+ sMDX = '{TM1SORT({TM1FILTERBYLEVEL( {{ HIERARCHIZE( {TM1SUBSETALL( [BusUnits] )} ) }}, 0)},ASC)}';
+ SubsetCreatebyMDX(sSubChild1, sMDX);
+ SubsetAliasSet(cDim1,sSubChild1, 'DisplayName' );
+
+
+
+######################################################################################################################AH1 Level 0
+
+IF(SubsetExists(cDim1, sSubChild2)= 1);
+     SubsetDestroy (cDim1, sSubChild2);
+ENDIF;
+
+ sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {FILTER( {TM1SUBSETALL( [BusUnits] )}, [BusUnits].[HierarchyStatus] = "Yes")}, 0)},ASC)}';
+ SubsetCreatebyMDX(sSubChild2, sMDX);
+ SubsetAliasSet(cDim1,sSubChild2, 'DisplayName' );
+
+
+
+
+
+######################################################################################################################################################################Create Subsets for Dimensoin Management for GLAccounts
+
+
+cDim2 = 'GL_Accounts';
+sSubTop1 = 'TopParentGL';
+sSubPar1 = 'SH1ParentsGL';
+sSubPar2 = 'AH1ParentsGL';
+sSubPar3 = 'AH2ParentsGL';
+sSubPar4 = 'AH3ParentsGL';
+sSubPar5 = 'Total StatisticsParentsGL';
+sSubPar6 = 'AH4ParentsGL';
+sSubPar7 = 'AH5ParentsGL';
+sSubPar8 = 'AH6ParentsGL';
+sSubPar9 = 'AH7ParentsGL';
+sSubChild1 = 'ChildrenGL';
+sSubChild2 = 'Total StatisticsChildrenGL';
+
+#####################################################################################################################Top Parent for iniital selection - This wil be a simple list due to
+
+IF(SubsetExists(cDim2, sSubTop1)= 1);
+     SubsetDestroy (cDim2, sSubTop1);
+ENDIF;
+
+sMDX = '{[GL_Accounts].[SH1] ,  [GL_Accounts].[AH1] , [GL_Accounts].[AH2] , [GL_Accounts].[AH3] , [GL_Accounts].[Total Statistics] , [GL_Accounts].[AH4]  , [GL_Accounts].[AH5]  , [GL_Accounts].[AH6]  , [GL_Accounts].[AH7] }';
+
+
+ SubsetCreatebyMDX(sSubTop1, sMDX);
+ SubsetAliasSet(cDim2,sSubTop1, 'DisplayName' );
+
+
+##################################SH1
+
+IF(SubsetExists(cDim2, sSubPar1)= 1);
+     SubsetDestroy (cDim2, sSubPar1);
+ENDIF;
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='SH1');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[SH1])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar1, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar1, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH1
+
+
+# loop through dimension
+
+IF(SubsetExists(cDim2, sSubPar2)= 1);
+     SubsetDestroy (cDim2, sSubPar2);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='AH1');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[AH1])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar2, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar2, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH2
+
+IF(SubsetExists(cDim2, sSubPar3)= 1);
+     SubsetDestroy (cDim2, sSubPar3);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='AH2');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[AH2])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar3, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar3, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH3
+
+IF(SubsetExists(cDim2, sSubPar4)= 1);
+     SubsetDestroy (cDim2, sSubPar4);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='AH3');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[AH3])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar4, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar4, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+##################################AH4
+
+IF(SubsetExists(cDim2, sSubPar6)= 1);
+     SubsetDestroy (cDim2, sSubPar6);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='AH4');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[AH4])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar6, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar6, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH5
+
+IF(SubsetExists(cDim2, sSubPar7)= 1);
+     SubsetDestroy (cDim2, sSubPar7);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='AH5');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[AH5])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar7, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar7, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH6
+
+IF(SubsetExists(cDim2, sSubPar8)= 1);
+     SubsetDestroy (cDim2, sSubPar8);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='AH6');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[AH6])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar8, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar8, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH7
+
+IF(SubsetExists(cDim2, sSubPar9)= 1);
+     SubsetDestroy (cDim2, sSubPar9);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='AH7');
+   sMDX1 = '{EXCEPT({descendants ([GL_Accounts].[AH7])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar9, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar9, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+###############################Statistical
+IF(SubsetExists(cDim2, sSubPar5)= 1);
+     SubsetDestroy (cDim2, sSubPar5);
+ENDIF;
+
+IF(DIMIX(cDim2,'Total Statistics')=1);
+nCounter = 1;
+nMaximum = DimSiz(cDim2);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim2, nCounter);
+ IF(sElName@='Total Statistics');
+   sMDX1 = '{EXCEPT({DESCENDANTS(GL_Accounts.[Total Statistics])},{TM1FILTERBYLEVEL({DESCENDANTS(GL_Accounts.[Total Statistics])},0)})}';
+ SubsetCreatebyMDX(sSubPar5, sMDX1);
+ SubsetAliasSet(cDim2,sSubPar5, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+ENDIF;
+
+
+
+
+##################################################################################################################All Parents Level 0
+##########SH1
+IF(SubsetExists(cDim2, sSubChild1)= 1);
+     SubsetDestroy (cDim2, sSubChild1);
+ENDIF;
+
+ sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({DESCENDANTS(GL_Accounts.[SH1])},0)},ASC)}';
+ SubsetCreatebyMDX(sSubChild1, sMDX);
+ SubsetAliasSet(cDim2,sSubChild1, 'DisplayName' );
+
+
+###############################Statistical
+
+IF(SubsetExists(cDim2, sSubChild2)= 1);
+     SubsetDestroy (cDim2, sSubChild2);
+ENDIF;
+
+IF(DIMIX(cDim2,'Total Statistics')=1);
+ sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({DESCENDANTS(GL_Accounts.[Total Statistics])},0)},ASC)}';
+ SubsetCreatebyMDX(sSubChild2, sMDX);
+ SubsetAliasSet(cDim2,sSubChild2, 'DisplayName' );
+ENDIF;
+
+ 
+######################################################################################################################################################################Create Subsets for Dimensoin Management for SubAccounts
+
+
+cDim3 = 'SubAccounts';
+sSubTop1 = 'TopParentSubAccounts';
+sSubPar1 = 'SH1ParentsSubAccounts';
+sSubPar2 = 'AH1ParentsSubAccounts';
+sSubChild1 = 'ChildrenSubAccounts';
+ 
+#####################################################################################################################Top Parent for iniital selection - This wil be a simple list due to
+
+IF(SubsetExists(cDim3, sSubTop1)= 1);
+     SubsetDestroy (cDim3, sSubTop1);
+ENDIF;
+
+sMDX = '{[SubAccounts].[SH1] ,  [SubAccounts].[AH1]}';
+
+
+ SubsetCreatebyMDX(sSubTop1, sMDX);
+ SubsetAliasSet(cDim3,sSubTop1, 'DisplayName' );
+
+
+##################################SH1
+
+IF(SubsetExists(cDim3, sSubPar1)= 1);
+     SubsetDestroy (cDim3, sSubPar1);
+ENDIF;
+
+nCounter = 1;
+nMaximum = DimSiz(cDim3);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim3, nCounter);
+ IF(sElName@='SH1');
+   sMDX1 = '{EXCEPT({descendants ([SubAccounts].[SH1])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar1, sMDX1);
+ SubsetAliasSet(cDim3,sSubPar1, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+##################################AH1
+
+
+# loop through dimension
+
+IF(SubsetExists(cDim3, sSubPar2)= 1);
+     SubsetDestroy (cDim3, sSubPar2);
+ENDIF;
+
+
+nCounter = 1;
+nMaximum = DimSiz(cDim3);
+WHILE(nCounter <= nMaximum);
+  sElName = DimNm(cDim3, nCounter);
+ IF(sElName@='AH1');
+   sMDX1 = '{EXCEPT({descendants ([SubAccounts].[AH1])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)})}';
+ SubsetCreatebyMDX(sSubPar2, sMDX1);
+ SubsetAliasSet(cDim3,sSubPar2, 'DisplayName' );
+EndIf;
+  nCounter = nCounter + 1;
+END;
+
+
+
+
+
+
+#################################################################################################################All Parents Level 0
+##########SH1
+IF(SubsetExists(cDim3, sSubChild1)= 1);
+     SubsetDestroy (cDim3, sSubChild1);
+ENDIF;
+
+ sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({DESCENDANTS(SubAccounts.[SH1])},0)},ASC)}';
+ SubsetCreatebyMDX(sSubChild1, sMDX);
+ SubsetAliasSet(cDim3,sSubChild1, 'DisplayName' );
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

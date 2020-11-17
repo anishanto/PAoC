@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"All SubAccounts NoLeafs",
+	"Expression":"{EXCEPT({ HIERARCHIZE( {TM1SUBSETALL( [Sub Accounts] )} ) }, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Sub Accounts] )}, 0)})}"
+}

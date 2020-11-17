@@ -1,0 +1,47 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Chris Malone 111716 New Code
+
+#Create Constants
+cClientName = CellGetS('Global Control', 'Client Name', 'String');
+
+vEmailcmd = 'cmd /c  E:\TM1Models\sendemail\Blat -t 3';
+
+vSend = vEmailcmd | ' -to ' | pSendTo | ' -subject "' | pEnv | pSubject | cClientName | ' " -body "' | pBody  | cClientName | '" -attacht ' | pLocation|pFileName;
+
+#ExecuteCommand( vSend, 0);
+
+DataSourceAsciiQuoteCharacter='';
+cClientServerName = CellGetS('Global Control', 'Client Server Name','String');
+cEnvironment = CellGetS('Global Control','TAT Environment', 'String');
+if (cEnvironment@='PRD');
+	vCCCFolder = 'PROD';
+else;
+	vCCCFolder = 'NPR';
+endif;
+vFileName = 's:\CCC\'|vCCCFolder|'\'| cClientServerName | '\info.mail';
+
+
+ASciioutput(vFileName, pSendTo);
+ASciioutput(vFileName, pSubject);
+ASciioutput(vFileName, pBody);
+ASciioutput(vFileName, pFileName);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

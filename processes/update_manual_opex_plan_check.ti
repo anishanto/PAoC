@@ -1,0 +1,176 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#The purpose of the process is to load data to the opex plan cube for the version selected.
+#Final user can choose to zero out the data, make a partial load, or accumulate 
+
+CubeLockOverride(1);
+
+##### Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Shared Folder', 'String');  
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cDimBU= 'BusUnits';
+cDimYear='Fiscal Years';
+sSubType = CELLGETS('Global Control','Client SubAcct Type', 'String');
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+nRecordProcessedCount=0;
+nError = 0;
+
+############################################################## Check to make sure file path exists
+
+IF( FileExists ( sFullPath ) = 0);
+	nError = 1;
+	sMessage = 'Location or File does not exist: Please review';
+	AsciiOutput (cDebugFile, sMessage );
+	DataSourceType = 'NULL';
+	ItemReject (sMessage);
+EndIf;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDebugFile = cDebugFile | 'Data.debug';
+nRecordProcessedCount = nRecordProcessedCount +1;
+
+### Checks Columns
+IF (nRecordProcessedCount=1);
+	IF(vVersion@<>'Version');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 1 is not labeled as "Version".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vYear@<>'Year');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 2 is not labeled as "Year".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vBusunit@<>'BusUnit');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 3 is not labeled as "BusUnit".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vAccountNumberSource@<>'Account Number');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 4 is not labeled as "Account Number".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vCompany@<>'Company');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 5 is not labeled as "Company".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vAssumptions@<>'Assumptions');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 6 is not labeled as "Assumptions".');
+		nError = nError + 1;
+	ENDIF;
+
+	vIndex = 1;
+	vIndexFinal = 12;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%M' | Expand( '%vIndexS%' ) | '%' );
+		IF (vVarM@<>'M'|vIndexS);
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column '| NumberToString(vIndex+6)|' is not labeled as "M'|vIndexS|'".');
+			nError = nError + 1;
+		ENDIF;
+		vIndex = vIndex + 1;
+	END;
+ELSE;
+### Checks Data
+	######################## Check Version
+	IF(pVersion@<>vVersion % DIMIX('Versions_PM',vVersion)=0);
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Version is misspelled.');
+		nError = nError + 1;
+	ENDIF;
+
+	######################## Check Year
+	IF(pYear@<>vYear % DIMIX(cDimYear, vYear)=0);
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Year is invalid.');
+		nError = nError + 1;
+	ENDIF;
+	
+	######################## Check BU
+	if (vBusUnit@='');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. BusUnit is empty.');
+		nError = nError + 1;
+	ENDIF;
+
+	######################## Check Account
+	if (vAccountNumberSource@='');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Account is empty.');
+		nError = nError + 1;
+	ENDIF;
+
+	######################## Check Account length
+	if (LONG(vAccountNumberSource)<>10 & sSubType@='Sub');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Account does not have 10 characters');
+		nError = nError + 1;
+	ENDIF;
+	
+	######################## Check Account length
+	if (LONG(vAccountNumberSource)<>10 & LONG(vAccountNumberSource)<>6  & sSubType@='No Sub');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Account does not have 10 or 6 characters');
+		nError = nError + 1;
+	ENDIF; 
+
+	######################## Check BU & Company
+	if (SUBST(vBusUnit, 1, 5)@<>vCompany);
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Company does not match for Business Unit.');
+		nError = nError + 1;
+	endif;
+
+	######################## Check BU & Company
+	IF(DIMIX(cDimBU, vBusUnit)<>0);
+		vBU_Company=AttrS(cDimBU, vBusUnit, 'Company');
+		IF(vCompany@<>vBU_Company & vBU_Company@<>'');
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Company does not match for Business Unit.');
+			nError = nError + 1;
+		ENDIF;
+	ENDIF;
+
+	######################## Check Data Format
+	vIndex = 1;
+	vIndexFinal = 12;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%M' | Expand( '%vIndexS%' ) | '%' ); 
+
+		## check every month if string is posible to be converted to value.           
+	             	nVarM = StringtoNumber(vVarM);
+
+		vIndex = vIndex + 1;
+	END;
+ENDIF;
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF (nError<>0);
+	ProcessQuit;
+ENDIF;
+#endregion

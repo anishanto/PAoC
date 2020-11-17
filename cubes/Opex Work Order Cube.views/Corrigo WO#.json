@@ -1,0 +1,178 @@
+{
+	"@type":"NativeView",
+	"Name":"Corrigo WO#",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')"
+				},
+				"Expression":"TM1SubsetAll([Corrigo Measures])"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Company')/Hierarchies('Company')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({ [Company].[All Companies] } ,ALL,RECURSIVE)},0)} "
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency')/Hierarchies('Currency')"
+				},
+				"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Currency] )} ) }, 0)}, ASC)}"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({ [BusUnits].[All Teva Pharmaceuticals] } ,ALL,RECURSIVE)},0)} "
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({ [GL_Accounts].[All JLL Accounts] } ,ALL,RECURSIVE)},0)} "
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({ [SubAccounts].[All JLL SubAccounts] } ,ALL,RECURSIVE)},0)} "
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Subledger')/Hierarchies('Subledger')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Subledger] )}, 0)}"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Vendor')/Hierarchies('Vendor')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Vendor] )}, 0)}"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('AP Status')/Hierarchies('AP Status')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [AP Status] )}, 0)}"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('WO Status')/Hierarchies('WO Status')"
+				},
+				"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [WO Status] )}, 0)} "
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Work Orders')/Hierarchies('Work Orders')"
+				},
+				"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Work Orders] )} ) }, 0)}, ASC)}"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2019')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2019')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M07')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M07')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Versions')/Hierarchies('Versions')"
+				},
+				"Expression":"TM1SubsetAll([Versions])"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Forecast')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}

@@ -1,0 +1,226 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################Prolog relaced Dynamic Subsets with Static to allow delete to be added. 1/4/17
+###########################Constants 1/4/17
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'Vendor';
+cTnode = 'AHIT';
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_Vendor';
+cDimName2 = '}ElementAttributes_Vendor';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExportPath = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImportPath = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cFileName = 'Vendor.csv';
+cMetadataFileName = 'Vendor.csv';
+cDataFileName = 'VendorStdNames.csv';
+cMetadataPath = cExportPath | cMetadataFileName;
+cDataPath = cExportPath | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cSubset1 = 'Global GLA Selection';
+vHeaderInsert1 ='yes';
+vHeaderInsert2 ='yes';
+
+#############################################################Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            GLCode : '| vVendor);
+   AsciiOutput( sDebugFile, '            V2                  : '| vVendorAttr);
+   AsciiOutput( sDebugFile, '            Value              :'| Value);
+EndIf;
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check if Dimension Constant Exists
+   IF( Trim( cDimName ) @=' ');
+     nErrors = 1;
+     sMessage = 'No dimension named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+#######################Delete View Subsets if they Exists
+
+ IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+ IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+ IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+################################################# Create Dimension Attribute Subset
+
+############VENDOR AHIT SUBSET
+
+
+#Create AHIT CHILDREN FOR VENDOR
+ sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Vendor] )}, 0)}';
+ SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+
+SUBSETCREATE(cDimName2,cViewNameTransfer);
+   SubsetElementInsert(cDimName2, cViewNameTransfer, 'InputTemplate',1);
+
+
+#############################################Create and assign View
+
+# IF(ViewExists(cCubeName, cViewNameTransfer) = 0);
+ViewCreate(cCubeName, cViewNameTransfer);
+#EndIf;
+
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName, cViewNameTransfer);
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName2, cViewNameTransfer);
+ViewRowDimensionSet (cCubeName, cViewNameTransfer, cDimName, 1);
+ViewColumnDimensionSet (cCubeName, cViewNameTransfer, cDimName2,1);
+
+ViewExtractSkipCalcsSet(cCubeName, cViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(cCubeName, cViewNameTransfer, 0);
+
+
+
+
+#Set dimension sort order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+###################DEFINE LOCAL VARIABLES
+DatasourceNameForServer = cCubeName;
+DatasourceNameForClient = cCubeName;
+DataSourceType = 'VIEW';
+DatasourceCubeview= cViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+######Continue Debug
+IF( pDebug >=1 );
+
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Metadata.debug';
+ENDIF;
+
+#####Continue Check from Prolog
+
+IF( nErrors > 0 );
+   ProcessBreak;
+ENDIF;
+
+
+
+ 
+############CREATE AHIT
+cParent = 'AHIT';
+       IF(Lower(ATTRS(cDimName,vVendor,'InputTemplate')) @<> 'yes');
+          IF(ELISPAR(cDimName,cParent,vVendor)=1);
+          DIMENSIONELEMENTCOMPONENTDELETE(cDimName,cParent,vVendor);
+       EndIf;
+     EndIf;
+
+
+       IF(Lower(ATTRS(cDimName,vVendor,'InputTemplate')) @= 'yes');
+        DIMENSIONELEMENTINSERT(cDimName,'',cParent,'c');
+        DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,vVendor,1.000000);
+ENDIF;
+ 
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+####################################Define Top Node Alias
+
+
+
+IF(pDebug >= 1 );  
+
+   #Set the Debug File for Epilog
+   sDebugFile = cDebugFile | 'Epilog.debug';
+
+   #Check for Errors
+   IF( nErrors <> 0 );
+      ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   EndIf;
+
+  #Log Finish Time
+  ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+####### If Errors occurred terminate process with error status
+  IF( nErrors <> 0 );
+       ProcessQuit;
+Endif;
+
+
+#######################Delete View Subsets if they Exists
+
+ IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+ IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+ IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+
+
+#endregion

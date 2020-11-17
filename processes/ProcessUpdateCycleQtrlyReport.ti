@@ -1,0 +1,26 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+####Set Comparison Value in Global Control###################
+vCube = 'Global Control';
+CellPutS(pComparison1, vCube, 'Reporting Qtrly Version 1', 'String');
+CellPutS(pComparison2, vCube, 'Reporting Qtrly Version 2', 'String');
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

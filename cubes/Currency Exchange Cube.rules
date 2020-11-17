@@ -1,0 +1,12 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+['Rate']=N:
+          IF(ATTRS('Company',!Company,'Currency')@<>DIMNM('Currency From',DIMIX('Currency From',!Currency From)),
+               0,
+           IF(DIMNM('Currency From',DIMIX('Currency From',!Currency From))@=DIMNM('Currency From',DIMIX('Currency To',!Currency To)),
+              1,
+               Continue));
+

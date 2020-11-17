@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Event Type",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Event Type')/Hierarchies('Event Type')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Event Type.hierarchies/Event Type.json"
+	]
+}

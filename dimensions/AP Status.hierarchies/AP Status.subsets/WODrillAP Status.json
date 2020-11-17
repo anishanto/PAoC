@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"WODrillAP Status",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [AP Status] )}, 0)}"
+}

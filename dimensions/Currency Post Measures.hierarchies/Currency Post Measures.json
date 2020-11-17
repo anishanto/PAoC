@@ -1,0 +1,12 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Currency Post Measures",
+	"Elements":
+	[
+		{
+			"Name":"Value",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}

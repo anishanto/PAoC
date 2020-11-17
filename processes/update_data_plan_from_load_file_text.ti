@@ -1,0 +1,963 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##############Create Constants
+
+cCube = 'Opex Plan Cube';
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');           
+vFileName = 'E1loadfile.csv';
+sFullExportPath = cExportPath|vFileName;
+cFileName =pFileName;
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+nRecordProcessedCount = 0;
+nRecordPostedCount = 0;
+sViewZero = cProcessName|' Zero';
+pSubsetZero = cProcessName|' Zero';
+sBU = 'BusUnits';
+sUnassignedBU = 'Unassigned BusUnits' ;
+pBusAH = CELLGETN('Global Control', 'BusUnits AH Hierarchies', 'Value');
+pGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+pSubAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+sGL ='GL_Accounts' ;
+sUnassignedAcct = 'Unassigned GL' ;
+sUnassignedAcctBS = 'Unassigned GL Balance Sheet' ;
+sUnassignedAcctPL = 'Unassigned GL PL Account' ;
+sUnassignedAcctST = 'Unassigned GL Statistical' ;
+sCO ='Company';
+sSA ='SubAccounts' ;
+sUnassignedSub = 'Unassigned SubAccount';  
+#######################################Set Debug
+
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+
+   #Log Variables, Constants and Strings
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '           cFileName                           : '| cFileName);
+   AsciiOutput( sDebugFile, '           sFullPath                             : '| sFullPath);
+   AsciiOutput( sDebugFile, '           cCube                                  : '| cCube);
+   AsciiOutput( sDebugFile, '           Years Paramter                     : '| pYears);
+   AsciiOutput( sDebugFile, '           Version Paramter                   : '| pVersion);
+
+EndIf; 
+##############################################################Check to make sure file path exists
+
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+
+##############################################################Check if Cube Constant Exists
+
+   IF( Trim( cCube ) @=' ');
+     nErrors = 1;
+     sMessage = 'No Cube named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+##########################################Destroy View if present
+
+
+ IF( ViewExists(cCube, sViewZero ) = 1);
+    ViewDestroy( cCube, sViewZero );
+EndIf;
+
+#############################################Create Subsets
+
+###########################################################################################################################################################################################Currency
+
+############Delete subset if it exists
+
+IF(SubsetExists('Currency_PM', pSubsetZero) = 1);
+     SubsetDestroy('Currency_PM', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency_PM] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+
+
+###########################################################################################################################################################################################Company
+
+############Delete subset if it exists
+
+IF(SubsetExists('Company', pSubsetZero) = 1);
+     SubsetDestroy('Company', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+
+####################################################################################################################################################################################################BusUnits
+
+############Delete subset if it exists
+
+IF(SubsetExists('BusUnits', pSubsetZero) = 1);
+     SubsetDestroy('BusUnits', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+
+################################################################################################################################################################################################GL Accounts
+
+############Delete subset if it exists
+ 
+IF(SubsetExists('GL_Accounts', pSubsetZero) = 1);
+     SubsetDestroy('GL_Accounts', pSubsetZero);
+EndIf;
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+
+####################################################################################################################################################################################################SubAcct
+
+############Delete subset if it exists
+
+IF(SubsetExists('SubAccounts', pSubsetZero) = 1);
+     SubsetDestroy('SubAccounts', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+
+##################################################################################################################################################################################################Fiscal Months
+ 
+############Delete subset if it exists
+
+IF(SubsetExists('Fiscal Months', pSubsetZero) = 1);
+     SubsetDestroy('Fiscal Months', pSubsetZero);
+EndIf;
+
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Months] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+
+########################################################################################################################################################################################Fiscal Years
+
+############Delete subset if it exists
+
+IF(SubsetExists('Fiscal Years', pSubsetZero) = 1);
+     SubsetDestroy('Fiscal Years', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pYears @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Years] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+IF(pYears @<>' ');
+    sMDX = '{[Fiscal Years].['| pYears |']}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+################################################################################################################################################################################################Measure
+
+############Delete subset if it exists
+ 
+IF(SubsetExists('Plan Measures', pSubsetZero) = 1);
+     SubsetDestroy('Plan Measures', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+sMDX = '{EXCEPT({TM1SUBSETALL([Plan Measures])},{Descendants([Plan Measures].[Total Amount])})}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+
+############################################################################################################################################################################################Version
+
+############Delete subset if it exists
+
+IF(SubsetExists('Versions_PM', pSubsetZero) = 1);
+     SubsetDestroy('Versions_PM', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pVersion @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Versions_PM] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Undefined Parameter
+IF(pVersion @<>' ' & DIMIX('Versions_PM',pVersion)>0);
+    sMDX = '{[Versions.PM].['| pVersion |']}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+ 
+########################################################################################################################################################################Create Zero View
+###########################Assign Dimensions and Subsets to View for Zero Out
+
+
+   ####CreateView
+ViewCreate( cCube, sViewZero );
+
+ViewColumnDimensionSet(cCube, sViewZero, 'Fiscal Months',1);
+ViewRowDimensionSet( cCube, sViewZero, 'BusUnits',1);
+ViewRowDimensionSet( cCube, sViewZero, 'Company',2);
+ViewRowDimensionSet( cCube, sViewZero, 'SubAccounts',3);
+ViewRowDimensionSet(cCube, sViewZero,  'GL_Accounts',4 );
+ViewRowDimensionSet(cCube, sViewZero, 'Fiscal Years',5 );
+ViewRowDimensionSet(cCube, sViewZero, 'Versions_PM' ,6) ;
+ViewRowDimensionSet(cCube, sViewZero, 'Plan Measures',7 ) ;
+ViewRowDimensionSet(cCube, sViewZero, 'Currency_PM' ,8) ;
+ViewSubsetAssign(cCube, sViewZero,  'BusUnits',pSubsetZero);
+ViewSubsetAssign(cCube, sViewZero, 'Company',pSubsetZero) ;
+ViewSubsetAssign(cCube, sViewZero, 'Currency_PM',pSubsetZero) ;
+ViewSubsetAssign(cCube, sViewZero,  'SubAccounts', pSubsetZero );
+ViewSubsetAssign(cCube, sViewZero,  'GL_Accounts', pSubsetZero );
+ViewSubsetAssign(cCube, sViewZero,'Fiscal Months', pSubsetZero );
+ViewSubsetAssign(cCube, sViewZero,'Fiscal Years', pSubsetZero);
+ViewSubsetAssign(cCube, sViewZero, 'Versions_PM', pSubsetZero) ;
+ViewSubsetAssign(cCube, sViewZero, 'Plan Measures', pSubsetZero) ;
+
+IF(pZeroCube = 1);
+   VIEWZEROOUT(cCube,sViewZero);
+EndIf;
+ 
+
+
+####Sort Dimensions - used for adding new element if they don't exists in the metadata load but are in the data load
+DIMENSIONSORTORDER('Versions_PM','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Fiscal Years','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('BusUnits','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('GL_Accounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('SubAccounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Company','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Fiscal Months','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Currency_PM','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Plan Measures','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Currency_PM','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+
+
+ 
+
+#################################################Delete View and Subset From Zero Out
+# IF(1=0);
+        ViewDestroy( cCube, sViewZero );
+        SubsetDestroy ('Company', pSubsetZero);
+        SubsetDestroy ('SubAccounts', pSubsetZero);
+        SubsetDestroy ('GL_Accounts', pSubsetZero);
+        SubsetDestroy ('Fiscal Years', pSubsetZero);
+        SubsetDestroy ('Fiscal Months', pSubsetZero);
+        SubsetDestroy ('BusUnits', pSubsetZero);
+        SubsetDestroy ('Versions_PM', pSubsetZero);
+        SubsetDestroy ('Currency_PM', pSubsetZero);
+        SubsetDestroy ('Plan Measures', pSubsetZero);
+#EndIf;
+
+##############Continue Debug for Epilog
+
+##############################################Create Target View
+
+
+############################################################ Assign DataSource 
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+ 
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(1=0);
+ 
+############################Continue Debug
+
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'MetaData.debug';
+EndIf;
+
+##########################IF Elements exist in the data load file that do not exist in the dimension load file - add the elements under a review parent within the dimension - Chris to discuss with  Suresh 112516
+
+IF( pDebug <= 1 );
+
+##############################################Unassigned Elements (reference from prolog tab)
+
+#################################################################################################Update Elements in Dimension
+###Elements coming in from load file will be added to unassigned buckets under each hierarchy.  Vendor is the exception.  Vendor dimension elements will be rejected.
+
+###########Update Year Dimension   
+
+IF(pYears@<>' ');
+   IF(DIMIX('Fiscal Years', pYears ) = 0);
+      DIMENSIONELEMENTINSERT('Fiscal Years','',pYears,'n');
+      DIMENSIONELEMENTCOMPONENTADD('Fiscal Years','All Fiscal Years',pYears,1);
+EndIf;
+EndIf;
+
+IF(pYears@=' ');
+   IF(DIMIX('Fiscal Years', vYear ) = 0);
+      DIMENSIONELEMENTINSERT('Fiscal Years','',vYear,'n');
+      DIMENSIONELEMENTCOMPONENTADD('Fiscal Years','All Fiscal Years',vYear,1);
+EndIf;
+EndIf;
+
+###########Update Version Dimension   
+IF(pVersion@<>' ');
+IF(DIMIX('Versions_PM', pVersion ) = 0);
+   DIMENSIONELEMENTINSERT('Versions_PM','',pVersion,'n');
+   DIMENSIONELEMENTCOMPONENTADD('Versions_PM','All Versions',pVersion,1);
+EndIf;
+EndIf;
+
+IF(pVersion@=' ');
+IF(DIMIX('Versions_PM', vVersion ) = 0);
+   DIMENSIONELEMENTINSERT('Versions_PM','',vVersion,'n');
+   DIMENSIONELEMENTCOMPONENTADD('Versions_PM','All Versions',vVersion,1);
+EndIf;
+EndIf;
+
+
+###########Update Business Units
+
+ 
+
+#Insert unassigned BusUnit
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 10);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH4' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH4', sUnassignedBU|' '|'AH4', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH5' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH5', sUnassignedBU|' '|'AH5', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH6' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH6', sUnassignedBU|' '|'AH6', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH7' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH7', sUnassignedBU|' '|'AH7', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH8' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH8', sUnassignedBU|' '|'AH8', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH9' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH9', sUnassignedBU|' '|'A9', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH10' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH10', sUnassignedBU|' '|'AH10', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 10);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH4',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH5',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH6',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH7',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH8',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH9',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH10',vBusUnits,1);
+
+EndIf;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 9);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH4' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH4', sUnassignedBU|' '|'AH4', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH5' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH5', sUnassignedBU|' '|'AH5', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH6' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH6', sUnassignedBU|' '|'AH6', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH7' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH7', sUnassignedBU|' '|'AH7', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH8' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH8', sUnassignedBU|' '|'AH8', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH9' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH9', sUnassignedBU|' '|'A9', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 9);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH4',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH5',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH6',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH7',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH8',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH9',vBusUnits,1);
+EndIf;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 8);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH4' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH4', sUnassignedBU|' '|'AH4', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH5' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH5', sUnassignedBU|' '|'AH5', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH6' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH6', sUnassignedBU|' '|'AH6', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH7' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH7', sUnassignedBU|' '|'AH7', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH8' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH8', sUnassignedBU|' '|'AH8', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 8);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH4',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH5',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH6',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH7',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH8',vBusUnits,1);
+EndIf;
+ 
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 7);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH4' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH4', sUnassignedBU|' '|'AH4', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH5' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH5', sUnassignedBU|' '|'AH5', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH6' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH6', sUnassignedBU|' '|'AH6', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH7' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH7', sUnassignedBU|' '|'AH7', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 7);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH4',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH5',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH6',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH7',vBusUnits,1);
+EndIf;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 6);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH4' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH4', sUnassignedBU|' '|'AH4', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH5' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH5', sUnassignedBU|' '|'AH5', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH6' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH6', sUnassignedBU|' '|'AH6', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 6);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH4',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH5',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH6',vBusUnits,1);
+EndIf;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 5);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH4' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH4', sUnassignedBU|' '|'AH4', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH5' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH5', sUnassignedBU|' '|'AH5', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 5);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH4',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH5',vBusUnits,1);
+EndIf;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 4);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH4' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH4', sUnassignedBU|' '|'AH4', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 4);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH4',vBusUnits,1);
+EndIf;
+ 
+     IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 3);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH3', sUnassignedBU|' '|'AH3', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 3);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH3',vBusUnits,1);
+EndIf;
+
+     IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 2);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH2', sUnassignedBU|' '|'AH2', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 2);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH2',vBusUnits,1);
+EndIf;
+
+     IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'AH1', sUnassignedBU|' '|'AH1', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 1);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'AH1',vBusUnits,1);
+EndIf;
+
+     IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 0);
+    DimensionElementInsert(sBU, '', sUnassignedBU|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sBU, 'SH1', sUnassignedBU|' '|'SH1', 1);
+    ENDIF;
+
+    IF(DIMIX(sBU, vBusUnits ) = 0 & pBusAH = 0);
+    DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+    DimensionElementComponentAdd(sBU, sUnassignedBU|' '|'SH1',vBusUnits,1);
+EndIf;
+EndIf; 
+
+
+###########Update General Ledger
+###########Update General Ledger
+ 
+#sAcctCategory = ATTRS(sGL,vAccountNumber,'AcctCategory');
+
+    IF(DIMIX(sGL,'Total GL')=0);
+       DimensionElementInsert(sGL, '', 'Total GL' , 'n');
+     EndIf;
+
+####################Balance Sheet
+#BS 
+
+IF(SUBST(vGL,1,1) @= '1' %
+    SUBST(vGL,1,1) @= '2' %
+    SUBST(vGL,1,1) @= '3');
+
+   IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 3);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'AH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'AH2' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sGL, 'BS', sUnassignedAcctBS|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'BS AH1', sUnassignedAcctBS|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, 'BS AH2', sUnassignedAcctBS|' '|'AH2', 1);
+    DimensionElementComponentAdd(sGL, 'BS AH3', sUnassignedAcctBS|' '|'AH3', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'AH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'AH2',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'AH3',vGL,1);
+    ENDIF;
+
+    IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 2);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'AH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sGL, 'BS', sUnassignedAcctBS|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'BS AH1', sUnassignedAcctBS|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, 'BS AH2', sUnassignedAcctBS|' '|'AH2', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'AH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'AH2',vGL,1);
+    ENDIF;
+
+    IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 1);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sGL, 'BS', sUnassignedAcctBS|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'BS AH1', sUnassignedAcctBS|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'AH1',vGL,1);
+    ENDIF;
+
+    IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 0);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctBS|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sGL, 'BS', sUnassignedAcctBS|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctBS|' '|'SH1',vGL,1);
+    ENDIF;
+EndIf;
+####################PNL
+#PL
+
+IF(SUBST(vGL,1,1) @= '4' %
+    SUBST(vGL,1,1) @= '5' %
+    SUBST(vGL,1,1) @= '6' %
+    SUBST(vGL,1,1) @= '7' %
+    SUBST(vGL,1,1) @= '8' %
+    SUBST(vGL,1,1) @= '9');
+
+  IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 3);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'AH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'AH2' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sGL, 'PL', sUnassignedAcctPL|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'PL AH1', sUnassignedAcctPL|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, 'PL AH2', sUnassignedAcctPL|' '|'AH2', 1);
+    DimensionElementComponentAdd(sGL, 'PL AH3', sUnassignedAcctPL|' '|'AH3', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'AH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'AH2',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'AH3',vGL,1);
+EndIf;
+
+    IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 2);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'AH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sGL, 'PL', sUnassignedAcctPL|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'PL AH1', sUnassignedAcctPL|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, 'PL AH2', sUnassignedAcctPL|' '|'AH2', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'AH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'AH2',vGL,1);
+EndIf;
+
+     IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 1);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sGL, 'PL', sUnassignedAcctPL|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'PL AH1', sUnassignedAcctPL|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'AH1',vGL,1);
+EndIf;
+
+    IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 0);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctPL|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sGL, 'PL', sUnassignedAcctPL|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctPL|' '|'SH1',vGL,1);
+EndIf;
+
+EndIf;
+ 
+####STATISTICS
+#STAT
+IF(SUBST(vGL,1,1) @<> '1' %
+    SUBST(vGL,1,1) @<> '2' %
+    SUBST(vGL,1,1) @<> '3' %
+    SUBST(vGL,1,1) @<> '4' %
+    SUBST(vGL,1,1) @<> '5' %
+    SUBST(vGL,1,1) @<> '6' %
+    SUBST(vGL,1,1) @<> '7' %
+    SUBST(vGL,1,1) @<> '8' %
+    SUBST(vGL,1,1) @<> '9');
+
+ IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 3);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'AH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'AH2' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'AH3' , 'C');
+    DimensionElementComponentAdd(sGL, 'ST', sUnassignedAcctST|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'ST AH1', sUnassignedAcctST|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, 'ST AH2', sUnassignedAcctST|' '|'AH2', 1);
+    DimensionElementComponentAdd(sGL, 'ST AH3', sUnassignedAcctST|' '|'AH3', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'AH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'AH2',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'AH3',vGL,1);
+EndIf;
+
+     IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 2);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'AH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'AH2' , 'C');
+    DimensionElementComponentAdd(sGL, 'ST', sUnassignedAcctST|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'ST AH1', sUnassignedAcctST|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, 'ST AH2', sUnassignedAcctST|' '|'AH2', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'AH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'AH2',vGL,1);
+EndIf;
+
+     IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 1);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sGL, 'ST', sUnassignedAcctST|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, 'ST AH1', sUnassignedAcctST|' '|'AH1', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'SH1',vGL,1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'AH1',vGL,1);
+EndIf;
+
+     IF(DIMIX(sGL, vGL ) = 0 & pGLAH = 0);
+    DimensionElementInsert(sGL, '',  vGL, 'N');
+    DimensionElementInsert(sGL, '', sUnassignedAcctST|' '|'SH1' , 'C');
+    DimensionElementInsert(sGL, '',  'ST', 'C');
+    DimensionElementComponentAdd(sGL, 'SH1', 'ST', 1);
+    DimensionElementComponentAdd(sGL, 'ST', sUnassignedAcctST|' '|'SH1', 1);
+    DimensionElementComponentAdd(sGL, sUnassignedAcctST|' '|'SH1',vGL,1);
+EndIf;
+EndIf;
+ 
+###########Update Company
+
+ 
+IF(DIMIX(sCO, vCompany ) = 0);
+  DimensionElementInsert(sCO,'',vCompany,'n');
+  DimensionElementComponentAdd(sCO, 'All Companies',vCompany, 1);
+ENDIF;
+
+###########Update SubAccount
+ 
+
+     IF(DIMIX(sSA, vSubAcct ) = 0 & pSubAH = 1);
+    DimensionElementInsert(sSA, '', sUnassignedSub|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sSA, 'SH1', sUnassignedSub|' '|'SH1', 1);
+    DimensionElementInsert(sSA, '', sUnassignedSub|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(sSA, 'AH1', sUnassignedSub|' '|'AH1', 1);
+    ENDIF;
+
+    IF(DIMIX(sSA, vSubAcct ) = 0 & pSubAH = 1);
+    DimensionElementInsert(sSA, '',  vSubAcct, 'N');
+    DimensionElementComponentAdd(sSA, sUnassignedSub|' '|'SH1',vSubAcct,1);
+    DimensionElementComponentAdd(sSA, sUnassignedSub|' '|'AH1',vSubAcct,1);
+EndIf;
+
+     IF(DIMIX(sSA, vSubAcct ) = 0 & pSubAH = 0);
+    DimensionElementInsert(sSA, '', sUnassignedSub|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sSA, 'SH1', sUnassignedSub|' '|'SH1', 1);
+    ENDIF;
+
+    IF(DIMIX(sSA, vSubAcct ) = 0 & pSubAH = 0);
+    DimensionElementInsert(sSA, '',  vSubAcct, 'N');
+    DimensionElementComponentAdd(sSA, sUnassignedSub|' '|'SH1',vSubAcct,1);
+ENDIF;
+
+###############################if pDebut is set to 1 ASCII  OUT
+
+If( pDebug >=1 );
+   ASCIIOUTPUT (sDebugFile, 'Review Version Elements.','Versions_PM',vVersion);
+   ASCIIOUTPUT (sDebugFile, 'Review Year Elements.','Fiscal Year',vYear);
+   ASCIIOUTPUT (sDebugFile, 'Review BusUnits Elements.','BusUnits',vBusUnits);
+   ASCIIOUTPUT (sDebugFile, 'Review GL_Accounts Elements.','GL_Accounts',vGL);
+   ASCIIOUTPUT (sDebugFile, 'Review SubAccounts Elements.','SubAccounts',vSubAcct);
+   ASCIIOUTPUT (sDebugFile, 'Review Company Elements.','Company',vCompany);
+   ASCIIOUTPUT (sDebugFile, 'Review CurrencyPM Elements.','Currency_PM',vCurrency);
+   ASCIIOUTPUT (sDebugFile, 'Review Plan Measure Elements.','Plan Measures',vMeasure);
+   ASCIIOUTPUT (sDebugFile, 'Review Months Elements.','Fiscal Months',vMonth);
+ENDIF;
+ 
+ 
+
+
+EndIf;
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+###############Define conditional variables to load data
+
+vVersion = IF(pVersion@<>' ',pVersion,vVersion);
+vYear =  IF(pYears@<>' ',pYears,vYear);
+ 
+ 
+
+######Load data based on conditional variables for string and numeric
+
+
+ IF(CELLISUPDATEABLE('Opex Plan Cube',vVersion,vCompany,vCurrency,vMonth,vYear,vSubAcct,vGL,vBusUnits,vMeasure)=1);
+              sElType = DType( 'Plan Measures',vMeasure);
+                    If( sElType @= 'S' );
+                      CellPutS(vValue,'Opex Plan Cube',vVersion,vCompany,vCurrency,vMonth,vYear,vSubAcct,vGL,vBusUnits,vMeasure);
+                    Else;
+ItemSkip;
+        EndIf;
+    EndIf;
+ 
+
+
+ 
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Epilog.debug';
+ 
+###############Log Error information
+   IF( nErrors <>0 );
+        AsciiOutput(sDebugFile, 'Errors Occured. Review fiile data and code');
+   EndIf;
+
+################Log Finish Time
+          AsciiOutput ( sDebugFile, 'Record Processed: ' | NumberToString ( nRecordProcessedCount ) );
+          AsciiOutput ( sDebugFile, 'Record Load: ' |  NumberToString ( nRecordPostedCount) );
+          AsciiOutPut ( sDebugFile, 'Process Finished: ' | TimSt ( Now, '\d-\m-\Y \h:\i:\s' ) );
+   EndIf;
+
+################If Errors Occur Quit the process
+     IF( nError <> 0 );
+         ProcessQuit;
+     EndIf;
+
+
+
+#endregion

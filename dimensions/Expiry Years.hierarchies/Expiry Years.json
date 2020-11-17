@@ -1,0 +1,52 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Expiry Years",
+	"Elements":
+	[
+		{
+			"Name":"Year 1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 2",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 3",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 4",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 5",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 6",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 7",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 8",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 9",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Year 10",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Expiry Years.subsets/ExpiryYearsDetail.json",
+		"Expiry Years.subsets/ExpiryYearsNumber.json"
+	]
+}

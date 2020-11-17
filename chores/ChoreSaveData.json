@@ -1,0 +1,19 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreSaveData",
+	"StartTime":"2015-12-22T03:14:08Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P1DT01H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":[],
+			"Process":
+			{
+				"@id":"Processes('SaveData')"
+			}
+		}
+	]
+}

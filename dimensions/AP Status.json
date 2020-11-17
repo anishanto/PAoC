@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"AP Status",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('AP Status')/Hierarchies('AP Status')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"AP Status.hierarchies/AP Status.json"
+	]
+}

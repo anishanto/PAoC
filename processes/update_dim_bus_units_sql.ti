@@ -1,0 +1,497 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################################Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');  
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+cDimName = 'BusUnits';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+sUnassignedBU = 'Unassigned BusUnits';
+vBusUnits = BUID;
+pBusAH = CELLGETN('Global Control', 'BusUnits AH Hierarchies', 'Value');
+sDateAttr = 'CreationDate';
+sTM1E1 = 'TM1E1';
+sCompany ='Company';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+sName = 'Name';
+pSendValue = '2';
+
+
+### Initialize Debug ###
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Prolog.debug';
+
+  # Log start time
+  AsciiOutput( sDebugFile, 'Process Started: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+  # Log parametersi
+  AsciiOutput( sDebugFile, '            BusUnits     : ' | BUID );
+  AsciiOutput( sDebugFile, '            Name           : ' | Name );
+  AsciiOutput( sDebugFile, '            Company      : ' | Company );
+
+
+
+##############################################################################################Debug
+nErrors = 0;
+# Validate source file
+IF(DimensionExists(cDimName) = 0);
+nErrors = 1;
+  If( pDebug >= 1 );
+    sMessage = 'Dimension does not exists. Please review';
+    AsciiOutput( sDebugFile, sMessage );
+  EndIf;
+  ProcessQuit;
+EndIf;
+EndIf;
+
+######################################Create Company Loop####################################
+ 
+dimCompany = 'Company';
+subCompanyLevel0 = 'zCompanyLevel0';
+
+SUBSETDESTROY(dimCompany, subCompanyLevel0);
+     SUBSETCREATEBYMDX(subCompanyLevel0, '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}, ASC)}');
+     # loop through the elements of the subset
+      j=1;
+      sCompanyString = '';
+     WHILE(j<=SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+
+         vElem=SUBSETGETELEMENTNAME(dimCompany, subCompanyLevel0,j);
+        IF(  j =SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+         sCompanyString = sCompanyString | '''' | vElem  | '''';
+         ELSE;
+         sCompanyString = sCompanyString | '''' | vElem  | ''',';
+        ENDIF;
+         j=j+1;
+     END;
+
+
+
+###########################################################Define Company - This is the basis for defining BusUnits to Load
+
+
+#####Define SQL for Load
+
+   sSQL =  '
+    SELECT 
+        [MCMCU] AS ''BUID''
+       ,[MCDL01] AS ''Name''
+       ,CAST([MCCO] AS VARCHAR (5)) AS ''Company''
+        FROM [Stage_E1].[PRODDTA].[F0006] WITH (READUNCOMMITTED)
+       WHERE [MCSTYL] = ''BU''
+       AND
+        ltrim(rtrim([MCCO])) in (' | sCompanyString | ')
+';
+
+ ###########################################Define Local Variables
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+
+
+
+ 
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+  sDebugFile = cDebugFile | 'Metadata.debug';
+
+If( pDebug <= 1 );
+
+##############Remove and AH1 with non AH1 Unassigned parents
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH2')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH2');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH3')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH3');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH4')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH4');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH5')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH5');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH6')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH6');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH7')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH7');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH8')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH8');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH9')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH9');
+EndIf;
+
+IF(ELISANC(cDimName,'AH1',sUnassignedBU|' '|'AH10')=1);
+   DimensionElementComponentDelete(cDimName,'AH1',sUnassignedBU|' '|'AH10');
+EndIf;
+
+#########################################Build Hierachy
+
+IF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 10);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH4' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH5' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH6' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH7' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH8' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH9' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH10' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH4', sUnassignedBU|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, 'AH5', sUnassignedBU|' '|'AH5', 1);
+ DimensionElementComponentAdd(cDimName, 'AH6', sUnassignedBU|' '|'AH6', 1);
+ DimensionElementComponentAdd(cDimName, 'AH7', sUnassignedBU|' '|'AH7', 1);
+ DimensionElementComponentAdd(cDimName, 'AH8', sUnassignedBU|' '|'AH8', 1);
+ DimensionElementComponentAdd(cDimName, 'AH8', sUnassignedBU|' '|'AH9', 1);
+ DimensionElementComponentAdd(cDimName, 'AH10', sUnassignedBU|' '|'AH10', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH4',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH5',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH6',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH7',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH8',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH9',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH10',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 9);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH4' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH5' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH6' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH7' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH8' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH9' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH4', sUnassignedBU|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, 'AH5', sUnassignedBU|' '|'AH5', 1);
+ DimensionElementComponentAdd(cDimName, 'AH6', sUnassignedBU|' '|'AH6', 1);
+ DimensionElementComponentAdd(cDimName, 'AH7', sUnassignedBU|' '|'AH7', 1);
+ DimensionElementComponentAdd(cDimName, 'AH8', sUnassignedBU|' '|'AH8', 1);
+ DimensionElementComponentAdd(cDimName, 'AH9', sUnassignedBU|' '|'AH9', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH4',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH5',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH6',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH7',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH8',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH9',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 8);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH4' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH5' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH6' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH7' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH8' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH4', sUnassignedBU|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, 'AH5', sUnassignedBU|' '|'AH5', 1);
+ DimensionElementComponentAdd(cDimName, 'AH6', sUnassignedBU|' '|'AH6', 1);
+ DimensionElementComponentAdd(cDimName, 'AH7', sUnassignedBU|' '|'AH7', 1);
+ DimensionElementComponentAdd(cDimName, 'AH8', sUnassignedBU|' '|'AH8', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH4',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH5',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH6',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH7',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH8',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 7);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH4' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH5' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH6' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH7' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH4', sUnassignedBU|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, 'AH5', sUnassignedBU|' '|'AH5', 1);
+ DimensionElementComponentAdd(cDimName, 'AH6', sUnassignedBU|' '|'AH6', 1);
+ DimensionElementComponentAdd(cDimName, 'AH7', sUnassignedBU|' '|'AH7', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH4',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH5',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH6',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH7',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 6);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH4' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH5' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH6' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH4', sUnassignedBU|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, 'AH5', sUnassignedBU|' '|'AH5', 1);
+ DimensionElementComponentAdd(cDimName, 'AH6', sUnassignedBU|' '|'AH6', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH4',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH5',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH6',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 5);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH4' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH5' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH4', sUnassignedBU|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, 'AH5', sUnassignedBU|' '|'AH5', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH4',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH5',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 4);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH4' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH4', sUnassignedBU|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH4',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 3);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH3' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH3', sUnassignedBU|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH3',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 2);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH2' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH2', sUnassignedBU|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH2',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 1);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'AH1' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedBU|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'AH1',BUID,1);
+
+ELSEIF(DIMIX(cDimName, BUID ) = 0 & pBusAH = 0);
+ DimensionElementInsert(cDimName, '',  BUID, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedBU|' '|'SH1' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedBU|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedBU|' '|'SH1',BUID,1);
+EndIf;
+EndIf;
+
+
+#####################################################################################Add Attributes
+IF(DIMIX(cDimName2,sDateAttr) = 0);
+   AttrInsert(cDimName,'Name' ,sDateAttr,'S');
+EndIf;
+
+IF(DIMIX(cDimName2,sTM1E1) = 0);
+   AttrInsert(cDimName,sDateAttr,sTM1E1,'S');
+EndIf;
+
+IF(DIMIX(cDimName2,sCompany) = 0);
+   AttrInsert(cDimName,sTM1E1,sCompany,'S');
+EndIf;
+
+
+############################################################################Debug
+
+If( pDebug >= 1 );
+sMessage = 'Component: ' | BUID | ' has been added in' | cDimName | ' dimension.';
+  AsciiOutput( sDebugFile, sMessage );
+EndIf;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+  
+sDebugFile = cDebugFile | 'Data.debug';
+
+
+IF(ELISPAR(cDimName, sUnassignedBU|' '|'AH1', BUID)=1);
+	ATTRPUTS('Yes', cDimName, BUID, 'HierarchyStatus');
+EndIf;
+
+###############Add Name and Company Attributes
+If( pDebug <= 1 );
+	if (ATTRS(cDimName,BUID,'TM1E1')@<>'Yes');
+		ATTRPUTS('Yes',cDimName,BUID,'TM1E1');
+	endif;
+	
+	if (ATTRS(cDimName,BUID,'Name')@<>Name);
+		ATTRPUTS(Name,cDimName,BUID,'Name');
+	endif;
+	if (ATTRS(cDimName,BUID,'Company')@<>Company);
+		ATTRPUTS(Company,cDimName,BUID,'Company');
+	endif;
+	
+	
+	IF(ELISPAR(cDimName, sUnassignedBU|' '|'AH1', BUID)=1);
+		ATTRPUTS(sDateAdd, cDimName, BUID, sDateAttr);
+	EndIf;
+EndIf;
+
+
+If( pDebug >= 1 );
+	sMessage = BUID | ' has added the following attributes: Name: '| Name | ', Company: ' |Company;
+	AsciiOutput( sDebugFile, sMessage );
+EndIf;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+################### Debug
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Epilog.debug';
+
+  # Log errors
+  If( nErrors <> 0 );
+    AsciiOutput( sDebugFile, 'Errors Occurred' );
+  EndIf;
+
+  # Log finish time
+  AsciiOutput( sDebugFile, 'Process Finished: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+EndIf;
+
+
+###############Email File
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFileUnassignedBUSQL';
+    ExecuteProcess(vProcess,'pSendTo', pEmail);
+ENDIF;
+
+
+### If errors occurred terminate process with a major error status ###
+
+If( nErrors <> 0 );
+  ProcessQuit;
+EndIf;
+
+ #Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+#endregion

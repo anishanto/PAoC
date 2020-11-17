@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TopParentsVendor",
+	"Expression":"{ {[Vendor].[SH1]} ,{[Vendor].[AHIT]} ,  [Vendor].[All Vendor and Other]},"
+}

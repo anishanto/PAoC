@@ -1,0 +1,127 @@
+{
+	"@type":"NativeView",
+	"Name":"Opex Detail Cube - BU",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthsWithTotal')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('CompanyBU')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail - AltName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2019')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Actuals')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('All GL Account CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Hierarchies Expanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Subledger')/Hierarchies('Subledger')/Subsets('InputSubLedger')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Subledger')/Hierarchies('Subledger')/Elements('All Subledger and Other')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Vendor')/Hierarchies('Vendor')/Subsets('InputVendor')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Vendor')/Hierarchies('Vendor')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Total Amount')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Total Amount')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.#########"
+}

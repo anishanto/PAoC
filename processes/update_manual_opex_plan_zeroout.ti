@@ -1,0 +1,89 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#The purpose of the process is to zero out the data to the opex plan cube for the version selected.
+
+CubeLockOverride(1);
+
+#####Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Shared Folder', 'String');  
+cCube = 'Opex Plan Cube';
+cCurrency = 'Local';
+cMeasure = 'Value';
+cMeasureAssumption = 'Assumptions';
+cFileName =pFileName;
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+nRecordProcessedCount = 0;
+nRecordPostedCount = 0;
+cProcessName = GetProcessName();
+sViewZero = cProcessName|' Zero';
+pDelimiter = '+';
+pSubsetZero = cProcessName|' Zero';
+sSubType = CELLGETS('Global Control','Client SubAcct Type', 'String');
+sYR = 'Fiscal Years';
+sAllYR = 'All Fiscal Years';
+sBU = 'BusUnits';
+sGL ='GL_Accounts' ;
+sCO ='Company' ;
+sSA ='SubAccounts' ;
+sDateAttr = 'CreationDate';
+
+
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+sSubType=CELLGETS('Global Control','Client SubAcct Type', 'String');
+vTrimSubAccountNumber=IF(sSubType @= 'Sub',Subst(vAccountNumberSource,8,3 ),'NA');
+vAccountNumber=IF(sSubType @= 'Sub',Subst(vAccountNumberSource,1,6 ),vAccountNumberSource);
+
+
+#ZerooutValues
+if ( DIMIX(sGL,vAccountNumber) <>0 & DIMIX(sSA,vTrimSubAccountNumber) <> 0 & DIMIX(sBU, vBusUnits) <> 0 );
+	CellPutS('',  cCube,vVersion,vCompany,cCurrency,'Total Months',vYear,vTrimSubAccountNumber,vAccountNumber,vBusUnits,cMeasureAssumption);
+
+	vIndex = 1;
+	vIndexFinal = 12;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%nM' | Expand( '%vIndexS%' ) | '%' );
+		IF(CELLISUPDATEABLE(cCube,vVersion,vCompany,cCurrency,'M'|vIndexS,vYear,vTrimSubAccountNumber,vAccountNumber,vBusUnits,cMeasure)=1);
+			CellPutN(0,  cCube,vVersion,vCompany,cCurrency,'M'|vIndexS,vYear,vTrimSubAccountNumber,vAccountNumber,vBusUnits,cMeasure);
+		
+		EndIf;
+		vIndex = vIndex + 1;
+	END;
+endif;
+
+		
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

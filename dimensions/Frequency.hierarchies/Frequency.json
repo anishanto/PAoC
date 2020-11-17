@@ -1,0 +1,28 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Frequency",
+	"Elements":
+	[
+		{
+			"Name":"/Annual",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"/Month",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"/Quarter",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"/Semi-Annual",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Total",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}

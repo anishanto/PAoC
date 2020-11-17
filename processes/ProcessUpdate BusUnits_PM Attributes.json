@@ -1,0 +1,71 @@
+{
+	"@type":"Process",
+	"Name":"ProcessUpdate BusUnits_PM Attributes",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessUpdate BusUnits_PM Attributes.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f_DeployParams={&quotdimensionConflictResolutions&quot:{}&#044&quotclass&quot:&quotDeployParams&quot&#044&quotdataAction&quot:&quotACCUMULATE&quot}\f_ParseParams={&quotskipRows&quot:&quot0&quot&#044&quotlocale&quot:{&quotlanguange&quot:&quoten&quot&#044&quotvariant&quot:&quot&quot&#044&quotcountry&quot:&quotUS&quot}&#044&quotdimensions&quot:[]&#044&quotmeasures&quot:[]&#044&quotnumColumns&quot:&quot3&quot&#044&quothasHeader&quot:&quottrue&quot}\f_importSourceDefinition={\"sourceType\":\"CUBE_VIEW\",\"originalColumns\":null,\"cubeViewSource\":{\"cubeName\":\"}ElementAttributes_BusUnits\",\"originalColumns\":[],\"viewName\":\"\",\"excludedColumns\":[],\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vDim\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vDim\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vAttr\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vAttr\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":1},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vValue\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vValue\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":2}]},\"locale\":{\"localeIsDefault\":false,\"localeCurrencySymbol\":\"$\",\"languageCode\":\"en\",\"languageDisplay\":\"English\",\"thousandsSeparator\":\",\",\"localeCode\":\"en_US\",\"localeCurrencyCode\":\"$\",\"localeDisplay\":\"English (United States)\",\"countryDisplay\":\"United States\",\"countryCode\":\"US\",\"decimalSeparator\":\".\"},\"excludedColumns\":[],\"processName\":\"ProcessUpdate BusUnits_PM Attributes\",\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vDim\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vDim\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vAttr\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vAttr\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":1},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vValue\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vValue\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":2}],\"sourceTypeHasBeenChanged\":false}\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"}ElementAttributes_BusUnits",
+		"dataSourceNameForServer":"}ElementAttributes_BusUnits",
+		"view":"VE-}ElementAttributes_BusUnits-Get"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pCubeName",
+			"Prompt":"Cube do not change",
+			"Value":"}ElementAttributes_BusUnits",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimName",
+			"Prompt":"Dim1 do not change",
+			"Value":"BusUnits",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimName2",
+			"Prompt":"Dim2 do not change",
+			"Value":"}ElementAttributes_BusUnits",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimNameTo",
+			"Prompt":"Dim target do no change",
+			"Value":"BusUnits_PM",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"vDim",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vAttr",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vValue",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

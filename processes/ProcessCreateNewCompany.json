@@ -1,0 +1,51 @@
+{
+	"@type":"Process",
+	"Name":"ProcessCreateNewCompany",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"ProcessCreateNewCompany.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pCo",
+			"Prompt":"Input New Company",
+			"Value":" ",
+			"Type":"String"
+		},
+		{
+			"Name":"pCoName",
+			"Prompt":"Input name",
+			"Value":" ",
+			"Type":"String"
+		},
+		{
+			"Name":"pCur",
+			"Prompt":"Input currency symbol",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCoMapping",
+			"Prompt":"Input co map value or leave blank if the same",
+			"Value":" ",
+			"Type":"String"
+		},
+		{
+			"Name":"pCoMappingReq",
+			"Prompt":"Input Yes if map required",
+			"Value":"no",
+			"Type":"String"
+		},
+		{
+			"Name":"pLedger",
+			"Prompt":"Input Ledger Information",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

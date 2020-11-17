@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"DW Versions Flag",
+	"Expression":"{ EXCEPT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [Versions] )}, ALL, RECURSIVE )} ) }, 0)}, { [Versions].[Actuals] }) }"
+}

@@ -1,0 +1,19 @@
+{
+	"@type":"Subset",
+	"Name":"tp_{7fc51930-4eae-4a12-9808-482a99ae2919}",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Actuals')"
+		},
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Budget')"
+		},
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Forecast')"
+		},
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('PriorForecast')"
+		}
+	]
+}

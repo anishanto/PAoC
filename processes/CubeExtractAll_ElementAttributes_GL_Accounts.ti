@@ -1,0 +1,150 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName ='}ElementAttributes_'|pDim;
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+vUseHeader= 'yes' ;
+vDim='}ElementAttributes_'|pDim;
+
+DATASOURCEASCIIQUOTECHARACTER = '';
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+# Create views and subsets for Export
+#Create GL_Accounts
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( ['| pDim |'] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+#Create }ElementAttributes_GL_Accounts
+SubsetCreate (vDim, ViewNameTransfer);
+SubsetElementInsert ( vDim,  ViewNameTransfer, 'CodeName' , 1);
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,pDim, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,vDim, ViewNameTransfer);
+
+ViewColumnDimensionSet(CubeName, ViewNameTransfer,vDim,1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, pDim, 1);
+
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameTransfer;
+
+
+#############Set Delimiter
+DataSourceAsciiDelimiter = ';';
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vCubeName ='}ElementAttributes_'|pDim;
+vName=CellGetS (vCubeName, Dim, 'Name' );
+vSH1Parent1=IF(DIMIX(vCubeName,'SH1Parent1')<>0, CellGetS (vCubeName, Dim, 'SH1Parent1' ),'');
+vSH1Parent2=IF(DIMIX(vCubeName,'SH1Parent2')<>0, CellGetS (vCubeName, Dim, 'SH1Parent2' ),'');
+vSH1Parent3=IF(DIMIX(vCubeName,'SH1Parent3')<>0, CellGetS (vCubeName, Dim, 'SH1Parent3' ),'');
+vSH1Parent4=IF(DIMIX(vCubeName,'SH1Parent4')<>0, CellGetS (vCubeName, Dim, 'SH1Parent4' ),'');
+vAcctType=CellGetS (vCubeName, Dim, 'AcctType' );
+vCurrencyCalc=CellGetS (vCubeName, Dim, 'CurrencyCalc' );
+vCT_Acct_Only=CellGetS (vCubeName, Dim, 'CT_Acct_Only' );
+vInputTemplate=CellGetS (vCubeName, Dim, 'Input Template' );
+vAH1Parent1=IF(DIMIX(vCubeName,'AH1Parent1')<>0, CellGetS (vCubeName, Dim, 'AH1Parent1' ),'');
+vAH1Parent2=IF(DIMIX(vCubeName,'AH1Parent2')<>0, CellGetS (vCubeName, Dim, 'AH1Parent2' ),'');
+vAH1Parent3=IF(DIMIX(vCubeName,'AH1Parent3')<>0, CellGetS (vCubeName, Dim, 'AH1Parent3' ),'');
+vAH1Parent4=IF(DIMIX(vCubeName,'AH1Parent4')<>0, CellGetS (vCubeName, Dim, 'AH1Parent4' ),'');
+vAH2Parent1=IF(DIMIX(vCubeName,'AH2Parent1')<>0, CellGetS (vCubeName, Dim, 'AH2Parent1' ),'');
+vAH2Parent2=IF(DIMIX(vCubeName,'AH2Parent2')<>0, CellGetS (vCubeName, Dim, 'AH2Parent2' ),'');
+vAH2Parent3=IF(DIMIX(vCubeName,'AH2Parent3')<>0, CellGetS (vCubeName, Dim, 'AH2Parent3' ),'');
+vAH2Parent4=IF(DIMIX(vCubeName,'AH2Parent4')<>0, CellGetS (vCubeName, Dim, 'AH2Parent4' ),'');
+vAH3Parent1=IF(DIMIX(vCubeName,'AH3Parent1')<>0, CellGetS (vCubeName, Dim, 'AH3Parent1' ),'');
+vAH3Parent2=IF(DIMIX(vCubeName,'AH3Parent2')<>0, CellGetS (vCubeName, Dim, 'AH3Parent2' ),'');
+vAH3Parent3=IF(DIMIX(vCubeName,'AH3Parent3')<>0, CellGetS (vCubeName, Dim, 'AH3Parent3' ),'');
+vAH3Parent4=IF(DIMIX(vCubeName,'AH3Parent4')<>0, CellGetS (vCubeName, Dim, 'AH3Parent4' ),'');
+vAH4Parent1=IF(DIMIX(vCubeName,'AH4Parent1')<>0, CellGetS (vCubeName, Dim, 'AH4Parent1' ),'');
+vAH4Parent2=IF(DIMIX(vCubeName,'AH4Parent2')<>0, CellGetS (vCubeName, Dim, 'AH4Parent2' ),'');
+vAH4Parent3=IF(DIMIX(vCubeName,'AH4Parent3')<>0, CellGetS (vCubeName, Dim, 'AH4Parent3' ),'');
+vAH4Parent4=IF(DIMIX(vCubeName,'AH4Parent4')<>0, CellGetS (vCubeName, Dim, 'AH4Parent4' ),'');
+vAL1Parent1=IF(DIMIX(vCubeName,'AL1Parent1')<>0, CellGetS (vCubeName, Dim, 'AL1Parent1' ),'');
+vAL1Parent2=IF(DIMIX(vCubeName,'AL1Parent2')<>0, CellGetS (vCubeName, Dim, 'AL1Parent2' ),'');
+vAL1Parent3=IF(DIMIX(vCubeName,'AL1Parent3')<>0, CellGetS (vCubeName, Dim, 'AL1Parent3' ),'');
+vAL1Parent4=IF(DIMIX(vCubeName,'AL1Parent4')<>0, CellGetS (vCubeName, Dim, 'AL1Parent4' ),'');
+vAL2Parent1=IF(DIMIX(vCubeName,'AL2Parent1')<>0, CellGetS (vCubeName, Dim, 'AL2Parent1' ),'');
+vAL2Parent2=IF(DIMIX(vCubeName,'AL2Parent2')<>0, CellGetS (vCubeName, Dim, 'AL2Parent2' ),'');
+vAL2Parent3=IF(DIMIX(vCubeName,'AL2Parent3')<>0, CellGetS (vCubeName, Dim, 'AL2Parent3' ),'');
+vAL2Parent4=IF(DIMIX(vCubeName,'AL2Parent4')<>0, CellGetS (vCubeName, Dim, 'AL2Parent4' ),'');
+vAL3Parent1=IF(DIMIX(vCubeName,'AL3Parent1')<>0, CellGetS (vCubeName, Dim, 'AL3Parent1' ),'');
+vAL3Parent2=IF(DIMIX(vCubeName,'AL3Parent2')<>0, CellGetS (vCubeName, Dim, 'AL3Parent2' ),'');
+vAL3Parent3=IF(DIMIX(vCubeName,'AL3Parent3')<>0, CellGetS (vCubeName, Dim, 'AL3Parent3' ),'');
+vAL3Parent4=IF(DIMIX(vCubeName,'AL3Parent4')<>0, CellGetS (vCubeName, Dim, 'AL3Parent4' ),'');
+vAL4Parent1=IF(DIMIX(vCubeName,'AL4Parent1')<>0, CellGetS (vCubeName, Dim, 'AL4Parent1' ),'');
+vAL4Parent2=IF(DIMIX(vCubeName,'AL4Parent2')<>0, CellGetS (vCubeName, Dim, 'AL4Parent2' ),'');
+vAL4Parent3=IF(DIMIX(vCubeName,'AL4Parent3')<>0, CellGetS (vCubeName, Dim, 'AL4Parent3' ),'');
+vAL4Parent4=IF(DIMIX(vCubeName,'AL4Parent4')<>0, CellGetS (vCubeName, Dim, 'AL4Parent4' ),'');
+vAO1Parent1=IF(DIMIX(vCubeName,'AO1Parent1')<>0, CellGetS (vCubeName, Dim, 'AO1Parent1' ),'');
+vAO1Parent2=IF(DIMIX(vCubeName,'AO1Parent2')<>0, CellGetS (vCubeName, Dim, 'AO1Parent2' ),'');
+vAO1Parent3=IF(DIMIX(vCubeName,'AO1Parent3')<>0, CellGetS (vCubeName, Dim, 'AO1Parent3' ),'');
+vAO1Parent4=IF(DIMIX(vCubeName,'AO1Parent4')<>0, CellGetS (vCubeName, Dim, 'AO1Parent4' ),'');
+vFMorLeaseFlag=IF(DIMIX(vCubeName,'AO1Parent4')<>0, CellGetS (vCubeName, Dim, 'AO1Parent4' ),'');
+vGLA=IF(DIMIX(vCubeName,'Global Assumption GLA category')<>0, CellGetS (vCubeName, Dim, 'Global Assumption GLA category'),'');
+
+
+###############CM Changed file to .txt for comma export issues 21418
+
+vBlank = '';
+vFileName = pDim|' Export.txt';
+vLocation = '..\DataSources\Exports\' ;
+
+IF( vUseHeader @= 'yes' ) ;
+    vUseHeader = 'no';
+   ASCIIOUTPUT(vLocation|vFilename,'Code','Name','SH1Parent1','SH1Parent2','SH1Parent3','SH1Parent4','AcctType','CurrencyCalc','CT_Acct_Only','Input Template','AH1Parent1','AH1Parent2','AH1Parent3','AH1Parent4','AH2Parent1','AH2Parent2','AH2Parent3','AH2Parent4','AH3Parent1','AH3Parent2','AH3Parent3','AH3Parent4',
+	'AH4Parent1','AH4Parent2','AH4Parent3','AH4Parent4','AL1Parent1','AL1Parent2','AL1Parent3','AL1Parent4','AL2Parent1','AL2Parent2','AL2Parent3','AL2Parent4','AL3Parent1','AL3Parent2','AL3Parent3','AL3Parent4','AL4Parent1','AL4Parent2','AL4Parent3','AL4Parent4','AO1Parent1','AO1Parent2','AO1Parent30','AO1Parent4',	
+	'FMorLeaseFlag','Global Assumption GL category') ;
+
+
+ENDIF ;
+
+   ASCIIOUTPUT(vLocation|vFilename,Dim,vName,vSH1Parent1,vSH1Parent2,vSH1Parent3,vSH1Parent4,vAcctType,vCurrencyCalc,vCT_Acct_Only,vInputTemplate,vAH1Parent1,vAH1Parent2,vAH1Parent3,vAH1Parent4,vAH2Parent1,vAH2Parent2,vAH2Parent3,vAH2Parent4,vAH3Parent1,vAH3Parent2,vAH3Parent3,vAH3Parent4,
+	vAH4Parent1,vAH4Parent2,vAH4Parent3,vAH4Parent4,vAL1Parent1,vAL1Parent2,vAL1Parent3,vAL1Parent4,vAL2Parent1,vAL2Parent2,vAL2Parent3,vAL2Parent4,vAL3Parent1,vAL3Parent2,vAL3Parent3,vAL3Parent4,vAL4Parent1,vAL4Parent2,vAL4Parent3,vAL4Parent4,vAO1Parent1,vAO1Parent2	,vAO1Parent3,vAO1Parent4,	
+	vFMorLeaseFlag,vGLA) ;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+
+#email file
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFile' ;
+    ExecuteProcess(vProcess,'pSendTo', pSendTo,'pFilename',vFileName );
+ENDIF;
+#endregion

@@ -1,0 +1,38 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+
+[{'Default Market', 'Default CPI'},
+{'Budget Region',
+'Budget Building Type',
+'Cost Category Type',
+'Lease Type',
+'Tenure Type'}]=S:'All';
+
+[{'Default Market', 'Default CPI'},'GLA Category']=S:'Portfolio Rate';
+
+[
+{'Budget Region',
+'Budget Building Type',
+'Cost Category Type',
+'Lease Type',
+'Tenure Type',
+'Event Type'}]=S:IF (DB('Leases Portfolio Assumptions', !Versions_PM, !Fiscal Years, !Portfolio Assumptions, 'GLA Category')@<>'' &
+						DB('Leases Portfolio Assumptions', !Versions_PM, !Fiscal Years, !Portfolio Assumptions, 'GLA Category')@<>'Portfolio Rate',
+                        'All',
+                        continue);
+
+
+['Event Type','Default Market']=S:'Rent Review (Negotiation)';
+['Event Type','Default CPI']=S:'Rent Review (CPI/Indexation)';
+
+['Check Rate']=S:
+	IF(['Rates']=0, 'WARNING: Rate is 0%',
+		IF(['Rates']<=1, 'OK','Invalid Rate'));
+
+['Valid Rate']=N:
+	IF(DB('Leases Portfolio Assumptions',!Versions_PM,!Fiscal Years,!Portfolio Assumptions,'Check Rate')@='OK',
+		['Rates'],
+		0);

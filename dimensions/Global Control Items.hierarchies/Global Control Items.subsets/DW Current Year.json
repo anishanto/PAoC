@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"DW Current Year",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Global Control Items')/Hierarchies('Global Control Items')/Elements('DW Current Year')"
+		}
+	]
+}

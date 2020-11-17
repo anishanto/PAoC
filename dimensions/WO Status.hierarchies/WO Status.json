@@ -1,0 +1,34 @@
+{
+	"@type":"Hierarchy",
+	"Name":"WO Status",
+	"Elements":
+	[
+		{
+			"Name":"Open",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Closed",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Completed",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Cancelled",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"New",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"WO Status.subsets/VE-Opex Work Order Cube-CopyToPlan.json",
+		"WO Status.subsets/WODrillWO Status.json",
+		"WO Status.subsets/WOPlanDrillWO Status.json",
+		"WO Status.subsets/WOStatusDetail.json"
+	]
+}

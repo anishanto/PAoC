@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_mgmt_wrapper",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_mgmt_wrapper.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDimension",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pEmail",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

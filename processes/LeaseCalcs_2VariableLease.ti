@@ -1,0 +1,265 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+TenureID=pTenureID;
+Version=pVersion;
+Currency=pCurrency;
+Company=pCompany;
+SubAccount=pSubAccount;
+GLAccount=pGLAccount;
+BusUnits=pBusUnits;
+
+TenureDim='Tenure ID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+PortfolioAssumptionsCube='Lease Portfolio Assumptions';
+LeasesCube='Leases Cube';
+CalendarCube='Calendar Cube';
+IF(Version@='Forecast');
+	ForecastMonth=CellGetS('Global Control', 'Lease Actuals Month', 'String')|' Y01';
+	ForecastFirstMonth=Dnext('Fiscal Month Year', ForecastMonth);
+	ForecastCtr=StringtoNumber(Subst(ForecastFirstMonth,2,2)); 
+ENDIF;
+
+LeaseEndDate=AttrS(TenureDim, TenureID, 'LeaseEndDate');
+LeaseEndYear=SubSt(LeaseEndDate, 1, 4);
+nLeaseEndYear=StringtoNumber(LeaseEndYEar);
+LeaseEndMonth=SubSt(LeaseEndDate, 6, 2);
+nLeaseEndMonth=StringtoNumber(LeaseEndMonth);
+
+LeaseStartDate=AttrS(TenureDim, TenureID, 'LeaseStartDate');
+LeaseStartYear=SubSt(LeaseStartDate, 1, 4);
+nLeaseStartYear=StringtoNumber(LEaseStartYear);
+LeaseStartMonth=SubSt(LeaseStartDate, 6, 2);
+nLeaseStartMonth=StringtoNumber(LeaseStartMonth);
+
+	
+Month_Attribute='Attribute';
+
+#Check Dispose
+Dispose=AttrS(TenureDim, TenureID, 'ExtensionOption');
+EnableDispose=0;
+IF(Dispose@='Dispose');
+	DisposeDate=AttrS(TenureDim, TenureID, 'BudgetEndDate');
+	IF(pVersion@='Forecast');
+		DisposeMonth_Map=AttrS('Calendar Months',Subst(DisposeDate, 6, 2),'MonthName')|' '|SubSt(DisposeDate,1,4)|'F';
+	ELSE;
+		DisposeMonth_Map=AttrS('Calendar Months',Subst(DisposeDate, 6, 2),'MonthName')|' '|SubSt(DisposeDate,1,4);
+	ENDIF;
+	DisposeMonth=DImensionElementPrincipalName('Fiscal Month Year', DisposeMonth_Map);
+	IF(DIMIX('Fiscal Month Year', DisposeMonth)<>0);
+		EnableDispose=1;
+	ENDIF;	
+ENDIF;
+
+#Validate Currency
+LeaseCurrency=CellGetS(LeasesCube, Version, Currency, Month_Attribute, Company, SubAccount, GLAccount, BusUnits, TenureID, 'CostCurrency');
+CompanyCurrency=CellGetS(LeasesCube, Version, Currency, Month_Attribute, Company, SubAccount, GLAccount, BusUnits, TenureID, 'CompanyCurrency');
+
+#Loop by month
+nStart=0;
+sDim = 'Fiscal Month Year'; 
+sSub = 'FiscalMonthsDetail';
+nMax = SubsetGetSize(sDim,sSub);
+nCtr = 1;
+WHILE(nCtr <= nMax);
+
+	sMonth = SubsetGetElementName(sDim,sSub,nCtr);
+	sYear = 'Y'|AttrS(sDim, sMonth, 'Year');
+	
+	IF(pVersion@='Forecast');
+		sMonthCalendar=AttrS(sDim, sMOnth, 'MonthCalendarF');
+		sYearCalendar=AttrS(sDIm, sMonth, 'YearCalendarF');
+	ELSE;
+		sMonthCalendar=AttrS(sDim, sMonth, 'MonthCalendar');
+		sYearCalendar=AttrS(sDim, sMonth, 'YearCalendar');
+	ENDIF;
+
+	nYear = StringtoNumber(sYearCalendar);
+	nMonth = StringtoNumber(DImensionElementPrincipalName('Calendar Months',sMonthCalendar));
+	
+	EventDate=CellGetS(LeasesCube, Version, Currency,sYear, Company, SubAccount, GLAccount, BusUnits, TenureID,'Event Dates');
+	IF(EventDate@<>'');
+		IF(pVersion@='Forecast');	
+			EventMonth=DImensionElementPrincipalName(sDim, AttrS('Calendar Months' ,SubSt(EventDate, 6,2), 'MonthName')|' '|SubSt(EventDate, 1,4)|'F');
+		ELSE;
+			EventMonth=DImensionElementPrincipalName(sDim, AttrS('Calendar Months' ,SubSt(EventDate, 6,2), 'MonthName')|' '|SubSt(EventDate, 1,4));
+		ENDIF;
+	ENDIF;
+
+	IF((nLeaseStartYear=nYear & nLeaseStartMonth <= nMonth)
+	% (nLeaseStartYear<nYear & nLeaseEndYear>nYear)
+	% (nLeaseEndYear=nYear & nLeaseEndMonth >= nMonth));
+
+	IF(pVersion@='Forecast');
+		LeaseStart=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseStartMonth, 'MonthName')|' '|LeaseStartYear|'F');
+		LeaseEnd=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseEndMonth, 'MonthName')|' '|LeaseEndYear|'F');
+	ELSE;
+		LeaseStart=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseStartMonth, 'MonthName')|' '|LeaseStartYear);
+		LeaseEnd=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseEndMonth, 'MonthName')|' '|LeaseEndYear);
+	ENDIF;
+	
+	IF(Version@='Forecast' & DIMIX(sDim, sMonth) < DIMIX(sDim, ForecastMonth));
+
+	ELSE;
+
+	IF(sMonth@=LeaseStart % nCtr=1 % (sMonth@=ForecastFirstMonth & pVersion@='Forecast'));
+		EventDay=StringtoNumber(SubSt(LeaseStartDate, 9, 2));
+		DaysinMonth=CellGetN(CalendarCube, sYearCalendar, sMonthCalendar, 'Days');
+		IF(EventDay=1 % nCtr=1 % (sMonth@=ForecastFirstMonth & pVersion@='Forecast' & sMonth@<>LeaseStart));
+			IF(Version@='Forecast' & DIMIX(sDim, EventMonth) < DIMIX(sDim, sMonth));
+				sParentYear=ElPar(sDim, sMonth, 1);
+				Rate=CellGetN(LeasesCube, Version, Currency, sParentYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			ELSE;
+				Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			ENDIF;
+			IF(LeaseCurrency@=CompanyCurrency);
+				XR=1;
+			ELSE;	
+				FiscalMonth='M'|AttrS(sDim, sMonth, 'Month');
+				FiscalYear=AttrS(sDim, ElPar(sDim, sMonth,1),'YearCalendar');
+				XR=CellGetN('Currency Exchange Cube', Version, Company, 'Opex', LeaseCurrency, CompanyCurrency, FiscalMonth, FiscalYear, 'Rate');
+			ENDIF;
+			Base=CellGetN(LeasesCube, Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BusUnits, TenureID, 'CostAmount') 
+				\ XR ;
+			LeaseCalc=Base * (1+Rate);
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		ELSE;
+			Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			IF(LeaseCurrency@=CompanyCurrency);
+				XR=1;
+			ELSE;	
+				FiscalMonth='M'|AttrS(sDim, sMonth, 'Month');
+				FiscalYear=AttrS(sDim, ElPar(sDim, sMonth,1),'YearCalendar');
+				XR=CellGetN('Currency Exchange Cube', Version, Company, 'Opex', LeaseCurrency, CompanyCurrency, FiscalMonth, FiscalYear, 'Rate');
+			ENDIF;
+			Base=CellGetN(LeasesCube, Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BusUnits, TenureID, 'CostAmount') 
+				\ XR ;
+			LeaseCalc= Base * (1+Rate) \ DaysinMonth * (DaysinMonth - EventDay);
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		
+		ENDIF;
+		IF(sMonth@=LeaseStart % sMonth@=ForecastFirstMonth);
+			nStart=1;
+		ENDIF;
+
+	ELSEIF(EnableDispose=1 & DIMIX(sDim, sMOnth)>=DIMIX(sDim, DisposeMonth) );
+		DisposeDay=StringtoNumber(SubSt(DisposeDate, 9, 2));
+		DaysinMonth=CellGetN(CalendarCube, SubSt(DisposeDate,1,4),Subst(DisposeDate, 6,2 ), 'Days');
+		PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+		IF(sMonth@=DisposeMonth);
+			IF(DisposeDay=1);
+		
+			ELSEIF(DaysinMonth = DisposeDay);
+				LeaseCalc=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			ELSE;
+				Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				LeaseCalc=Base \ DaysinMonth * DisposeDay ;
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			ENDIF;
+		ENDIF;
+	ELSEIF(sMonth @= EventMonth);
+
+		PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+		EventDay=StringtoNumber(SubSt(EventDate, 9, 2));
+		DaysinMonth=CellGetN(CalendarCube, sYearCalendar, sMonthCalendar, 'Days');
+		IF(EventDay=1);
+			Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			LeaseCalc=Base * (1+Rate);
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		ELSE;
+			Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			LeaseCalc= Base \ DaysinMonth * EventDay + Base * (1+Rate) \ DaysinMonth * (DaysinMonth - EventDay);
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			
+		ENDIF;
+		nStart=0;
+	ELSEIF( sMonth@=LeaseEnd);
+		PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+		EventDay=StringtoNumber(SubSt(LeaseEndDate, 9, 2));
+		DaysinMonth=CellGetN(CalendarCube, sYearCalendar, sMonthCalendar, 'Days');
+		IF(EventDay=1);
+		ELSE;
+			PrevRate=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			IF(PrevRate=0);
+				Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			ELSE;
+				PrevPrevMonth=SubsetGetElementName(sDim,sSub,nCtr-2);
+				Base=CellGetN(LeasesCube, Version, Currency, PrevPrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				Rate=PrevRate;
+			ENDIF;	
+			IF(DaysinMonth = EventDay);
+				LeaseCalc=Base * (1+Rate);
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			ELSE;
+				LeaseCalc= Base * (1+Rate) \ DaysinMonth * EventDay;
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			ENDIF;
+		ENDIF;
+		nCtr=nMax;
+	ELSE;
+
+		IF(nStart=1);
+			IF(LeaseCurrency@=CompanyCurrency);
+				XR=1;
+			ELSE;	
+				FiscalMonth='M'|AttrS(sDim, sMonth, 'Month');
+				FiscalYear=AttrS(sDim, ElPar(sDim, sMonth,1),'YearCalendar');
+				XR=CellGetN('Currency Exchange Cube', Version, Company, 'Opex', LeaseCurrency, CompanyCurrency, FiscalMonth, FiscalYear, 'Rate');
+			ENDIF;
+			Base=CellGetN(LeasesCube, Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BusUnits, TenureID, 'CostAmount') 
+				\ XR ;
+			LeaseCalc=Base;			
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			nStart=0;
+		ELSE;
+			PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+			PrevRate=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			IF(PrevRate=0 % nCtr=2);
+				LeaseCalc=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			ELSE;
+				PrevPrevMonth=SubsetGetElementName(sDim,sSub,nCtr-2);
+				Base=CellGetN(LeasesCube, Version, Currency, PrevPrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				LeaseCalc=Base * (1+PrevRate);
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		
+			ENDIF;
+
+		ENDIF;
+	ENDIF;
+	ENDIF;
+	ENDIF;
+	nCtr = nCtr + 1;
+END;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

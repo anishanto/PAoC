@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"EventTypeDetail",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Event Type] )}, 0)}"
+}

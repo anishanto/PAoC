@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"BusUnitsDetail",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}, ASC)}"
+}

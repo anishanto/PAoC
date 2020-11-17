@@ -1,0 +1,156 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+CellPutS('',cubMessages,cProcess,elmfailureMessage);
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vClientType=CELLGETN(cubGlobalControl, 'Client Model Type', 'Value');
+vCurType = 'Opex';
+vCM = 'Rate';
+######################################################################################
+
+
+#####################Calculate FX Rates###########################
+IF(pFX @= 'Yes');
+
+dFiscalMon='Fiscal Months';
+vMonStart = DimensionElementPrincipalName(dFiscalMon, pMonStart);
+vMonEnd = DimensionElementPrincipalName(dFiscalMon, pMonEnd);
+
+	IF(SUBST(vMonStart,1,2)@='M0');
+		sMonStart=SUBST(vMonStart, 3, 1);
+		else;
+		sMonStart=SUBST(vMonStart, 2, 2);
+	ENDIF;
+
+	IF(SUBST(vMonEnd,1,2)@='M0');
+		sMonEnd=SUBST(vMonEnd, 3, 1);
+		else;
+		sMonEnd=SUBST(vMonEnd, 2, 2);
+	ENDIF;
+
+	ExecuteProcess( 'CopyVersion - Fx Rates', 'pSourceVersion',pVersionFrom ,'pTargetVersion',pVersion, 'pSourceYear', pYearFrom,'pTargetYear',pYear,'pMonthStart',sMonStart,'pMonthEnd',sMonEnd,'pCurrencyType',pCurrencyType,'pCurrencyTypeTo',pCurrencyTypeTo);
+
+ENDIF;
+###############################################################
+
+###############Currency Validation Check########################
+
+vError=0;
+
+IF(pCurrency@='Yes' % pRestatement @='Yes' % pVariation@='Yes');
+	##Define Variables##
+	cube='Currency Exchange Cube';
+
+###Lookup Rates####
+	#Create Company
+	sDim = 'Company';
+	sSub= 'pCompany';
+	SubsetDestroy( sDim, sSub );
+	
+	IF(pCo @= 'All Companies') ;
+		sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+		SubsetCreatebyMDX( sSub, sMDX);
+	ELSE;
+		SubsetCreate( sDim, sSub );
+		SubsetElementInsert( sDim, sSub, pCo, 0 );
+	ENDIF;
+
+	sDim2 = 'Currency Type';
+	sSub2= 'pCurrency';
+			
+	SubsetDestroy( sDim2, sSub2 );
+		
+	IF(pRestatement@='Yes') ;
+		sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [CurrencyType] )}, 0)}';
+		SubsetCreatebyMDX( sSub2, sMDX);
+	ELSE;
+		SubsetCreate( sDim2, sSub2 );
+		SubsetElementInsert( sDim2, sSub2, 'Opex', 0 );
+	ENDIF;
+	
+	sDim3 = 'Fiscal Months';
+	sSub3= 'pMonths';	
+	SubsetDestroy(sDim3, sSub3);
+	sMDX = '{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Months] )}, 0)}, { [Fiscal Months].[M00] }) }';
+	SubsetCreatebyMDX( sSub3, sMDX);
+
+		#Run through Company
+		nMax = SubsetGetSize(sDim, sSub);
+		nCtr = 1;
+		WHILE(nCtr <= nMax);
+			sCo = SubsetGetElementName(sDim,sSub, nCtr);
+			vCurFrom = ATTRS('Company', sCo, 'Currency');
+			#Run through Currency Type
+			
+			nMax2 = SubsetGetSize(sDim2, sSub2);
+			nCtr2 = 1;
+			WHILE(nCtr2 <= nMax2);
+				sCurType = SubsetGetElementName(sDim2,sSub2, nCtr2);
+				#Run through Months
+				nMax3 = SubsetGetSize(sDim3, sSub3);
+				nCtr3 = 1;
+				WHILE(nCtr3 <= nMax3);
+					sMon = SubsetGetElementName(sDim3, sSub3, nCtr3);
+                        				vValue = CellgetN(cube, pVersion, sCo, sCurType, vCurFrom, pCurrencyTo, sMon, pYear, vCM);
+                        				###End process if the value is zero M01 - M12 - Do not end if M00 is zero
+                        				IF( vValue=0);
+						vError=1;
+                				            	vMessage='Currency exchange rates is zero for combination';
+  						Asciioutput('..\logs\System\Error_Currency.txt', vMessage, sCo, sCurType, pVersion, pYear, sMon);
+					ENDIF;
+                				nCtr3 = nCtr3 + 1;
+               				END;
+                			nCtr2 = nCtr2 + 1;
+            			END;
+            			nCtr = nCtr + 1;
+         		END;
+
+	 IF(vError=1);
+		vMessage='Process failed: Make sure currency exchange rates are populated for selected company/version/year combination';
+        		CellPutS(vMessage,cubMessages,cProcess,elmfailureMessage);
+		ProcessQuit;
+	ENDIF;
+
+SubsetDestroy( sDim, sSub );
+SubsetDestroy( sDim2, sSub2 );
+SubsetDestroy( sDim3, sSub3 );
+ENDIF;
+
+
+
+#######################Execute Conversion Processes#############################
+
+#If client is 1 (Detail) then execute DetailAnalysisFX - Wrapper Else execute the balance client AnalysisFX - Wrapper
+#1 = Detail Client
+#0 =  Balance Client
+
+IF(vClientType=1);
+	ExecuteProcess( 'ProcessDetailAnalysisFX - Wrapper', 'pVersion', pVersion,'pYear',pYear,'pCurrency',pCurrency,'pRestatement',pRestatement,'pVariation',pVariation,'pCurrencyTo',pCurrencyTo,'pCo',pCo);
+	ELSE;
+	ExecuteProcess( 'ProcessAnalysisFX - Wrapper', 'pVersion', pVersion,'pYear',pYear,'pCompany',pCo,'pCurrency',pCurrency,'pRestatement',pRestatement,'pVariation',pVariation,'pCurrencyTo',pCurrencyTo);
+ENDIF;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

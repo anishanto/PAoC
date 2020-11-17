@@ -1,0 +1,51 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+LeaseNumberofYears=CellGetN('Global Control', 'Lease Number of Years Projection', 'Value'); 
+LeaseBaseYear=StringtoNumber(CellGetS('Global Control', 'Lease Base Year', 'String')); 
+
+sDim = 'Fiscal Years';
+sSub1='FiscalYearRange';
+
+IF(SubsetExists(sDim, sSub1)=0);
+	SubsetCreate(sDim, sSub1);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub1);
+ENDIF;
+
+# Colocar el name como alias en el cubo de atributos
+
+sDim = 'Fiscal Years';
+nMax = LeaseNumberOfYears + 1;
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sEl = DIMNM(sDim,nCtr);
+	sLev=ELLEV(sDim, sEl);
+	IF(sLev=0);
+		NameYear=Numbertostring(LeaseBaseYear + nCtr-1);
+		SubsetElementInsert(sDim, sSub1, NameYear, 0);
+	ENDIF;
+	nCtr = nCtr + 1;
+END;
+	
+sAlias='AltName';
+SubsetAliasSet(sDim, sSub1, sAlias );
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

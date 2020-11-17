@@ -1,0 +1,40 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_costtype_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_costtype_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"jT1Kc`X1Htl8X3TlQ;o@ZQ]b]Vv]mFMlf@YTzty^ZtDakb=Ln@J@6il66N7Md:ftnCi3QG\\zrnjM7j8zfTG^vODSIInOJcMdKN_zb1X<BzO=AWtri^KdbXP1g3B?T3J85<L`>9feRr>XP6JK_g`Sy_UJb5_@TlzHNOf|xzb03Vv`aA`MD7h45o]Rc471t`ewtpkN3Mf>",
+		"query":"SELECT 1,2",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"CostTypeKey",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"CostCategoryType",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

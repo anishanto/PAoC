@@ -1,0 +1,348 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#############################################################Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cFileName = 'Tenure_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cDimName = 'Tenure ID';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+
+
+###########################################################Create Dimension if it doesn't exist
+IF(DimensionExists(cDimName) = 0);
+    DImensionCreate(cDimName);
+EndIf;
+
+#############################################################Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+######################################################################Standard Attributes
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            Tenure                      : '| Tenure);
+   AsciiOutput( sDebugFile, '            Name                     : '| Name);
+   AsciiOutput( sDebugFile, '            SH1Parent1            : '| SH1Parent1);
+   AsciiOutput( sDebugFile, '            SH1Parent2            : '| SH1Parent2);
+   AsciiOutput( sDebugFile, '            SH1Parent3            : '| SH1Parent3);
+   AsciiOutput( sDebugFile, '            SH1Parent4            : '| SH1Parent4);
+   AsciiOutput( sDebugFile, '            AH1Parent1            : '| AH1Parent1);
+   AsciiOutput( sDebugFile, '            AH1Parent2            : '| AH1Parent2);
+   AsciiOutput( sDebugFile, '            AH1Parent3            : '| AH1Parent3);
+   AsciiOutput( sDebugFile, '            AH1Parent4            : '| AH1Parent4);
+   AsciiOutput( sDebugFile, '            AH2Parent1            : '| AH2Parent1);
+   AsciiOutput( sDebugFile, '            AH2Parent2            : '| AH2Parent2);
+   AsciiOutput( sDebugFile, '            AH2Parent3            : '| AH2Parent3);
+   AsciiOutput( sDebugFile, '            AH2Parent4            : '| AH2Parent4);
+   AsciiOutput( sDebugFile, '            AH3Parent1            : '| AH3Parent1);
+   AsciiOutput( sDebugFile, '            AH3Parent2            : '| AH3Parent2);
+   AsciiOutput( sDebugFile, '            AH3Parent3            : '| AH3Parent3);
+   AsciiOutput( sDebugFile, '            AH3Parent4            : '| AH3Parent4);
+   AsciiOutput( sDebugFile, '            AH4Parent1            : '| AH4Parent1);
+   AsciiOutput( sDebugFile, '            AH4Parent2            : '| AH4Parent2);
+   AsciiOutput( sDebugFile, '            AH4Parent3            : '| AH4Parent3);
+   AsciiOutput( sDebugFile, '            AH4Parent4            : '| AH4Parent4);
+   AsciiOutput( sDebugFile, '            InputTemplate            : '| InputTemplate);
+   AsciiOutput( sDebugFile, '            BudgetRegion            : '| BudgetRegion);
+EndIf;
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check to make sure file path exists
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+
+
+##############################################################Check if Dimension Constant Exists
+   IF( Trim( cDimName ) @=' ');
+     nErrors = 1;
+     sMessage = 'No dimension named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+####################Build Dimension if it doesn't exist.
+
+IF( DIMENSIONEXISTS(cDimName) = 0);
+     DIMENSIONCREATE(cDimName);
+EndIF;
+
+
+####################Delete All Elements
+
+IF( pDeleteAllElements = 1);
+DIMENSIONDELETEALLELEMENTS(cDimName);
+Endif;
+
+
+#############################Delete All Attributes If Deleting All Elements
+IF(1=0);
+
+IF( pDeleteAllElements = 1);
+######################################################################Standard Attributes
+   #ATTRDELETE(cDimName,'Name');
+   ATTRDELETE(cDimName,'SH1Parent1');
+   ATTRDELETE(cDimName,'SH1Parent2');
+   ATTRDELETE(cDimName,'SH1Parent3');
+   ATTRDELETE(cDimName,'SH1Parent4');
+   ATTRDELETE(cDimName,'AH1Parent1');
+   ATTRDELETE(cDimName,'AH1Parent2');
+   ATTRDELETE(cDimName,'AH1Parent3');
+   ATTRDELETE(cDimName,'AH1Parent4');
+   ATTRDELETE(cDimName,'AH2Parent1');
+   ATTRDELETE(cDimName,'AH2Parent2');
+   ATTRDELETE(cDimName,'AH2Parent3');
+   ATTRDELETE(cDimName,'AH2Parent4');
+   ATTRDELETE(cDimName,'AH3Parent1');
+   ATTRDELETE(cDimName,'AH3Parent2');
+   ATTRDELETE(cDimName,'AH3Parent3');
+   ATTRDELETE(cDimName,'AH3Parent4');
+   ATTRDELETE(cDimName,'AH4Parent1');
+   ATTRDELETE(cDimName,'AH4Parent2');
+   ATTRDELETE(cDimName,'AH4Parent3');
+   ATTRDELETE(cDimName,'AH4Parent4');
+#   ATTRDELETE(cDimName,'InputTemplate');
+
+######################################################################Derived Standard Attributes not in file
+   #ATTRDELETE(cDimName,'CodeName');
+   #ATTRDELETE(cDimName,'DisplayName');
+   #ATTRDELETE(cDimName,'DisplayNameCustom');
+   #ATTRDELETE(cDimName,'NameCode');
+
+
+
+EndIf;
+EndIf;
+
+############################################################################Insert Base Element Attributes
+
+IF( DIMIX(cDimName2,'Name')=0);
+   ATTRINSERT(cDimName,'','Name','S');
+EndIf;
+   ATTRINSERT(cDimName,'','SH1Parent1','S');
+   ATTRINSERT(cDimName,'','SH1Parent2','S');
+   ATTRINSERT(cDimName,'','SH1Parent3','S');
+   ATTRINSERT(cDimName,'','SH1Parent4','S');
+   ATTRINSERT(cDimName,'','AH1Parent1','S');
+   ATTRINSERT(cDimName,'','AH1Parent2','S');
+   ATTRINSERT(cDimName,'','AH1Parent3','S');
+   ATTRINSERT(cDimName,'','AH1Parent4','S');
+   ATTRINSERT(cDimName,'','AH2Parent1','S');
+   ATTRINSERT(cDimName,'','AH2Parent2','S');
+   ATTRINSERT(cDimName,'','AH2Parent3','S');
+   ATTRINSERT(cDimName,'','AH2Parent4','S');
+   ATTRINSERT(cDimName,'','AH3Parent1','S');
+   ATTRINSERT(cDimName,'','AH3Parent2','S');
+   ATTRINSERT(cDimName,'','AH3Parent3','S');
+   ATTRINSERT(cDimName,'','AH3Parent4','S');
+   ATTRINSERT(cDimName,'','AH4Parent1','S');
+   ATTRINSERT(cDimName,'','AH4Parent2','S');
+   ATTRINSERT(cDimName,'','AH4Parent3','S');
+   ATTRINSERT(cDimName,'','AH4Parent4','S');
+ #  ATTRINSERT(cDimName,'','InputTemplate','S');
+
+   #ATTRINSERT(cDimName,'','DisplayNameCustom','A');
+   #ATTRINSERT(cDimName,'','DisplayName','A');
+   #ATTRINSERT(cDimName,'','NameCode','A');
+  # ATTRINSERT(cDimName,'','CodeName','A');
+
+
+
+#####Set Element Sort Order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+#### Assign DataSource 
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+##################################################################Continue Debug
+If( pDebug >=1 );
+
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Metadata.debug';
+EndIf;
+
+##################################################################Continue Check from Prolog
+
+If( nErrors > 0 );
+   ProcessBreak;
+EndIf;
+
+
+####################################################################MetdataCount
+nMetaCount  = nMetaCount +1;
+
+#####################################################################Add child level dimension elements
+IF( pDebug <=1 );
+   DIMENSIONELEMENTINSERT(cDimName,'',Tenure,'n');
+EndIf;
+
+IF( pDebug >=1 );
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , Tenure,' For Dimension ',cDimName);
+Endif;
+
+
+
+IF(DIMIX(cDimName,'NA')=0);
+   DIMENSIONELEMENTINSERT(cDimName,'','NA','n');
+EndIf;
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+#############################################################Load Standard Attributes
+
+   ATTRPUTS(Name,cDimName,Tenure,'Name');
+   ATTRPUTS(SH1Parent1,cDimName,Tenure,'SH1Parent1');
+   ATTRPUTS(SH1Parent2,cDimName,Tenure,'SH1Parent2');
+   ATTRPUTS(SH1Parent3,cDimName,Tenure,'SH1Parent3');
+   ATTRPUTS(SH1Parent4,cDimName,Tenure,'SH1Parent4');
+   ATTRPUTS(AH1Parent1,cDimName,Tenure,'AH1Parent1');
+   ATTRPUTS(AH1Parent2,cDimName,Tenure,'AH1Parent2');
+   ATTRPUTS(AH1Parent3,cDimName,Tenure,'AH1Parent3');
+   ATTRPUTS(AH1Parent4,cDimName,Tenure,'AH1Parent4');
+   ATTRPUTS(AH2Parent1,cDimName,Tenure,'AH2Parent1');
+   ATTRPUTS(AH2Parent2,cDimName,Tenure,'AH2Parent2');
+   ATTRPUTS(AH2Parent3,cDimName,Tenure,'AH2Parent3');
+   ATTRPUTS(AH2Parent4,cDimName,Tenure,'AH2Parent4');
+   ATTRPUTS(AH3Parent1,cDimName,Tenure,'AH3Parent1');
+   ATTRPUTS(AH3Parent2,cDimName,Tenure,'AH3Parent2');
+   ATTRPUTS(AH3Parent3,cDimName,Tenure,'AH3Parent3');
+   ATTRPUTS(AH3Parent4,cDimName,Tenure,'AH3Parent4');
+   ATTRPUTS(AH4Parent1,cDimName,Tenure,'AH4Parent1');
+   ATTRPUTS(AH4Parent2,cDimName,Tenure,'AH4Parent2');
+   ATTRPUTS(AH4Parent3,cDimName,Tenure,'AH4Parent3');
+   ATTRPUTS(AH4Parent4,cDimName,Tenure,'AH4Parent4');
+   ATTRPUTS(InputTemplate,cDimName,Tenure,'InputTemplate');
+   ATTRPUTS(BudgetRegion,cDimName,Tenure,'Budget Region');
+
+
+
+##################################################################Insert Conditional Attributes
+#####################################These Atttributes will only be loaded if a value exists in the load file
+ 
+
+
+
+
+
+
+
+
+ 
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####Set Element Sort Order
+DIMENSIONSORTORDER(cDimName2,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+##### Update Budget Region Dimension
+ExecuteProcess('update_dim_budgetregion');
+
+IF(pDebug >= 1 );  
+
+   #Set the Debug File for Epilog
+   sDebugFile = cDebugFile | 'Epilog.debug';
+
+   #Check for Errors
+   IF( nErrors <> 0 );
+      ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   EndIf;
+
+  #Log Finish Time
+  ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+####################################### If Errors occurred terminate process with error status
+  IF( nErrors <> 0 );
+       ProcessQuit;
+Endif;
+
+############Create Standard Hierarchies
+
+IF(pCreateAllHierarchies = 1);
+
+ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       'pHierarchy','SH1',
+       'pEmailFIle','No',
+       'pSendTo','');
+
+
+ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       'pHierarchy','AH1',
+       'pEmailFIle','No',
+       'pSendTo','');
+
+ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       'pHierarchy','AH2',
+       'pEmailFIle','No',
+       'pSendTo','');
+
+ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       'pHierarchy','AH3',
+       'pEmailFIle','No',
+       'pSendTo','');
+
+ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       'pHierarchy','AH4',
+	'pEmailFIle','No',
+	'pSendTo','');
+
+ExecuteProcess('update_dim_tenure_2_ahit_hierarchy',
+       'pDebug',0);
+
+EndIf;
+#endregion

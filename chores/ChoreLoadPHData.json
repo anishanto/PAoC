@@ -1,0 +1,29 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreLoadPHData",
+	"StartTime":"2017-11-10T13:00Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P0DT04H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"bDebug",
+					"Value":1
+				},
+				{
+					"Name":"pEmail",
+					"Value":""
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('ProcessLoadPHData')"
+			}
+		}
+	]
+}

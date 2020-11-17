@@ -1,0 +1,34 @@
+{
+	"@type":"Process",
+	"Name":"Security_DeleteGroups_File",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"Security_DeleteGroups_File.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ASCII",
+		"asciiDecimalSeparator":".",
+		"asciiDelimiterChar":",",
+		"asciiDelimiterType":"Character",
+		"asciiHeaderRecords":0,
+		"asciiQuoteCharacter":"\"",
+		"asciiThousandSeparator":",",
+		"dataSourceNameForClient":"\\\\data\\s\\prod\\PlanOpexTrainer\\DataSources\\Imports\\Delete_Groups.csv",
+		"dataSourceNameForServer":"\\\\data\\s\\prod\\PlanOpexTrainer\\DataSources\\Imports\\Delete_Groups.csv"
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"vGroup",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

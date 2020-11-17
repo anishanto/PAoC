@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"LeaseValues",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Elements('Lease Value')"
+		},
+		{
+			"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Elements('Rate')"
+		}
+	]
+}

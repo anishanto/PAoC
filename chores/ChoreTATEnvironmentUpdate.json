@@ -1,0 +1,19 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreTATEnvironmentUpdate",
+	"StartTime":"2019-07-26T19:00Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P1DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":[],
+			"Process":
+			{
+				"@id":"Processes('update_TAT_environment')"
+			}
+		}
+	]
+}

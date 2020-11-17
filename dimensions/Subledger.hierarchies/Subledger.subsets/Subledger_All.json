@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Subledger_All",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [Subledger] )}, ALL, RECURSIVE )}"
+}

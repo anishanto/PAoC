@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"Vendor Expanded",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Vendor')/Hierarchies('Vendor')/Elements('SH1')"
+		}
+	]
+}

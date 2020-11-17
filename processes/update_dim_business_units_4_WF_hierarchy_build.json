@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_business_units_4_WF_hierarchy_build",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"update_dim_business_units_4_WF_hierarchy_build.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"EventTypeSelect",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Event Type')/Hierarchies('Event Type')/Elements('Rent Review (CPI/Indexation)')"
+		},
+		{
+			"@id":"Dimensions('Event Type')/Hierarchies('Event Type')/Elements('Rent Review (Negotiation)')"
+		}
+	]
+}

@@ -1,0 +1,802 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############################################################# Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cFileName = 'GLAccount_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cDimName = 'GL_Accounts';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+
+
+############################################################# Create Dimension if it doesn't exist
+IF(DimensionExists(cDimName) = 0);
+	DimensionCreate(cDimName);
+EndIf;
+
+############################################################# Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+	
+	sFulPath = cImportPath|cFileName;
+	
+	# Set Debug file name
+	sDebugFile = cDebugFile|'Prolog.debug';
+
+	# Log start time
+	AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+	###################################################### ASCII OUTPUT SECTION
+
+   	AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   	AsciiOutput( sDebugFile, '            GLCode                  : '| GLCode);
+   	AsciiOutput( sDebugFile, '            Name                      : '| Name);
+   	AsciiOutput( sDebugFile, '            SH1Parent1            : '| SH1Parent1);
+   	AsciiOutput( sDebugFile, '            SH1Parent2            : '| SH1Parent2);
+   	AsciiOutput( sDebugFile, '            SH1Parent3            : '| SH1Parent3);
+   	AsciiOutput( sDebugFile, '            SH1Parent4            : '| SH1Parent4);
+   	AsciiOutput( sDebugFile, '            AcctType                : '| AcctType);
+   	AsciiOutput( sDebugFile, '            CurrencyCalc           : '| CurrencyCalc);
+   	AsciiOutput( sDebugFile, '            CT_Acct_Only         : '| CT_Acct_Only);
+   	AsciiOutput( sDebugFile, '            InputTemplate          : '| InputTemplate);
+   	AsciiOutput( sDebugFile, '            AH1Parent1            : '| AH1Parent1);
+   	AsciiOutput( sDebugFile, '            AH1Parent2            : '| AH1Parent2);
+   	AsciiOutput( sDebugFile, '            AH1Parent3            : '| AH1Parent3);
+   	AsciiOutput( sDebugFile, '            AH1Parent4            : '| AH1Parent4);
+   	AsciiOutput( sDebugFile, '            AH2Parent1            : '| AH2Parent1);
+   	AsciiOutput( sDebugFile, '            AH2Parent2            : '| AH2Parent2);
+   	AsciiOutput( sDebugFile, '            AH2Parent3            : '| AH2Parent3);
+   	AsciiOutput( sDebugFile, '            AH2Parent4            : '| AH2Parent4);
+   	AsciiOutput( sDebugFile, '            AH3Parent1            : '| AH3Parent1);
+   	AsciiOutput( sDebugFile, '            AH3Parent2            : '| AH3Parent2);
+   	AsciiOutput( sDebugFile, '            AH3Parent3            : '| AH3Parent3);
+   	AsciiOutput( sDebugFile, '            AH3Parent4            : '| AH3Parent4);
+   	AsciiOutput( sDebugFile, '            AH4Parent1            : '| AH3Parent1);
+   	AsciiOutput( sDebugFile, '            AH4Parent2            : '| AH3Parent2);
+   	AsciiOutput( sDebugFile, '            AH4Parent3            : '| AH3Parent3);
+   	AsciiOutput( sDebugFile, '            AH4Parent4            : '| AH3Parent4);
+
+	############################################### Debug - Alternative Hierarchies for Leases
+
+   	AsciiOutput( sDebugFile, '            AL1Parent1            : '| AL1Parent1);
+   	AsciiOutput( sDebugFile, '            AL1Parent2            : '| AL1Parent2);
+   	AsciiOutput( sDebugFile, '            AL1Parent3            : '| AL1Parent3);
+   	AsciiOutput( sDebugFile, '            AL1Parent4            : '| AL1Parent4);
+   	AsciiOutput( sDebugFile, '            AL2Parent1            : '| AL2Parent1);
+   	AsciiOutput( sDebugFile, '            AL2Parent2            : '| AL2Parent2);
+   	AsciiOutput( sDebugFile, '            AL2Parent3            : '| AL2Parent3);
+   	AsciiOutput( sDebugFile, '            AL2Parent4            : '| AL2Parent4);
+   	AsciiOutput( sDebugFile, '            AL3Parent1            : '| AL3Parent1);
+   	AsciiOutput( sDebugFile, '            AL3Parent2            : '| AL3Parent2);
+   	AsciiOutput( sDebugFile, '            AL3Parent3            : '| AL3Parent3);
+   	AsciiOutput( sDebugFile, '            AL3Parent4            : '| AL3Parent4);
+   	AsciiOutput( sDebugFile, '            AL4Parent1            : '| AL3Parent1);
+   	AsciiOutput( sDebugFile, '            AL4Parent2            : '| AL3Parent2);
+   	AsciiOutput( sDebugFile, '            AL4Parent3            : '| AL3Parent3);
+   	AsciiOutput( sDebugFile, '            AL4Parent4            : '| AL3Parent4);
+
+	############################################## Debug - Alternative Hierarchy for Others
+
+   	AsciiOutput( sDebugFile, '            AO1Parent1            : '| AO1Parent1);
+   	AsciiOutput( sDebugFile, '            AO1Parent2            : '| AO1Parent2);
+   	AsciiOutput( sDebugFile, '            AO1Parent3            : '| AO1Parent3);
+   	AsciiOutput( sDebugFile, '            AO1Parent4            : '| AO1Parent4);
+
+	### Non Standard Attributes
+
+EndIf;
+
+############################################################# Validate Constants
+nErrors = 0;
+
+############################################################# Check to make sure file path exists
+IF( FileExists ( sFullPath ) = 0);
+
+	nError = 1;
+    	sMessage = 'Location or File does not exist: Please review';
+
+    	If( pDebug >=1 );
+      		AsciiOutput ( sDebugFile, sMessage );
+    	EndIf;
+
+    	DataSourceType = 'NULL';
+    	ItemReject ( sMessage );
+EndIf;
+
+
+############################################################## Check if Dimension Constant Exists
+IF( Trim( cDimName ) @=' ');
+	nErrors = 1;
+     	sMessage = 'No dimension named in Constant Section of Process';
+     	
+	If( pDebug >= 1);
+      		AsciiOutput ( sDebugFile, sMessage );
+     	EndIf;    
+     	
+	DatSourceType = 'NULL';   
+     	ItemReject (sMessage);
+EndIf;
+
+
+############################################################## Build Dimension if it doesn't exist
+IF( DIMENSIONEXISTS(cDimName) = 0);
+     DIMENSIONCREATE(cDimName);
+EndIF;
+
+############################################################## Delete All Elements
+IF( pDeleteAllElements = 1);
+	DIMENSIONDELETEALLELEMENTS(cDimName);
+Endif;
+
+
+
+############################################################## If Deleting All Elements, Delete All Attributes [NOT BEING USED AT THE MOMENT]
+IF(1=0);
+	IF( pDeleteAllElements = 1);
+		#ATTRDELETE(cDimName,'Name');
+	   	ATTRDELETE(cDimName,'AcctType');
+	   	ATTRDELETE(cDimName,'CT_Acct_Only');
+	   	ATTRDELETE(cDimName,'InputTemplate');
+
+		IF ( DIMIX (cDimName2, 'SH1Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'SH1Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'SH1Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'SH1Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'SH1Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'SH1Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'SH1Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'SH1Parent4');
+		ENDIF;
+
+		############################################# Delete attributes of default Alternative Hierarchies (AH1 - AH4)
+
+		IF ( DIMIX (cDimName2, 'AH1Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH1Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH1Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH1Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH1Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH1Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH1Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH1Parent4');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH2Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH2Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH2Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH2Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH2Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH2Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH2Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH2Parent4');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH3Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH3Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH3Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH3Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH3Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH3Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH3Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH3Parent4');
+		ENDIF;
+	
+		IF ( DIMIX (cDimName2, 'AH4Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH4Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH4Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH4Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH4Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH4Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AH4Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AH4Parent4');
+		ENDIF;
+	
+		############################################# Delete attributes of Alternative Hierarchies for Leases (AL1 - AL4)
+ 
+		IF ( DIMIX (cDimName2, 'AL1Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL1Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL1Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL1Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL1Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL1Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL1Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL1Parent4');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL2Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL2Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL2Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL2Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL2Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL2Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL2Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL2Parent4');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL3Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL3Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL3Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL3Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL3Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL3Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL3Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL3Parent4');
+		ENDIF;
+	
+		IF ( DIMIX (cDimName2, 'AL4Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL4Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL4Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL4Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL4Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL4Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AL4Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AL4Parent4');
+		ENDIF;
+
+		############################################# Delete attributes of Other Alternative Hierarchy (AO1)
+   	
+		IF ( DIMIX (cDimName2, 'AO1Parent1' ) <> 0);
+    			ATTRDELETE ( cDimName,'AO1Parent1');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AO1Parent2' ) <> 0);
+    			ATTRDELETE ( cDimName,'AO1Parent2');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AO1Parent3' ) <> 0);
+    			ATTRDELETE ( cDimName,'AO1Parent3');
+		ENDIF;
+
+		IF ( DIMIX (cDimName2, 'AO1Parent4' ) <> 0);
+    			ATTRDELETE ( cDimName,'AO1Parent4');
+		ENDIF;
+	
+		############################ Non Standard Attributes
+
+	EndIf;
+EndIf;
+
+############################################################## Insert Base Element Attributes
+ 
+IF( DIMIX(cDimName2,'Name')=0);
+   ATTRINSERT(cDimName,'','Name','S');
+EndIf;
+
+ATTRINSERT(cDimName,'','AcctType','S');
+ATTRINSERT(cDimName,'','CurrencyCalc','S');
+ATTRINSERT(cDimName,'','CT_Acct_Only','S');
+ATTRINSERT(cDimName,'','InputTemplate','S');
+ATTRINSERT(cDimName,'','DisplayNameCustom','A');
+ATTRINSERT(cDimName,'','DisplayName','A');
+ATTRINSERT(cDimName,'','NameCode','A');
+ATTRINSERT(cDimName,'','CodeName','A');
+
+############################################################## Set Element Sort Order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+############################################################## Assign DataSource 
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+#endregion
+#region Metadata
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###################################### Continue Debug
+If( pDebug >=1 );
+	#Set Debug File
+   	sDebugFile = cDebugFile | 'Metadata.debug';
+EndIf;
+
+###################################### Continue Check from Prolog
+If( nErrors > 0 );
+   	ProcessBreak;
+EndIf;
+
+###################################### MetadataCount
+nMetaCount  =  nMetaCount +1;
+
+###################################### Builds Dimension
+IF( pDebug <=1 );
+   	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+EndIf;
+
+IF( pDebug >=1 );
+      	ASCIIOUTPUT(  sDebugFile , 'Element Added' , GLCode,' For Dimension ',cDimName);
+Endif;
+#endregion
+#region Data
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############################################## Load Standard Attributes
+if (ATTRS(cDimName,GLCode,'Name')@<>Name);
+	ATTRPUTS(Name,cDimName,GLCode,'Name');
+endif;
+
+if (ATTRS(cDimName,GLCode,'AcctType')@<>AcctType);
+	ATTRPUTS(AcctType,cDimName,GLCode,'AcctType');
+endif;
+if (ATTRS(cDimName,GLCode,'CT_Acct_Only')@<>CT_Acct_Only);
+	ATTRPUTS(CT_Acct_Only,cDimName,GLCode,'CT_Acct_Only');
+endif;
+
+if (ATTRS(cDimName,GLCode,'InputTemplate')@<>InputTemplate);
+	ATTRPUTS(InputTemplate,cDimName,GLCode,'InputTemplate');
+endif;
+
+if (ATTRS(cDimName,GLCode,'Lease or FM Flag')@<>FMorLeaseFlag);
+	ATTRPUTS(FMorLeaseFlag,cDimName,GLCode,'Lease or FM Flag');
+endif;
+
+if (ATTRS(cDimName,GLCode,'Global Assumption GLA Category')@<>vGLACategory);
+	ATTRPUTS(vGLACategory, cDimName, GLCode, 'Global Assumption GLA Category');
+endif;
+############################################## Insert Conditional Attributes
+############################################## Only populated hierarchy attributes in the source will be inserted
+
+
+IF( SH1Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'SH1Parent1')=0);
+   		ATTRINSERT(cDimName,'','SH1Parent1','S');
+	ENDIF;
+   	ATTRPUTS(SH1Parent1,cDimName,GLCode,'SH1Parent1');
+ENDIF;
+
+IF( SH1Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'SH1Parent2')=0);
+   		ATTRINSERT(cDimName,'','SH1Parent2','S');
+	ENDIF;
+   	ATTRPUTS(SH1Parent2,cDimName,GLCode,'SH1Parent2');
+ENDIF;
+
+IF( SH1Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'SH1Parent3')=0);
+   		ATTRINSERT(cDimName,'','SH1Parent3','S');
+	ENDIF;   
+	ATTRPUTS(SH1Parent3,cDimName,GLCode,'SH1Parent3');
+ENDIF;
+
+IF( SH1Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'SH1Parent4')=0);
+	   	ATTRINSERT(cDimName,'','SH1Parent4','S');
+	ENDIF;
+   	ATTRPUTS(SH1Parent4,cDimName,GLCode,'SH1Parent4');
+ENDIF;
+
+### Insert Attributes for AH1-AH4
+IF( AH1Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AH1Parent1')=0);
+   		ATTRINSERT(cDimName,'','AH1Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AH1Parent1,cDimName,GLCode,'AH1Parent1');
+ENDIF;
+
+IF( AH1Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AH1Parent2')=0);
+   		ATTRINSERT(cDimName,'','AH1Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AH1Parent2,cDimName,GLCode,'AH1Parent2');
+ENDIF;
+
+IF( AH1Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AH1Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AH1Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AH1Parent3,cDimName,GLCode,'AH1Parent3');
+ENDIF;
+
+IF( AH1Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AH1Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AH1Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AH1Parent4,cDimName,GLCode,'AH1Parent4');
+ENDIF;
+
+IF( AH2Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AH2Parent1')=0);
+   		ATTRINSERT(cDimName,'','AH2Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AH2Parent1,cDimName,GLCode,'AH2Parent1');
+ENDIF;
+
+IF( AH2Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AH2Parent2')=0);
+   		ATTRINSERT(cDimName,'','AH2Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AH2Parent2,cDimName,GLCode,'AH2Parent2');
+ENDIF;
+
+IF( AH2Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AH2Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AH2Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AH2Parent3,cDimName,GLCode,'AH2Parent3');
+ENDIF;
+
+IF( AH2Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AH2Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AH2Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AH2Parent4,cDimName,GLCode,'AH2Parent4');
+ENDIF;
+
+IF( AH3Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AH3Parent1')=0);
+   		ATTRINSERT(cDimName,'','AH3Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AH3Parent1,cDimName,GLCode,'AH3Parent1');
+ENDIF;
+
+IF( AH3Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AH3Parent2')=0);
+   		ATTRINSERT(cDimName,'','AH3Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AH3Parent2,cDimName,GLCode,'AH3Parent2');
+ENDIF;
+
+IF( AH3Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AH3Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AH3Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AH3Parent3,cDimName,GLCode,'AH3Parent3');
+ENDIF;
+
+IF( AH3Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AH3Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AH3Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AH3Parent4,cDimName,GLCode,'AH3Parent4');
+ENDIF;
+
+IF( AH4Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AH4Parent1')=0);
+   		ATTRINSERT(cDimName,'','AH4Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AH4Parent1,cDimName,GLCode,'AH4Parent1');
+ENDIF;
+
+IF( AH4Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AH4Parent2')=0);
+   		ATTRINSERT(cDimName,'','AH4Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AH4Parent2,cDimName,GLCode,'AH4Parent2');
+ENDIF;
+
+IF( AH4Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AH4Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AH4Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AH4Parent3,cDimName,GLCode,'AH4Parent3');
+ENDIF;
+
+IF( AH4Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AH4Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AH4Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AH4Parent4,cDimName,GLCode,'AH4Parent4');
+ENDIF;
+
+### Insert Attributes for AL1-AL4
+IF( AL1Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AL1Parent1')=0);
+  		ATTRINSERT(cDimName,'','AL1Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AL1Parent1,cDimName,GLCode,'AL1Parent1');
+ENDIF;
+
+IF( AL1Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AL1Parent2')=0);
+   		ATTRINSERT(cDimName,'','AL1Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AL1Parent2,cDimName,GLCode,'AL1Parent2');
+ENDIF;
+
+IF( AL1Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AL1Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AL1Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AL1Parent3,cDimName,GLCode,'AL1Parent3');
+ENDIF;
+
+IF( AL1Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AL1Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AL1Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AL1Parent4,cDimName,GLCode,'AL1Parent4');
+ENDIF;
+
+IF( AL2Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AL2Parent1')=0);
+   		ATTRINSERT(cDimName,'','AL2Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AL2Parent1,cDimName,GLCode,'AL2Parent1');
+ENDIF;
+
+IF( AL2Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AL2Parent2')=0);
+   		ATTRINSERT(cDimName,'','AL2Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AL2Parent2,cDimName,GLCode,'AL2Parent2');
+ENDIF;
+
+IF( AL2Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AL2Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AL2Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AL2Parent3,cDimName,GLCode,'AL2Parent3');
+ENDIF;
+
+IF( AL2Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AL2Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AL2Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AL2Parent4,cDimName,GLCode,'AL2Parent4');
+ENDIF;
+
+IF( AL3Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AL3Parent1')=0);
+   		ATTRINSERT(cDimName,'','AL3Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AL3Parent1,cDimName,GLCode,'AL3Parent1');
+ENDIF;
+
+IF( AL3Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AL3Parent2')=0);
+   		ATTRINSERT(cDimName,'','AL3Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AL3Parent2,cDimName,GLCode,'AL3Parent2');
+ENDIF;
+
+IF( AL3Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AL3Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AL3Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AL3Parent3,cDimName,GLCode,'AL3Parent3');
+ENDIF;
+
+IF( AL3Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AL3Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AL3Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AL3Parent4,cDimName,GLCode,'AL3Parent4');
+ENDIF;
+
+IF( AL4Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AL4Parent1')=0);
+   		ATTRINSERT(cDimName,'','AL4Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AL4Parent1,cDimName,GLCode,'AL4Parent1');
+ENDIF;
+
+IF( AL4Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AL4Parent2')=0);
+   		ATTRINSERT(cDimName,'','AL4Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AL4Parent2,cDimName,GLCode,'AL4Parent2');
+ENDIF;
+
+IF( AL4Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AL4Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AL4Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AL4Parent3,cDimName,GLCode,'AL4Parent3');
+ENDIF;
+
+IF( AL4Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AL4Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AL4Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AL4Parent4,cDimName,GLCode,'AL4Parent4');
+ENDIF;
+
+### Insert Attributes for AO1
+
+IF( AO1Parent1 @<>' ');
+	IF (DIMIX(cDimname2,'AO1Parent1')=0);
+   		ATTRINSERT(cDimName,'','AO1Parent1','S');
+	ENDIF;
+  	ATTRPUTS(AO1Parent1,cDimName,GLCode,'AO1Parent1');
+ENDIF;
+
+IF( AO1Parent2 @<>' ');
+	IF (DIMIX(cDimname2,'AO1Parent2')=0);
+   		ATTRINSERT(cDimName,'','AO1Parent2','S');
+   	ENDIF;
+	ATTRPUTS(AO1Parent2,cDimName,GLCode,'AO1Parent2');
+ENDIF;
+
+IF( AO1Parent3 @<>' ');
+	IF (DIMIX(cDimname2,'AO1Parent3')=0);
+	   	ATTRINSERT(cDimName,'','AO1Parent3','S');
+	ENDIF;
+   	ATTRPUTS(AO1Parent3,cDimName,GLCode,'AO1Parent3');
+ENDIF;
+
+IF( AO1Parent4 @<>' ');
+	IF (DIMIX(cDimname2,'AO1Parent4')=0);
+	   	ATTRINSERT(cDimName,'','AO1Parent4','S');
+	ENDIF;
+   	ATTRPUTS(AO1Parent4,cDimName,GLCode,'AO1Parent4');
+ENDIF;
+
+#################### Added Attributes Non Standard
+
+#################### Update Alias Based Attributes
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+################################################################ Set Element Sort Order
+
+DIMENSIONSORTORDER(cDimName2,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+IF(pDebug >= 1 );  
+
+	### Set the Debug File for Epilog
+   	sDebugFile = cDebugFile | 'Epilog.debug';
+
+   	### Check for Errors
+   	IF( nErrors <> 0 );
+      		ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   	EndIf;
+
+  	### Log Finish Time
+  	ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+EndIf;
+
+############################################################## If Errors occurred, terminate process with error status.
+
+IF( nErrors <> 0 );
+       	ProcessQuit;
+Endif;
+
+############################################################## Create Hierarchies
+
+IF(pCreateAllHierarchies = 1);
+
+	######################################## Standard Hierarchy (SH1)
+
+	ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+	       'pHierarchy','SH1',
+	        'pDebug',0
+	);
+
+	######################################## Alternative Hierarchies FM (AH1-AH4)
+
+	IF(DIMIX(cDimName2,'AH1Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AH1',
+		        'pDebug',0
+		);
+	EndIf;
+
+	IF(DIMIX(cDimName2,'AH2Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AH2',
+		        'pDebug',0
+		);
+	EndIf;
+
+	IF(DIMIX(cDimName2,'AH3Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AH3',
+		        'pDebug',0
+		);
+	EndIf;
+
+	IF(DIMIX(cDimName2,'AH4Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AH4',
+		        'pDebug',0
+		);
+	EndIf;
+
+   	######################################## Alternative Hierarchies for Leases (AL1-AL4)
+
+	IF(DIMIX(cDimName2,'AL1Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AL1',
+		        'pDebug',0
+		);
+	EndIf;
+
+	IF(DIMIX(cDimName2,'AL2Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AL2',
+		        'pDebug',0
+		);
+	EndIf;
+
+	IF(DIMIX(cDimName2,'AL3Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AL3',
+		        'pDebug',0
+		);
+	EndIf;
+
+	IF(DIMIX(cDimName2,'AL4Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AL4',
+		        'pDebug',0
+		);
+	EndIf;
+
+   	########################################## Alternative Hierarchy for Others (AO1)
+
+	IF(DIMIX(cDimName2,'AO1Parent1')<>0);
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build',
+		       'pHierarchy','AO1',
+		        'pDebug',0
+		);
+	EndIf;
+EndIf;
+
+ExecuteProcess('update_dim_accounts_1_picklists');
+#endregion

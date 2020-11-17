@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"ViewZeroOutFlag",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2020')"
+		}
+	]
+}

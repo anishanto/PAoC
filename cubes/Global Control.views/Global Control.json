@@ -1,0 +1,26 @@
+{
+	"@type":"NativeView",
+	"Name":"Global Control",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Global Control Measures')/Hierarchies('Global Control Measures')/Subsets('All Members')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Global Control Items')/Hierarchies('Global Control Items')/Subsets('All Members')"
+			}
+		}
+	],
+	"Titles":[],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

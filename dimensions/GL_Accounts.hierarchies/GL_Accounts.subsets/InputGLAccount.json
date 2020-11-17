@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"InputGLAccount",
+	"Expression":"{FILTER( {TM1SUBSETALL( [GL_Accounts] )}, [GL_Accounts].[InputFlag] = \"Y\")}"
+}

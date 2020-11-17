@@ -1,0 +1,52 @@
+{
+	"@type":"Process",
+	"Name":"ProcessDimensionParentCleanUp",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"ProcessDimensionParentCleanUp.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"IgnoredInputVarName=BusUnits\fVarType=32\fColType=1165\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1DimensionSubset",
+		"dataSourceNameForClient":"BusUnits",
+		"dataSourceNameForServer":"BusUnits",
+		"subset":"All"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDimension",
+			"Prompt":"Dimension",
+			"Value":"BusUnits",
+			"Type":"String"
+		},
+		{
+			"Name":"pSendTo",
+			"Prompt":"",
+			"Value":"TM1Admin@am.jll.comTM1Admin@am.jll.com",
+			"Type":"String"
+		},
+		{
+			"Name":"pSubject",
+			"Prompt":"",
+			"Value":"BusUnit Hierarchy Has Parent Element with no Children:",
+			"Type":"String"
+		},
+		{
+			"Name":"pBody",
+			"Prompt":"",
+			"Value":"Please check the dimension BusUnits subset ",
+			"Type":"String"
+		},
+		{
+			"Name":"pTopParent",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

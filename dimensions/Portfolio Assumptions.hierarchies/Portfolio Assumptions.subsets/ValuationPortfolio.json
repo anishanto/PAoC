@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"ValuationPortfolio",
+	"Expression":"{ EXCEPT( {TM1SUBSETALL( [Portfolio Assumptions] )}, { [Portfolio Assumptions].[Default Market], [Portfolio Assumptions].[Default CPI] }) }"
+}

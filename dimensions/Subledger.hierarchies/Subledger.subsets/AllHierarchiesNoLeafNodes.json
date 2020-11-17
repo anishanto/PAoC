@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"AllHierarchiesNoLeafNodes",
+	"Expression":"{EXCEPT({TM1DRILLDOWNMEMBER( { HIERARCHIZE( {TM1SUBSETALL( [Subledger] )} ) },ALL, RECURSIVE )}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Subledger] )}, 0)})}"
+}

@@ -1,0 +1,56 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##################################### Define Variables ##############################################
+cubGlobalControl = 'Global Control';
+vClientType=CELLGETN(cubGlobalControl, 'Client Model Type', 'Value');
+vProcess = GetProcessName();
+vPA = '}Processes';
+AttrPutS('',vPA,vProcess,'Failure');
+cImportPath = CELLGETS('Global Control','Export Folder', 'String');  
+vFileName = 'E1loadfile.csv';
+sFullPath = cImportPath|vFileName;
+CellPutS(pYear, 'Global Control', 'Extract Year', 'String');
+##################################### Export to E1 #################################################
+
+AttrPutS ('',vPA,vProcess,'Failure');
+
+## Deletes Previously Created File if it exists
+IF (FileExists (sFullPath) = 1);
+	AsciiDelete (sFullPath);
+ENDIF;
+
+sProcessName = IF(vClientType=1,'CubeExtract - OpexDetail','CubeExtract - OpexPlan');
+
+return = EXECUTEPROCESS(sProcessName,'pSourceVersion',pSourceVersion,'pCompany',pCompany,'pYear',pYear,'pLedgerType',pLedgerType,'pEmailFile',pEmailfile,'pSendTo',pSendTo,'pCurrency',pCurrency);
+
+IF (return = ProcessExitByQuit());
+	sMessage = 'The selected version contains zero data for the selected period. No file has been generated.';
+	AttrPutS (sMessage,vPA,vProcess,'Failure');
+	ProcessQuit;
+ENDIF;
+
+
+	
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

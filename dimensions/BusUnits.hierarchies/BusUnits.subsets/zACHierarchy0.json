@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zACHierarchy0",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [BusUnits] )}, \"AC1\")}, { [BusUnits].[AC1] }, RECURSIVE ) }, 0)}"
+}

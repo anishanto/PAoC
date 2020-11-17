@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_sub_accounts_1_dim_mgmt",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"update_dim_sub_accounts_1_dim_mgmt.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

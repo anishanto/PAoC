@@ -1,0 +1,142 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+TenureDim='Tenure ID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+FixedRatesCube='Leases Fixed Rates';
+LeaseCube='Leases Cube';
+
+TenureID=pTenureID;
+Version=pVersion;
+Currency=pCurrency;
+Company=pCompany;
+SubAccount=pSubAccount;
+GLAccount=pGLAccount;
+BusUnits=pBusUnits;
+
+## Set up view for zeroing at Data ##
+CubeName=FixedRatesCube ;
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Event Name', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Fixed Rates Measures', ViewNameSource);
+
+# Create views and subsets for SourceView
+
+#Create Version
+SubsetCreate ('Versions_PM', ViewNameSource);
+SubsetElementInsert ( 'Versions_PM',  ViewNameSource, pVersion, 1);
+
+#Create EventName
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Event Name] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Portfolio Assumptions
+SubsetCreate('Tenure ID', ViewNameSource);
+SubsetElementInsert('Tenure ID', ViewNameSource, pTenureID,0);
+
+#Create Fixed Rates Measures
+SubsetCreate('Fixed Rates Measures', ViewNameSource);
+SubsetElementInsert('Fixed Rates Measures', ViewNameSource, 'Valid Rate',0);
+
+#Create View
+ViewCreate( CubeName, ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Versions_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Event Name', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Tenure ID', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Fixed Rates Measures', ViewNameSource);
+ViewExtractSkipZeroesSet (CubeName, ViewNameSource,1);
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource,1);
+ViewExtractSkipRuleValuesSet(CubeName, ViewNameSource,0);
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+## Attr by Tenure ##
+
+LeaseEndDate=AttrS(TenureDim, TenureID, 'LeaseEndDate');
+LeaseStartDAte=AttrS(TenureDim, TenureID, 'LeaseStartDate');
+EventType=AttrS(TenureDim, TenureID, 'EventType');
+
+LeaseStartYear=StringtoNumber(Subst(LeaseStartDate, 1, 4 ));
+LeaseEndYear=StringtoNumber(Subst(LeaseEndDate, 1, 4));
+LeaseEndMonth=StringtoNumber(Subst(LeaseEndDate, 6, 2));
+	
+sDim_Year='Fiscal Month Year';	
+	
+EventDate=CellGetS(FixedRatesCube, Version, EventName, TenureID, 'Event Date');
+EventMonthName=AttrS('Calendar Months', Subst(EventDate,6,2), 'MonthName');
+EventYearName=Subst(EventDate,1,4);
+
+IF(pVersion@='Forecast');
+	EventMapMonth_Text=EventMonthName|' '|EventYearName|'F';
+	EventMapMonth=DimensionElementPrincipalName(sDim_Year,EventMapMonth_Text);	
+ELSE;
+	EventMapMonth_Text=EventMonthName|' '|EventYearName;
+	EventMapMonth=DimensionElementPrincipalName(sDim_Year,EventMapMonth_Text);	
+ENDIF;
+
+EventYear=StringtoNumber(EventYearName);
+EventMonth=StringtoNumber(SubSt(EventDate,6,2));
+
+
+
+IF(LeaseStartYear <= EventYear & (LeaseEndYear>EventYear % (LeaseEndYear=EventYear & LeaseEndMonth >=EventMonth)) );
+
+	IF(dimix(sDim_Year,EventMapMonth)<>0);
+
+		sYear= 'Y'|AttrS(sDim_Year, EventMapMonth, 'Year');
+		
+		CellPutS(EventName, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Assumption Category');  
+		CellPutS(EventType, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Event Type');
+		CellPutS(EventDate, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Event Dates');
+
+		Rate=CellGetN(FixedRatesCube, Version, EventName, TenureID, 'Valid Rate');
+		CellPutS(NUmbertostring(Rate*100)|'%', LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Assumption Rate');
+
+		CellPutN(Rate, LeaseCube, Version, Currency, EventMapMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+	ELSE;
+		itemskip;
+	ENDIF;
+
+ENDIF;
+
+	
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Event Name', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Fixed Rates Measures', ViewNameSource);
+#endregion

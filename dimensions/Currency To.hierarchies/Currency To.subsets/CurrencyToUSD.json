@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CurrencyToUSD",
+	"Expression":" {[Currency To].[USD]}"
+}

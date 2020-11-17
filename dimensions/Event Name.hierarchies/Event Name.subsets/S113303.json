@@ -1,0 +1,31 @@
+{
+	"@type":"Subset",
+	"Name":"S113303",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17982')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17983')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17984')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17995')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17982')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17983')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17984')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17995')"
+		}
+	]
+}

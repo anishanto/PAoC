@@ -1,0 +1,16 @@
+{
+	"@type":"Subset",
+	"Name":"Conversion Measures",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Total Amount')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Restatement')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('FX Variance')"
+		}
+	]
+}

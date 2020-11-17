@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"JLL_GLA",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('JLL_GLA')/Hierarchies('JLL_GLA')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"JLL_GLA.hierarchies/JLL_GLA.json"
+	]
+}

@@ -1,0 +1,40 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_ovcproperty_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_ovcproperty_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"x4ev:8@?2EK8lfQTdxVsFUm4liogBh8T7T5hNPnu:>\\Ncjmn42:a[4^;AgDwT`bT5LG91;<aeOcj_64aE6Sb=UATBw`oll8lWQTz`o>WZqVFfUzrIOc3FZBJlV^XigSF2=1eNRj6VB;nvYK17LFcxd4D@nl8kUw1GvalJm641E7ubaPK2CaawzMlLZ>wAhuqTvAyFT[t",
+		"query":"Select 1,2",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"OVCPID",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"E1BU",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

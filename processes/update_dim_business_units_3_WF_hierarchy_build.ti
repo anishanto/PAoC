@@ -1,0 +1,77 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'BusUnits';
+
+
+cEnablePlanningLevel=DIMIX('Global Control Items','Select Level of Planning');
+IF(cEnablePlanningLevel<>0);
+	cConsolidatePlanning = CellGetS('Global Control','Consolidated level planning','String');
+	cPlanningLevel=CellGetS('Global Control','Select Level of Planning','String');
+ENDIF;
+
+######################Create Workflow Subsets for Business Unit Dimension
+
+#Re-Create Approval WF subset
+sAppSub = 'Approval ' | cClientName | ' WF';
+
+IF(SubsetExists(cDimName, sAppSub)= 1);
+	SubsetDeleteAllElements (cDimName, sAppSub);
+else;
+	SubsetCreate(cDimName, sAppSub);
+ENDIF;	
+
+IF(cPlanningLevel@<>'' & cConsolidatePlanning@='Yes');
+	sMDX = '{TM1DRILLDOWNMEMBER( {[BusUnits].[AC1]}, ALL, RECURSIVE )}';
+	SubsetMDXSet(cDimName, sAppSub, sMDX);
+	SubsetMDXSet(cDimName, sAppSub, ''); 
+	SubsetAliasSet(cDimName, sAppSub, 'DisplayName' );
+
+ELSE;
+	sMDX = '{TM1DRILLDOWNMEMBER( {[BusUnits].[AH1]}, ALL, RECURSIVE )}';
+	SubsetMDXSet(cDimName, sAppSub, sMDX);
+	SubsetMDXSet(cDimName, sAppSub, ''); 
+	SubsetAliasSet(cDimName, sAppSub, 'DisplayName' );
+ENDIF;
+
+#Re-Create Approval WF subset
+sAppSub = 'Approval WF';
+
+IF(SubsetExists(cDimName, sAppSub)= 1);
+	SubsetDeleteAllElements (cDimName, sAppSub);
+else;
+	SubsetCreate(cDimName, sAppSub);
+ENDIF;	
+
+IF(cPlanningLevel@<>'' & cConsolidatePlanning@='Yes');
+	sMDX = '{TM1DRILLDOWNMEMBER( {[BusUnits].[AC1]}, ALL, RECURSIVE )}';
+	SubsetMDXSet(cDimName, sAppSub, sMDX);
+	SubsetMDXSet(cDimName, sAppSub, ''); 
+	SubsetAliasSet(cDimName, sAppSub, 'DisplayName' );
+
+ELSE;
+	sMDX = '{TM1DRILLDOWNMEMBER( {[BusUnits].[AH1]}, ALL, RECURSIVE )}';
+	SubsetMDXSet(cDimName, sAppSub, sMDX);
+	SubsetMDXSet(cDimName, sAppSub, ''); 
+	SubsetAliasSet(cDimName, sAppSub, 'DisplayName' );
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

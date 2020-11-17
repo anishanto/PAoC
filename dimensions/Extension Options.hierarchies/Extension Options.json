@@ -1,0 +1,75 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Extension Options",
+	"Elements":
+	[
+		{
+			"Name":"All Extension Options",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CPI",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Market/CPI",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Flatline",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Market",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Dispose",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Extend API",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Extension Options",
+			"ComponentName":"CPI",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Extension Options",
+			"ComponentName":"Market/CPI",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Extension Options",
+			"ComponentName":"Flatline",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Extension Options",
+			"ComponentName":"Market",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Extension Options",
+			"ComponentName":"Dispose",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Extension Options",
+			"ComponentName":"Extend API",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Extension Options.subsets/ExtensionOptionsDetailed.json",
+		"Extension Options.subsets/ExtensionOptionsExpanded.json",
+		"Extension Options.subsets/level0.json",
+		"Extension Options.subsets/level0_input.json"
+	]
+}

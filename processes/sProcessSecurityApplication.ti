@@ -1,0 +1,268 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####Define Variables#####
+sProcessNm = getProcessName();
+sView = 'VE-' | sProcessNm;
+sSub = 'VE-' | sProcessNm;
+cCube = '}ApplicationSecurity';
+dGrp = '}Groups';
+dAppEnt='}ApplicationEntries';
+
+CubeSetLogChanges(cCube, 0);
+
+#####Destroy previous views and subsets#####
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+#####Create View#####
+ViewCreate( cCube, sView);
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1)@<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+#####Create Dim Subsets#####
+
+iDimCnt = 1;
+
+WHILE(TabDim(cCube, iDimCnt) @<> '');
+
+     vDim = TabDim(cCube, iDimCnt);
+
+     IF(vDim @= dAppEnt);
+
+          sMDX = ' {TM1SUBSETALL( [}ApplicationEntries] ) }';
+          SubsetCreatebyMDX(sSub, sMDX);
+          ViewSubsetAssign(cCube, sView, vDim, sSub);
+          ViewRowDimensionSet(cCube, sView, vDim, 1);
+
+     ELSEIF(vDim @= dGrp);
+
+          sMDX= '{ EXCEPT( {TM1SUBSETALL( ['|dGrp|'] )}, { ['|dGrp|'].[ADMIN], ['|dGrp|'].[SecurityAdmin], ['|dGrp|'].[DataAdmin], ['|dGrp|'].[OperationsAdmin] }) }';
+          SubsetCreatebyMDX(sSub, sMDX);
+          ViewSubsetAssign(cCube, sView, vDim, sSub);
+          ViewColumnDimensionSet(cCube, sView, vDim,1);
+
+     ENDIF;
+
+     iDimCnt = iDimCnt + 1;
+
+END;
+
+#####Set View Filters#####
+ViewExtractSkipCalcsSet(cCube, sView, 0);
+ViewExtractSkipZeroesSet(cCube, sView, 0);
+
+#####Zero Out View#####
+VIEWZEROOUT(cCube, sView ) ;
+
+#####Set new views as the datasource#####
+    DatasourceNameForServer = cCube;
+    DatasourceCubeView = sView;
+
+
+
+vLine =0;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+######APPLICATION FOLDER SECURITY REQUIRES THIS TO RUN FIRST TO WORK#######
+CELLPUTS( 'NONE', cCube, vAppEnt, vGrp);
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+if (vLine=0);
+	ViewZeroOut(cCube,sView);
+	vLine = vLine +1;
+endif;
+
+#####PROCESS SUMMARY#####
+#Allow Read ALL access to the DA group
+#Allow Read access to Template folders for WB groups
+#Allow Read to Reporting folders for all client groups
+#Default balance to NONE including the 'Everyone' group
+
+
+#####DEFINE VARIABLES#####
+cCube='Global Control';
+vCorp = LOWER('CorpTM1 PlanOpex');
+vClient = LOWER(CellGetS(cCube, 'Client Name', 'String'));
+vClientSubAcctType= LOWER(CellGetS(cCube, 'Client SubAcctType', 'String'));
+vClientModelType = LOWER(CellGetS(cCube, 'Client Model Type', 'String'));
+vSecurityGroup1 = LOWER(CellGetS(cCube, 'Security Group 1', 'String'));
+vSecurityGroup2 = LOWER(CellGetS(cCube, 'Security Group 2', 'String'));
+vSecurityGroup3 = LOWER(CellGetS(cCube, 'Security Group 3', 'String'));
+vTenureFlag= CellGetN(cCube, 'Client Tenure Type', 'Value');
+
+dAppEnt = '}ApplicationEntries';
+dGrp = '}Groups';
+eGrp = LOWER(ATTRS('}Groups', vGrp, '}TM1_DefaultDisplayValue'));
+eApp = '}Applications';
+
+
+#####DEFINE PATH#####
+vPath = LOWER(CellGetS(cCube, 'Export Folder', 'String'));
+vFile = vPath | vClient | sProcessNm | '.csv';
+
+
+#####ASSIGN SECURITY#####
+
+
+cCube = '}ApplicationSecurity';
+
+IF(SCAN(vClient, eGrp) <> 0 
+% SCAN(vCorp, eGrp) <> 0
+% SCAN(vSecurityGroup1, eGrp) <> 0
+% SCAN(vSecurityGroup2, eGrp) <> 0
+% SCAN(vSecurityGroup3, eGrp) <> 0);
+
+#######Leases NONE Access#####
+if (ATTRS('}ApplicationEntries',vAppEnt,'Leases')@='Y' & vTenureFlag=0);
+	CELLPUTS('NONE', cCube, vAppEnt, vGrp);
+endif;
+
+#####Assign READ Access#####
+#Opex DA Group & TA Group
+IF(SCAN('opexda', eGrp) <> 0 % SCAN('opexta', eGrp) <> 0);
+
+	IF(vTenureFlag=1);
+	CELLPUTS('READ', cCube, vAppEnt, vGrp);
+      	ENDIF;
+
+	IF(vTenureFlag=0 & (SCAN('Leases',vAppEnt)=0 ));
+     	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+      	ENDIF;
+
+ENDIF;
+
+#Opex FA Group
+IF(SCAN('opexfa', eGrp) <> 0);
+	IF(vTenureFlag=1 & (SCAN('Dimension Management',vAppEnt)<>0 % SCAN('Reporting',vAppEnt)<>0 % SCAN('Templates',vAppEnt)<>0));
+     	CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+	IF(vTenureFlag=0 & (SCAN('Dimension Management',vAppEnt)<>0 % SCAN('Reporting',vAppEnt)<>0 % SCAN('Templates',vAppEnt)<>0) & SCAN('Leases',vAppEnt)=0);
+     	CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+ENDIF;
+
+
+#Opex WB Group 
+IF(SCAN('opexwb', eGrp) <> 0);
+	IF(vTenureFlag=1 & (SCAN('Templates',vAppEnt)<>0 % SCAN('Reporting',vAppEnt)<>0));
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+	IF(vTenureFlag=0 & (SCAN('Templates',vAppEnt)<>0 % SCAN('Reporting',vAppEnt)<>0) & SCAN('Leases',vAppEnt)=0);
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+ENDIF;
+
+#Opex EC Group
+IF(SCAN('opexec', eGrp) <> 0);
+	IF(vTenureFlag=1 & (SCAN('Templates',vAppEnt)<>0 % SCAN('Reporting',vAppEnt)<>0));
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+	IF(vTenureFlag=0 & (SCAN('Templates',vAppEnt)<>0 % SCAN('Reporting',vAppEnt)<>0) & SCAN('Leases',vAppEnt)=0);
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+ENDIF;
+
+
+#Opex ProcR Group
+IF(SCAN('opexprocr', eGrp) <> 0);
+	IF(vTenureFlag=1);
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+	IF(vTenureFlag=0 & SCAN('Leases',vAppEnt)=0);
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+ENDIF;
+
+#Opex RO Group
+     IF(SCAN('opexro', eGrp) <> 0);
+	IF(vTenureFlag=1);
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+	IF(vTenureFlag=0 & SCAN('Leases',vAppEnt)=0);
+    	 CELLPUTS('READ', cCube, vAppEnt, vGrp);
+	ENDIF;
+
+ENDIF;
+
+#####Assign NONE Access#####
+ELSE;
+     CELLPUTS( 'NONE', cCube, vAppEnt, vGrp);
+
+ENDIF;
+
+
+#####EXPORT ISSUE LOG#####
+     vReport = 'Yes';
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##### Add Read at top levels for applications #######
+
+eGrp='CAMID("::Everyone")';
+top_AppEnt='}Applications';
+client_AppEnt=ELCOMP(dAppEnt,top_AppEnt,1);
+CELLPUTS('READ', cCube, top_AppEnt, eGrp);
+CELLPUTS('READ', cCube, client_AppEnt, eGrp);
+
+#####Cleanup Views & Subsets#####
+
+CubeSetLogChanges(cCube, 1);
+
+IF(pDebug <> 1);
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1) @<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+ENDIF;
+
+#SecurityRefresh;
+#endregion

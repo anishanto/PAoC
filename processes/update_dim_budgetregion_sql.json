@@ -1,0 +1,32 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_budgetregion_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_budgetregion_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"b^lks_^BjD^fVvf=?0nKF0Razt[ZkDeKfU9^^JizhIlG;n=G;i2KUC2uglReAWiTP;a?qP?L^qo^r43GBgaGw=Z?_sboi]lMvM5FJg;;nMsNUZrYg<@27T8NVqUP@eujlXh~mJn@lB@gPa@YtCz]U]ePmn=c`\\zs2aLzv=Yj[8yeqdjY8<YN4TbdGR@Bn5xtM7ysb\\\\",
+		"query":"SELECT 1",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"Region",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

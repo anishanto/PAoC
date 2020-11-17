@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"DWPush - Delete Version",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"DWPush - Delete Version.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pTableName",
+			"Prompt":"",
+			"Value":"[ssdi].[DetailAnalysisCube]",
+			"Type":"String"
+		},
+		{
+			"Name":"pDebug",
+			"Prompt":"",
+			"Value":0,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}

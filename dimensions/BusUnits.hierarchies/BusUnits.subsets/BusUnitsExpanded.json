@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"BusUnitsExpanded",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( { HIERARCHIZE( {TM1SUBSETALL( [BusUnits] )} ) }, \"SH1*\")}, ALL, RECURSIVE )}"
+}

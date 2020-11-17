@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"FiscalMonthswithTotalF",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Attribute')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('All Month Years')"
+		}
+	]
+}

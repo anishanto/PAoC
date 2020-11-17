@@ -1,0 +1,20 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_glob_control_dim_mgmt_subsets",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_glob_control_dim_mgmt_subsets.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"IgnoredInputVarName=BusUnits\fVarType=32\fColType=1165\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1DimensionSubset",
+		"dataSourceNameForClient":"BusUnits",
+		"dataSourceNameForServer":"BusUnits",
+		"subset":"All"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

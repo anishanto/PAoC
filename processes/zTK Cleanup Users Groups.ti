@@ -1,0 +1,54 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+####Chris Malone New Code 111617 for client informatoin
+cClientName = CELLGETS('Global Control', 'Client Name', 'String');
+
+
+
+IF ( 1 = pRunDC );
+
+#Enter camid's here
+
+#DeleteClient('CAMID("jll:u:4dd6fafdd206e74791de9422c55ebe84")');
+
+
+
+ENDIF;
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF( 1 = pRun );
+vPath = '..\datasources\exports\delgroups.csv' ;
+vCurGrp = ATTRS( pDimName, vDim, '}TM1_DefaultDisplayValue' ) ;
+
+IF ( DIMIX ( pDimName, vDim) > 0 ) ;
+IF ( (SCAN( cClientName, vCurGrp) > 0 % SCAN('PlanOpex', vCurGrp) > 0 % SCAN('PlanComp', vCurGrp) > 0 )  & DIMIX(pDimName, vDim) > 0   )  ;
+     DeleteGroup( vDim  );
+ASCIIOUTPUT ( vPath, cClientName, vCurGrp, pDimName,  vDim );
+ENDIF;
+ENDIF;
+ENDIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

@@ -1,0 +1,77 @@
+{
+	"@type":"Process",
+	"Name":"zTK Cleanup Clients",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"zTK Cleanup Clients.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"}ClientSecurity",
+		"dataSourceNameForServer":"}ClientSecurity",
+		"view":"VE-zTK Cleanup Clients"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pCubeName",
+			"Prompt":"Do not change cube",
+			"Value":"}ClientSecurity",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimName",
+			"Prompt":"Do not change clients",
+			"Value":"}Clients",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimName2",
+			"Prompt":"Do not change groups",
+			"Value":"}Groups",
+			"Type":"String"
+		},
+		{
+			"Name":"pRun",
+			"Prompt":"input 1 to run",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pENV",
+			"Prompt":"input Prod if that environment",
+			"Value":"Prod",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"vDim",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vGroup",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Value",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

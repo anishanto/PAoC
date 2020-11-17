@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"WODrillWO Status",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [WO Status] )}, 0)} "
+}

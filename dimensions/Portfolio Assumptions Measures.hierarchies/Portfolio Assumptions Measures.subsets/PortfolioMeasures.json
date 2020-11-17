@@ -1,0 +1,31 @@
+{
+	"@type":"Subset",
+	"Name":"PortfolioMeasures",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Budget Region')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Budget Building Type')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Cost Category Type')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Lease Type')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Tenure Type')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Event Type')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Rates')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Check Rate')"
+		}
+	]
+}

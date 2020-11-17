@@ -1,0 +1,280 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################################Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');  
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+cDimName = 'SubLedger';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+sUnassignedSL = 'Unassigned SubLedger';
+vSubLedger = GLSBL;
+pBusAH = CELLGETN('Global Control', 'SubLedger AH Hierarchies', 'Value');
+sDateAttr = 'CreationDate';
+sTM1E1 = 'TM1E1';
+sCompany ='Company';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+sType = GLLT;
+ 
+
+### Initialize Debug ###
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Prolog.debug';
+
+  # Log start time
+  AsciiOutput( sDebugFile, 'Process Started: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+  # Log parametersi
+  AsciiOutput( sDebugFile, '            SubLedger     : ' | GLSBL );
+  AsciiOutput( sDebugFile, '            Ledger Type   : ' | GLLT );
+
+
+
+
+##############################################################################################Debug
+nErrors = 0;
+# Validate source file
+IF(DimensionExists(cDimName) = 0);
+nErrors = 1;
+  If( pDebug >= 1 );
+    sMessage = 'Dimension does not exists. Please review';
+    AsciiOutput( sDebugFile, sMessage );
+  EndIf;
+  ProcessQuit;
+EndIf;
+EndIf;
+
+######################################Create Company Loop####################################
+ 
+dimCompany = 'Company';
+subCompanyLevel0 = 'zCompanyLevel0';
+
+SUBSETDESTROY(dimCompany, subCompanyLevel0);
+     SUBSETCREATEBYMDX(subCompanyLevel0, '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}, ASC)}');
+     # loop through the elements of the subset
+      j=1;
+      sCompanyString = '';
+     WHILE(j<=SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+
+         vElem=SUBSETGETELEMENTNAME(dimCompany, subCompanyLevel0,j);
+        IF(  j =SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+         sCompanyString = sCompanyString | '''' | vElem  | '''';
+         ELSE;
+         sCompanyString = sCompanyString | '''' | vElem  | ''',';
+        ENDIF;
+         j=j+1;
+     END;
+
+
+
+###########################################################Define Company - This is the basis for defining BusUnits to Load
+
+
+#####Define SQL for Load
+
+   sSQL =  '
+    SELECT 
+        DISTINCT [GLSBL]
+       ,[GLLT] 
+        FROM [Stage_E1].[PRODDTA].[F0911] WITH (READUNCOMMITTED)
+        WHERE [GLCO] in (' | sCompanyString | ')  AND [GLSBL]<>'' ''
+';
+
+
+ ###########################################Define Local Variables
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+
+
+
+ 
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####Trim leading and trailing from Subledger cm 22818
+GLSBL = TRIM(GLSBL);
+
+sDebugFile = cDebugFile | 'Metadata.debug';
+
+If( pDebug <= 1 );
+
+IF(DIMIX(cDimName, GLSBL ) = 0 & pBusAH = 4);
+ DimensionElementInsert(cDimName, '',  GLSBL, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH3' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH4' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedSL|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH4', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'SH1',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH1',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH2',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH3',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH4',GLSBL,1);
+
+ELSEIF(DIMIX(cDimName, GLSBL ) = 0 & pBusAH = 3);
+ DimensionElementInsert(cDimName, '',  GLSBL, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH2' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH3' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedSL|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH3', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'SH1',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH1',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH2',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH3',GLSBL,1);
+
+ELSEIF(DIMIX(cDimName, GLSBL ) = 0 & pBusAH = 2);
+ DimensionElementInsert(cDimName, '',  GLSBL, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH2' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedSL|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH2', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'SH1',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH1',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH2',GLSBL,1);
+
+ELSEIF(DIMIX(cDimName, GLSBL ) = 0 & pBusAH = 1);
+ DimensionElementInsert(cDimName, '',  GLSBL, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'SH1' , 'C');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'AH1' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedSL|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSL|' '|'AH1', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'SH1',GLSBL,1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'AH1',GLSBL,1);
+
+ELSEIF(DIMIX(cDimName, GLSBL ) = 0 & pBusAH = 0);
+ DimensionElementInsert(cDimName, '',  GLSBL, 'N');
+ DimensionElementInsert(cDimName, '', sUnassignedSL|' '|'SH1' , 'C');
+ DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedSL|' '|'SH1', 1);
+ DimensionElementComponentAdd(cDimName, sUnassignedSL|' '|'SH1',GLSBL,1);
+
+EndIf;
+EndIf;
+
+
+#####################################################################################Add Attributes
+IF(DIMIX(cDimName2,sTM1E1) = 0);
+   AttrInsert(cDimName,'Name' ,sTM1E1,'S');
+EndIf;
+
+IF(DIMIX(cDimName2,sDateAttr) = 0);
+   AttrInsert(cDimName,'Name' ,sDateAttr,'S');
+EndIf;
+
+IF(DIMIX(cDimName2,'Type') = 0);
+   AttrInsert(cDimName,'Name' ,'Type','S');
+EndIf;
+
+
+############################################################################Debug
+
+If( pDebug >= 1 );
+sMessage = 'Component: ' | GLSBL | ' has been added in' | cDimName | ' dimension.';
+  AsciiOutput( sDebugFile, sMessage );
+EndIf;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+GLSBL = TRIM(GLSBL);
+
+  sDebugFile = cDebugFile | 'Data.debug';
+
+
+###############Add Name and Company Attributes
+If( pDebug <= 1 );
+  ATTRPUTS('Yes',cDimName,GLSBL,'TM1E1');
+  ATTRPUTS(GLLT,cDimName,GLSBL,'Type');
+  ATTRPUTS(sDateAdd,cDimName,GLSBL,sDateAttr );
+EndIf;
+
+
+If( pDebug >= 1 );
+sMessage = GLSBL | ' has added the following attributes: Type: '| GLLT  ;
+  AsciiOutput( sDebugFile, sMessage );
+EndIf;
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+################### Debug
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Epilog.debug';
+
+  # Log errors
+  If( nErrors <> 0 );
+    AsciiOutput( sDebugFile, 'Errors Occurred' );
+  EndIf;
+
+  # Log finish time
+  AsciiOutput( sDebugFile, 'Process Finished: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+EndIf;
+
+###############Email File
+
+sSubLedgerType = CELLGETS('Global Control', 'Client Subledger Type', 'String');
+
+
+IF(sSubLedgerType @='SubLedger');
+
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFileUnassignedSLSQL' ;
+    ExecuteProcess(vProcess,'pSendTo', pEmail);
+ENDIF;
+ENDIF;
+
+
+### If errors occurred terminate process with a major error status ###
+
+If( nErrors <> 0 );
+  ProcessQuit;
+EndIf;
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+#endregion

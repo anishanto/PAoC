@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"DrillSubledger",
+	"Expression":"EXCEPT({TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Subledger] )} ) }, 0)}, ASC)}, {[Subledger].[All Subledger and Other]})"
+}

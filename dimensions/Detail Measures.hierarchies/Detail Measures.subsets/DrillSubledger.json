@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"DrillSubledger",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Value')"
+		}
+	]
+}

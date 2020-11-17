@@ -1,0 +1,52 @@
+{
+	"@type":"Cube",
+	"Name":"Opex Detail Cube",
+	"Rules@Code.link":"Opex Detail Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')"
+		},
+		{
+			"@id":"Dimensions('Currency_PM')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Months')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('SubAccounts')"
+		},
+		{
+			"@id":"Dimensions('GL_Accounts')"
+		},
+		{
+			"@id":"Dimensions('Subledger')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')"
+		},
+		{
+			"@id":"Dimensions('Vendor')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Opex Detail Cube.views/Corrigo Work Orders.json",
+		"Opex Detail Cube.views/Current Month Corrigo Forecast.json",
+		"Opex Detail Cube.views/Detail - Load Review.json",
+		"Opex Detail Cube.views/Opex Detail Cube.json",
+		"Opex Detail Cube.views/Opex Detail Cube - BU.json",
+		"Opex Detail Cube.views/Suppression Flag.json",
+		"Opex Detail Cube.views/Transaction Actuals to Date Detail Drill.json",
+		"Opex Detail Cube.views/Transaction Detail Drill.json"
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"level0_Tenure",
+	"Expression":"{ EXCEPT( { EXCEPT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}, { [Tenure ID].[All Tenures & Other] }) }, { [Tenure ID].[NA] }) }"
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Consolidated Report Subset",
+	"Expression":"{TM1DRILLDOWNMEMBER( {[Subledger].[SH1]}, ALL, RECURSIVE )}"
+}

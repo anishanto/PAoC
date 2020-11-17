@@ -1,0 +1,66 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Event Type",
+	"Elements":
+	[
+		{
+			"Name":"All Event Type",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"All",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Rent Review (CPI/Indexation)",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Rent Review (Fixed)",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Rent Review (Negotiation)",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Rent Review (Other)",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Event Type",
+			"ComponentName":"All",
+			"Weight":0
+		},
+		{
+			"ParentName":"All Event Type",
+			"ComponentName":"Rent Review (CPI/Indexation)",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Type",
+			"ComponentName":"Rent Review (Fixed)",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Type",
+			"ComponentName":"Rent Review (Negotiation)",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Type",
+			"ComponentName":"Rent Review (Other)",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Event Type.subsets/EventTypeDetail.json",
+		"Event Type.subsets/EventTypeExpanded.json",
+		"Event Type.subsets/EventTypeSelect.json",
+		"Event Type.subsets/level0.json"
+	]
+}

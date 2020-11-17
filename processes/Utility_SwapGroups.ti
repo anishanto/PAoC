@@ -1,0 +1,31 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sFullPath ='..\Groups.txt';
+
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+if (DIMIX('}Groups',vGroup)=1);
+	DeleteGroup(vGroup);
+	AddGroup(vGroup);
+endif;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

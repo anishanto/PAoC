@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"DrillVendor",
+	"Expression":"{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({ [BusUnits].[All Trainer] } ,ALL,RECURSIVE)},0)} "
+}

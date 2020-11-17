@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zDimMgmtParents",
+	"Expression":"{EXCEPT({TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [Company] )}, ALL, RECURSIVE )}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)})}"
+}

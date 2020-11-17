@@ -1,0 +1,65 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_business_units_dim_mgmt",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_business_units_dim_mgmt.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"}ElementAttributes_BusUnits",
+		"dataSourceNameForServer":"}ElementAttributes_BusUnits",
+		"view":"all"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pHierarchy",
+			"Prompt":"Enter a Hierarchy Top Node: SH1, AH1-AH10",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pEmailFile",
+			"Prompt":"Send email regarding workflow subset build",
+			"Value":"Yes",
+			"Type":"String"
+		},
+		{
+			"Name":"pSendTo",
+			"Prompt":"Send to",
+			"Value":"TM1Admin@am.jll.com",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"BusUnits",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"V2",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Value",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

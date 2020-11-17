@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Expiry Years",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Expiry Years')/Hierarchies('Expiry Years')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Expiry Years.hierarchies/Expiry Years.json"
+	]
+}

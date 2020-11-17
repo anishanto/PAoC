@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Extension Options",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Extension Options')/Hierarchies('Extension Options')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Extension Options.hierarchies/Extension Options.json"
+	]
+}

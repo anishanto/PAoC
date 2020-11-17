@@ -1,0 +1,91 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+## Set up view for zeroing at Data ##
+CubeName='}ElementAttributes_Tenure ID';
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('TenureID', ViewNameSource);
+SubsetDestroy ('}ElementAttributes_Tenure ID', ViewNameSource);
+
+#Create Tenure ID
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Attr
+SubsetCreate ('}ElementAttributes_Tenure ID', ViewNameSource);
+SubsetElementInsert('}ElementAttributes_Tenure ID', ViewNameSource, 'Budget Region', 0);
+
+ViewCreate(CubeName,ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Tenure ID', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, '}ElementAttributes_Tenure ID', ViewNameSource);
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameSource, 1);
+
+DatasourceNameForServer = CubeName;
+DatasourceCubeView = ViewNameSource;
+
+####################################Add Attributes#####################################
+cDim = 'Budget Region';
+sAttr = 'Name';
+
+ATTRINSERT(cDim,'',sAttr,'S');
+
+####################################Update Dim#####################################
+DIMENSIONSORTORDER(cDim,'BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+#DimensionDeleteAllElements(cDim);
+
+####################################Add unique elements#####################################
+sP1 = 'All Budget Region';
+IF( DIMIX(cDim, sP1)=0);
+    DIMENSIONELEMENTINSERT(cDim,'',sP1,'c');
+EndIf;
+
+sEl='All';
+IF(DIMIX(cDim, sEl)=0);
+   DimensionElementInsert(cDim,'',sEl,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl, 0);
+EndIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Update Dim#####################################
+sEl = vBudgetRegion;
+
+IF(DIMIX(cDim, sEl)=0);
+	DimensionElementInsert(cDim,'',sEl,'n');
+	DimensionElementComponentAdd(cDim,sP1,sEl, 1);
+EndIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Update Attributes#####################################
+sAttr = 'Name';
+sAttrv =  vBudgetRegion;
+sEl = vBudgetRegion;
+
+ATTRPUTS(sAttrv,cDim,sEl,sAttr);
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CubeName='}ElementAttributes_Tenure ID';
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('}ElementAttributes_Tenure ID', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+#endregion

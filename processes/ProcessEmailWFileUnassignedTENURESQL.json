@@ -1,0 +1,21 @@
+{
+	"@type":"Process",
+	"Name":"ProcessEmailWFileUnassignedTENURESQL",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessEmailWFileUnassignedTENURESQL.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pSendTo",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

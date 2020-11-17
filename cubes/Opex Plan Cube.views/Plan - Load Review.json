@@ -1,0 +1,94 @@
+{
+	"@type":"NativeView",
+	"Name":"Plan - Load Review",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthsWithTotal')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('All Hierarchies Expanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('All GL Account CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Plan Measures')/Hierarchies('Plan Measures')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Plan Measures')/Hierarchies('Plan Measures')/Elements('Total Amount')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}

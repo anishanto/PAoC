@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TopParentBUNoSH1",
+	"Expression":"{[BusUnits].[AH1] , [BusUnits].[AH2] , [BusUnits].[AH3] , [BusUnits].[AH4] , [BusUnits].[AH5] , [BusUnits].[AH6] , [BusUnits].[AH7] , [BusUnits].[AH8] , [BusUnits].[AH9] , [BusUnits].[AH10]}"
+}

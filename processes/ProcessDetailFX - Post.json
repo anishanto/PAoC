@@ -1,0 +1,155 @@
+{
+	"@type":"Process",
+	"Name":"ProcessDetailFX - Post",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessDetailFX - Post.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=33\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"Opex Detail Cube",
+		"dataSourceNameForServer":"Opex Detail Cube",
+		"view":"Opex Detail Cube"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pVersion",
+			"Prompt":"Input Source Version",
+			"Value":"Actuals",
+			"Type":"String"
+		},
+		{
+			"Name":"pYear",
+			"Prompt":"Input Year",
+			"Value":"2018",
+			"Type":"String"
+		},
+		{
+			"Name":"pPost",
+			"Prompt":"Input Post",
+			"Value":"All Posts",
+			"Type":"String"
+		},
+		{
+			"Name":"pExtractCalc",
+			"Prompt":"Yes\\No to trouble shoot",
+			"Value":"No",
+			"Type":"String"
+		},
+		{
+			"Name":"pConversion",
+			"Prompt":"0 to Convert Local Currency  to Reporting Currency;1 to Convert from Reporting Currency to Local Currency",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pCurReporting",
+			"Prompt":"The Reporting currency code from the Exchange Rate Cube",
+			"Value":"AUD",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"BusUnits",
+			"Type":"String",
+			"Position":9,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"GL_Accounts",
+			"Type":"String",
+			"Position":7,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"SubAccounts",
+			"Type":"String",
+			"Position":6,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Subledger",
+			"Type":"String",
+			"Position":8,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Vendor",
+			"Type":"String",
+			"Position":10,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Versions_PM",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Currency_PM",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vYr",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vDM",
+			"Type":"String",
+			"Position":11,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCo",
+			"Type":"String",
+			"Position":5,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vMon",
+			"Type":"String",
+			"Position":4,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Value",
+			"Type":"Numeric",
+			"Position":12,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"BusUnits",
+	"Expression":"{TM1DRILLDOWNMEMBER( {[BusUnits].[AH1]}, ALL, RECURSIVE )}"
+}

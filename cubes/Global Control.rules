@@ -1,0 +1,145 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+[{'Detail Cube - Retention Number of Years','Balance Cube - Retention Number of Years'},'Value'] =N: NUMBR(DB('Global Control',!Global Control Items,'String'));
+
+[{'Retention Month','Actuals Month'},'Value'] =N: NUMBR(SUBST(DB('Global Control',!Global Control Items,'String'), 2, 2));
+
+[{'Lease Actuals Month','Lease Reporting Actuals Month'},'Value'] =N: NUMBR(SUBST(DB('Global Control',!Global Control Items,'String'), 2, 2));
+
+['Reporting Actuals Month','Value'] =N: NUMBR(SUBST(DB('Global Control','Reporting Actuals Month','String'), 2, 2));
+
+
+#Region CM - Update String parameters based on client name:
+['Environment','String']=S:
+IF(SUBST(DB('Global Control','TAT Environment','String'),1,3)@='DEV','DEVELOPMENT',
+IF(SUBST(DB('Global Control','TAT Environment','String'),1,3)@='TST','TEST',
+IF(SUBST(DB('Global Control','TAT Environment','String'),1,3)@='PRD','PRODUCTION',
+Continue)));
+
+['Backup Folder'] =S:'..\Admin\backups\';
+
+['Import Folder'] =S:'..\DataSources\Imports\';
+
+['Export Folder']  =S: '..\DataSources\Exports\';
+
+['Log Folder']  =S: '..\..\logs\System\';
+
+# Number of AH Hierarchies
+
+['BusUnits AH Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_BusUnits','AH10Parent1')<>0,10,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH9Parent1')<>0,9,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH8Parent1')<>0,8,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH7Parent1')<>0,7,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH6Parent1')<>0,6,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH5Parent1')<>0,5,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH4Parent1')<>0,4,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH3Parent1')<>0,3,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH2Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_BusUnits','AH1Parent1')<>0,1,
+              0))))))))));
+
+
+['GA Accounts AH Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AH4Parent1')<>0,4,
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AH3Parent1')<>0,3,
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AH2Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AH1Parent1')<>0,1,
+                 0))));
+
+['SubAccounts AH Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_SubAccounts','AH1Parent1')<>0,1,
+                 0);
+
+['SubLedger AH Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_Subledger','AH1Parent1')<>0,1,
+                 0);
+
+['Vendor AH Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_Vendor','AH1Parent1')<>0,1,
+                 0);
+
+['GA Accounts AL Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AL4Parent1')<>0,4,
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AL3Parent1')<>0,3,
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AL2Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AL1Parent1')<>0,1,
+                 0))));
+
+['SubAccounts AL Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_SubAccounts','AL1Parent1')<>0,1,
+                 0);
+
+['GA Accounts AO Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_GL_Accounts','AO1Parent1')<>0,1,
+                 0);
+
+['SubAccounts AO Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_SubAccounts','AO1Parent1')<>0,1,
+                 0);
+
+#####Leases#####
+['BusUnits AL Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_BusUnits','AL4Parent1')<>0,4,
+              IF(DIMIX('}ElementAttributes_BusUnits','AL3Parent1')<>0,3,
+              IF(DIMIX('}ElementAttributes_BusUnits','AL2Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_Busunits','AL1Parent1')<>0,1,
+                 0))));
+
+
+['BusUnits AO Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_BusUnits','AO3Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_BusUnits','AO2Parent1')<>0,1,
+
+                 0));
+
+['Tenure AH Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_Tenure ID','AH4Parent1')<>0,4,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AH3Parent1')<>0,3,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AH2Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AH1Parent1')<>0,1,
+                 0))));
+
+['Tenure AL Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL4Parent1')<>0,4,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL3Parent1')<>0,3,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL2Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL1Parent1')<>0,1,
+                 0))));
+
+['Tenure AO Hierarchies','Value'] =
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL4Parent1')<>0,4,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL3Parent1')<>0,3,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL2Parent1')<>0,2,
+              IF(DIMIX('}ElementAttributes_Tenure ID','AL1Parent1')<>0,1,
+                 0))));
+#EndRegion
+
+
+['Client SubAcct Type','Value'] = N:IF(DB('Global Control','Client SubAcct Type','String')@='Sub',1,0);
+['Client Model Type','Value'] = N:IF(DB('Global Control','Client Model Type','String')@='Detail',1,0);
+['Client Subledger Type','Value'] = N:IF(DB('Global Control','Client Subledger Type','String')@='Subledger',1,0);
+['Client Vendor Type','Value'] = N:IF(DB('Global Control','Client Vendor Type','String')@='Vendor',1,0);
+['Client Tenure Type','Value'] = N:IF(DB('Global Control','Client Tenure Type','String')@='Tenure',1,0);
+
+['E1 Actuals Year'] =S: DB('Global Control','E1 Calendar','String');
+['TM1 Client Actuals Year'] =S: DB('Global Control','Budget Year','String');
+['DW Push Default Year'] =S: DB('Global Control','DW Current Year','String');
+
+
+
+
+['Import Shared Folder'] =S:'..\DataSources\Imports\';
+
+
+['Export Shared Folder'] =S:'..\DataSources\Exports\';
+
+
+FEEDERS;
+[{'Lease Reporting Actuals Month','Lease Actuals Month'},'String'] => ['Value'];
+['E1 Calendar'] => ['E1 Actuals Year'];
+['Budget Year'] => ['TM1 Client Actuals Year'];
+['DW Current Year'] => ['DW Push Default Year'] ;

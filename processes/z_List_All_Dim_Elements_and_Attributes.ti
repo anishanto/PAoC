@@ -1,0 +1,78 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# this process will list all Dimensions and Attribute value for each element
+vOutputfile = '..\DataSources\Exports\Dim and Attr.txt' ;
+DataSourceASCIIQuoteCharacter = CHAR(34)   ;
+
+vNoDims = DIMSIZ ( '}Dimensions' ) ;
+vDelimiter = ' ; '  ;
+i = 1 ;
+
+ASCIIOUTPUT ( vOutputFile , 'DIMENSION; ELEMENT; ATTRIBUTE1;  ATTRIBUTE2; ATTRIBUTE3;  ATTRIBUTE4;  ATTRIBUTE5;  ATTRIBUTE6;  ATTRIBUTE7; ATTRIBUTE8;  ATTRIBUTE9; ATTRIBUTE10; ATTRIBUTE11;  ATTRIBUTE12;  ATTRIBUTE13; ATTRIBUTE14; ATTRIBUTE15   '      ) ;
+
+
+WHILE  ( i <= vNoDims ) ;
+     vDim = DIMNM ( '}Dimensions', i ) ;
+     vDimAttrDim = '}ElementAttributes_' | vDim ;
+     vDimSize = DIMSIZ ( vDim ) ;
+     vDimAttrDimSize = DIMSIZ ( vDimAttrDim ) ;
+      vWriteHeader = 'F' ;
+      vHeader = '' ;
+      IF ( SUBST ( vDim, 1, 1 ) @<> '}' ) ;
+      k = 1 ;
+     # write the Header for the current Dim and its Attribute Names
+     vHeader = vDim |   vDelimiter  | 'Element ; ' ;
+      x = 1 ;
+      WHILE  ( x <= vDimAttrDimSize ) ;
+           vAttrName = DIMNM( vDimAttrDim , x ) ;
+           vHeader = vHeader |  vAttrName |  vDelimiter ;
+            x = x + 1 ;
+     END;       
+     ASCIIOUTPUT ( vOutputFile , vHeader ) ;
+     WHILE ( k <= vDimSize ) ;
+        vString =  vDim |  vDelimiter  ;     
+         x = 1 ;
+         vElem = DIMNM ( vDim, k ) ;
+         IF( SCAN( ',', vElem ) <> 0 );
+                vElem = CHAR(44) | vElem | CHAR(44)  ;
+         ENDIF;
+         vString = vString |  vElem |  vDelimiter ;
+         WHILE  ( x <= vDimAttrDimSize ) ;
+              vAttrName = DIMNM( vDimAttrDim , x ) ;
+               vAttrType = DTYPE ( vDimAttrDim, vAttrName ) ;
+                IF ( vAttrType @='N' ) ;
+                    vString = vString |  NUMBERTOSTRING( ATTRN ( vDim, vElem, vAttrName ) )  |  vDelimiter ;                 
+                ELSE;
+                    vAttrValue = ATTRS ( vDim, vElem, vAttrName ) ;
+                    IF( vAttrValue @= '' ) ;
+                           vAttrValue ='None' ;
+                    ENDIF;
+                    vString = vString |  vAttrValue |  vDelimiter ;                 
+                ENDIF;
+              x = x + 1 ;
+          END;       
+          k = k + 1 ;
+          ASCIIOUTPUT ( vOutputFile , vString ) ;
+     END ;
+     ENDIF;
+    i = i + 1 ;
+END;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

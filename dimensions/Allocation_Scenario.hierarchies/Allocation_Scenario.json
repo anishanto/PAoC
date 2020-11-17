@@ -1,0 +1,28 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Allocation_Scenario",
+	"Elements":
+	[
+		{
+			"Name":"Scenario 1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Scenario 2",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Scenario 3",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Scenario 4",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Allocation_Scenario.subsets/level0.json",
+		"Allocation_Scenario.subsets/level0_Alias.json"
+	]
+}

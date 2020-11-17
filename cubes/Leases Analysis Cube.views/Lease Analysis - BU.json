@@ -1,0 +1,118 @@
+{
+	"@type":"NativeView",
+	"Name":"Lease Analysis - BU",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthsWithTotal')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('CompanyBU')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail - AltName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2019')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Subsets('VersionDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Actuals')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Subsets('TenureExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('All GL Account CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency')/Hierarchies('Currency')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency')/Hierarchies('Currency')/Elements('All Currency')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Subsets('LeaseValues')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Elements('Lease Value')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Elements('No Scale')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.#########"
+}

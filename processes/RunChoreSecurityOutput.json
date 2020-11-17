@@ -1,0 +1,21 @@
+{
+	"@type":"Process",
+	"Name":"RunChoreSecurityOutput",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"RunChoreSecurityOutput.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pTester",
+			"Prompt":"0 to run automatically in TST or PRD, 1 to run manually in DEV",
+			"Value":0,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}

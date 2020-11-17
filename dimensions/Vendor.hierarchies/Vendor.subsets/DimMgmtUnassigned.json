@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"DimMgmtUnassigned",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Vendor] )}, \"Unassigned Vendor SH1\")}, ALL, RECURSIVE )}"
+}

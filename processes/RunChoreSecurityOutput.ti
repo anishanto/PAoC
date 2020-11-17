@@ -1,0 +1,38 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+### This is a WRAPPER process for chore ChoreSecurityOutput
+### The purpose of this process is to stop the ChoreSecurityOutput from running if the TAT Environment is not TST or PRD.
+### There exists the possibility of running it manually if the TAT Environrment is not TST or PRD, by assigning 1 to the 'pTester' parameter.
+
+## 1)  Evaluates TAT Environment and decides to continue/quit.
+
+cCube = 'Global Control';
+cGlobalControlItem1 = 'TAT Environment';
+cGlobalControlMeasure = 'String';
+cTATEnvironment = CellGetS(cCube,cGlobalControlItem1,cGlobalControlMeasure);
+
+IF ((cTATEnvironment @<>'PRD' & cTATEnvironment@<>'TST') & pTester<>1);
+	ChoreQuit;
+ENDIF;
+
+## 2) Runs the process
+ExecuteProcess('sProcessSecurity Group Listing - TAT');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

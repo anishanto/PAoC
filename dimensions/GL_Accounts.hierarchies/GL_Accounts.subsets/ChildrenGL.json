@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"ChildrenGL",
+	"Expression":" {TM1SORT( {TM1FILTERBYLEVEL({DESCENDANTS(GL_Accounts.[SH1])},0)},ASC)}"
+}

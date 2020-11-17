@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"tp_delete_all",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"tp_delete_all.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pExecutionId",
+			"Prompt":"",
+			"Value":"None",
+			"Type":"String"
+		},
+		{
+			"Name":"pApprovalDim",
+			"Prompt":"",
+			"Value":"None",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

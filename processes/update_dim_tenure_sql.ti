@@ -1,0 +1,634 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeLockOverride(1);
+
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientID = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+vRecNo = 1;
+vdim = 'Tenure ID';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');  
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+nItem=0;
+nError=0;
+nBaseYear=StringtoNumber(AttrS('Fiscal Month Year','M01 Y01','YearCalendarF'));
+nBaseMonth=StringtoNumber(DimensionElementPrincipalName('Calendar Months',AttrS('Fiscal Month Year','M01 Y01','MonthCalendarF')));
+pHtenure=CellGetN('Global Control','Tenure AH Hierarchies','Value');
+sDateAttr = 'CreationDate';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+CalendarCube='Calendar Cube';
+
+## filter by date for current year base values ###
+sCurrentMonth=CellGetS(cubGlobalControl,'Lease Actuals Month','String');
+IF(sCurrentMonth@<>'');
+	sNextMonth=ATTRS('Fiscal Months',sCurrentMonth,'Next Month');
+ELSE;
+	sNextMonth='M01';
+ENDIF;
+nCurrentMonth=StringtoNumber(DimensionElementPrincipalName('Calendar Months',AttrS('Fiscal Months',sNextMonth,'DisplayName')));
+sCurrentPeriod=sNextMonth|' Y01';
+nCurrentYear=StringtoNumber(ATTRS('Fiscal Month Year',sCurrentPeriod,'YearCalendarF'));
+
+####################################Define Datasource Tab#####################################
+sSQL='SELECT Cost.[OneViewClientID]
+	,Cost.[ClientName]
+	,Cost.[TenureKey]
+	,Cost.[CostTypeKey]
+	,Cost.[CostStartDate]
+	,Cost.[CostEndDate]
+	,Cost.[Frequency]
+	,Cost.[CostAmount]
+	,Cost.[TenureID]
+	,Cost.[TenureName]
+	,Cost.[ProcessingGroup]
+	,Cost.[LeaseType]
+	,Cost.[TenureType]
+	,Cost.[TenureStatus]
+	,Cost.[LeaseStartDate]
+	,Cost.[LeaseEndDate]
+	,Cost.[PropertyKey]
+	,Cost.[OVCP_ID]
+	,Cost.[E1 BU]
+	,Cost.[Region]
+	,Cost.[BU Type]
+	,Cost.[CostCategoryType]
+	,Cost.[CostCurrency]
+	,Prop.[DashboardID]
+	,Ten.[TermStatus]
+	,Ten.[TenureParentKey]
+FROM [DW_All_Clients].[OVLA].[vw_OVLA_Budget_APAC_CostScheduleFinancial] Cost
+	inner join  [DW_All_Clients].[OVLA].[vw_OVLA_Properties] prop on (Prop.PropertyKey = Cost.PropertyKey and Cost.OVCP_ID = Prop.OVCP_ID)
+	inner join  [DW_All_Clients].[OVLA].[vw_OVLA_Tenures] Ten on Cost.PropertyKey = Ten.PropertyKey and Prop.DashboardID = Ten.DashboardID and Cost.TenureKey = Ten.TenureKey 
+where cost.OneViewClientID='|sClientID;
+
+# cost.OVCP_ID=13148247 and
+#sSQL='SELECT * FROM [DW_All_Clients].[OVLA].[vw_OVLA_Budget_APAC_CostScheduleFinancial] WHERE OneViewCLientID = '|sClientID;
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);	
+	ASCIIOUTPUT('..\logs\System\DebugTenure.sql.txt', sSQL);
+	ASCIIOUTPUT('..\logs\System\DebugTenure.sql.Error.txt', sSQL);
+	
+ENDIF;
+
+ 
+
+###########Update Tenure
+DIMENSIONSORTORDER('Tenure ID','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+#DimensionDeleteAllElements('Tenure ID');
+
+##############Add Attributes
+cDim = 'Tenure ID';
+sAttr = 'Name';
+ATTRINSERT(cDim,'',sAttr,'S');
+
+##########Create SH1 Hierarchy if it doesn't exist
+sP1 = 'SH1';
+sP1_U = 'Unassigned Tenures SH1';
+
+IF( DIMIX(cDim, sP1)=0);
+    DIMENSIONELEMENTINSERT(cDim,'',sP1,'c');
+EndIf;
+
+IF( DIMIX(cDim, sP1_U)=0);
+   DimensionElementInsert(cDim,'',sP1_U,'n');
+   DimensionElementComponentAdd(cDim,sP1,sP1_U, 1);
+ENDIF;
+
+#########
+sEl_NA = 'NA';
+
+IF(DIMIX(cDim, sEl_NA)=0);
+   DimensionElementInsert(cDim,'',sEl_NA,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl_NA, 1);
+EndIF;
+
+########## Settings for Leases Cube
+LeasesCube='Leases Cube';
+sVersion='Actuals';
+sSub=CellGetS('Global Control', 'Client SubAcct Type', 'String');
+sCurrency='Local';
+sMonth_Attribute='Attribute';
+
+##########Clean Leases Cube for Attributes load (by Cost Item)
+
+CubeName = 'Leases Cube';
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+
+#  Destroy previous views and subsets for forecast transfer 
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Currency_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Month Year', ViewNameTarget);
+SubsetDestroy ('Company', ViewNameTarget);
+SubsetDestroy ('SubAccounts', ViewNameTarget);
+SubsetDestroy ('GL_Accounts', ViewNameTarget);
+SubsetDestroy ('BusUnits', ViewNameTarget);
+SubsetDestroy ('Tenure ID', ViewNameTarget);
+SubsetDestroy ('Leases Measures', ViewNameTarget);
+
+# Create views and subsets to Zero out
+
+SubsetCreate ('Versions_PM', ViewNameTarget);
+SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, sVersion, 1);
+
+# Create Currency
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency_PM] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create Fiscal Month Year
+#SubsetCreate ('Fiscal Month Year', ViewNameTarget);
+#SubsetElementInsert ( 'Fiscal Month Year',  ViewNameTarget, 'Attribute', 1);
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Month Year] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+
+# Create Company
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create SubAccounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}';
+SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+# Create GL Accounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+# Create BusUnits
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}';
+SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+# Create Tenure ID
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}';
+SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+# Create Leases Measures
+sMDX = '{ EXCEPT( {TM1SUBSETALL( [Leases Measures] )}, { [Leases Measures].[Lease Value] }) }';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+ViewCreate( CubeName, ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Currency_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Fiscal Month Year', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Company', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'SubAccounts', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'GL_Accounts', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'BusUnits', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Tenure ID', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Leases Measures', ViewNameTarget);
+
+# Zero out the Target values
+VIEWZEROOUT(CubeName, ViewNameTarget); 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDebugFile = cDebugFile | 'Metadata.debug';
+
+###############################Create Hierarchy################################
+
+##########Create SH1 Hierarchy if it doesn't exist
+sP1 = 'Unassigned Tenures SH1';
+sEl = TenureID;
+nCostEndYear=StringtoNumber(Subst(CostEndDate,1,4));
+
+IF(DIMIX(cDim, sEl)=0 & CostAmount>0 & nCostEndYear>=nBaseYear);
+	DimensionElementInsert(cDim,'',sEl,'n');
+	DimensionElementComponentAdd(cDim,sP1,sEl, 1);
+
+	sUnassignedTenure = 'Unassigned Tenures';
+	#AH
+	nCtr = 1;
+	While (nCtr<=pHTenure);
+		sAH = 'AH'|NumberToString(nCtr);
+  		DimensionElementInsert(cDim,'',sUnassignedTenure|' '|sAH, 'C');
+		DimensionElementInsert(cDim,'',sAH, 'C');
+		DimensionElementComponentAdd(cDim, sAH, sUnassignedTenure|' '|sAH, 1);
+		DimensionElementComponentAdd(cDim, sUnassignedTenure|' '|sAH,sEl,1);
+		nCtr = nCtr+1;
+	END;
+
+	If( bDebug >= 1);
+		sMessage = 'Component: ' | TenureID | ' has been added in' | cDim | ' dimension.';
+		AsciiOutput( sDebugFile, sMessage );
+	EndIf;
+EndIF;
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDebugFile = cDebugFile | 'Data.debug';
+sDebugFile_Error = cDebugFile | 'Error.Data.debug';
+nItem=nItem+1;
+
+TenureID = TenureID;
+##############Add Attributes
+sAttr = 'Name';
+sAttrv = TenureName;
+sEl =TenureID;
+sP1 = 'Unassigned Tenures SH1';
+
+IF(ELISPAR(cDim, sP1, TenureID)=1);
+	ATTRPUTS(sDateAdd, cDim, TenureID, sDateAttr);
+EndIf;
+
+
+
+nCostEndYear=StringtoNumber(Subst(CostEndDate,1,4));
+
+IF(DIMIX(cDim, sEl)<>0 & CostAmount<>0 & Frequency@<>'Total' & nCostEndYear>=nBaseYear & ELLEV(cDim,sEl)=0);
+	# Filter date string #
+	LeaseStartDate=SubST(LeaseStartDate, 1,10);
+	LeaseEndDate=SubST(LeaseEndDate, 1,10);
+	CostStartDate=SubST(CostStartDate, 1,10);
+	CostEndDate=SubST(CostEndDate, 1,10);
+    
+
+
+	# Tenure Attributes ##
+	vAttr=ATTRS(cDim,sEl,sAttr);
+	IF(vAttr@<>sAttrV);
+		ATTRPUTS(sAttrv,cDim,sEl,sAttr);
+	        	vName=TenureID|' - '|TenureName;
+        		ATTRPUTS(vName,cDim,sEl,'CodeName');
+        		vName=TenureName|' - '|TenureID;
+        		ATTRPUTS(vName,cDim,sEl,'NameCode');
+        vName=TenureID|' - '|TenureName;
+        ATTRPUTS(vName,cDim,sEl,'DisplayName');
+        vName=  SUBST(TenureID| '-' |TenureName,1,35);
+        ATTRPUTS(vName,cDim,sEl,'DisplayNameCustom');
+    ENDIF;
+	vOneView=ATTRS(cDim,sEl,'ClientID');
+	IF(vOneView@<>OneViewClientID);
+		ATTRPUTS(OneViewClientID,cDim,sEl,'ClientID');
+	ENDIF;
+	vClientName=ATTRS(cDim,sEl,'ClientName');
+	IF(vClientName@<>ClientName);
+		ATTRPUTS(ClientName,cDim,sEl,'ClientName');
+	ENDIF;
+	vTenureKey=ATTRS(cDim,sEl,'TenureKey');
+	IF(vTenureKey@<>TenureKey);
+		ATTRPUTS(TenureKey,cDim,sEl,'TenureKey');
+	ENDIF;
+
+	vTenureKeyAlias=ATTRS(cDim,sEl,'TenureKeyAlias');
+	IF(vTenureKeyAlias@<>'TKA-'|TenureKey);
+		ATTRPUTS('TKA-'|TenureKey,cDim,sEl,'TenureKeyAlias');
+	ENDIF;
+
+	vLeaseType=ATTRS(cDim,sEl,'LeaseType');
+	IF(vLeaseType@<>LeaseType);
+		ATTRPUTS(LeaseType,cDim,sEl,'LeaseType');
+	ENDIF;
+	vTenureType=ATTRS(cDim,sEl,'TenureType');
+	IF(vTenureType@<>TenureType);
+		ATTRPUTS(TenureType,cDim,sEl,'TenureType');
+	ENDIF;
+	vTenureStatus=ATTRS(cDim,sEl,'TenureStatus');
+	IF(vTenureStatus@<>TenureStatus);
+		ATTRPUTS(TenureStatus,cDim,sEl,'TenureStatus');
+	ENDIF;
+	vLeaseStartDate=ATTRS(cDim,sEl,'LeaseStartDate');
+	IF(vLeaseStartDate@<>LeaseStartDate);
+		ATTRPUTS(LeaseStartDate,cDim,sEl,'LeaseStartDate');
+	ENDIF;
+	vLeaseEndDate=ATTRS(cDim,sEl,'LeaseEndDate');
+	IF(vLeaseEndDate@<>LeaseEndDate);
+ 		ATTRPUTS(LeaseEndDate,cDim,sEl,'LeaseEndDate');
+	ENDIF;
+	vPropertyKey=ATTRS(cDim,sEl,'PropertyKey');
+	IF(vPropertyKey@<>PropertyKey);
+		ATTRPUTS(PropertyKey,cDim,sEl,'PropertyKey');
+	ENDIF;
+	vRegion=ATTRS(cDim,sEl,'Region');
+	IF(vRegion@<>Region);
+		ATTRPUTS(Region,cDim,sEl,'Region');
+	ENDIF;
+	vBUType=ATTRS(cDim,sEL,'BUType');
+	IF(vBUType@<>BUType);
+		ATTRPUTS(BUType,cDim,sEL,'BUType');
+	ENDIF;
+	vOVCP=ATTRS(cDim,sEL,'OVCP_ID');
+	IF(vOVCP@<>OVCP_ID);
+		ATTRPUTS(OVCP_ID,cDim,sEL,'OVCP_ID');
+	ENDIF;
+	vTenureParentKey=ATTRS(cDim,sEL,'TenureParentKey');
+	IF(vTenureParentKey@<>TenureParentKey);
+		ATTRPUTS(TenureParentKey,cDim,sEL,'TenureParentKey');
+	ENDIF;
+    
+    # Mappings
+	IF(OVCP_ID@<>'');
+		sBU=AttrS('OVCProperty',OVCP_ID,'BusUnits');
+		IF(sBU@<>'');
+			sCompany=AttrS('BusUnits', sBU,  'Company');
+			AttrPutS(sBU, cDim, sEL, 'BusUnit');
+			AttrPutS(sCompany, cDim, sEL, 'Company');
+			CompanyCurrency=AttrS('Company', sCompany,  'Currency');
+			IF(ProcessingGroup@='Accounts Payable' % ProcessingGroup@='Accounts Receivable');
+				sGLAccount=AttrS('Cost Type', CostTypeKey, ProcessingGroup);
+				IF(sGLAccount@='');
+					sGLAccount='NA';
+				ENDIF;
+			ELSE;
+				sGLAccount='na';
+			ENDIF;
+			IF(sSub@='No Sub');
+				sSubAcc='NA';
+			ELSE;
+				sSubAcc=SubSt(sGLAccount, 8, 3);
+			ENDIF;
+
+			## filter by date for current year base values ###
+			vCheckValue=CellGetN(LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'Cost Amount');
+			#IF(vCheckValue<>0);
+			#	nStartMonth=StringtoNumber(Subst(CostStartDate,6,2));
+			#	nStartYear=StringtoNumber(Subst(CostStartDate,1,4));
+			#	IF(nCurrentYear<nStartYear);
+			#		itemskip;
+			#	ELSE;
+			#		IF(nCurrentYear=nStartYear);
+			#			IF(nCurrentMonth<=nStartMonth);
+			#				itemskip;	
+			#			ENDIF;						
+			#		ENDIF;	
+			#	ENDIF;
+			#ENDIF;
+			
+            #Prev
+            CheckStart=CellGetS(LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CostStartDate');
+            CheckEnd=CellGetS(LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CostEndDate');
+			# Lease Cube #
+			CellPutS(OVCP_ID, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'OVCP_ID');
+			CellPutS(CostCategoryType, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CostCategoryType');
+			CellPutS(CostCurrency, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CostCurrency');
+			CellPutS(CompanyCurrency, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CompanyCurrency');
+			CellPutS(CostTypeKey, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CostTypeKey');
+			CellPutS(CostStartDate, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CostStartDate');
+			CellPutS(CostEndDate, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'CostEndDate');
+			CellPutS(Frequency, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'Frequency');
+			CellPutS(ProcessingGroup, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'ProcessingGroup');
+			CellPutS(TenureStatus, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'TenureStatus');
+			CellPutS(TermStatus, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'TermStatus');
+			IF(TenureType@='Sub Lease');
+				CostAmount=CostAmount * -1;
+			ENDIF;
+			CostAmount=CostAmount/AttrN('Frequency', Frequency, 'Divideby');
+            
+            nCostEndYear=StringtoNumber(SubSt(CostEndDate, 1, 4));
+			nCostEndMonth=StringtoNumber(SubSt(CostEndDate,6 , 2));
+            nCostStartYear=StringtoNumber(SubSt(CostStartDate, 1, 4));
+			nCostStartMonth=StringtoNumber(SubSt(CostStartDate,6 , 2));
+
+            IF((nCostStartYear<nBaseYear % (nCostStartYear=nBaseYear & nCostStartMonth<nBaseMonth)) & CheckEnd@=CostEnddate);
+            	CellIncrementN(CostAmount, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'Cost Amount');
+            ELSE;
+            	CellPutN(CostAmount, LeasesCube, sVersion, sCurrency, sMonth_Attribute, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'Cost Amount');
+            ENDIF;
+            
+            
+           
+            sDim_Month = 'Fiscal Month Year'; 
+            sSub_Month = 'level0';
+            nMax_Month = SubsetGetSize(sDim_Month,sSub_Month);
+            nCtr_Month = 2;
+            WHILE(nCtr_Month <= nMax_Month);
+                sMonth = SubsetGetElementName(sDim_Month,sSub_Month,nCtr_Month);
+
+                nMonthCalendarF=StringToNumber(DimensionElementPrincipalName('Calendar Months',AttrS(sDim_Month,sMonth,'MonthCalendarF')));
+                nYearCalendarF=StringtoNumber(AttrS(sDim_Month,sMonth,'YearCalendarF'));
+                IF((nYearCalendarF>nCostStartYear % (nYearCalendarF=nCostStartYear & nMonthCalendarF>=nCostStartMonth))
+                    & (nYearCalendarF<nCostEndYear % (nYearCalendarF=nCostEndYear & nMonthCalendarF<=nCostEndMonth)));
+
+				IF((nYearCalendarF=nCostStartYear & nMonthCalendarF=nCostStartMonth) %  (nYearCalendarF=nCostEndYear & nMonthCalendarF=nCostEndMonth));
+					sCostEndYear=SubSt(CostEndDate, 1, 4);
+					sCostEndMonth=SubSt(CostEndDate,6 , 2);
+					nCostEndDays=StringtoNumber(SubSt(CostEndDate,9, 2));
+            		sCostStartYear=SubSt(CostStartDate, 1, 4);
+					sCostStartMonth=SubSt(CostStartDate,6 , 2);
+					nCostStartDays=StringtoNumber(SubSt(CostStartDate,9, 2));			
+					DaysinMonthStart=0;
+					DaysinMonthEnd=0;
+
+					sCostEndMonthName=AttrS('Calendar Months', Subst(CostEndDate,6,2), 'MonthName');
+					sCostEndPeriod=DimensionElementPrincipalName(sDim_Month,sCostEndMonthName|' '|Subst(CostEndDate,1,4)|'F');				
+					sCostStartMonthName=AttrS('Calendar Months', Subst(CostStartDate,6,2), 'MonthName');
+					sCostStartPeriod=DimensionElementPrincipalName(sDim_Month,sCostStartMonthName|' '|Subst(CostStartDate,1,4)|'F');
+
+					IF(DIMIX('Fiscal Years',sCostStartYear)<>0 & sCostStartPeriod@=sMonth);
+						DaysinMonthStart=CellGetN(CalendarCube, sCostStartYear, sCostStartMonth, 'Days');
+					ENDIF;
+					IF(DIMIX('Fiscal Years',sCostEndYear)<>0 & sCostEndPeriod@=sMonth);
+						DaysinMonthEnd=CellGetN(CalendarCube, sCostEndYear, sCostEndMonth, 'Days');
+					ENDIF;
+					IF(nCostStartDays<>1 & DaysinMonthStart<>0 & sCostStartPeriod@=sMonth);
+						CostValue=CostAmount/30*(DaysinMonthStart-nCostStartDays);
+					ELSEIF(nCostEndDays<>DaysinMonthEnd & DaysinMonthEnd<>0 & sCostEndPeriod@=sMonth);
+						CostValue=CostAmount/30*nCostEndDays;
+                    ELSEIF(nCostStartDays=1 & sCostStartPeriod@=sMonth);
+ 						CostValue=CostAmount;                   	
+					ENDIF;
+
+				ELSE;
+					CostValue=CostAmount; 
+				ENDIF;
+             	CellIncrementN(CostValue, LeasesCube, sVersion, sCurrency, sMonth, sCompany, sSubAcc, sGLAccount, sBU, TenureID, 'Cost Amount');
+                		
+                ENDIF;
+
+                nCtr_Month = nCtr_Month + 1;
+            END;
+            
+            
+            
+		ENDIF;	
+	ENDIF;
+
+	sP1 = 'Unassigned Tenures SH1';
+	### Add Unassigned Parent Attribute
+	IF(DIMIX(cDim,sP1)<>0);
+		IF( ELISPAR(cDim,sP1,TenureID)=1);
+			AttrPutS(sP1,cDim,TenureID,'SH1Parent1' );
+		EndIf;
+	EndIf;
+
+	### Adds the attribute to the Tenure
+	#AH
+	nCtr = 1;
+	While (nCtr<=pHTenure);
+		sAH = 'AH'|NumberToString(nCtr);
+		sP2 = 'Unassigned Tenures '|sAH;
+		IF(DIMIX(cDim,sP2)<>0);
+			IF(ELISPAR(cDim,sP2,TenureID)=1);
+				AttrPutS(sP2,cDim,TenureID,sAH|'Parent1');
+			EndIf;
+		EndIf;
+		nCtr = nCtr + 1;
+	END;
+
+	#Add Date
+	IF(ELISPAR(cDim, sP1, TenureID)=1);
+		ATTRPUTS(sDateAdd, cDim, TenureID, sDateAttr);
+	EndIf;
+
+
+	If( bDebug >= 1 );
+		sMessage = TenureID | ' has added the following attributes: 
+		Name: '| TenureName | ', CostStartDate: ' |CostStartDate|', CostEndDate: '| CostEndDate | ', LeaseStartDate: ' |LeaseStartDate|',
+		LeaseEndDate: '| LeaseEndDate | ', ClientID: ' |OneViewClientID|', ClientName: '| ClientName | ', TenureKey: ' |TenureKey|',
+		CostTypeKey: '| CostTypeKey | ', Frequency: ' |Frequency|', ProcessingGroup: '| ProcessingGroup | ', LeaseType: ' |LeaseType|',
+		TenureType: '| TenureType | ', TenureStatus: ' |TenureStatus|', PropertyKey: '| PropertyKey | ', OVCP_ID: ' |OVCP_ID|',
+		TenureType: '| TenureType | ', TenureStatus: ' |TenureStatus|', PropertyKey: '| PropertyKey | ', OVCP_ID: ' |OVCP_ID|',
+		E1BU: '| E1BU | ', Region: ' |Region|', CostCategoryType: '| CostCategoryType | ', BUType: ' |BUType|',
+		CostCurrency: '| CostCurrency | ', CostAmount: ' |numbertostring(CostAmount)  | ', TermStatus: ' |TermStatus|', 
+		TenureParentKey: ' |TenureParentKey
+		;		
+		AsciiOutput( sDebugFile, sMessage );
+
+		sError_Tenure='Updated successfully';
+		sError_CostEndDate='Updated successfully';
+		sError_Frequency='Updated successfully';
+		sError_ProcessingGroup='Updated successfully';
+		sError_TenureType='Updated successfully';
+		sError_LeaseType='Updated successfully';
+		sError_CostCategoryType='Updated successfully';
+		sError_CostCurrency='Updated successfully';
+		sError_Region='Updated successfully';
+		sError_CostTypeKey='Updated successfully';
+		sError_OVCP='Updated successfully';
+		sError_BU='Updated successfully';
+		sError_TenureStatus='Updated sucessfully';
+		sError_TermStatus='Updated successfully';
+
+
+		IF(TenureID@= '' % CostEndDate@='' % Frequency@='' % ProcessingGroup@='' 
+		% TenureType@='' % LeaseType@='' % CostCategoryType@='' % CostCurrency@='' 
+		% Region@='' % CostTypeKey@='' % E1BU@='' % OVCP_ID@='' % TermStatus@='' % TenureStatus@='');
+			IF(TenureID@='');
+				sError_Tenure='Empty value at TenureID column';
+			ENDIF;
+			IF(CostEndDate@='');
+				sError_CostEndDate='Empty value at CostEndDate column';
+			ENDIF;
+			IF(Frequency@='');
+				sError_Frequency='Empty value at Frequency column';
+			ENDIF;
+			IF(ProcessingGroup@='');
+				sError_ProcessingGroup='Empty value at ProcessingGroup column';
+			ENDIF;
+			IF(TenureType@='');
+				sError_TenureType='Empty value at TenureType column';
+			ENDIF;
+			IF(LeaseType@='');
+				sError_LeaseType='Empty value at LeaseType column';
+			ENDIF;
+			IF(CostCategoryType@='');
+				sError_CostCategoryType='Empty value at CostCategoryType column';
+			ENDIF;
+			IF(CostCurrency@='');
+				sError_CostCurrency='Empty value at CostCurrency column';
+			ENDIF;
+			IF(Region@='');
+				sError_Region='Empty value at Region column';
+			ENDIF;
+			IF(CostTypeKey@='');
+				sError_CostTypeKey='Empty value at CostTypeKey column';
+			ENDIF;
+			IF(E1BU@='');
+				sError_BU='Empty value at E1BU column';
+			ENDIF;
+			IF(OVCP_ID@='');
+				sError_OVCP='Empty value at OVCP';
+			ENDIF;
+			IF(TenureStatus@='');
+				sError_TenureStatus='Empty value at TenureStatus';
+			ENDIF;
+			IF(TermStatus@='');
+				sError_TermStatus='Empty value at TermStatus';
+			ENDIF;
+			sMessage= TenureID|' - '|CostTypeKey|' has some invalid columns';
+			AsciiOutput( sDebugFile_Error, sMessage,
+			sError_Tenure, sError_CostEndDate, sError_Frequency, sError_ProcessingGroup, sError_TenureType,
+			sError_LeaseType, sError_CostCategoryType, sError_CostCurrency, sError_Region, sError_CostTypeKey,
+			sError_BU,sError_OVCP,sError_TenureStatus,sError_TermStatus
+			 );
+		ENDIF;
+	EndIf;
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vDim = 'Tenure ID';
+#SH1
+vName='All JLL Tenures';
+vEl='SH1';
+ATTRPUTS(vName,vDim,vEl,'Name');
+ATTRPUTS(vName,vDim,vEl,'CodeName');
+ATTRPUTS(vName,vDim,vEl,'NameCode');
+ATTRPUTS(vName,vDim,vEl,'DisplayName');
+ATTRPUTS(vName,vDim,vEl,'DisplayNameCustom');
+#AH1
+vName='All '|CellGetS('Global Control','Client Name','String');
+vEl='AH1';
+ATTRPUTS(vName,vDim,vEl,'Name');
+ATTRPUTS(vName,vDim,vEl,'CodeName');
+ATTRPUTS(vName,vDim,vEl,'NameCode');
+ATTRPUTS(vName,vDim,vEl,'DisplayName');
+ATTRPUTS(vName,vDim,vEl,'DisplayNameCustom');
+#AHIT
+vName='Total Input';
+vEl='AHIT';
+ATTRPUTS(vName,vDim,vEl,'Name');
+ATTRPUTS(vName,vDim,vEl,'CodeName');
+ATTRPUTS(vName,vDim,vEl,'NameCode');
+ATTRPUTS(vName,vDim,vEl,'DisplayName');
+ATTRPUTS(vName,vDim,vEl,'DisplayNameCustom');
+
+
+ExecuteProcess('Update_Dim_tenure_2_ahg_hierarchy',
+	'pDebug',0);
+    
+    
+#Copiar los nuevos atributos.
+ExecuteProcess('update_dim_tenure_tenureparentKey');
+    
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+###############Email File
+IF( Lower( pEmail) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFileUnassignedTenureSQL';
+    ExecuteProcess(vProcess,'pSendTo', pEmail);
+ENDIF;
+
+
+#endregion

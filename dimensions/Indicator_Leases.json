@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Indicator_Leases",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Indicator_Leases')/Hierarchies('Indicator_Leases')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Indicator_Leases.hierarchies/Indicator_Leases.json"
+	]
+}

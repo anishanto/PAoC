@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_accounts_1_picklists",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"update_dim_accounts_1_picklists.ti",
+	"UIData":"_ParameterConstraints=e30=\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

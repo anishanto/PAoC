@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"WO Status",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('WO Status')/Hierarchies('WO Status')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"WO Status.hierarchies/WO Status.json"
+	]
+}

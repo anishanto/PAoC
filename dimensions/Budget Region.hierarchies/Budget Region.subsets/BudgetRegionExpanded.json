@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"BudgetRegionExpanded",
+	"Expression":"{TM1SUBSETALL( [Budget Region] )}"
+}

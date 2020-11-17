@@ -1,0 +1,267 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################Prolog relaced Dynamic Subsets with Static to allow delete to be added. 1/4/17
+###########################Constants 1/4/17
+
+#cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'Tenure ID';
+#cTnode = 'AHIT';
+#cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_Tenure ID';
+cDimName2 = '}ElementAttributes_Tenure ID';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExportPath = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImportPath = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cFileName = 'Tenure ID.csv';
+cMetadataFileName = 'Tenure ID.csv';
+cDataFileName = 'TenureIDStdNames.csv';
+cMetadataPath = cExportPath | cMetadataFileName;
+cDataPath = cExportPath | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+
+
+DIMENSIONSORTORDER(cDimName,'BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+
+#############################################################Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            GLCode : '| vTenure);
+   AsciiOutput( sDebugFile, '            V2                  : '| vTenureAttr);
+   AsciiOutput( sDebugFile, '            Value              :'| Value);
+EndIf;
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check if Dimension Constant Exists
+   IF( Trim( cDimName ) @=' ');
+     nErrors = 1;
+     sMessage = 'No dimension named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+#######################Delete View Subsets if they Exists
+
+ IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+ IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+ IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+################################################# Create Dimension Attribute Subset
+
+############TENURE AHIT SUBSET
+
+
+#Create AHIT CHILDREN FOR TENURE
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}';
+SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+
+SUBSETCREATE(cDimName2,cViewNameTransfer);
+SubsetElementInsert(cDimName2, cViewNameTransfer, 'TenureKey',1);
+
+
+#############################################Create and assign View
+
+IF(ViewExists(cCubeName, cViewNameTransfer) = 0);
+	ViewCreate(cCubeName, cViewNameTransfer);
+EndIf;
+
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName, cViewNameTransfer);
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName2, cViewNameTransfer);
+ViewRowDimensionSet (cCubeName, cViewNameTransfer, cDimName, 1);
+ViewColumnDimensionSet (cCubeName, cViewNameTransfer, cDimName2,1);
+
+ViewExtractSkipCalcsSet(cCubeName, cViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(cCubeName, cViewNameTransfer, 0);
+
+
+
+
+#Set dimension sort order
+DIMENSIONSORTORDER(cDimName,'ByInput','ASCENDING','ByHierarchy','ASCENDING');
+DIMENSIONELEMENTINSERTDIRECT(cDimName, '','AHG','c');
+
+#Delete -G elements
+cSubsetName = 'AHG-Aux';
+vAHGMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[AHG]}, ALL, RECURSIVE )}, 1,2,3,4)}';
+if (SubsetExists( cDimName, cSubsetName )=0);
+	SubsetCreate( cDimName, cSubsetName);
+endif;
+
+SubsetMDXSet( cDimName, cSubsetName, vAHGMDX );
+SubsetMDXSet( cDimName, cSubsetName, '' );
+
+DimensionDeleteElements(cDimName,cSubsetName );
+
+if (SubsetExists( cDimName, 'zNoParent' )=0);
+	SubsetCreate( cDimName, 'zNoParent');
+endif;
+
+SubsetDeleteAllElements( cDimName, 'zNoParent' );
+
+
+
+###################DEFINE LOCAL VARIABLES
+DatasourceNameForServer = cCubeName;
+DatasourceNameForClient = cCubeName;
+DataSourceType = 'VIEW';
+DatasourceCubeview= cViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+######Continue Debug
+IF( pDebug >=1 );
+
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Metadata.debug';
+ENDIF;
+
+#####Continue Check from Prolog
+
+IF( nErrors > 0 );
+   ProcessBreak;
+ENDIF;
+
+
+
+############CREATE AHIT
+cParent = 'AHG';
+
+vParentKey = ATTRS(cDimName,vTenure,'TenureParentKey');
+vParentKeyAlias = 'TKA-'|vParentKey;
+
+
+DIMENSIONELEMENTINSERT(cDimName,'',cParent,'c');
+if (vParentKey @='' % vParentKey@='-2' % vParentKey@='0');
+	vTenureP = vTenure | '.';
+	#DIMENSIONELEMENTINSERT(cDimName,'',vTenureP,'c');
+	if (Dimix(cDimName,vTenureP)>0);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,vTenureP,1.000000);	
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vTenureP,vTenure,1.000000);
+	else;
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,vTenure,1.000000);	
+	endif;
+elseif (DIMIX(cDimName, vParentKeyAlias)>0);
+	vTenureP = DimensionElementPrincipalName( cDimName, vParentKeyAlias ) | '.';
+	DIMENSIONELEMENTINSERT(cDimName,'',vTenureP,'c');
+	if (ELISPAR(cDimName, cParent, DimensionElementPrincipalName( cDimName, vParentKeyAlias ))>0);
+		DimensionElementComponentDelete( cDimName, cParent, DimensionElementPrincipalName( cDimName, vParentKeyAlias ) );
+	endif;
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,vTenureP,1.000000);	
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vTenureP,DimensionElementPrincipalName( cDimName, vParentKeyAlias ),1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vTenureP,vTenure,1.000000);
+
+else;
+	vTenureP = 'Unassigned Tenure';
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,vTenureP,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vTenureP,vTenure,1.000000);
+endif;
+       
+       
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vParentKey = ATTRS(cDimName,vTenure,'TenureParentKey');
+if (DIMIX(cDimName, vParentKey)=0 & vParentKey@<>'-2');
+	SubsetElementInsert( cDimName, 'zNoParent', vTenure, 0 );
+
+endif;
+
+vTenureP = DimensionElementPrincipalName( cDimName, vParentKey ) | '.';
+
+
+
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+####################################Define Top Node Alias
+
+
+
+IF(pDebug >= 1 );  
+
+   #Set the Debug File for Epilog
+   sDebugFile = cDebugFile | 'Epilog.debug';
+
+   #Check for Errors
+   IF( nErrors <> 0 );
+      ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   EndIf;
+
+  #Log Finish Time
+  ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+####### If Errors occurred terminate process with error status
+  IF( nErrors <> 0 );
+       ProcessQuit;
+Endif;
+
+
+#######################Delete View Subsets if they Exists
+
+IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+	ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+	SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+	SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+
+
+#endregion

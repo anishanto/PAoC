@@ -1,0 +1,57 @@
+{
+	"@type":"Process",
+	"Name":"ProcessDimensionRealignDimensionElement",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessDimensionRealignDimensionElement.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pValidationFlag",
+			"Prompt":"Validation Flag?",
+			"Value":"FALSE",
+			"Type":"String"
+		},
+		{
+			"Name":"pElement",
+			"Prompt":"Element Name",
+			"Value":"0000000000",
+			"Type":"String"
+		},
+		{
+			"Name":"pOldParent",
+			"Prompt":"Element Old Parent",
+			"Value":"Parent",
+			"Type":"String"
+		},
+		{
+			"Name":"pNewParent",
+			"Prompt":"Element NewElement Old Parent Parent",
+			"Value":"ParemtBusUnits",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimension",
+			"Prompt":"Dimension",
+			"Value":"BusUnits",
+			"Type":"String"
+		},
+		{
+			"Name":"pTopParent",
+			"Prompt":"",
+			"Value":"SH1",
+			"Type":"String"
+		},
+		{
+			"Name":"pIndex",
+			"Prompt":"",
+			"Value":1,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}

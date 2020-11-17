@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"CyclePanel Options",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('CyclePanel Options')/Hierarchies('CyclePanel Options')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"CyclePanel Options.hierarchies/CyclePanel Options.json"
+	]
+}

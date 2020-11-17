@@ -1,0 +1,51 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vDataBase='BudgetWB';
+vDebugFileName = '..\logs\System\DWPush - Delete Version.txt';
+vTable = pTableName;
+vClientID = CellGetS('Global Control','Client Server Name','String');
+vClientIDs = ''''|vClientID|'''';
+ODBCOPEN('BudgetWB','TM1_readonly','tm1readonly');
+
+
+
+pDim = 'Versions';
+pSub = 'All Members';
+subsetSize =  SubsetGetSize(pDim,pSub);
+enumerator=1;
+while (enumerator <= subsetSize);
+	elementVersion = SubsetGetElementName(pDim,pSub,enumerator);
+	#Check if the version has to be deleted
+	vVersionS = ''''|elementVersion|'''';
+	vSQL = 'Delete from '|vTable|' where Version = '|vVersionS| ' and ClientID = ' |vClientIDs;
+	if (ATTRS( 'Versions' , ElementVersion, 'DW Flag')@='Delete' % ATTRS( 'Versions' , ElementVersion, 'DW Flag')@='Yes');
+		ODBCOutput(vDataBase,vSQL); 
+		if (pDebug = 1 );
+			asciioutput(vDebugFileName,vSQL);
+		endif;
+	endif;
+
+	enumerator=enumerator+1;
+end;
+
+ODBCClose(vDataBase);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

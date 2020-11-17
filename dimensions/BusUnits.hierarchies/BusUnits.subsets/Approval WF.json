@@ -1,0 +1,250 @@
+{
+	"@type":"Subset",
+	"Name":"Approval WF",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('AH1')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('FM AA AH1 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9901000001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9901000002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9901000003')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Global Team Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Regional Team 1 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Sub Regional Team 1 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team 1 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team 1 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100003')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100004')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100005')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100006')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100007')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100008')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100009')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100010')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team 2 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team 2 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900200001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900200002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900200003')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900200004')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team 3 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team 3 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100011')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100012')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100013')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900100400')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900152085')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900300001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900300002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900400001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900400002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Regional Team 2 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Sub Regional Team 2 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team 4 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team 4 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900500001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900500002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900500003')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900500004')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Regional Team 3 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Sub Regional Team 3 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team 5 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team 5 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900600001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900600002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900600003')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900600004')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team 6 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team 6 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900700001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900700002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900700003')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team 7 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team 7 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900800001')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900800002')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Regional Team AL 8 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Sub Regional Team AL 8 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team AL 8 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team AL 8 Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900500008')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900500016')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9900500064')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Regional Team AL Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Sub Regional Team AL Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team AL Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team AL Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9906400008')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9906400016')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9906400064')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Regional Team GH Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Sub Regional Team GH Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Territory Team GH Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('Team GH Approval')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9907700016')"
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Allocation_Scenario",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Allocation_Scenario')/Hierarchies('Allocation_Scenario')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Allocation_Scenario.hierarchies/Allocation_Scenario.json"
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"AH1 Expand All",
+	"Expression":"{ HIERARCHIZE( {TM1SUBSETALL( [GL_Accounts] )} ) }"
+}

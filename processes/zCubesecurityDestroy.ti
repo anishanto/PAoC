@@ -1,0 +1,27 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CUBEDESTROY ( '}cellsecurity_Opex Plan Cube') ;
+CUBEDESTROY ( '}cellsecurity_Opex Analysis Cube') ;
+CUBEDESTROY ( '}cellsecurity_Calendar') ;
+#CUBEDESTROY ('}CellSecurity_}tp_application_permission}{3d13de62-c38e-4478-9229-4bd222ce7199}');
+#CUBEDESTROY ('}CellSecurity_}tp_application_root_permissions');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

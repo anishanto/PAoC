@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"Utility_DeleteTm1Admin",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Utility_DeleteTm1Admin.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

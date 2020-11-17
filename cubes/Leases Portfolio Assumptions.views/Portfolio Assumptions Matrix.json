@@ -1,0 +1,78 @@
+{
+	"@type":"NativeView",
+	"Name":"Portfolio Assumptions Matrix",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Budget Region')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Budget Building Type')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Cost Category Type')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Lease Type')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Tenure Type')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Event Type')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('GLA Category')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Rates')"
+					},
+					{
+						"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')/Elements('Check Rate')"
+					}
+				]
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Portfolio Assumptions')/Hierarchies('Portfolio Assumptions')/Subsets('All Members')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Forecast')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearRange')"
+			},
+			"Selected":null
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.#########"
+}

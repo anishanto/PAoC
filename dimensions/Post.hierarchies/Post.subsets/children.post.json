@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"children.post",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Post] )}, 0)}"
+}

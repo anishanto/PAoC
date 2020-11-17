@@ -1,0 +1,145 @@
+{
+	"@type":"Process",
+	"Name":"CubeExtract - OpexPlan - SetFlag",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"CubeExtract - OpexPlan - SetFlag.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f_DeployParams={&quotdimensionConflictResolutions&quot:{}&#044&quotclass&quot:&quotDeployParams&quot&#044&quotdataAction&quot:&quotACCUMULATE&quot}\f_ParseParams={&quotskipRows&quot:&quot0&quot&#044&quotlocale&quot:{&quotlanguange&quot:&quoten&quot&#044&quotvariant&quot:&quot&quot&#044&quotcountry&quot:&quotUS&quot}&#044&quotdimensions&quot:[]&#044&quotmeasures&quot:[]&#044&quotnumColumns&quot:&quot10&quot&#044&quothasHeader&quot:&quottrue&quot}\f_importSourceDefinition={\"sourceType\":\"CUBE_VIEW\",\"originalColumns\":null,\"cubeViewSource\":{\"cubeName\":\"Opex Plan Cube\",\"originalColumns\":[],\"viewName\":\"\",\"excludedColumns\":[],\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vVer\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vVer\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCo\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCo\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":1},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCur\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCur\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":2},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vMons\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vMons\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":3},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vYr\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vYr\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":4},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vSubs\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vSubs\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":5},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vAccts\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vAccts\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":6},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vBU\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vBU\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":7},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vPM\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vPM\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":8},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"DOUBLE\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vAMT\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vAMT\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":9}]},\"locale\":{\"localeIsDefault\":false,\"localeCurrencySymbol\":\"$\",\"languageCode\":\"en\",\"languageDisplay\":\"English\",\"thousandsSeparator\":\",\",\"localeCode\":\"en_US\",\"localeCurrencyCode\":\"$\",\"localeDisplay\":\"English (United States)\",\"countryDisplay\":\"United States\",\"countryCode\":\"US\",\"decimalSeparator\":\".\"},\"excludedColumns\":[],\"processName\":\"CubeExtract - OpexPlan\",\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vVer\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vVer\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCo\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCo\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":1},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCur\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCur\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":2},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vMons\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vMons\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":3},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vYr\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vYr\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":4},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vSubs\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vSubs\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":5},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vAccts\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vAccts\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":6},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vBU\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vBU\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":7},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vPM\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vPM\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":8},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"DOUBLE\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vAMT\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vAMT\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":9}],\"sourceTypeHasBeenChanged\":false}\f",
+	"VariablesUIData":
+	[
+		"_DataType=STRING\f_SourceIndex=0\f_UILabel=vVer\f_UserVisible=vVer\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=1\f_UILabel=vCo\f_UserVisible=vCo\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=2\f_UILabel=vCur\f_UserVisible=vCur\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=3\f_UILabel=vMons\f_UserVisible=vMons\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=4\f_UILabel=vYr\f_UserVisible=vYr\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=5\f_UILabel=vSubs\f_UserVisible=vSubs\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=6\f_UILabel=vAccts\f_UserVisible=vAccts\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=7\f_UILabel=vBU\f_UserVisible=vBU\fVarType=32\fColType=827\f",
+		"_DataType=STRING\f_SourceIndex=8\f_UILabel=vPM\f_UserVisible=vPM\fVarType=32\fColType=827\f",
+		"_DataType=DOUBLE\f_SourceIndex=9\f_UILabel=vAMT\f_UserVisible=vAMT\fVarType=33\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"Opex Plan Cube",
+		"dataSourceNameForServer":"Opex Plan Cube",
+		"view":""
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pSourceVersion",
+			"Prompt":"Version to export",
+			"Value":"Budget",
+			"Type":"String"
+		},
+		{
+			"Name":"pCompany",
+			"Prompt":"Company to export",
+			"Value":"All Companies",
+			"Type":"String"
+		},
+		{
+			"Name":"pYear",
+			"Prompt":"Year to export",
+			"Value":"2018",
+			"Type":"String"
+		},
+		{
+			"Name":"pLedgerType",
+			"Prompt":"Input Ledger Type",
+			"Value":"B1",
+			"Type":"String"
+		},
+		{
+			"Name":"pEmailFile",
+			"Prompt":"Yes Email file",
+			"Value":"Yes",
+			"Type":"String"
+		},
+		{
+			"Name":"pSendTo",
+			"Prompt":"Input Email Distirbution and or Email address as needed",
+			"Value":"TM1Admin@am.jll.com",
+			"Type":"String"
+		},
+		{
+			"Name":"pCurrency",
+			"Prompt":"Currency to Export",
+			"Value":"Local",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"vVer",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCo",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCur",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vMons",
+			"Type":"String",
+			"Position":4,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vYr",
+			"Type":"String",
+			"Position":5,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vSubs",
+			"Type":"String",
+			"Position":6,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vAccts",
+			"Type":"String",
+			"Position":7,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vBU",
+			"Type":"String",
+			"Position":8,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vPM",
+			"Type":"String",
+			"Position":9,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vAMT",
+			"Type":"Numeric",
+			"Position":10,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

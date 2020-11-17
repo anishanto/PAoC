@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"VersionsPMDetail",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Versions_PM] )}, 0)}, ASC)}"
+}

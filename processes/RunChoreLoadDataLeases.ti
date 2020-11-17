@@ -1,0 +1,61 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+### This is a WRAPPER process for chore ChoreLoadDataLeases
+### The purpose of this process is to stop the ChoreLoadDataLeases from running if the TAT Environment is not PRD.
+### There exists the possibility of running it manually if the TAT Environrment is not PRD, by assigning 1 to the 'pTester' parameter.
+
+
+## 1)  Evaluates TAT Environment and decides to continue/quit.
+
+cCube = 'Global Control';
+cGlobalControlItem1 = 'TAT Environment';
+cGlobalControlMeasure = 'String';
+cTATEnvironment = CellGetS(cCube,cGlobalControlItem1,cGlobalControlMeasure);
+cClientName = CellGetS(cCube,'Client Name',cGlobalControlMeasure);
+cSubAcctType = CellGetN(cCube,'Client SubAcct Type','Number');
+cSubLedgerType = CellGetN(cCube,'SubLedger Type','Number');
+cVendorType = CellGetN(cCube,'Vendor Type','Number');
+
+IF (cTATEnvironment @<>'PRD' & pTester<>1);
+
+	ChoreQuit;
+ENDIF;
+
+## 2) Runs the rest of the processes
+
+cGlobalControlItem2 = 'Core Team Email';
+pGlobalControlEmail = CellGetS(cCube,cGlobalControlItem2,cGlobalControlMeasure);
+
+
+ExecuteProcess('update_dim_tenure_sql','pEmail',pGlobalControlEmail,'bDebug',0);
+ExecuteProcess('update_dim_tenure_sql_event_table');
+ExecuteProcess('update_dim_tenuretype_sql');
+ExecuteProcess('update_dim_leasetype_sql','pEmail',pGlobalControlEmail,'bDebug',0);
+ExecuteProcess('update_dim_costtype_sql');
+ExecuteProcess('update_dim_costcategorytype_sql','pEmail',pGlobalControlEmail,'bDebug',0);
+ExecuteProcess('update_dim_budgetregion');
+ExecuteProcess('update_dim_budgettype_sql','',pGlobalControlEmail,'',0);
+ExecuteProcess('update_data_lease_fixed_rates_sql','pEmail',pGlobalControlEmail,'bDebug',0);
+ExecuteProcess('LeaseE1Actuals - LeasesCube');
+ExecuteProcess('LeaseE1Actuals - LeasesAnalysisCube');
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

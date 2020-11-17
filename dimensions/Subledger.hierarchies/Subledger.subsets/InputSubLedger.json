@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"InputSubLedger",
+	"Expression":"{[Subledger].[All Subledger and Other]}"
+}

@@ -1,0 +1,122 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+############################################################# Constants
+cDimName = 'GL_Accounts';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+cCubeName = '}ElementAttributes_'|cDimName;
+sLocalCube = 'local:'|cCubeName;
+pGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+pGLAL = CELLGETN('Global Control', 'GA Accounts AL Hierarchies', 'Value');
+pGLAO = CELLGETN('Global Control', 'GA Accounts AO Hierarchies', 'Value');
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+
+
+
+
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############################################################## Check Validation if value is 1 then error
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+	ElName = DIMNM( cDimName , x );
+   	IF( ATTRS(cDimName,ElName,'Validation')@='1');
+      		vMessage = 'ERROR: '| cDimName | ' Validation Error.  There are duplicate parents within a single hierarchy.  Please correct records where Validation value = 1';
+      		CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      		PROCESSERROR;
+   	ENDIF;
+    	x=x-1;
+END;
+
+############################################################## Create Hierarchies
+
+IF( pGLAH >= 0 & pGLAH < 5);
+
+	########################### Create Standard Hierarchy
+
+	ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','SH1','pDebug',0);
+
+	########################### Create Alt Hierarchies (AH1-AH4)
+
+	IF( pGLAH > 0 & pGLAH < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AH1', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+	IF( pGLAH > 1 & pGLAH < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AH2', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+	IF( pGLAH > 2 & pGLAH < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AH3', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+	IF( pGLAH > 3 &  pGLAH < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AH4', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+EndIf;
+
+########################### Create Alt Hierarchies (AL1-AL4)
+
+IF( pGLAL >= 0 & pGLAL < 5 );
+
+	IF( pGLAL > 0 & pGLAL < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AL1', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+	IF( pGLAL > 1 & pGLAL < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AL2', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+	IF( pGLAL > 2 & pGLAL < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AL3', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+	IF( pGLAL > 3 & pGLAL < 5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AL4', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+
+EndIf;
+
+########################### Create Alt Hierarchies (AO1)
+
+IF( pGLAO >= 0 & pGLAO < 5 );
+	IF( pGLAO > 0 & pGLAO <5 );
+		ExecuteProcess('update_dim_accounts_2_hierarchy_build', 'pHierarchy','AO1', 'pDebug',0,'pSecurityRefresh','0');
+	EndIf;
+EndIf;
+
+if (ProcessExists( 'update_dim_accounts_1_picklists' )=1);
+	ExecuteProcess('update_dim_accounts_1_picklists');
+endif;
+
+
+
+#Structure validation
+
+if (ProcessExists( 'Dimension_HierarchyValidation' )=1);
+	vMail = CellGetS('Global Control', 'Core Team Email', 'String');
+	vValidation  = ExecuteProcess ('Dimension_HierarchyValidation','pDim', 'GL_Accounts','pSendTo', vMail, 'pSendMail', 'Yes','pMessageProcess', cProcess);
+endif;
+
+
+####### Refresh Security#####################
+
+#Update Security
+pDim='GL_Accounts';
+sSecurityUpdate = 'sProcessElementSecurity';
+ExecuteProcess( sSecurityUpdate, 'pDim', pDim);
+SecurityRefresh;
+#endregion

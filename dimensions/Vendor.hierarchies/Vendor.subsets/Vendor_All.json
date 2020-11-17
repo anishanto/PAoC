@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Vendor_All",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [Vendor] )}, ALL, RECURSIVE )}"
+}

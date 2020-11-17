@@ -1,0 +1,65 @@
+{
+	"@type":"Process",
+	"Name":"CubeExtractAll_ElementAttributes_GL_Accounts",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"CubeExtractAll_ElementAttributes_GL_Accounts.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"}ElementAttributes_GL_Accounts",
+		"dataSourceNameForServer":"}ElementAttributes_GL_Accounts",
+		"view":"VE-}ElementAttributes_GL_Accounts-Export"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pEmailFile",
+			"Prompt":"Yes Email file",
+			"Value":"No",
+			"Type":"String"
+		},
+		{
+			"Name":"pSendTo",
+			"Prompt":"Input Email Distirbution and or Email address as needed",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim",
+			"Prompt":"Input Dimension Name",
+			"Value":"GL_Accounts",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"Dim",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Attributes",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vValue",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

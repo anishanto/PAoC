@@ -1,0 +1,51 @@
+{
+	"@type":"Process",
+	"Name":"ProcessEmail BUPM Update",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessEmail BUPM Update.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f_DeployParams={&quotdimensionConflictResolutions&quot:{}&#044&quotclass&quot:&quotDeployParams&quot&#044&quotdataAction&quot:&quotACCUMULATE&quot}\f_ParseParams={&quotskipRows&quot:&quot0&quot&#044&quotlocale&quot:{&quotlanguange&quot:&quoten&quot&#044&quotvariant&quot:&quot&quot&#044&quotcountry&quot:&quotUS&quot}&#044&quotdimensions&quot:[]&#044&quotmeasures&quot:[]&#044&quotnumColumns&quot:&quot0&quot&#044&quothasHeader&quot:&quotfalse&quot}\f_importSourceDefinition={\"scriptOnlySource\":{},\"sourceType\":\"NONE\",\"originalColumns\":null,\"locale\":{\"localeIsDefault\":false,\"localeCurrencySymbol\":\"$\",\"languageCode\":\"en\",\"languageDisplay\":\"English\",\"thousandsSeparator\":\",\",\"localeCode\":\"en_US\",\"localeCurrencyCode\":\"$\",\"localeDisplay\":\"English (United States)\",\"countryDisplay\":\"United States\",\"countryCode\":\"US\",\"decimalSeparator\":\".\"},\"excludedColumns\":[],\"columns\":[],\"sourceTypeHasBeenChanged\":false}\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pSendTo",
+			"Prompt":"Input email address with a comma between addresses",
+			"Value":"tm1admin@am.jll.com",
+			"Type":"String"
+		},
+		{
+			"Name":"pSubject",
+			"Prompt":"Input subject",
+			"Value":"BusUnits_PM Hierarchy update - ",
+			"Type":"String"
+		},
+		{
+			"Name":"pBody",
+			"Prompt":"Input text",
+			"Value":"TM1 Processing BusUnits Hierarchy - Please review Approval WF Subset - ",
+			"Type":"String"
+		},
+		{
+			"Name":"pLocation",
+			"Prompt":"Input file path",
+			"Value":"..\\DataSources\\Exports\\",
+			"Type":"String"
+		},
+		{
+			"Name":"pFilename",
+			"Prompt":"input file name",
+			"Value":"BUPMApprovalMgt.csv",
+			"Type":"String"
+		},
+		{
+			"Name":"pEnv",
+			"Prompt":"Input Environment",
+			"Value":"DEV  - ",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

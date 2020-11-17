@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"WODrillWork Orders",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Work Orders] )} ) }, 0)}, ASC)}"
+}

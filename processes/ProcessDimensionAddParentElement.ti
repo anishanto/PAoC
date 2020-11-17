@@ -1,0 +1,191 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#============================        NOTES     =================================================
+#    Date                   Initials        Note
+#    2016-06-07            John Petrovik           		Initial Build
+#
+#  Adds new parent element in appropriate hierarchies
+#
+#==========================================================================================
+
+#==========================================================================================
+
+#===============================    Process statistics  ===========================================
+cProcess = GETPROCESSNAME ;
+sProcess = TRIM (cProcess);
+WHILE ( SCAN ( ' ', sProcess )  > 0 );
+    sProcess = DELET ( sProcess, SCAN ( ' ' , sProcess ) , 1 ) ;
+END ;
+
+sUser = TM1USER() ;
+
+sNow = TIMST( NOW , '\M \D, \Y at \H \p \i min \s sec' ) ;
+vNowStart = NOW ;
+
+cubMessages = '}ElementAttributes_}Processes';
+
+#========================================================================================
+
+#============================= Define User Log =============================================
+cubGblCube = 'Global Settings';
+logPath = '..\logs\tunit\';
+exportPath = '..\DataSources\Exports\';
+
+IF ( SUBST ( logPath , LONG ( logPath ) - 1 , 1 ) @<> '\' ) ;
+    logPath = logPath | '\' ;
+ENDIF;
+
+logName = TRIM ( sProcess ) | '_' | sNow | '.log' ;
+errName =  TRIM ( sProcess ) | '_' | sNow | '.err' ;
+logNameMeta = TRIM ( sProcess ) | '_' | sNow | '-KICKOUT.csv' ;
+errNameMeta = TRIM ( sProcess ) | '_' | sNow | '-META.err' ;
+logFile = logPath | logName ;
+errFile = logPath | errName ;
+logFileMeta = logPath | logNameMeta ;
+errFileMeta = logPath | errNameMeta ;
+
+#===================================================================================
+
+
+#===============================   Process Variables  ====================================
+
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+vProcessStatusCube = 'Process Status';
+vDimension = pDimension;
+
+vFlag = 0;
+vExists = 0;
+
+vTimeStamp = TIMST(NOW, '\m-\d-\Y @ \H:\i \p PST');
+vMessage = 'No Message';
+
+DIMENSIONSORTORDER(vDimension, 'ByName','Ascending','ByHierarchy','Ascending');
+
+pElementParent = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pElementParent);
+
+pTopParentPrinciple = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pTopParent);
+
+#Check that the fields have been entered and valid
+IF(pElement @= '');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: '| pDimension | ' not entered.';
+   ENDIF;
+ENDIF;
+
+IF (pNumericValidation <> 0);
+IF(LONG(pElement) <> pNumericValidation % CODE(pElement,1) < 48 % CODE(pElement,1) > 57 % CODE(pElement,2) < 48 % CODE(pElement,2) > 57 % CODE(pElement,3) < 48 % CODE(pElement,3) > 57
+    % CODE(pElement,4) < 48 % CODE(pElement,4) > 57 );
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: ' |pDimension |' code must be a ' | NUMBERTOSTRING(pNumericValidation) |' digit numeric value.';
+   ENDIF;
+ENDIF;
+ENDIF;
+
+#Check that Element does not exist
+
+      IF(DIMIX(vDimension, pElement) > 1);
+         vFlag = 1;
+         vMessage = 'ERROR: "'| pElement | ' "already exists.';
+    ENDIF;
+
+
+#Check that Parent is Level 1
+#IF(vDimension @= 'BusUnits' & vFlag = 0 & ELLEV(vDimension, pElementParent) <> 2);
+#         vFlag = 1;
+#         vMessage = 'ERROR: The new parent "'| pElement | ' "can be added only on Level 1.';
+#ENDIF;
+
+IF(pElementAlias @= '');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: '| pDimension | ' Alias not entered.';
+   ENDIF;
+ENDIF;
+
+vDimension = pDimension;
+vElementParent = pElementParent;
+IF(pElementParent @= '' % pElementParent @= '0');
+  vElementParent = DIMNM(vDimension, 1);
+ENDIF;
+
+IF(ELLEV(pDimension, vElementParent) = 0 & SUBST(vElementParent,1,3)@<>'All');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: Invalid Parent selection.';
+   ENDIF;
+ENDIF;
+
+#Add Element
+IF(vFlag = 0);
+IF(vDimension @= 'BusUnits');
+   IF(pValidationFlag @= 'TRUE');
+      vMessageSuccess = 'SUCCESS: Validation successful.  Click Complete New Parent '| pDimension |' to add the new ' |pElement |' '| pDimension | '.';
+   ELSE;
+      vMessageSuccess = 'SUCCESS: Parent element ' | pElement | ' added to the ' | pDimension | ' hierarchy.' ;
+      #To Dimension
+#       ASCIIOUTPUT('..\\logs\System\Debug.txt', vDimension, 'SH1', pElement,pElementParent, NUMBERTOSTRING(ELISANC(vDimension, 'SH1', pElementParent)));
+
+      IF(ELISANC(vDimension, pTopParentPrinciple, pElementParent) = 1 %  pElementParent@=pTopParentPrinciple);
+         DIMENSIONELEMENTINSERT(vDimension, '', pElement, 'C');
+         DIMENSIONELEMENTCOMPONENTADD(vDimension, pElementParent, pElement, 1);
+      ENDIF;
+   ENDIF;
+ELSE;
+         vMessageSuccess = 'SUCCESS: Parent element ' | pElement | ' added to the ' | pDimension | ' hierarchy.' ;
+         DIMENSIONELEMENTINSERT(pDimension, '', pElement, 'C');
+         DIMENSIONELEMENTCOMPONENTADD(vDimension, pElementParent, pElement, 1);
+ENDIF;
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Update Process Status cube with messages
+CELLPUTS ( vMessageSuccess , cubMessages, cProcess, elmSuccessMessage);
+CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+
+#ASCIIOUTPUT('..\\logs\System\Debug.txt', vDimension,vMessageSuccess, vMessage, numbertostring(vFlag));
+
+IF(vFlag = 1);
+   ProcessQuit;
+ENDIF;
+
+IF(vFlag = 0 & pValidationFlag @= 'FALSE' & DIMIX(vDimension, pElement) <> 0 & pElementAlias @<> '0');
+IF(vDimension @= 'BusUnits');
+   # Add Description attribute in dimension
+   IF(ELISANC(vDimension, pTopParentPrinciple, pElementParent) = 1);
+      ATTRPUTS(pElement ,vDimension, pElement ,'Name');
+   ENDIF;
+      ATTRPUTS('Yes' ,vDimension, pElement ,'HierarchyStatus');
+ENDIF;
+  
+
+ENDIF;
+
+#Update Security
+sSecurityUpadate = 'sProcessSecurityUpdate';
+ExecuteProcess(sSecurityUpadate);
+
+# Refresh Security
+vSecurity_Refresh = 'SecurityRefresh';
+EXECUTEPROCESS(vSecurity_Refresh);
+#endregion

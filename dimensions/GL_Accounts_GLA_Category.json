@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"GL_Accounts_GLA_Category",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('GL_Accounts_GLA_Category')/Hierarchies('GL_Accounts_GLA_Category')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"GL_Accounts_GLA_Category.hierarchies/GL_Accounts_GLA_Category.json"
+	]
+}

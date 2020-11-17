@@ -1,0 +1,38 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+### Validates Date Format and Rate Percentage
+
+['Check Rate']= S:
+	IF (DB('Leases Fixed Rates',!Versions_PM,!Event Name, !Tenure ID, 'Event Name')@='',
+		'',
+		continue);
+
+['Check Rate']= S:
+	IF (DB('Leases Fixed Rates',!Versions_PM,!Event Name, !Tenure ID, 'Event Name')@<>''
+		% DB('Leases Fixed Rates',!Versions_PM,!Event Name, !Tenure ID, 'Event Notes')@<>'',
+	#THEN
+		 IF(['Rates']=0,
+		#THEN
+			 'WARNING: Rate is 0%',
+		#ELSE
+			IF(['Rates']<=1,
+			#THEN
+				'OK',
+			#ELSE
+				'Invalid Rate')
+		),
+	#ELSE
+		'');
+
+
+['Valid Rate']= N:
+	IF(DB('Leases Fixed Rates',!Versions_PM,!Event Name, !Tenure ID, 'Check Rate') @='OK',
+		['Rates'],
+		0);
+
+FEEDERS;
+['Event Date'] => ['Check Rate'];
+['Rates'] => ['Check Rate'], ['Valid Rate'];

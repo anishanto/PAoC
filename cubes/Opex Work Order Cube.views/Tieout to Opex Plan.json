@@ -1,0 +1,217 @@
+{
+	"@type":"NativeView",
+	"Name":"Tieout to Opex Plan",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')/Elements('Due Date')"
+					},
+					{
+						"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')/Elements('Date Time Completed - First')"
+					},
+					{
+						"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')/Elements('Vendor NTE')"
+					},
+					{
+						"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')/Elements('Total Spot Purchase Cost')"
+					},
+					{
+						"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')/Elements('Corrigo Work Orders')"
+					},
+					{
+						"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')/Elements('Corrigo Closed WO')"
+					},
+					{
+						"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')/Elements('Corrigo Open WO')"
+					}
+				]
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Work Orders')/Hierarchies('Work Orders')"
+				},
+				"Expression":"TM1SubsetAll([Work Orders])"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+					}
+				]
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('AP Status')/Hierarchies('AP Status')/Subsets('APStatusDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('WO Status')/Hierarchies('WO Status')/Subsets('WOStatusDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('All Hierarchies CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency')/Hierarchies('Currency')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Currency')/Hierarchies('Currency')/Elements('All Currency')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency')/Hierarchies('Currency')/Elements('All Currency')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Versions')/Hierarchies('Versions')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('All Versions')"
+					},
+					{
+						"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Actuals')"
+					},
+					{
+						"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Budget')"
+					},
+					{
+						"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Forecast')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Forecast')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2019')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Hierarchies Expanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Subledger')/Hierarchies('Subledger')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Subledger')/Hierarchies('Subledger')/Elements('SH1')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Subledger')/Hierarchies('Subledger')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Vendor')/Hierarchies('Vendor')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Vendor')/Hierarchies('Vendor')/Elements('SH1')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Vendor')/Hierarchies('Vendor')/Elements('SH1')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.#########"
+}

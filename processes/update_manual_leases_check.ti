@@ -1,0 +1,319 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#The purpose of the process is to load data to the opex plan cube for the version selected.
+#Final user can choose to zero out the data, make a partial load, or accumulate 
+
+CubeLockOverride(1);
+
+##### Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+sSubType = CELLGETS('Global Control', 'Client SubAcct Type', 'String');
+cImportPath = CELLGETS('Global Control','Import Shared Folder', 'String');  
+cFileName = 'Leases_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cDimBU= 'BusUnits';
+cDimYear='Fiscal Years';
+cDimExtOptions='Extension Options';
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+nRecordProcessedCount=0;
+nError = 0;
+
+############################################################## Check to make sure file path exists
+
+IF( FileExists ( sFullPath ) = 0);
+	nError = 1;
+	sMessage = 'Location or File does not exist: Please review';
+	AsciiOutput (cDebugFile, sMessage );
+	DataSourceType = 'NULL';
+	ItemReject (sMessage);
+EndIf;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDebugFile = cDebugFile | 'Data.debug';
+nRecordProcessedCount = nRecordProcessedCount +1;
+
+### Checks Columns
+IF (nRecordProcessedCount=1);
+	IF(vVersion@<>'Version');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 1 is not labeled as "Version".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vCompany@<>'Company');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 2 is not labeled as "Company".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vBusunits@<>'BusUnits');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 3 is not labeled as "BusUnit".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vAccountNumberSource@<>'Account Number');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 4 is not labeled as "Account Number".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(vTenureID@<>'Tenure ID');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 5 is not labeled as "Tenure ID".');
+		nError = nError + 1;
+	ENDIF;
+
+	vDim = 'Fiscal Month Year';
+	vSub = 'FiscalMonthsDetail';
+	vMonth = 1;
+	vYear = 1;
+	vIndex = 1;
+	vIndexFinal = SubsetGetSize(vDim,vSub);
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%nM' | Expand( '%vIndexS%' ) | '%' );
+
+		vMonthS = IF (vMonth < 10, '0'|NumberToString(vMonth),NumberToString(vMonth));
+		vYearS = IF (vYear < 10, '0'|NumberToString(vYear),NumberToString(vYear));
+		
+		IF (vVarM@<>'M'|vMonthS|' Y'|vYearS);
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column '| NumberToString(vIndex+5)|' is not labeled as "M'|vMonthS|' Y'|vYearS |'".');
+			nError = nError + 1;
+		ENDIF;
+
+		### Month and Year Variables
+		IF (vMonth<12);
+			vMonth = vMonth+1;
+		ELSE;
+			vMonth = 1;
+			vYear = vYear+1;
+		ENDIF;
+
+		vIndex = vIndex + 1;
+	END;
+
+	IF(LeaseStartDate@<>'Start Date');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 126 is not labeled as "Start Date".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(LeaseEndDate@<>'End Date');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 127 is not labeled as "End Date".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(StartAmount@<>'Monthly Base Amount');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 128 is not labeled as "Monthly Base Amount".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(ExtensionOption@<>'Extension Option');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 129 is not labeled as "Extension Option".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(BudgetEndDate@<>'Budget End Date');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 130 is not labeled as "Budget End Date".');
+		nError = nError + 1;
+	ENDIF;
+
+	vIndex = 1;
+	vIndexFinal = 10;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%EventTypeY' | Expand( '%vIndexS%' ) | '%' );
+		IF (vVarM@<>'Y'|vIndexS);
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column '| NumberToString(vIndex+130)|' is not labeled as "Y' | vIndexS | '".');
+			nError = nError + 1;
+		ENDIF;
+		vIndex = vIndex + 1;
+	END;
+
+	vIndex = 1;
+	vIndexFinal = 10;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%EventDateY' | Expand('%vIndexS%') | '%' );
+		IF (vVarM@<>'Y'|vIndexS);
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column '| NumberToString(vIndex+140)|' is not labeled as "Y' | vIndexS | '".');
+			nError = nError + 1;
+		ENDIF;
+		vIndex = vIndex + 1;
+	END;
+
+	vIndex = 1;
+	vIndexFinal = 10;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%CategoryY' | Expand('%vIndexS%') | '%' );
+		IF (vVarM@<>'Y'|vIndexS);
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column '| NumberToString(vIndex+150)|' is not labeled as "Y' | vIndexS | '".');
+			nError = nError + 1;
+		ENDIF;
+		vIndex = vIndex + 1;
+	END;
+
+	vIndex = 1;
+	vIndexFinal = 10;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%RateY' | Expand('%vIndexS%') | '%' );
+		IF (vVarM@<>'Y'|vIndexS);
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column '| NumberToString(vIndex+160)|' is not labeled as "Y' | vIndexS | '".');
+			nError = nError + 1;
+		ENDIF;
+		vIndex = vIndex + 1;
+	END;
+
+	IF(BaseAmount@<>'Start Amount');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 171 is not labeled as "Start Amount".');
+		nError = nError + 1;
+	ENDIF;
+
+	vIndex = 1;
+	vIndexFinal = 10;
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%Y' | Expand('%vIndexS%') | '%' );
+		IF (vVarM@<>'Y'|vIndexS);
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column '| NumberToString(vIndex+171)|' is not labeled as "Y' | vIndexS | '".');
+			nError = nError + 1;
+		ENDIF;
+		vIndex = vIndex + 1;
+	END;
+
+	IF(BudgetRegion@<>'BudgetRegion');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 182 is not labeled as "BudgetRegion".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(BudgetBuildingType@<>'BudgetBuildingType');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 183 is not labeled as "BudgetBuildingType".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(LeaseType@<>'LeaseType');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 184 is not labeled as "LeaseType".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(Review@<>'Review');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 185 is not labeled as "Review".');
+		nError = nError + 1;
+	ENDIF;
+
+	IF(Commentary@<>'Commentary');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Column 186 is not labeled as "Commentary".');
+		nError = nError + 1;
+	ENDIF;
+ELSE;
+### Checks Data
+	######################## Check Version
+	IF(pVersion@<>vVersion % DIMIX('Versions_PM',vVersion)=0);
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Version is misspelled.');
+		nError = nError + 1;
+	ENDIF;
+
+	######################## Check BU & Company
+	if (SUBST(vBusUnits, 1, 5)@<>vCompany);
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Company does not match for Business Unit.');
+		nError = nError + 1;
+	endif;
+
+	######################## Check BU & Company
+	IF(DIMIX(cDimBU, vBusUnits)<>0);
+		vBU_Company=AttrS(cDimBU, vBusUnits, 'Company');
+		IF(vCompany@<>vBU_Company & vBU_Company@<>'');
+			Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Company does not match for Business Unit.');
+			nError = nError + 1;
+		ENDIF;
+	ENDIF;
+
+	######################## Check BU
+	if (vBusUnits@='');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Business Unit is empty.');
+		nError = nError + 1;
+	ENDIF;
+
+	######################## Check Account
+	if (vAccountNumberSource@='');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Account is empty.');
+		nError = nError + 1;
+	ENDIF;
+	
+	######################## Check Account length
+
+	### Sub
+	if (LONG(vAccountNumberSource)<>10 & sSubType@='Sub');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Account does not have 10 characters');
+		nError = nError + 1;
+	ENDIF;
+	
+	### No Sub
+	if (LONG(vAccountNumberSource)<>10 & LONG(vAccountNumberSource)<>6  & sSubType@='No Sub');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Account does not have 10 or 6 characters');
+		nError = nError + 1;
+	ENDIF;  
+
+	######################## Check Company
+	if (vCompany@='');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Company is empty.');
+		nError = nError + 1;
+	ENDIF;
+
+	######################## Check Tenure ID
+	if (vTenureID@='');
+		Asciioutput(sDebugFile, 'Reach for line '|numbertostring(nRecordProcessedCount)|' at file. Tenure ID is empty.');
+		nError = nError + 1;
+	ENDIF;
+
+	######################## Check Data Format for Months
+
+	vDim = 'Fiscal Month Year';
+	vSub = 'FiscalMonthsDetail';
+	vIndex = 1;
+	vIndexFinal = SubsetGetSize(vDim,vSub);
+	While (vIndex <= vIndexFinal);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%nM' | Expand( '%vIndexS%' ) | '%' );
+
+		## check every month if string is posible to be converted to value.           
+             		nVarM = StringtoNumber(vVarM);
+
+		vIndex = vIndex + 1;
+	END;
+
+	### Date formats are not validated at this point, as they are not being user for any further calculation ###
+
+ENDIF;
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF (nError<>0);
+	ProcessQuit;
+ENDIF;
+#endregion

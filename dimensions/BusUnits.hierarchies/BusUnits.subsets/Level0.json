@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Level0",
+	"Expression":"{TM1SORT(  {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[BusUnits].[SH1]}, ALL, RECURSIVE )}, 0)}, ASC)}"
+}

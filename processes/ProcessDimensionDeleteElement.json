@@ -1,0 +1,39 @@
+{
+	"@type":"Process",
+	"Name":"ProcessDimensionDeleteElement",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessDimensionDeleteElement.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pElement",
+			"Prompt":"Element Name",
+			"Value":"Parent Name",
+			"Type":"String"
+		},
+		{
+			"Name":"pDimension",
+			"Prompt":"Dimension",
+			"Value":"BusUnitsAH1",
+			"Type":"String"
+		},
+		{
+			"Name":"pAllElement",
+			"Prompt":"All Element",
+			"Value":"SH1",
+			"Type":"String"
+		},
+		{
+			"Name":"pAllElementAH",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

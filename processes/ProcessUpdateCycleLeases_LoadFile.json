@@ -1,0 +1,33 @@
+{
+	"@type":"Process",
+	"Name":"ProcessUpdateCycleLeases_LoadFile",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessUpdateCycleLeases_LoadFile.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDebug",
+			"Prompt":"1 to Debug",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pVersion",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pEmailFile",
+			"Prompt":"",
+			"Value":"yes",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

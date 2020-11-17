@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TotalExpenseExpanded",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [GL_Accounts] )}, \"Total Expense\")}, ALL, RECURSIVE )}"
+}

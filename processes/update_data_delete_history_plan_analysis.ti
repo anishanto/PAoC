@@ -1,0 +1,364 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+sZeroData = cProcessName|' Zero';
+sMonth = 'M03';
+sMonthP = DimensionElementPrincipalName('Fiscal Months','M01');
+sMonthName = ATTRS('Fiscal Months',sMonthP,'Name');
+sClientType =  CELLGETS('Global Control','Client Model Type','String'); 
+#######Define Time
+
+
+sCurrentYear = SUBST(today(1),1,4);
+sNextYear = STR(NUMBR(SUBST(today(1),1,4))+1,4,0);
+
+IF(sMonthName@='Nov' % sMonthName@='Dec' % sMonthName@='Jan' );
+    sYear = sCurrentYear;
+   Else;
+    sYear = sNextYear;
+EndIf;
+
+##Year flag based on customer year. 
+sPriorYear = STR(NUMBR(sYear)-4,4,0);
+sPriorYear1 = STR(NUMBR(sYear)-5,4,0);
+sPriorYear2 = STR(NUMBR(sYear)-6,4,0);
+
+ 
+ 
+
+
+#########Check Actuals have been loaded into parameter month for current year
+
+sCYActuals = CELLGETN('Opex Plan Cube','Actuals','All Companies','Local',sMonth,sYear,'SH1','SH1','SH1','Total Amount')
+                    +CELLGETN('Opex Plan Cube','Actuals','All Companies','USD',sMonth,sYear,'SH1','SH1','SH1','Total Amount')
+                    +CELLGETN('Opex Plan Cube','Actuals','All Companies','AUD',sMonth,sYear,'SH1','SH1','SH1','Total Amount');
+
+sCYActuals2 = CELLGETN('Opex Analysis Cube','Actuals','All Companies','All Currency',sMonth,sYear,'SH1','SH1','SH1','No Scale','Total Amount');
+
+
+
+#Clear out Views
+IF( ViewExists('Opex Plan Cube', sZeroData ) = 1);
+ViewDestroy( 'Opex Plan Cube', sZeroData );
+EndIf;
+
+IF( ViewExists('Opex Analysis Cube', sZeroData ) = 1);
+ViewDestroy( 'Opex Analysis Cube', sZeroData );
+EndIf;
+
+
+
+
+################Define Subsets to Delete
+
+#############Subset Parameters
+#Fiscal Years
+
+IF(SubsetExists('Fiscal Years', sZeroData) = 1);
+     SubsetDestroy('Fiscal Years', sZeroData);
+EndIf;
+
+sMDX = '{[Fiscal Years].['|sPriorYear|'],[Fiscal Years].['|sPriorYear1|'],[Fiscal Years].['|sPriorYear2|']}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create SubAccounts
+IF(SubsetExists('SubAccounts', sZeroData) = 1);
+     SubsetDestroy('SubAccounts', sZeroData);
+EndIf;
+
+sMDX = '{TM1SUBSETALL( [SubAccounts] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create GL Accounts
+
+IF(SubsetExists('GL_Accounts', sZeroData) = 1);
+     SubsetDestroy('GL_Accounts', sZeroData);
+EndIf;
+
+sMDX = '{TM1SUBSETALL( [GL_Accounts] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+
+#Create BusUnits
+IF(SubsetExists('BusUnits', sZeroData) = 1);
+     SubsetDestroy('BusUnits', sZeroData);
+EndIf;
+
+sMDX = '{TM1SUBSETALL( [BusUnits] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Company
+IF(SubsetExists('Company', sZeroData) = 1);
+     SubsetDestroy('Company', sZeroData);
+EndIf;
+
+sMDX = '{TM1SUBSETALL( [Company] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Versions_PM
+IF(SubsetExists('Versions_PM', sZeroData) = 1);
+     SubsetDestroy('Versions_PM', sZeroData);
+EndIf;
+
+sMDX = '{TM1SUBSETALL( [Versions_PM] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Versions
+IF(SubsetExists('Versions', sZeroData) = 1);
+     SubsetDestroy('Versions', sZeroData);
+EndIf;
+
+
+sMDX = '{TM1SUBSETALL( [Versions] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Currency_PM
+IF(SubsetExists('Currency_PM', sZeroData) = 1);
+     SubsetDestroy('Currency_PM', sZeroData);
+EndIf;
+
+ 
+sMDX = '{TM1SUBSETALL( [Currency_PM] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Currency
+IF(SubsetExists('Currency', sZeroData) = 1);
+     SubsetDestroy('Currency', sZeroData);
+EndIf;
+
+sMDX = '{TM1SUBSETALL( [Currency] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Fiscal Months
+IF(SubsetExists('Fiscal Months', sZeroData) = 1);
+     SubsetDestroy('Fiscal Months', sZeroData);
+EndIf;
+
+sMDX = '{TM1SUBSETALL( [Fiscal Months] )}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Plan Measures
+IF(SubsetExists('Plan Measures', sZeroData) = 1);
+     SubsetDestroy('Plan Measures', sZeroData);
+EndIf;
+
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Plan Measures] )} ) }, 0)}, ASC)}';
+
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+# create Analysis Measures
+IF(SubsetExists('Analysis Measures', sZeroData) = 1);
+     SubsetDestroy('Analysis Measures', sZeroData);
+EndIf;
+
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Analysis Measures] )} ) }, 0)}, ASC)}';
+
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+
+
+# create Scale Measures
+IF(SubsetExists('Scale Measure', sZeroData) = 1);
+     SubsetDestroy('Scale Measure', sZeroData);
+EndIf;
+
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Scale Measure] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( sZeroData, sMDX);
+
+
+###############Detail Cube
+
+
+IF(DIMIX('Fiscal Years',sCurrentYear) >0 & sCYActuals <>0);
+    cCube = 'Opex Plan Cube'; 
+ ####Destroy View if preent
+IF( ViewExists(cCube, sZeroData ) = 1);
+   ViewDestroy( cCube, sZeroData );
+EndIf;
+
+####CreateView for Detail Cube
+ViewCreate( cCube, sZeroData );
+ViewExtractSkipZeroesSet (cCube, sZeroData, 1);
+ViewExtractSkipRuleValuesSet (cCube, sZeroData, 1);
+ViewRowSuppressZeroesSet(cCube, sZeroData, 1);
+ViewColumnSuppressZeroesSet(cCube, sZeroData, 1);
+ViewSuppressZeroesSet(cCube, sZeroData, 1);
+
+ViewSubsetAssign (cCube, sZeroData, 'Versions_PM', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Company', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Currency_PM', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Fiscal Years', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Fiscal Months', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'SubAccounts', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'GL_Accounts', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'BusUnits', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Plan Measures', sZeroData);
+
+ViewColumnDimensionSet(cCube, sZeroData, 'Plan Measures',1);
+ViewRowDimensionSet(cCube, sZeroData, 'Versions_PM',1);
+ViewRowDimensionSet(cCube, sZeroData, 'Currency_PM',2);
+ViewRowDimensionSet(cCube, sZeroData, 'GL_Accounts',3);
+ViewRowDimensionSet(cCube, sZeroData, 'SubLedger',4);
+ViewRowDimensionSet(cCube, sZeroData, 'Vendor',5);
+ViewRowDimensionSet(cCube, sZeroData, 'Company',6);
+ViewRowDimensionSet(cCube, sZeroData, 'Fiscal Months',7);
+ViewRowDimensionSet(cCube, sZeroData, 'Fiscal Years',8);
+ViewRowDimensionSet(cCube, sZeroData, 'SubAccounts',9);
+ViewRowDimensionSet(cCube, sZeroData, 'BusUnits',10);
+
+ VIEWZEROOUT(cCube,sZeroData);
+EndIf;
+
+###############
+IF(DIMIX('Fiscal Years',sCurrentYear) >0 & sCYActuals2 <>0);
+    cCube = 'Opex Analysis Cube'; 
+ ####Destroy View if preent
+IF( ViewExists(cCube, sZeroData ) = 1);
+   ViewDestroy( cCube, sZeroData );
+EndIf;
+   ####CreateView
+ViewCreate( cCube, sZeroData );
+ViewExtractSkipZeroesSet (cCube, sZeroData, 1);
+ViewExtractSkipRuleValuesSet (cCube, sZeroData, 1);
+ViewRowSuppressZeroesSet(cCube, sZeroData, 1);
+ViewColumnSuppressZeroesSet(cCube, sZeroData, 1);
+ViewSuppressZeroesSet(cCube, sZeroData, 1);
+
+ViewSubsetAssign (cCube, sZeroData, 'Versions', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Company', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Currency', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Fiscal Years', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Fiscal Months', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'SubAccounts', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'GL_Accounts', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'BusUnits', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Analysis Measures', sZeroData);
+ViewSubsetAssign (cCube, sZeroData, 'Scale Measure', sZeroData);
+
+ViewColumnDimensionSet(cCube, sZeroData, 'Analsyis Measures',1);
+ViewRowDimensionSet(cCube, sZeroData, 'Versions',1);
+ViewRowDimensionSet(cCube, sZeroData, 'Currency',2);
+ViewRowDimensionSet(cCube, sZeroData, 'GL_Accounts',3);
+ViewRowDimensionSet(cCube, sZeroData, 'Scale Measure',4);
+ViewRowDimensionSet(cCube, sZeroData, 'Company',5);
+ViewRowDimensionSet(cCube, sZeroData, 'Fiscal Months',6);
+ViewRowDimensionSet(cCube, sZeroData, 'Fiscal Years',7);
+ViewRowDimensionSet(cCube, sZeroData, 'SubAccounts',8);
+ViewRowDimensionSet(cCube, sZeroData, 'BusUnits',9);
+
+VIEWZEROOUT(cCube,sZeroData);
+
+
+EndIf;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############Delete View and Subset
+
+IF(1=1);
+
+#Clear out Views
+IF( ViewExists('Opex Plan Cube', sZeroData ) = 1);
+ViewDestroy( 'Opex Plan Cube', sZeroData );
+EndIf;
+
+IF( ViewExists('Opex Analysis Cube', sZeroData ) = 1);
+ViewDestroy( 'Opex Analysis Cube', sZeroData );
+EndIf;
+
+
+
+
+
+
+#Fiscal Years
+
+IF(SubsetExists('Fiscal Years', sZeroData) = 1);
+     SubsetDestroy('Fiscal Years', sZeroData);
+EndIf;
+
+# create SubAccounts
+IF(SubsetExists('SubAccounts', sZeroData) = 1);
+     SubsetDestroy('SubAccounts', sZeroData);
+EndIf;
+ 
+# create GL Accounts
+
+IF(SubsetExists('GL_Accounts', sZeroData) = 1);
+     SubsetDestroy('GL_Accounts', sZeroData);
+EndIf;
+
+#Create BusUnits
+IF(SubsetExists('BusUnits', sZeroData) = 1);
+     SubsetDestroy('BusUnits', sZeroData);
+EndIf;
+
+# create Company
+IF(SubsetExists('Company', sZeroData) = 1);
+     SubsetDestroy('Company', sZeroData);
+EndIf;
+
+# create Versions_PM
+IF(SubsetExists('Versions_PM', sZeroData) = 1);
+     SubsetDestroy('Versions_PM', sZeroData);
+EndIf;
+ 
+# create Versions
+IF(SubsetExists('Versions', sZeroData) = 1);
+     SubsetDestroy('Versions', sZeroData);
+EndIf;
+
+# create Currency_PM
+IF(SubsetExists('Currency_PM', sZeroData) = 1);
+     SubsetDestroy('Currency_PM', sZeroData);
+EndIf;
+
+# create Currency
+IF(SubsetExists('Currency', sZeroData) = 1);
+     SubsetDestroy('Currency', sZeroData);
+EndIf;
+
+# create Fiscal Months
+IF(SubsetExists('Fiscal Months', sZeroData) = 1);
+     SubsetDestroy('Fiscal Months', sZeroData);
+EndIf;
+
+# create Plan Measures
+IF(SubsetExists('Plan Measures', sZeroData) = 1);
+     SubsetDestroy('Plan Measures', sZeroData);
+EndIf;
+
+# create Analysis Measures
+IF(SubsetExists('Analysis Measures', sZeroData) = 1);
+     SubsetDestroy('Analysis Measures', sZeroData);
+EndIf;
+ 
+# create Scale Measures
+IF(SubsetExists('Scale Measure', sZeroData) = 1);
+     SubsetDestroy('Scale Measure', sZeroData);
+EndIf;
+
+EndIf;
+#endregion

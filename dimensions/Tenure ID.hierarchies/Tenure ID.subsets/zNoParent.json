@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"zNoParent",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Elements('NA')"
+		}
+	]
+}

@@ -1,0 +1,229 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####Define Variables#####
+sProcessNm = getProcessName();
+sView = 'VE-' | sProcessNm;
+sSub = 'VE-' | sProcessNm;
+cCube = '}CubeSecurity';
+dGrp = '}Groups';
+dDim='}Cubes';
+
+CubeSetLogChanges(cCube, 0);
+
+#####Destroy previous views and subsets#####
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1) @<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+
+#####Create Dim Subset#####
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [' | dDim | '] )}, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+######Create Groups#####
+sMDX= '{ EXCEPT( {TM1SUBSETALL( ['|dGrp|'] )}, { ['|dGrp|'].[ADMIN], ['|dGrp|'].[SecurityAdmin], ['|dGrp|'].[DataAdmin], ['|dGrp|'].[OperationsAdmin] }) }';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+#####Create View#####
+ViewCreate(cCube, sView);
+ViewSubsetAssign(cCube, sView,dDim, sView);
+ViewSubsetAssign(cCube, sView,dGrp, sView);
+ViewRowDimensionSet(cCube, sView,dDim, 1);
+ViewColumnDimensionSet(cCube, sView,dGrp,1);
+
+
+#####Set View Filters#####
+ViewExtractSkipCalcsSet(cCube, sView, 0);
+ViewExtractSkipZeroesSet(cCube, sView, 0);
+
+
+#####Zero Out View#####
+VIEWZEROOUT(cCube, sView ) ;
+
+
+#####Set new views as the datasource#####
+    DatasourceNameForServer = cCube;
+    DatasourceCubeView = sView;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####PROCESS SUMMARY#####
+#Allow Write back access for WB & DA groups
+#Allow Read Only access  for RO & ProcR groups
+#Default balance to NONE including the 'Everyone' group
+
+
+#####DEFINE VARIABLES#####
+cCube='Global Control';
+vClient = LOWER(CellGetS(cCube, 'Client Name', 'String'));
+vSecurityGroup1 = LOWER(CellGetS(cCube, 'Security Group 1', 'String'));
+vSecurityGroup2 = LOWER(CellGetS(cCube, 'Security Group 2', 'String'));
+vSecurityGroup3 = LOWER(CellGetS(cCube, 'Security Group 3', 'String'));
+vTenureFlag=0;
+if (DIMIX('Global Control Items','Client Tenure Type')<>0);
+	vTenureFlag= CellGetN(cCube, 'Client Tenure Type', 'Value');
+endif;
+vCorrigoFlag='';
+if (DIMIX('Global Control Items','Client Corrigo Name')<>0);
+	vCorrigoFlag= CellGetS(cCube, 'Client Corrigo Name', 'String');
+endif;
+vCorp = LOWER('CorpTM1 PlanOpex');
+eGrp = LOWER(ATTRS(dGrp, vGrp, '}TM1_DefaultDisplayValue'));
+
+
+#####DEFINE PATH#####
+vPath = LOWER(CellGetS(cCube, 'Export Folder', 'String'));
+vFile = vPath | vClient | sProcessNm | '.csv';
+
+#####ASSIGN SECURITY#####
+
+cCube = '}CubeSecurity';
+
+IF(SCAN(vClient, eGrp) <> 0 
+% SCAN(vCorp, eGrp) <> 0
+% SCAN(vSecurityGroup1, eGrp) <> 0
+% SCAN(vSecurityGroup2, eGrp) <> 0
+% SCAN(vSecurityGroup3, eGrp) <> 0);
+
+
+#####Assign WRITE######
+#Assign DA & TA Group
+IF(SCAN('da_all', eGrp) <> 0 % SCAN('ta_all', eGrp) <> 0);
+    IF(ATTRS(dDim,vDimElements,'DA Security')@='WRITE');
+        CELLPUTS( 'WRITE', cCube, vDimElements, vGrp);
+    ELSEIF( SUBST ( vDimElements, 1,1 ) @= '}' %  ATTRS(dDim,vDimElements,'DA Security')@='READ');
+        CELLPUTS( 'READ', cCube, vDimElements, vGrp);
+    ELSE ;
+        CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+    ENDIF; 
+ENDIF;
+
+#Assign FA Group
+IF(SCAN('fa_', eGrp) <> 0);
+    IF(ATTRS(dDim,vDimElements,'FA Security')@='WRITE');
+        CELLPUTS( 'WRITE', cCube, vDimElements, vGrp);
+    ELSEIF( SUBST ( vDimElements, 1,1 ) @= '}' %  ATTRS(dDim,vDimElements,'FA Security')@='READ' );
+        CELLPUTS( 'READ', cCube, vDimElements, vGrp);
+    ELSE ;
+        CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+    ENDIF; 
+ENDIF;
+
+
+#Assign WB Group
+IF(SCAN('wb_', eGrp)<>0);
+    IF ( SUBST ( vDimElements, 1,1 ) @<> '}'  & ATTRS(dDim,vDimElements,'WB Security')@='WRITE' );
+        CELLPUTS( 'WRITE', cCube, vDimElements, vGrp);
+
+    ELSEIF ( SUBST ( vDimElements, 1,1 ) @<> '}'  & ATTRS(dDim,vDimElements,'WB Security')@='READ' );
+        CELLPUTS( 'READ', cCube, vDimElements, vGrp);
+
+    ELSEIF( SUBST ( vDimElements, 1,1 ) @= '}');
+        CELLPUTS( 'READ', cCube, vDimElements, vGrp);
+    ELSE ;
+        CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+    ENDIF; 
+ENDIF;
+
+
+#Assign EC Group
+IF(SCAN('ec_', eGrp)<>0);
+    IF ( SUBST ( vDimElements, 1,1 ) @<> '}'  & ATTRS(dDim,vDimElements,'EC Security')@='WRITE' );
+        CELLPUTS( 'WRITE', cCube, vDimElements, vGrp);
+
+    ELSEIF ( SUBST ( vDimElements, 1,1 ) @<> '}'  & ATTRS(dDim,vDimElements,'EC Security')@='READ' );
+        CELLPUTS( 'READ', cCube, vDimElements, vGrp);
+
+    ELSEIF( SUBST ( vDimElements, 1,1 ) @= '}');
+        CELLPUTS( 'READ', cCube, vDimElements, vGrp);
+    ELSE ;
+        CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+    ENDIF; 
+ENDIF;
+
+
+#####Assign READ Access#####
+IF(SCAN('opexro_',  eGrp ) <> 0 % SCAN('opexprocr_', eGrp ) <> 0);
+       CELLPUTS('READ',cCube, vDimElements, vGrp);
+ENDIF;
+
+#####Assign NONE Access#####
+ELSE;
+     CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+
+ENDIF;
+
+IF(vTenureFlag=0 & ATTRS(dDim,vDimElements,'SecurityType')@='Leases');
+     CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+ENDIF;
+
+IF(vCorrigoFlag@='' & ATTRS(dDim,vDimElements,'SecurityType')@='Corrigo');
+     CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+ENDIF;
+
+#####EXPORT ISSUE LOG#####
+IF(pDebug = 1);
+ASCIIOUTPUT(vFile, vClient, eGrp, cCube, vGrp, vAccess);
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####Cleanup Views & Subsets#####
+
+CubeSetLogChanges(cCube, 1);
+
+IF(pDebug <> 1);
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+#ViewCreate( cCube, sView);
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1) @<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+ENDIF;
+
+
+CellPutS('Read','}CubeSecurity','}ClientGroups','CorpTM1 PlanOpexRO_ALL');
+#endregion

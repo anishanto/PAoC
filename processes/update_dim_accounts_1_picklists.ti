@@ -1,0 +1,60 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+############################################################# Constants
+cDimName = 'GL_Accounts';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+cCubeName = '}ElementAttributes_'|cDimName;
+sLocalCube = 'local:'|cCubeName;
+pGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+pGLAL = CELLGETN('Global Control', 'GA Accounts AL Hierarchies', 'Value');
+pGLAO = CELLGETN('Global Control', 'GA Accounts AO Hierarchies', 'Value');
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+bAccGLA = 0;
+if (DIMIX('}ElementAttributes_GL_Accounts','Global Assumption GLA Category')>0);
+	bAccGLA = 1;
+endif;
+
+
+if (bAccGLA = 1);  
+	DimensionDeleteAllElements( 'GL_Accounts_GLA_Category' );
+    DimensionElementInsert('GL_Accounts_GLA_Category', '', 'Portfolio Rate', 'N' );
+endif;
+
+#Create all the dimension or subsets needed
+eCnt = DIMSIZ( cDimName );
+x = 1;
+WHILE( x <=eCnt);
+	ElName = DIMNM( cDimName , x );
+   	#Global Assumption GLA Category 
+    if (bAccGLA = 1);
+   		vGLA = ATTRS( cDimName,ElName, 'Global Assumption GLA Category'  );
+  		if (vGLa@<>'');
+        	DimensionElementInsert( 'GL_Accounts_GLA_Category', '', vGLA, 'N' );
+        endif;
+    endif;
+    x=x+1;
+END;
+
+
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+if (bAccGLA = 1);
+	if (SubsetExists( 'GL_Accounts_GLA_Category', 'level0' )=0);
+    	SubsetCreate( 'GL_Accounts_GLA_Category', 'level0');
+    endif;
+    vMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts_GLA_Category] )}, 0)}, ASC)}';
+	SubsetMDXSet( 'GL_Accounts_GLA_Category', 'level0', vMDX );
+endif;
+
+#endregion

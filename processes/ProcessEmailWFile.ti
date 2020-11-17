@@ -1,0 +1,55 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+###Chris Malone 111716 
+#Define Constants
+cFilePath = 'E:\TM1Models\';
+cClientName = CellGetS('Global Control', 'Client Server Name','String');
+cFolder = '\DataSources\Exports\';
+
+####Define String Path
+sPath = cFilePath|cClientName|cFolder;
+
+vEmailcmd = 'cmd /c  E:\TM1Models\sendemail\Blat -t 3';
+
+if (pFileName@<>'');
+	vSend = vEmailcmd | ' -to ' | pSendTo | ' -subject "' | pSubject | ' " -body "' | pBody | '" -attacht ' | sPath|pFileName;
+else;
+	vSend = vEmailcmd | ' -to ' | pSendTo | ' -subject "' | pSubject | ' " -body "' | pBody;
+endif;
+
+
+DataSourceAsciiQuoteCharacter='';
+
+cEnvironment = CellGetS('Global Control','TAT Environment', 'String');
+if (cEnvironment@='PRD');
+	vCCCFolder = 'PROD';
+else;
+	vCCCFolder = 'NPR';
+endif;
+vFileName = 'S:\CCC\'|vCCCFolder|'\'| cClientName | '\info.mail';
+
+
+ASciioutput(vFileName, pSendTo);
+ASciioutput(vFileName, pSubject);
+ASciioutput(vFileName, pBody);
+ASciioutput(vFileName, pFileName);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

@@ -1,0 +1,46 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_leasetype_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_leasetype_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"yOFn\\h_d;NWtx^xjKpDb0Pck?lvN26xII7wQ:l_3\\IS`Mg]SJ3lmYQ;vnhF4NshtnTW<Q:Guu4\\iZiIDona>Ymj5AqoO=aRIX@2:Hx:bI=F5Z>sr9RuEZ_hf>PQc0QSX60obnOJ6X7hh04D>fKq:xwbL::b<k72e?UmLu1>Qkqs_naA>JZwoeiD4\\rUtakuqt[q3:JI2",
+		"query":"SELECT 1",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pEmail",
+			"Prompt":"Enter Email Address that should recieve the issue logs",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"bDebug",
+			"Prompt":"1 to generage log files",
+			"Value":1,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"LeaseType",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

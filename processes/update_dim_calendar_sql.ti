@@ -1,0 +1,155 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientID = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+
+vDim = 'Calendar Months';
+vSub = 'Level0';
+vDimFiscalMonths = 'Fiscal Months';
+vSubFiscalMonths = 'Level 0';
+
+####################################Define Datasource Tab#####################################
+sSQL = 'SELECT  
+dateadd(dd, (convert(varchar,[PRODDTA].[F0008].[CDD01J],10) - ((convert(varchar,[PRODDTA].[F0008].[CDD01J],10)/1000) * 1000)) - 1, dateadd(yy, convert(varchar,[PRODDTA].[F0008].[CDD01J],10)/1000, 0))
+,[PRODDTA].[F0010].[CCCO]
+,[PRODDTA].[F0010].[CCDFF]
+,[PRODDTA].[F0010].[CCDTPN]
+FROM [PRODDTA].[F0008]
+INNER JOIN [PRODDTA].[F0010] ON [PRODDTA].[F0010].[CCDFF]=[PRODDTA].[F0008].[CDFY] AND [PRODDTA].[F0010].[CCDTPN]=[PRODDTA].[F0008].[CDDTPN] 
+WHERE [PRODDTA].[F0010].[CCCO] = '|sClientID;
+
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+AttrInsert('Fiscal Months','', 'AliasCorrigo', 'A');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+AttrInsert('Fiscal Months','', 'AliasCorrigo', 'A');
+
+
+
+
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+### Obtains the first month from the E1 table
+sFirstMonth = SUBST(sFirstMonthDate,6,2);
+
+### Loops for each month element in the Fiscal Month dimension 
+vLoop = 1;
+vMax = 12;
+
+WHILE (vLoop <= vMax);
+	element = SubSetGetElementName(vDim,vSubFiscalMonths,vLoop);
+
+    ### Assigns month number to vMonth 
+	IF (vLoop = 1);
+		vMonth = sFirstMonth;
+	ELSE;
+		vMonth = AttrS(vDim,vMonth,'NextMonth');
+	ENDIF;
+	
+   ### Updates attributes for Fiscal Months Dimension
+	AttrPutS('',vDimFiscalMonths,'M' | vMonth,'AliasCorrigo');
+
+	vLoop = vLoop + 1;
+END;
+
+vLoop = 1;
+vMax = 12;
+WHILE (vLoop <= vMax);
+	element = SubSetGetElementName(vDim,vSubFiscalMonths,vLoop);
+
+    ### Assigns month number to vMonth 
+	IF (vLoop = 1);
+		vMonth = sFirstMonth;
+	ELSE;
+		vMonth = AttrS(vDim,vMonth,'NextMonth');
+	ENDIF;
+	
+    ### Gets the month name from the Calendar Month dimension.
+	vName = AttrS(vDim,element,'MonthName');
+	vNameQTD = vName | ' QTD';
+	vNameYTD = vName | ' YTD';
+	vAliasCorrigo = element;
+
+    ### Updates attributes for Fiscal Months Dimension
+	AttrPutS(vAliasCorrigo,vDimFiscalMonths,'M' | vMonth,'AliasCorrigo');
+	AttrPutS(vName,vDimFiscalMonths,'M' | vMonth,'Name');
+	AttrPutS(vName,vDimFiscalMonths,'M' | vMonth,'RetentionEnglishName');
+	AttrPutS(vNameQTD,vDimFiscalMonths,'M' | vMonth | ' QTD','Name');
+	AttrPutS(vNameQTD,vDimFiscalMonths,'M' | vMonth | ' QTD','RetentionEnglishName');
+	AttrPutS(vNameYTD,vDimFiscalMonths,'M' | vMonth | ' YTD','Name');
+	AttrPutS(vNameYTD,vDimFiscalMonths,'M' | vMonth | ' YTD','RetentionEnglishName');
+
+	
+
+	vLoop = vLoop + 1;
+END;
+
+
+
+	
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+
+### Loops for each month element in the Fiscal Month dimension to populate the Year attribute.
+# If client is using calendar year, then column should be filled with “FY”. 
+# If calendar is different, then the year column should be filled with “PY” for the months that apply to previous year.
+vFY = 0;
+vLoop = 1;
+vMax = 12;
+WHILE (vLoop <= vMax);
+	element = SubSetGetElementName(vDim,vSubFiscalMonths,vLoop);
+	vMonthName = AttrS(vDimFiscalMonths,'M'|element,'Name');
+
+	IF (vMonthName@='Jan');
+		vFY = 1;
+	ENDIF;
+    
+    ### Updates attributes for Fiscal Months Dimension
+	IF (vFY = 1);
+		AttrPutS('FY',vDimFiscalMonths,'M'|element,'Year');
+	ELSE;
+		AttrPutS('PY',vDimFiscalMonths,'M'|element,'Year');
+	ENDIF;
+
+	vLoop = vLoop + 1;
+END;
+
+
+
+
+#endregion

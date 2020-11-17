@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Lease Input Budget Subset",
+	"Expression":"{TM1DRILLDOWNMEMBER( {[Tenure ID].[AHG]}, ALL, RECURSIVE )}"
+}

@@ -1,0 +1,248 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# This process will Create a subsets for "orphan" elements
+# that is Colsols without children and Ns without parents
+
+
+### Constants ###
+sDimension = 'GL_Accounts';
+cProcess = 'ProcessDimensionParentCleanUp';
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
+sRandomInt = NumberToString( INT( RAND( ) * 100000 ));
+cDebugFile = GetProcessErrorFileDirectory | cProcess| '.' |cClient| '.' |sDimension | '.' | cTimeStamp | '.' | sRandomInt ;
+sSub = 'zEmptyParents';
+
+
+pDebug = 0;
+ 
+
+
+####################################################################### Initialize Debug ###
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Prolog.debug';
+
+  # Log start time
+  AsciiOutput( sDebugFile, 'Process Started: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+  # Log parameters
+  AsciiOutput( sDebugFile, 'Parameters: pDimension : ' | sDimension );
+
+  # Log subset names
+  AsciiOutput( sDebugFile, 'Orphan subsets for dimension        :', sDimension );
+  AsciiOutput( sDebugFile,'Subset for consols without children :', sSub );
+
+
+EndIf;
+
+
+######################################################################## Validate Parameters ###
+
+nErrors = 0;
+
+# Validate dimension
+If( Trim( sDimension ) @= '' );
+  nErrors = 1;
+  sMessage = 'No dimension specified';
+  If( pDebug >= 1 );
+    AsciiOutput( sDebugFile, sMessage );
+  EndIf;
+  ItemReject( sMessage );
+EndIf;
+If( DimensionExists( sDimension ) = 0 );
+  nErrors = 1;
+  sMessage = 'Invalid dimension: ' | sDimension;
+  If( pDebug >= 1 );
+    AsciiOutput( sDebugFile, sMessage );
+  EndIf;
+  ItemReject( sMessage );
+EndIf;
+
+
+### Create Subsets ###
+
+IF(SubsetExists(sDimension,sSub)=1);
+    SubsetDestroy(sDimension, sSub);
+EndIf;
+
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+    SubsetCreatebyMDX(sSub, sMDX);
+
+
+### End Prolog ###
+
+
+#### Assign DataSource 
+#DataSourceType = 'Subset';
+#DataSourceDimensionSubset = cSub;
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###############Define unassigned folders
+
+sUnassignedAcctBSSH1 = 'Unassigned GL Balance Sheet SH1' ;
+sUnassignedAcctPLSH1 = 'Unassigned GL PL Account SH1' ;
+sUnassignedAcctSTSH1 = 'Unassigned GL Statistical SH1' ;
+ 
+sUnassignedAcctBSAH1 = 'Unassigned GL Balance Sheet AH1' ;
+sUnassignedAcctPLAH1 = 'Unassigned GL PL Account AH1' ;
+sUnassignedAcctSTAH1 = 'Unassigned GL Statistical AH1' ;
+
+sUnassignedAcctBSAH2 = 'Unassigned GL Balance Sheet AH2' ;
+sUnassignedAcctPLAH2 = 'Unassigned GL PL Account AH2' ;
+sUnassignedAcctSTAH2 = 'Unassigned GL Statistical AH2' ;
+
+sUnassignedAcctBSAH3 = 'Unassigned GL Balance Sheet AH3' ;
+sUnassignedAcctPLAH3 = 'Unassigned GL PL Account AH3' ;
+sUnassignedAcctSTAH3 = 'Unassigned GL Statistical AH3' ;
+
+sUnassignedAcctBSAH4 = 'Unassigned GL Balance Sheet AH4' ;
+sUnassignedAcctPLAH4 = 'Unassigned GL PL Account AH4' ;
+sUnassignedAcctSTAH4 = 'Unassigned GL Statistical AH4' ;
+
+
+############################################Clear Out
+
+############################SH1
+
+IF(DIMIX(sDimension,'SH1') >0);
+
+IF(ELISPAR(sDimension,'SH1',sUnassignedAcctBSSH1)=1 & ELISPAR(sDimension,sUnassignedAcctBSSH1,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctBSSH1);
+EndIf;
+
+IF(ELISPAR(sDimension,'SH1',sUnassignedAcctPLSH1)=1 &ELISPAR(sDimension,sUnassignedAcctPLSH1,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLSH1);
+EndIf;
+
+IF(ELISPAR(sDimension,'SH1',sUnassignedAcctSTSH1)=1 &ELISPAR(sDimension,sUnassignedAcctSTSH1,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLSH1);
+EndIf;
+
+EndIf;
+
+############################AH1
+
+IF(DIMIX(sDimension,'AH1') >0);
+
+IF(ELISPAR(sDimension,'AH1',sUnassignedAcctBSAH1)=1 &ELISPAR(sDimension,sUnassignedAcctBSAH1,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctBSAH1);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH1',sUnassignedAcctPLAH1)=1 &ELISPAR(sDimension,sUnassignedAcctPLAH1,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH1);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH1',sUnassignedAcctSTAH1)=1 &ELISPAR(sDimension,sUnassignedAcctSTAH1,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH1);
+EndIf;
+
+EndIf;
+
+#############################AH2
+
+IF(DIMIX(sDimension,'AH2') >0);
+
+IF(ELISPAR(sDimension,'AH2',sUnassignedAcctBSAH2)=1 &ELISPAR(sDimension,sUnassignedAcctBSAH2,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctBSAH2);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH2',sUnassignedAcctPLAH2)=1 &ELISPAR(sDimension,sUnassignedAcctPLAH2,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH2);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH2',sUnassignedAcctSTAH2)=1 &ELISPAR(sDimension,sUnassignedAcctSTAH2,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH2);
+EndIf;
+
+EndIf;
+
+
+#############################AH3
+
+IF(DIMIX(sDimension,'AH3') >0);
+
+IF(ELISPAR(sDimension,'AH3',sUnassignedAcctBSAH3)=1 &ELISPAR(sDimension,sUnassignedAcctBSAH3,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctBSAH3);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH3',sUnassignedAcctPLAH3)=1 &ELISPAR(sDimension,sUnassignedAcctPLAH3,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH3);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH3',sUnassignedAcctSTAH3)=1 &ELISPAR(sDimension,sUnassignedAcctSTAH3,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH3);
+EndIf;
+
+EndIf;
+
+#############################AH4
+
+IF(DIMIX(sDimension,'AH4') >0);
+
+IF(ELISPAR(sDimension,'AH4',sUnassignedAcctBSAH4)=1 &ELISPAR(sDimension,sUnassignedAcctBSAH4,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctBSAH4);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH4',sUnassignedAcctPLAH4)=1 &ELISPAR(sDimension,sUnassignedAcctPLAH4,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH4);
+EndIf;
+
+IF(ELISPAR(sDimension,'AH4',sUnassignedAcctSTAH4)=1 &ELISPAR(sDimension,sUnassignedAcctSTAH4,GL_Accounts)=0);
+   DimensionElementDelete(sDimension, sUnassignedAcctPLAH4);
+EndIf;
+
+EndIf;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+### Initialise Debug ###
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Epilog.debug';
+
+  # Log errors
+  If( nErrors <> 0 );
+    AsciiOutput( sDebugFile, 'Errors Occurred' );
+  EndIf;
+
+  # Log finish time
+  AsciiOutput( sDebugFile, 'Process Finished: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+EndIf;
+
+
+
+### If errors occurred terminate process with a major error status ###
+
+If( nErrors <> 0 );
+  ProcessQuit;
+EndIf;
+
+
+### End Epilog ###
+#endregion

@@ -1,0 +1,174 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+vRecNo = 1;
+vdim = 'Vendor';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+
+
+######################################Create Company Loop####################################
+dimCompany = 'Company';
+subCompanyLevel0 = 'zCompanyLevel0';
+
+ 
+  SUBSETDESTROY(dimCompany, subCompanyLevel0);
+ 
+
+     SUBSETCREATEBYMDX(subCompanyLevel0, '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}, ASC)}');
+     # loop through the elements of the subset
+      j=1;
+         sCompanyString = '';
+     WHILE(j<=SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+
+         vElem=SUBSETGETELEMENTNAME(dimCompany, subCompanyLevel0,j);
+         sCompanyString = sCompanyString | '''' | vElem  | ''' ,';
+         j=j+1;
+     END;
+
+IF(pCompany@='All Companies');
+sCompanyString = SUBST(sCompanyString , 1, LONG(sCompanyString) - 1);
+ELSE;
+sCompanyString=pCompany;
+ENDIF;
+
+IF(bDebug=1);
+ASCIIOUTPUT('..\logs\System\Debug.Company.txt' , sCompanyString);
+ENDIF;
+
+
+####################################Define Datasource Tab#####################################
+ IF(1=1);
+sSQL = 'SELECT DISTINCT a.[GLCO], a.[GLAN8], b.[ABDC]   FROM [Stage_E1].[PRODDTA].[F0911] a left outer join  [Stage_E1].[PRODDTA].[F0101] b on a.[GLAN8] = b.[ABAN8] where a.GLAN8 <> 0 AND ltrim(rtrim([GLCO])) in ('| sCompanyString|')'; 
+#sSQL = 'SELECT DISTINCT a.[GLCO], a.[GLAN8],  b.[ABAN8], a.[GLEXA], b.[ABALPH], b.[ABDC]   FROM [Stage_E1].[PRODDTA].[F0911] a inner join  [Stage_E1].[PRODDTA].[F0101] b on a.[GLAN8] = b.[ABAN8] where ltrim(rtrim([GLCO])) in ('| sCompanyString|')'; 
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);
+ASCIIOUTPUT('..\logs\System\DebugVendor.sql.txt', sSQL);
+ENDIF;
+#WITH (READUNCOMMITTED)
+EndIF;
+ 
+
+###########Update Vendor
+DIMENSIONSORTORDER('Vendor','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+#DimensionDeleteAllElements('Vendor');
+
+##############Add Attributes
+cDim = 'Vendor';
+sAttr = 'Name';
+
+ATTRINSERT(cDim,'',sAttr,'S');
+
+
+
+
+
+
+
+ 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+CON='SH1';
+#****End: Generated Statements****
+
+
+####Trim leading and trailing from Vendor cm 22818
+GLAN8 = TRIM(GLAN8);
+
+cDim = 'Vendor';
+
+###############################Create Hierarchy
+
+##########Create SH1 Hierarchy if it doesn't exist
+sP1 = 'SH1';
+sP2 = 'AHIT';
+
+IF( DIMIX(cDim, sP1)=0);
+    DIMENSIONELEMENTINSERT(cDim,'',sP1,'c');
+EndIf;
+
+IF(DIMIX(cDim, sP2)=0);
+    DIMENSIONELEMENTINSERT(cDim,'',sP2,'c');
+EndIf;
+
+#########
+sEl = 'All Vendor and Other';
+sEl1 = 'NA';
+sEl2 = GLAN8;
+
+IF(DIMIX(cDim, sEl)=0);
+   DimensionElementInsert(cDim,'',sEl,'n');
+   #DimensionElementComponentAdd(cDim,sP1,sEl, 0);
+EndIF;
+
+IF(DIMIX(cDim, sEl1)=0);
+   DimensionElementInsert(cDim,'',sEl1,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl1, 1);
+EndIF;
+
+IF(DIMIX(cDim, sEl2)=0);
+   DimensionElementInsert(cDim,'',sEl2,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl2, 1);
+EndIF;
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+CON='SH1';
+#****End: Generated Statements****
+
+####Trim leading and trailing from Vendor cm 22818
+GLAN8 = TRIM(GLAN8);
+
+
+##############Add Attributes
+cDim = 'Vendor';
+sAttr = 'Name';
+sAttrv = ABDC;
+sEl2 = GLAN8;
+
+ 
+IF(sEl2 @= '2');
+ASCIIOUTPUT('..\logs\System\iNdATAIF.txt' , sCompanyString);
+
+ELSE;
+ATTRPUTS(sAttrv,cDim,sEl2,sAttr);
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+#endregion

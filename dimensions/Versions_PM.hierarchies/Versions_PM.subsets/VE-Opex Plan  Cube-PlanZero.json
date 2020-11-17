@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"VE-Opex Plan  Cube-PlanZero",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Actuals')"
+		}
+	]
+}

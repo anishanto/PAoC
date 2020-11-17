@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"All JLL Expand1",
+	"Expression":"{ DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [GL_Accounts] )}, \"All JLL*\")}, {[GL_Accounts].[SH1]} ) }"
+}

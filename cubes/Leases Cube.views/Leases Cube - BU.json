@@ -1,0 +1,98 @@
+{
+	"@type":"NativeView",
+	"Name":"Leases Cube - BU",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Subsets('FiscalMonthYear')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('CompanyBU')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Actuals')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Subsets('TenureExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('All GL Account CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Subsets('CurrencyDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Subsets('LeaseValues')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Elements('Lease Value')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

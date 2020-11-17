@@ -1,0 +1,48 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vClientType  = CellGetS('Global Control','Client Model Type','String');
+
+ExecuteProcess('DWPush - Delete Version','pTableName','[ssdi].[DetailAnalysisCube]','pDebug',pDebug);
+#ExecuteProcess('DWPush - Delete Version','pTableName','[ssdi].[LeaseAnalysisCube]','pDebug',pDebug);
+
+#ExecuteProcess('DWPush - Lease Analysis Cube','pDebug',pDebug);
+
+if (vClientType@='Detail');
+	ExecuteProcess('DWPush - Detail Analysis Cube','pDebug',pDebug);
+else;
+	ExecuteProcess('DWPush - Analysis Cube','pDebug',pDebug);
+endif;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+pDim = 'Versions';
+pSub = 'All Members';
+subsetSize =  SubsetGetSize(pDim,pSub);
+enumerator=1;
+while (enumerator <= subsetSize);
+	elementVersion = SubsetGetElementName(pDim,pSub,enumerator);
+	#Change value of Flag
+	if (ATTRS( 'Versions' , ElementVersion, 'DW Flag')@='Yes' & ATTRS( 'Versions' , ElementVersion, 'CurrentFiscalYr') @<> CellGetS('Global Control','DW Current Year','String'));
+		AttrPutS('No', 'Versions', ElementVersion, 'DW Flag');
+	endif;		
+
+	enumerator=enumerator+1;
+end;
+#endregion

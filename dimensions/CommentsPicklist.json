@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"CommentsPicklist",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('CommentsPicklist')/Hierarchies('CommentsPicklist')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"CommentsPicklist.hierarchies/CommentsPicklist.json"
+	]
+}

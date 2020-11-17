@@ -1,0 +1,143 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################Prolog relaced Dynamic Subsets with Static to allow delete to be added. 1/4/17
+###########################Constants 1/4/17
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = pDimension;
+cTnode = UPPER('AHIT');
+cElementName = DimensionElementPrincipalName(cDimName,pElement);
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_'|pDimension;
+cDimName2 = '}ElementAttributes_'|pDimension;
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExportPath = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImportPath = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cFileName = pDimension|'.csv';
+cMetadataFileName = pDimension|'.csv';
+cDataFileName = pDimension|' Names.csv';
+cMetadataPath = cExportPath | cMetadataFileName;
+cDataPath = cExportPath | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+vHeaderInsert1 ='yes';
+vHeaderInsert2 ='yes';
+
+#############################################################Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            GLCode : '| pElement);
+   AsciiOutput( sDebugFile, '            Input Template                  : '| pInputTemplate);
+EndIf;
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check if Dimension Constant Exists
+   IF( Trim( cDimName ) @=' ');
+     nErrors = 1;
+     sMessage = 'No dimension named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+##############################################################Check if Element Exists
+   IF( Trim( pElement ) @=' ');
+     nErrors = 1;
+     sMessage = 'No Element Defined';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+##############################################################Check if Input is set Exists
+   IF( Trim( pInputTemplate ) @=' ');
+     nErrors = 1;
+     sMessage = 'No Value for Input Template Defined';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+########################Metadata Constants Existing Code 1/4/17
+
+############Delete Element from AHIT
+cParent = 'AHIT';
+IF(DIMIX(cDimName,'AHIT')<>0);
+       IF(Lower(ATTRS(cDimName,pElement,'InputTemplate')) @<> 'yes');
+        DIMENSIONELEMENTCOMPONENTDELETE(cDimName,cParent,cElementName);
+ENDIF;
+ENDIF;
+
+
+############Add element to AHIT
+cParent = 'AHIT';
+IF(DIMIX(cDimName,'AHIT')<>0);
+       IF(Lower(ATTRS(cDimName,pElement,'InputTemplate')) @= 'yes');
+        DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,cElementName,1.000000);
+ENDIF;
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+ 
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+
+#endregion

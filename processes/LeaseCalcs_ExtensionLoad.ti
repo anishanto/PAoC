@@ -1,0 +1,361 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+Version=pVersion;
+
+vDim='Tenure ID';
+TenureDim='TenureID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+LeasesCube='Leases Cube';
+FixedRatesCube='Leases Fixed Rates';
+PortfolioAssumptionsCube='Leases Portfolio Assumptions';
+ExtensionCube='Leases Extension Options';
+CalendarCube='Calendar Cube';
+Month_Attribute='Attribute';
+sDim_Year='Fiscal Month Year';	
+
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmFailureMessage = 'Failure' ;
+CellPutS('',cubMessages,cProcess,elmfailureMessage);
+
+##########################################
+
+#Base Date
+sFcstDate='2019-06-30';
+nFcstYear=StringtoNumber(Subst(sFcstDate, 1, 4 ));
+nFcstMonth=StringtoNumber(Subst(sFcstDate, 6, 2 ));
+
+
+sExtensionOption_1='Market';
+sExtensionOption_2='Holdover Market';
+sBudgetEndDate='2030-06-30';
+
+#############################################
+
+User=TM1User();
+
+sDim = '}Groups';
+nMax = DIMSIZ(sDim);
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sGroup = DIMNM(sDim, nCtr);
+	sSet=CellGetS('}ClientGroups',User,sGroup);
+	IF(sSet@<>'' & SCAN('EC',sGroup)<>0);
+			vMessage='Recalculate Leases is not an available feature for your group.';
+			CellPutS(vMessage,cubMessages,cProcess,elmfailureMessage);
+			ProcessQuit;
+	ENDIF;
+	nCtr = nCtr + 1;
+END;
+
+#########################################
+
+
+	
+sBudget=CellGetS('Global Control', 'Lease Load Budget File', 'String');
+sForecast=CellGetS('Global Control', 'Lease Load Forecast File', 'String');
+
+IF(pVersion@='Budget' & sBudget@='Yes');
+	vMessage='Process failed: Leases values for Budget are updated through file.';
+	CellPutS(vMessage,cubMessages,cProcess,elmfailureMessage);
+	ProcessQuit;
+ELSEIF(pVersion@='Forecast' & sForecast@='Yes');
+	vMessage='Process failed: Leases values for Forecast are updated through file.';
+	CellPutS(vMessage,cubMessages,cProcess,elmfailureMessage);
+	ProcessQuit;
+ENDIF;
+
+IF(pVersion@='Forecast');
+	nBaseYear=StringtoNumber(CellGetS('Global Control','Lease Forecast Year','String'));
+	nBasePeriod=StringtoNumber(DimensionElementPrincipalName('Calendar Months', AttrS('Fiscal Months','M01','DisplayName')));
+	nBasePeriodYear=Stringtonumber(AttrS('Fiscal Month Year','M01 Y01','YearCalendarF'));
+ELSEIF(pVersion@='Budget');
+	nBaseYear=StringtoNumber(CellGetS('Global Control','Lease Budget Year','String'));
+	nBasePeriod=StringtoNumber(DImensionELementPrincipalName('Calendar Months',AttrS('Fiscal Months','M01','DisplayName')));
+	nBasePeriodYear=Stringtonumber(AttrS('Fiscal Month Year','M01 Y01','YearCalendar'));
+ENDIF;
+
+
+sSub=CellGetS('Global Control', 'Client SubAcct Type', 'String');
+
+## Set up view for zeroing at Data ##
+CubeName=LeasesCube;
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Currency_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Month Year', ViewNameTarget);
+SubsetDestroy ('Company', ViewNameTarget);
+SubsetDestroy ('SubAccounts', ViewNameTarget);
+SubsetDestroy ('GL_Accounts', ViewNameTarget);
+SubsetDestroy ('BusUnits', ViewNameTarget);
+SubsetDestroy ('Tenure ID', ViewNameTarget);
+SubsetDestroy ('Leases Measures', ViewNameTarget);
+
+# Create views and subsets to Zero out
+SubsetCreate ('Versions_PM', ViewNameTarget);
+SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, Version, 1);
+
+#Create Cuurency
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency_PM] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create Fiscal Month Years
+SubsetCreate ('Fiscal Month Year', ViewNameTarget);
+SubsetElementInsert ( 'Fiscal Month Year',  ViewNameTarget, 'Attribute', 1);
+
+#Create Company
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create SubAccounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create SubAccounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create BusUnits_Leases
+sMDX='{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[BusUnits].['|pNode|']}, ALL, RECURSIVE ) }] , 0)} ';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create Tenure
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+#Create Lease Measures
+SubsetCreate ('Leases Measures', ViewNameTarget);
+SubsetElementInsert('Leases Measures', ViewNameTarget, 'ExtensionOption', 0);
+SubsetElementInsert('Leases Measures', ViewNameTarget, 'BudgetEndDate', 0);
+
+
+#Create View
+ViewCreate( CubeName, ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Currency_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'FIscal Month Year', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Company', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'SubAccounts', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'GL_Accounts', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'BusUnits', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Tenure ID', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Leases Measures', ViewNameTarget);
+
+ViewZeroOut(CubeName, ViewNameTarget);
+
+
+# create Source view to copy from
+CubeName=LeasesCube;
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+# Delete view prior to creating the source
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Currency_PM', ViewNameSource);
+SubsetDestroy ('Fiscal Month Year', ViewNameSource);
+SubsetDestroy ('Company', ViewNameSource);
+SubsetDestroy ('SubAccounts', ViewNameSource);
+SubsetDestroy ('GL_Accounts', ViewNameSource);
+SubsetDestroy ('BusUnits', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Leases Measures', ViewNameSource);
+
+# create Versions_PM
+SubsetCreate ('Versions_PM', ViewNameSource);
+SubsetElementInsert ( 'Versions_PM',  ViewNameSource, Version, 1);
+
+#Create currency
+SubsetCreate ('Currency_PM', ViewNameSource);
+SubsetElementInsert ( 'Currency_PM',  ViewNameSource, 'Local', 1);
+
+#Create Company
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create fiscal months
+SubsetCreate ('Fiscal Month Year', ViewNameSource);
+SubsetElementInsert ( 'Fiscal Month Year',  ViewNameSource, 'Attribute', 1);
+
+#Create SubAccounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create GL_Accounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create BusUnits_Leases
+sMDX='{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[BusUnits].['|pNode|']}, ALL, RECURSIVE ) }] , 0)} ';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Tenure
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Lease Measures
+SubsetCreate ('Leases Measures', ViewNameSource);
+SubsetElementInsert ( 'Leases Measures',  ViewNameSource, 'Cost Amount', 1);
+
+
+# Create the Source view
+ViewCreate( CubeName, ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Versions_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Company', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Currency_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Fiscal Month Year', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Tenure ID', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'BusUnits', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'SubAccounts', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'GL_Accounts', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Leases Measures', ViewNameSource);
+ViewRowDimensionSet(CubeName, ViewNameSource,  'Versions_PM', 1);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Company', 2);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Currency_PM', 3);
+ViewRowDimensionSet(CubeName, ViewNameSource, 'Fiscal Month Year',4);
+ViewRowDimensionSet(CubeName, ViewNameSource, 'Tenure ID', 5);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'SubAccounts', 6);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'GL_Accounts',7);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'BusUnits', 8);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Leases Measures',9);
+
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameSource, 1);
+
+DatasourceNameForServer = CubeName;
+DatasourceCubeView = ViewNameSource;
+#endregion
+#region Metadata
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#****End: Generated Statements****t
+
+############################# Tenure Attributes ########################################
+
+EventType=AttrS(vDim, TenureID, 'EventType');
+BudgetRegion=AttrS(TenureDim, TenureID, 'Budget Region');
+BudgetBuildingType=AttrS(TenureDim, TenureID, 'BUType');
+CostCategoryType=CellGetS('Leases Cube', Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'CostCategoryType');
+TenureType=AttrS(TenureDim, TenureID, 'TenureType');
+LeaseType=AttrS(TenureDim, TenureID, 'LeaseType');
+EventType=AttrS(TenureDim, TenureID, 'EventType');
+vGLACategory = ATTRS('GL_Accounts', GL_Accounts, 'Global Assumption GLA Category');
+TermStatus=CellGetS(LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'TermStatus');
+ExtensionOption= CellGetS('Leases Cube', Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'ExtensionOption');
+
+sCostEndDate= CellGetS(LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'CostEndDate');
+nCostEndYear=StringtoNumber(SubSt(sCostEndDate, 1, 4));
+nCostEndMonth=StringtoNumber(SubSt(sCostEndDate,6 , 2));
+sLeaseEndDate=AttrS(TenureDim, TenureID, 'LeaseEndDate');
+nLeaseEndYear=StringtoNumber(SubSt(sLeaseEndDate, 1, 4));
+nLeaseEndMonth=StringtoNumber(SubSt(sLeaseEndDate,6 , 2));
+sLeaseEndYear=SubSt(sLeaseEndDate, 1, 4);
+sLeaseEndMonth=SubSt(sLeaseEndDate,6 , 2);
+
+sLeaseStartDate=AttrS(vDim, TenureID, 'LeaseStartDate');
+nLeaseStartYear=StringtoNumber(Subst(sLeaseStartDate, 1, 4 ));
+nLeaseStartMonth=StringtoNumber(Subst(sLeaseStartDate, 6, 2 ));
+sLeaseStartYear=Subst(sLeaseStartDate, 1, 4 );
+sLeaseStartMonth=Subst(sLeaseStartDate, 6, 2 );
+
+
+
+IF(TermStatus@='' % Eventtype@='' % sCostEndDate@='' % sLeaseEndDate@='' % sLeaseStartDate@='' % 
+	(nCostEndYear<nBasePeriodYear 
+	% (nCostEndYear=nBasePeriodYear & nCostEndMonth<nBaseperiod)));
+
+		itemskip;
+ENDIF;
+
+## IF termstatus is standard can be calculated
+IF (TermStatus@='Standard' % TermStatus@='Month to Month' % TermStatus@='Holdover');
+
+	IF (TermStatus@='Standard' % TermStatus@='Month to Month');
+
+		IF(sLeaseEndDate@=sCostEndDate % nLeaseEndYear<nCostEndYear % (nLeaseEndYear=nCostEndYear & nLeaseEndMonth<nCostEndMonth));
+			sLeaseEndDate= CellGetS(LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'CostEndDate');
+			nLeaseEndYear=StringtoNumber(SubSt(sCostEndDate, 1, 4));
+			nLeaseEndMonth=StringtoNumber(SubSt(sCostEndDate,6 , 2));
+		ELSEIF(nLeaseEndYear>nCostEndYear % (nLeaseEndYear=nCostEndYear & nLeaseEndMonth>nCostEndMonth));
+        			IF(ExtensionOption@='' % ExtensionOption@='Disposed');
+            				sLeaseEndDate= CellGetS(LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'CostEndDate');
+				nLeaseEndYear=StringtoNumber(SubSt(sCostEndDate, 1, 4));
+				nLeaseEndMonth=StringtoNumber(SubSt(sCostEndDate,6 , 2));
+            			ENDIF;
+        		ELSE;
+        			itemskip;
+		ENDIF;
+        
+	ELSEIF(TermStatus@='Holdover');
+    		sLeaseEndDate= CellGetS(LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'CostEndDate');
+		nLeaseEndYear=StringtoNumber(SubSt(sCostEndDate, 1, 4));
+		nLeaseEndMonth=StringtoNumber(SubSt(sCostEndDate,6 , 2));
+	ENDIF;
+
+	
+	IF(nLeaseEndYear>nFcstYear);
+    	IF(termStatus@='Holdover');
+        	CellPutS(sExtensionOption_2,LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'ExtensionOPtion');
+		ELSE;
+			CellPutS(sExtensionOption_1,LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'ExtensionOPtion');
+        ENDIF;
+		CellPutS(sBudgetEndDate,LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'BudgetEndDate');
+	ELSEIF(nLeaseEndYear=nFcstYear & nLeaseEndMonth>nFcstMonth );
+		IF(termstatus@='HOldover');
+        	CellPutS(sExtensionOption_2,LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'ExtensionOPtion');
+		ELSE;
+        	CellPutS(sExtensionOption_1,LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'ExtensionOPtion');
+		ENDIF;	
+			CellPutS(sBudgetEndDate,LeasesCube, Version, Currency, 'Attribute', Company, SubAccounts, GL_Accounts, BUsUnits, TenureID, 'BudgetEndDate');
+	ENDIF;
+       
+	asciioutput('..\test.txt',GL_Accounts, BUsUnits, TenureID, sleaseenddate, scostenddate, numbertostring(nleaseendyear),numbertostring(nbaseyear));		
+
+ENDIF;
+
+
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName=LeasesCube;
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Currency_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Month Year', ViewNameTarget);
+SubsetDestroy ('Company', ViewNameTarget);
+SubsetDestroy ('SubAccounts', ViewNameTarget);
+SubsetDestroy ('GL_Accounts', ViewNameTarget);
+SubsetDestroy ('BusUnits', ViewNameTarget);
+SubsetDestroy ('Tenure ID', ViewNameTarget);
+SubsetDestroy ('Leases Measures', ViewNameTarget);
+
+CubeName=LeasesCube;
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Currency_PM', ViewNameSource);
+SubsetDestroy ('Fiscal Month Year', ViewNameSource);
+SubsetDestroy ('Company', ViewNameSource);
+SubsetDestroy ('SubAccounts', ViewNameSource);
+SubsetDestroy ('GL_Accounts', ViewNameSource);
+SubsetDestroy ('BusUnits', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Leases Measures', ViewNameSource);
+
+
+#ExecuteProcess('LeaseCalcs_4Currency','pVersion',pVersion);
+#endregion

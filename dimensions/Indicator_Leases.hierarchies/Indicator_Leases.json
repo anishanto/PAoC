@@ -1,0 +1,33 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Indicator_Leases",
+	"Elements":
+	[
+		{
+			"Name":"Yes",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"All",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"No",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Local",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Local_Portfolio",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Indicator_Leases.subsets/Indicator.json",
+		"Indicator_Leases.subsets/Indicator_CP.json",
+		"Indicator_Leases.subsets/Indicator Code.json"
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"ChildrenSubAccounts",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL({DESCENDANTS(SubAccounts.[SH1])},0)},ASC)}"
+}

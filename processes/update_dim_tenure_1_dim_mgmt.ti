@@ -1,0 +1,98 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################################Constants
+cDimName = 'Tenure ID';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+cCubeName = '}ElementAttributes_'|cDimName;
+sLocalCube = 'local:'|cCubeName;
+pHTenure = CELLGETN('Global Control', 'Tenure AH Hierarchies', 'Value');
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+######################Add NA and All Subledger and Other
+IF(DIMIX(cDimName,'NA')=0);
+ DIMENSIONELEMENTINSERT(cDimName,'','NA','N');
+EndIf;
+
+
+
+
+
+
+
+
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##########No Tenure Type
+sTenureType = CELLGETS( 'Global Control', 'Client Tenure Type' , 'String' );
+
+
+##############################################################Check Validation if value is 1 then error
+cDimName = 'Tenure ID';
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+   ElName = DIMNM( cDimName , x );
+   IF( ATTRS(cDimName,ElName,'Validation')@='1');
+      vMessage = 'ERROR: '| cDimName | ' Validation Error.  There are dupicate parents within a single hierarchy';
+      CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSERROR;
+   ENDIF;
+    x=x-1;
+END;
+
+
+###############################################Create Standard Hierarchy
+
+
+IF( pHTenure >= 0 & pHTenure< 4 );
+	ExecuteProcess('Update_Dim_tenure_2_ahit_hierarchy',
+	'pDebug',0);
+    
+    ExecuteProcess('Update_Dim_tenure_2_ahg_hierarchy',
+	'pDebug',0);
+
+	ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       	'pHierarchy','SH1',
+	'pEmailFIle','No',
+	'pSendTo','');
+endif;
+
+IF( pHTenure > 0 & pHTenure < 4 );
+	ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       	'pHierarchy','AH1',
+        	'pEmailFIle','No',
+	'pSendTo','');
+EndIf;
+
+IF( pHTenure > 1 & pHTenure < 4 );
+	ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       	'pHierarchy','AH2',
+        	'pEmailFIle','No',
+	'pSendTo','');
+EndIf;
+
+IF( pHTenure > 2 & pHTenure < 4  );
+	ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       	'pHierarchy','AH3',
+        	'pEmailFIle','No',
+	'pSendTo','');
+EndIf;
+
+IF( pHTenure = 4 );
+	ExecuteProcess('update_dim_tenure_2_hierarchy_build',
+       	'pHierarchy','AH4',
+        	'pEmailFIle','No',
+	'pSendTo','');
+EndIf;
+
+#endregion

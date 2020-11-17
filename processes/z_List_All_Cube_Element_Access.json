@@ -1,0 +1,56 @@
+{
+	"@type":"Process",
+	"Name":"z_List_All_Cube_Element_Access",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"z_List_All_Cube_Element_Access.ti",
+	"UIData":"DataAction=1504\fCubeAction=1500\fCubeName=All\fZeroOut=0\fCubeLogChanges=0\f_storeZeros=0\f_MinVarsForMeasureDim=1\fMeasuresDim=}Cubes\fMeasuresDimOrder=1\fMeasuresDimAction=Update\fMeasuresDimElemSortType=ByInput\fMeasuresDimElemSortSense=Ascending\f_MeasDimCaption=All Measures\f_CubeCaption=All\fReplaceEmptyValues=1\f_ParseParams={&quotskipRows&quot:&quot0&quot&#044&quotlocale&quot:{&quotlanguange&quot:&quoten&quot&#044&quotvariant&quot:&quot&quot&#044&quotcountry&quot:&quotUS&quot}&#044&quotdimensions&quot:[{&quotcreateNamedLevels&quot:true&#044&quotcreateSimpleCaptions&quot:true&#044&quotinvariantName&quot:&quot}Cubes&quot&#044&quotdimensionType&quot:&quotGENERIC&quot&#044&quotparentChild&quot:false&#044&quotleafSortType&quot:&quotNONE&quot&#044&quotconsolidatedSortDirection&quot:&quotASCENDING&quot&#044&quotunbalancedSourceData&quot:false&#044&quotstrategy&quot:&quotMERGE&quot&#044&quotraggedKeepStructure&quot:true&#044&quotlabel&quot:&quot}Cubes&quot&#044&quotraggedSourceData&quot:false&#044&quottype&quot:&quotdimension&quot&#044&quotqualifyHierarchy&quot:true&#044&quotqualifySeparator&quot:&quot > &quot&#044&quotisMemberUpdateStrategyChanged&quot:false&#044&quotcreateTotalRoot&quot:true&#044&quotunbalancedToRagged&quot:false&#044&quotraggedSkipLevel&quot:&quotEMPTY&quot&#044&quotlevels&quot:[{&quotexpression&quot:null&#044&quotnumberOfLongItems&quot:0&#044&quotcolumnType&quot:&quotSTRING&quot&#044&quotlabel&quot:&quotvCube&quot&#044&quottype&quot:&quotlevel&quot&#044&quottotalValuesLength&quot:0&#044&quottotalItemsNum&quot:0&#044&quotcolumnKind&quot:&quotDimension&quot&#044&quotvarName&quot:&quotvCube&quot&#044&quotmaxLength&quot:0&#044&quotminLength&quot:10&#044&quotexists&quot:false&#044&quotisMeasure&quot:false&#044&quotcolumnName&quot:&quotvCube&quot&#044&quotnumberOfEmptyItems&quot:0&#044&quotsourceColumn&quot:0&#044&quotelementWeight&quot:&quot1&quot}]&#044&quotexists&quot:false&#044&quotisMeasureDimension&quot:false&#044&quotleafSortDirection&quot:&quotASCENDING&quot&#044&quotconsolidatedSortType&quot:&quotNONE&quot}]&#044&quotmeasures&quot:[]&#044&quotnumColumns&quot:&quot1&quot&#044&quothasHeader&quot:&quotfalse&quot}\f_DeployParams={&quotcubeConflictResolution&quot:{&quotstrategy&quot:&quotMERGE&quot&#044&quotclass&quot:&quotConflictResolution&quot&#044&quotconflict&quot:{&quotname&quot:&quotAll&quot&#044&quotclass&quot:&quotConflict&quot&#044&quottype&quot:&quotCUBE&quot}}&#044&quotdimensionConflictResolutions&quot:{&quot}Cubes&quot:{&quotstrategy&quot:&quotMERGE&quot&#044&quotclass&quot:&quotConflictResolution&quot&#044&quotconflict&quot:{&quotname&quot:&quot}Cubes&quot&#044&quotclass&quot:&quotConflict&quot&#044&quottype&quot:&quotDIMENSION&quot}}}&#044&quotclass&quot:&quotDeployParams&quot&#044&quotdataAction&quot:&quotACCUMULATE&quot}\f_importSourceDefinition={\"sourceType\":\"TM1DIMENSIONSUBSET\",\"originalColumns\":null,\"tm1DimensionSubsetSource\":{\"dimensionCaption\":\"}Cubes\",\"originalColumns\":[],\"dimensionSubsetName\":\"All\",\"excludedColumns\":[],\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCube\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCube\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0}],\"dimensionName\":\"}Cubes\"},\"locale\":{\"localeIsDefault\":false,\"localeCurrencySymbol\":\"$\",\"languageCode\":\"en\",\"languageDisplay\":\"English\",\"thousandsSeparator\":\",\",\"localeCode\":\"en_US\",\"localeCurrencyCode\":\"$\",\"localeDisplay\":\"English (United States)\",\"countryDisplay\":\"United States\",\"countryCode\":\"US\",\"decimalSeparator\":\".\"},\"excludedColumns\":[],\"processName\":\"z_List_All_Cube_Element_Access\",\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCube\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCube\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0}],\"sourceTypeHasBeenChanged\":false}\f",
+	"VariablesUIData":
+	[
+		"_DimCaption=}Cubes\f_DimType=GENERIC\fVarType=32\fColType=825\fVarDimension=}Cubes\fVarDimOrder=1\fVarDimAction=Update\fVarElemType=Numeric\fVarDimElemSortType=ByInput\fVarDimElemSortSense=ASCENDING\f_LevelCaption=vCube\f_UserVisible=vCube\f_UILabel=vCube\f_DataType=STRING\f_SourceIndex=0\f",
+		"VarType=32\fColType=858\fConsolidationDim=}Cubes\fConsolidationChildVar=vCube\fConsolidationChildWeight=1.0\fComponentSortType=ByInput\fComponentSortSense=ASCENDING\f_LevelCaption=Total\f_TotalMember=Total of }Cubes\fVarName=Total_of__Cubes\fVarFormula=Total_of__Cubes='Total of }Cubes';\fVarFormulaDestination=METADATA\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1DimensionSubset",
+		"dataSourceNameForClient":"}Cubes",
+		"dataSourceNameForServer":"}Cubes",
+		"subset":"All"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"param_destroy",
+			"Prompt":"Destroy cube and dimensions",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"param_createIfNotExist",
+			"Prompt":"Create cube and dimensions if they do not exist",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pOutputPath",
+			"Prompt":"Path for the output files",
+			"Value":"..\\DataSources\\Exports",
+			"Type":"String"
+		},
+		{
+			"Name":"pFileName",
+			"Prompt":"Output file name",
+			"Value":"ListByObject.csv",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"vCube",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

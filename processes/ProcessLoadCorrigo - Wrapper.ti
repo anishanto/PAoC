@@ -1,0 +1,27 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vCube='Global Control';
+vCurrentYear = CellGetS(vCube, 'Forecast Year', 'String');
+vEmail = CellGetS(vCube, 'Core Team Email', 'String');
+
+ExecuteProcess('ProcessLoadCorrigoData','pEmail',vEmail,'bDebug',1,'pVersion','Actuals','pYear',vCurrentYear,'pCompany','All Companies','pDeleteAllElements',0);
+ExecuteProcess('ProcessLoadCorrigoData','pEmail',vEmail,'bDebug',1,'pVersion','Forecast','pYear',vCurrentYear,'pCompany','All Companies','pDeleteAllElements',0);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

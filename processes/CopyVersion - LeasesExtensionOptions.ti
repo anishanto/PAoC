@@ -1,0 +1,161 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Updated with multi level text required month select to be removed tmk
+
+RC = 0;
+
+CubeName = 'Leases Extension Options';
+ViewNameSource = 'VE-' | CubeName | '-zSource' ;
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+
+CUBESETLOGCHANGES(CubeName, 0);
+
+#  Destroy previous views and subsets for forecast transfer 
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Extension Options', ViewNameTarget);
+SubsetDestroy ('Expiry Years', ViewNameTarget);
+SubsetDestroy ('Fiscal Years', ViewNameTarget);
+SubsetDestroy ('Extension Options Measures', ViewNameTarget);
+
+# Create views and subsets to Zero out
+
+SubsetCreate ('Versions_PM', ViewNameTarget);
+SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, pTargetVersion, 1);
+
+# Create Extension Options
+sMDX = '{TM1SUBSETALL( [Extension Options] )}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create Expiry Years
+sMDX = '{TM1SUBSETALL( [Expiry Years] )} ';
+SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+# Create Year
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Years] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create Extension Options Measures
+sMDX = '{TM1SUBSETALL( [Extension Options Measures] )} ';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+ViewCreate( CubeName, ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Extension Options', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Expiry Years', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Fiscal Years', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Extension Options Measures', ViewNameTarget);
+ViewRowDimensionSet(CubeName, ViewNameTarget,  'Versions_PM', 1);
+ViewRowDimensionSet (CubeName, ViewNameTarget, 'Extension Options', 2);
+ViewRowDimensionSet (CubeName, ViewNameTarget, 'Expiry Years', 3);
+ViewRowDimensionSet(CubeName, ViewNameTarget, 'Fiscal Years',4);
+ViewRowDimensionSet (CubeName, ViewNameTarget, 'Extension Options Measures',5);
+
+# Zero out the Target values
+VIEWZEROOUT(CubeName, ViewNameTarget);
+
+#Delete view to create source version 
+
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Extension Options', ViewNameSource);
+SubsetDestroy ('Expiry Years', ViewNameSource);
+SubsetDestroy ('Fiscal Years', ViewNameSource);
+SubsetDestroy ('Extension Options Measures', ViewNameSource);
+
+SubsetCreate ('Versions_PM', ViewNameSource);
+SubsetElementInsert ( 'Versions_PM',  ViewNameSource, pSourceVersion, 1);
+
+# Create Extension Options
+sMDX = '{TM1SUBSETALL( [Extension Options] )}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+# Create Expiry Years
+sMDX = '{TM1SUBSETALL( [Expiry Years] )} ';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+# Use Source year
+sMDX = '{TM1SUBSETALL( [Fiscal Years] )} ';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+# Create Extension Options Measures
+sMDX = '{TM1SUBSETALL( [Extension Options Measures] )} ';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+# Create the Source view
+ViewCreate( CubeName, ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Versions_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Extension Options', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Expiry Years', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Fiscal Years', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Extension Options Measures', ViewNameSource);
+ViewRowDimensionSet(CubeName, ViewNameSource,  'Versions_PM', 1);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Extension Options', 2);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Expiry Years', 3);
+ViewRowDimensionSet(CubeName, ViewNameSource, 'Fiscal Years',4);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Extension Options Measures',5);
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource, 0);
+ViewExtractSkipZeroesSet(CubeName, ViewNameSource, 0);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameSource;
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Copy from source Version to Target Version
+vMeasureType = DType('Extension Options Measures',vMeasures);
+IF (vMeasureType @='S' & CellIsUpdateable(CubeName, pTargetVersion,vExtensionOptions,vEY, vFY, vMeasures)=1);
+	CellPutS (vValue, CubeName, pTargetVersion,vExtensionOptions,vEY, vFY, vMeasures);
+ELSEIF (vMeasureType@='N' & CellIsUpdateable(CubeName, pTargetVersion,vExtensionOptions,vEY, vFY, vMeasures)=1);
+	vValueN = StringToNumber(vValue);
+	CellPutN (vValueN, CubeName, pTargetVersion,vExtensionOptions,vEY, vFY, vMeasures);
+ENDIF;
+
+# Copy Version Log
+IF (RC = 0);
+	Asciioutput('..\logs\System\CopyVersion.csv', 'TargetVersion','TargetYear','ExtensionOptions','YearsFromExpiry', 'ExtensionOptionsMeasures','Value');
+	RC = RC+ 1;
+ENDIF;
+
+Asciioutput('..\logs\System\CopyVersion.csv', pTargetVersion, vFY, vExtensionOptions,vEY,vMeasures, vValue);
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CUBESETLOGCHANGES(CubeName, 1);
+
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Extension Options', ViewNameSource);
+SubsetDestroy ('Expiry Years', ViewNameSource);
+SubsetDestroy ('Fiscal Years', ViewNameSource);
+SubsetDestroy ('Extension Options Measures', ViewNameSource);
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Extension Options', ViewNameTarget);
+SubsetDestroy ('Expiry Years', ViewNameTarget);
+SubsetDestroy ('Fiscal Years', ViewNameTarget);
+SubsetDestroy ('Extension Options Measures', ViewNameTarget);
+#endregion

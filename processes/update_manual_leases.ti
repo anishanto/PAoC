@@ -1,0 +1,737 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# The purpose of the process is to load data to the leases cube for the selected version.
+# Final user can choose to zero out the data, make a partial load, or accumulate. 
+
+CubeLockOverride(1);
+
+##### Constants
+cImportPath = CELLGETS('Global Control','Import Shared Folder', 'String');  
+cFileName = 'Leases_Load.csv';
+sFullPath = cImportPath|cFileName;
+
+
+
+cCube = 'Leases Cube';
+cCurrency = 'Local';
+
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+
+sViewZero = cProcessName|' Zero';
+pSubsetZero = cProcessName|' Zero';
+pZeroSubAccounts ='SH1';
+
+cSubType = CELLGETS('Global Control','Client SubAcct Type', 'String');
+sFMorLeases =  IF (DIMIX('Global Control Items','Client Tenure Type')<>0, IF (CELLGETS('Global Control','Client Tenure Type', 'String')@='Tenure','Leases','FM'),'FM');
+sYR = 'Fiscal Years';
+sAllYR = 'All Fiscal Years';
+
+cBU = 'BusUnits';
+cUnassignedBU = 'Unassigned BusUnits';
+pBusAH = CELLGETN('Global Control', 'BusUnits AH Hierarchies', 'Value');
+pBusAL = CELLGETN('Global Control', 'BusUnits AL Hierarchies', 'Value');
+pBusAO = CELLGETN('Global Control', 'BusUnits AO Hierarchies', 'Value');
+
+sGL ='GL_Accounts' ;
+vGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+vGLAL = CELLGETN('Global Control', 'GA Accounts AL Hierarchies', 'Value');
+vGLAO = CELLGETN('Global Control', 'GA Accounts AO Hierarchies', 'Value');
+
+sSA ='SubAccounts' ;
+cASA = '}ElementAttributes_SubAccounts';
+cUnassignedSub = 'Unassigned SubAccount';
+vSAAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+  
+cTenure='Tenure ID';
+sUnassignedLease='Unassigned Tenure ID';
+pTenureIDAH = CELLGETN('Global Control', 'Tenure AH Hierarchies', 'Value');
+
+sDateAttr = 'CreationDate';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+
+####################################### Set Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug =1);
+	sFulPath = cImportPath|cFileName;
+	
+	#Set Debug file name
+	sDebugFile = cDebugFile|'Prolog.debug';
+
+	#Log start time
+	AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+	#Log Variables, Constants and Strings
+	AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+	AsciiOutput( sDebugFile, '           cFileName                           : '| cFileName);
+	AsciiOutput( sDebugFile, '           sFullPath                             : '| sFullPath);
+	AsciiOutput( sDebugFile, '           cCube                                  : '| cCube);
+	AsciiOutput( sDebugFile, '           Company Parameter               : '| pZeroCompany);
+	AsciiOutput( sDebugFile, '           BusUnits Parameter               : '| pZeroBusUnits);
+	AsciiOutput( sDebugFile, '           GL Account Parameter           : '| pZeroGL_Accounts);
+	AsciiOutput( sDebugFile, '           Years Parameter                     : '| pZeroFiscalYears);
+	AsciiOutput( sDebugFile, '           Months Parameter                   : '| pZeroFiscalMonths);
+	AsciiOutput( sDebugFile, '           TenureID Parameter                   : '| pZeroTenureID);
+	AsciiOutput( sDebugFile, '           Version Parameter                   : '| pVersion);
+	AsciiOutput( sDebugFile, '           Zero Cube Parameter                   : '| NumberToString(pZeroCube));
+	AsciiOutput( sDebugFile, '           Increment Parameter                : '| NumberToString(pIncrement));
+EndIf; 
+
+
+############################################################## Check to make sure file path exists
+IF( FileExists ( sFullPath ) = 0);
+	nError = 1;
+	sMessage = 'Location or File does not exist: Please review';
+	If( pDebug =1 );
+		AsciiOutput ( sDebugFile, sMessage );
+	EndIf;
+	DataSourceType = 'NULL';
+	ItemReject ( sMessage );
+EndIf;
+
+############################################################## Check if Cube Constant Exists
+IF( Trim( cCube ) @=' ');
+	nErrors = 1;
+	sMessage = 'No Cube named in Constant Section of Process';
+	If( pDebug = 1);
+		AsciiOutput ( sDebugFile, sMessage );
+	EndIf;    
+	DatSourceType = 'NULL';   
+	ItemReject (sMessage);
+EndIf;
+
+
+# Create view zero out cube if pZeroCube =1
+if (pZeroCube=1);
+	########################################## Destroy View if preent
+	 IF( ViewExists(cCube, sViewZero ) = 1);
+		ViewDestroy( cCube, sViewZero );
+	EndIf;
+
+	
+	#Create Subsets#
+	ExecuteProcess('utility_update_create_subset','pDim','Versions_PM','pSubset',pSubsetZero,'pSelection',pVersion);
+	ExecuteProcess('utility_update_create_subset','pDim','Currency_PM','pSubset',pSubsetZero,'pSelection','Local');
+
+	pYear = 'FY ' | SUBST(pZeroFiscalYears,3,2) | '-' | NumberToString(StringToNumber(SUBST(pZeroFiscalYears,3,2))+1);
+	ExecuteProcess('utility_update_create_subset','pDim','Fiscal Month Year','pSubset',pSubsetZero,'pSelection',pYear);
+
+	### Fiscal Month Year Build
+	pZeroFiscalMonthYearAlias = pZeroFiscalMonths | ' ' | pZeroFiscalYears;
+	pZeroFiscalMonthYear = DimensionElementPrincipalName('Fiscal Month Year',pZeroFiscalMonthYearAlias);
+
+	IF (pZeroFiscalYears@<>'');
+
+		### If the user wants to clear all the months inside a specific year.
+		IF (pZeroFiscalMonths@='All Month Years');
+			
+			vLoop = 1;
+			vDim = 'Fiscal Month Year';
+			vSub = 'Level 0';
+			vSubsize = SubsetGetSize(vDim,vSub);
+			WHILE (vLoop <= vSubSize);
+				element = SubsetGetElementName(vDim,vSub,vLoop);
+				vElPar = ElPar (vDim,element,vLoop);
+				IF (vElPar@= pYear);
+					SubsetElementInsert('Fiscal Month Year',pSubsetZero,element,0);
+				ENDIF;
+				vLoop = vLoop + 1;
+			END;
+		ELSE;
+
+		### If the user wants to clear only one month.
+			pZeroFiscalMonthYear = pZeroFiscalMonths | ' ' | PZeroFiscalYears;
+			SubsetElementInsert('Fiscal Month Year',pSubsetZero,pZeroFiscalMonthYear,0);
+		ENDIF;
+	ENDIF;
+
+	ExecuteProcess('utility_update_create_subset','pDim','Company','pSubset',pSubsetZero,'pSelection',pZeroCompany);
+	ExecuteProcess('utility_update_create_subset','pDim','SubAccounts','pSubset',pSubsetZero,'pSelection',pZeroSubAccounts);
+	ExecuteProcess('utility_update_create_subset','pDim','GL_Accounts','pSubset',pSubsetZero,'pSelection',pZeroGL_Accounts);
+	ExecuteProcess('utility_update_create_subset','pDim','BusUnits','pSubset',pSubsetZero,'pSelection',pZeroBusUnits);
+	ExecuteProcess('utility_update_create_subset','pDim','Tenure ID','pSubset',pSubsetZero,'pSelection',pZeroTenureID);
+
+	sMDX =  '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Leases Measures] )}, 0)}';
+	SubsetCreatebyMDX(pSubsetZero, sMDX);
+	
+	ViewCreate( cCube, sViewZero );
+	
+	ViewColumnDimensionSet(cCube, sViewZero, 'Fiscal Month Year',1);
+	ViewRowDimensionSet(cCube, sViewZero, 'BusUnits',1);
+	ViewTitleDimensionSet(cCube, sViewZero, 'Versions_PM');
+	ViewTitleDimensionSet(cCube, sViewZero, 'Currency_PM') ;
+	ViewTitleDimensionSet(cCube, sViewZero, 'Company') ;
+	ViewTitleDimensionSet(cCube, sViewZero, 'SubAccounts');
+	ViewTitleDimensionSet(cCube, sViewZero, 'GL_Accounts');
+	ViewTitleDimensionSet(cCube, sViewZero, 'Tenure ID');
+	ViewTitleDimensionSet(cCube, sViewZero, 'Leases Measures') ;
+	
+	ViewSubsetAssign(cCube, sViewZero, 'Fiscal Month Year', pSubsetZero);
+	ViewSubsetAssign(cCube, sViewZero, 'BusUnits',pSubsetZero);
+	ViewSubsetAssign(cCube, sViewZero, 'Versions_PM', pSubsetZero) ;
+	ViewSubsetAssign(cCube, sViewZero, 'Currency_PM', pSubsetZero);
+	ViewSubsetAssign(cCube, sViewZero, 'Company',pSubsetZero) ;
+	ViewSubsetAssign(cCube, sViewZero, 'SubAccounts', pSubsetZero);
+	ViewSubsetAssign(cCube, sViewZero, 'GL_Accounts', pSubsetZero);
+	ViewSubsetAssign(cCube, sViewZero, 'Tenure ID', pSubsetZero);
+	ViewSubsetAssign(cCube, sViewZero, 'Leases Measures', pSubsetZero);
+	
+	VIEWZEROOUT(cCube,sViewZero);
+
+	################################################# Delete View and Subset From Zero Out
+	ViewDestroy(cCube, sViewZero );
+	SubsetDestroy ('Versions_PM', pSubsetZero);
+	SubsetDestroy ('Currency_PM', pSubsetZero);
+	SubsetDestroy ('Fiscal Month Year', pSubsetZero);
+	SubsetDestroy ('Company', pSubsetZero);
+	SubsetDestroy ('SubAccounts', pSubsetZero);
+	SubsetDestroy ('GL_Accounts', pSubsetZero);
+	SubsetDestroy ('BusUnits', pSubsetZero);
+	SubsetDestroy ('Tenure ID', pSubsetZero);
+	SubsetDestroy ('Leases Measures', pSubsetZero);
+endif;
+
+
+#### Sort Dimensions - used for adding new element if they don't exist in the metadata load, but are in the data load.
+DIMENSIONSORTORDER('Company','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('SubAccounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('GL_Accounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('BusUnits','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+#### Zeros only the combinations in the file.
+ExecuteProcess('update_manual_leases_zeroout','pVersion',pVersion,'pFileName',cFileName);
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vTrimSubAccountNumber=IF(cSubType @= 'Sub',Subst(vAccountNumberSource,8,3 ),'NA');
+vAccountNumber=IF(cSubType @= 'Sub',Subst(vAccountNumberSource,1,6 ),vAccountNumberSource);
+
+#################################### Continue Debug
+IF(pDebug=1);
+	# Set Debug File
+	sDebugFile = cDebugFile | 'MetaData.debug';
+EndIf;
+
+### For unexisting elements: Elements coming in from load file will be added to unassigned buckets under each hierarchy. 
+### Update Business Units
+IF(DIMIX(cBU, vBusUnits ) = 0);
+	### If elements exist in the data load file, but don't exist in the dimension, they are added here as they would be by the chore that runs at night.
+	### Adds the BU to the dimension, and to SH & AH hierarchies
+	DimensionElementInsert(cBU,'',vBusUnits, 'N');
+	DimensionElementInsert(cBU, '', cUnassignedBU|' '|'SH1' , 'C');
+	DimensionElementComponentAdd(cBU, 'SH1', cUnassignedBU|' '|'SH1', 1);
+	DimensionElementComponentAdd(cBU, cUnassignedBU|' '|'SH1',vBusUnits,1);
+
+	vLoop = 1;
+	While (vLoop<=pBusAH);
+		sLoop = NumberToString(vLoop);
+		DimensionElementInsert(cBU,'',cUnassignedBU|' AH'|sLoop, 'C');
+		DimensionElementComponentAdd(cBU, 'AH'|sLoop, cUnassignedBU|' '|'AH'|sLoop, 1);
+		DimensionElementComponentAdd(cBU, cUnassignedBU|' AH'|sLoop,vBusUnits,1);
+		vLoop = vLoop +1;
+	END;
+
+	### If it's a leases client, adds the BU to the AL & AO hierarchies
+	IF (sFMorLeases@='Leases');
+		### Adds it to AL hierarchies
+		vLoop = 1;
+		While (vLoop<=pBusAL);
+			sLoop = NumberToString(vLoop);
+			DimensionElementInsert(cBU,'',cUnassignedBU|' AL'|sLoop, 'C');
+			DimensionElementComponentAdd(cBU, 'AL'|sLoop, cUnassignedBU|' '|'AL'|sLoop, 1);
+			DimensionElementComponentAdd(cBU, cUnassignedBU|' AL'|sLoop,vBusUnits,1);	
+			vLoop = vLoop +1;
+		END;
+	ENDIF;
+
+	### Adds it to AO Hierachies
+	vLoop = 1;
+	While (vLoop<=pBusAO);
+		sLoop = NumberToString(vLoop+1);
+		DimensionElementInsert(cBU,'',cUnassignedBU|' AOL'|sLoop, 'C');
+		DimensionElementComponentAdd(cBU, 'AO'|sLoop, cUnassignedBU|' '|'AO'|sLoop, 1);
+		DimensionElementComponentAdd(cBU, cUnassignedBU|' AO'|sLoop,vBusUnits,1);
+		vLoop = vLoop +1;
+	END;
+
+	pSendBU = 1;
+ENDIF;
+
+### Update GL Accounts
+
+IF(DIMIX(sGL,vAccountNumber) = 0);
+	IF(   SUBST(vAccountNumber,1,1) @= '1' %
+		SUBST(vAccountNumber,1,1) @= '2' %
+		SUBST(vAccountNumber,1,1) @= '3');
+		sUnassignedAcct = 'Unassigned GL Balance Sheet' ;
+		sCons = 'BS';
+	ELSEIF(SUBST(vAccountNumber,1,1) @= '4' %
+		SUBST(vAccountNumber,1,1) @= '5' %
+		SUBST(vAccountNumber,1,1) @= '6' %
+		SUBST(vAccountNumber,1,1) @= '7' %
+		SUBST(vAccountNumber,1,1) @= '8' %
+		(SUBST(vAccountNumber,1,1) @= '9' &
+		NUMBR(SUBST(vAccountNumber,1,6)) <= 949999 % NUMBR(SUBST(vAccountNumber,1,6)) >= 955000));
+		sUnassignedAcct = 'Unassigned GL PL Account' ;
+		sCons = 'PL';
+	ELSEIF(NUMBR(SUBST(vAccountNumber,1,6)) > 949999 & NUMBR(SUBST(vAccountNumber,1,6)) < 955000);
+		sUnassignedAcct = 'Unassigned GL Statistical' ;
+		sCons = 'ST';
+	ENDIF;
+
+	DimensionElementInsert(sGL, '',  vAccountNumber, 'N');
+	DimensionElementInsert(sGL, '', sUnassignedAcct|' '|'SH1', 'C');
+	DimensionElementInsert(sGL, '', sCons, 'C');
+	DimensionElementComponentAdd(sGL, 'SH1', sCons, 1);
+	DimensionElementComponentAdd(sGL, sCons, sUnassignedAcct|' '|'SH1', 1);
+	DimensionElementComponentAdd(sGL, sUnassignedAcct|' '|'SH1',vAccountNumber,1);
+
+	#################################################################### AH Hierarchies #########################################################
+	nCtrAH = 1;
+
+	WHILE(nCtrAH <= vGLAH); 
+		sAH = 'AH'|NumberToString(nCtrAH);
+		sConsAH = sCons | ' ' | sAH;
+		DimensionElementInsert(sGL, '',  vAccountNumber, 'N');
+		DimensionElementInsert(sGL, '', sUnassignedAcct|' '|sAH, 'C');
+		DimensionElementInsert(sGL, '', sConsAH, 'C');
+		DimensionElementComponentAdd(sGL, sAH, sConsAH, 1);
+		DimensionElementComponentAdd(sGL, sConsAH, sUnassignedAcct|' '|sAH, 1);
+		DimensionElementComponentAdd(sGL, sUnassignedAcct|' '|sAH,vAccountNumber,1);
+		nCtrAH=nCtrAH+1;
+	END;
+	#################################################################### AL Hierarchies #########################################################
+
+	IF(sFMorLeases@='Leases');
+		nCtrAL = 1;
+		WHILE(nCtrAL <= vGLAL); 
+			sAL = 'AL'|NumberToString(nCtrAL);
+			sConsAL = sCons | ' ' | sAL;
+			DimensionElementInsert(sGL, '',  vAccountNumber, 'N');
+			DimensionElementInsert(sGL, '', sUnassignedAcct|' '|sAL, 'C');
+			DimensionElementInsert(sGL, '', sConsAL, 'C');
+			DimensionElementComponentAdd(sGL, sAL, sConsAL, 1);
+			DimensionElementComponentAdd(sGL, sConsAL, sUnassignedAcct|' '|sAL, 1);
+			DimensionElementComponentAdd(sGL, sUnassignedAcct|' '|sAL,vAccountNumber,1);
+			nCtrAL=nCtrAL+1;
+		END;
+		nCtrAO = 1;
+		WHILE(nCtrAO <= vGLAO); 
+			sAO = 'AO'|NumberToString(nCtrAO);
+			sConsAO = sCons | ' ' | sAO;
+			DimensionElementInsert(sGL, '',  vAccountNumber, 'N');
+			DimensionElementInsert(sGL, '', sUnassignedAcct|' '|sAO, 'C');
+			DimensionElementInsert(sGL, '', sConsAO, 'C');
+			DimensionElementComponentAdd(sGL, sAO, sConsAO, 1);
+			DimensionElementComponentAdd(sGL, sConsAO, sUnassignedAcct|' '|sAO, 1);
+			DimensionElementComponentAdd(sGL, sUnassignedAcct|' '|sAO,vAccountNumber,1);
+			nCtrAO=nCtrAO+1;
+		END;
+	ENDIF;
+	pSendGL = 1;
+endif;
+
+### Update Subaccount
+
+IF(DIMIX(sSA,vTrimSubAccountNumber) = 0);
+	sUnassigned = 'Unassigned Subaccount'; 
+	DimensionElementInsertDirect(sSA, '',  vTrimSubAccountNumber, 'N');
+	DimensionElementInsertDirect(sSA, '', sUnassigned|' '|'SH1' , 'C');
+	DimensionElementComponentAddDirect(sSA, sUnassigned|' '|'SH1',vTrimSubAccountNumber,1);
+	DimensionElementComponentAddDirect(sSA, 'SH1', sUnassigned|' '|'SH1', 1);
+	vLoop = 1;
+	While (vLoop<=vSAAH);
+		vSLoop = NumberToString(vLoop);
+		DimensionElementInsertDirect(sSA,'',sUnassigned|' AH'|vSLoop, 'C');
+		DimensionElementComponentAddDirect(sSA, 'AH'|vSLoop, sUnassigned|' '|'AH'|vSLoop, 1);
+		DimensionElementComponentAddDirect(sSA, sUnassigned|' AH'|vSLoop,vTrimSubAccountNumber,1);
+		vLoop = vLoop +1;
+	END;
+	pSendSA = 1;
+endif;
+
+### Update Tenure ID
+
+IF(DIMIX(cTenure,vTenureID) = 0);
+	
+	### Adds the Tenure to the dimension, and to SH & AH hierarchies
+	DimensionElementInsert(cTenure,'',vTenureID, 'N');
+	DimensionElementInsert(cTenure, '', sUnassignedLease|' '|'SH1' , 'C');
+	DimensionElementComponentAdd(cTenure, 'SH1', sUnassignedLease|' '|'SH1', 1);
+	DimensionElementComponentAdd(cTenure, sUnassignedLease|' '|'SH1',vTenureID,1);
+
+	#AH
+	vLoop = 1;
+	While (vLoop<=pTenureIDAH);
+		sLoop = NumberToString(vLoop);
+		DimensionElementInsert(cTenure,'',sUnassignedLease|' AH'|sLoop, 'C');
+		DimensionElementInsert(cTenure,'','AH'|sLoop, 'C');
+		DimensionElementComponentAdd(cTenure, 'AH'|sLoop, sUnassignedLease|' '|'AH'|sLoop, 1);
+		DimensionElementComponentAdd(cTenure, sUnassignedLease|' AH'|sLoop,vTenureID,1);
+		vLoop = vLoop +1;
+	END;
+
+	pSendTenure = 1;
+ENDIF;
+	
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vTrimSubAccountNumber=IF(cSubType @= 'Sub',Subst(vAccountNumberSource,8,3 ),'NA');
+vAccountNumber=IF(cSubType @= 'Sub',Subst(vAccountNumberSource,1,6 ),vAccountNumberSource);
+
+#################################### Continue Debug
+If( pDebug =1 );
+	# Set Debug File
+	sDebugFile = cDebugFile | 'Data.debug';
+EndIf;
+
+#################################### Update Attributes for the elements created in the Metadata tab
+
+################################# BU 
+
+### Add Creation Date
+
+IF(DIMIX(cBU,cUnassignedBU|' '|'SH1')<>0);
+	IF(ATTRS(cBU,vBusUnits,sDateAttr)@=' ');
+		IF(ELISPAR(cBU,cUnassignedBU|' '|'SH1',vBusUnits)=1);
+			AttrPutS(sDateAdd,cBU,vBusUnits,sDateAttr);
+		EndIf;
+	EndIf;
+EndIf;
+
+### Add associated Company attribute
+ATTRPUTS(vCompany,cBU,vBusUnits,'Company');
+
+### Add Unassigned Parent Attribute
+IF(DIMIX(cBU,cUnassignedBU|' '|'SH1')<>0);
+	IF( ELISPAR(cBU,cUnassignedBU|' '|'SH1',vBusUnits)=1);
+		AttrPutS(cUnassignedBU|' '|'SH1',cBU,vBusUnits,'SH1Parent1' );
+	EndIf;
+EndIf;
+
+### Add the attribute to the BU depending on the value of the parameter pFMorLeases.
+vLoop = 1;
+While (vLoop<=pBusAH);
+	sLoop = NumberToString(vLoop);
+	IF(DIMIX(cBU,cUnassignedBU|' AH'|sLoop)<>0);
+		IF(ELISPAR(cBU,cUnassignedBU|' AH'|sLoop,vBusUnits)=1);
+			AttrPutS(cUnassignedBU|' AH'|sLoop,cBU,vBusUnits,'AH'|sLoop|'Parent1');
+			IF (vLoop = 1);
+				### Add Hierarchy Attributes
+				ATTRPUTS('yes',cBU,vBusUnits,'HierarchyStatus');
+			ENDIF;
+		EndIf;
+	EndIf;
+	vLoop = vLoop + 1;
+END;
+
+IF (sFMorLeases@='Leases');
+	vLoop = 1;
+	While (vLoop<=pBusAL);
+		sLoop = NumberToString(vLoop);
+		IF(DIMIX(cBU,cUnassignedBU|' AL'|sLoop)<>0);
+			IF(ELISPAR(cBU,cUnassignedBU|' AL'|sLoop,vBusUnits)=1);
+				AttrPutS(cUnassignedBU|' AL'|sLoop,cBU,vBusUnits,'AL'|sLoop|'Parent1');
+			EndIf;
+		EndIf;
+		vLoop = vLoop +1;
+	END;
+
+	vLoop = 1;
+	While (vLoop<=pBusAO);
+		sLoop = NumberToString(vLoop+1);
+		IF(DIMIX(cBU,cUnassignedBU|' AO'|sLoop)<>0);
+			IF(ELISPAR(cBU,cUnassignedBU|' AO'|sLoop,vBusUnits)=1);
+				AttrPutS(cUnassignedBU|' AL'|sLoop,cBU,vBusUnits,'AO'|sLoop|'Parent1');
+			EndIf;
+		EndIf;
+		vLoop = vLoop +1;
+	END;
+ENDIF;
+
+#################################### GLAccount
+IF(SUBST(vAccountNumber,1,1) @= '1' %
+	   SUBST(vAccountNumber,1,1) @= '2' %
+	   SUBST(vAccountNumber,1,1) @= '3');
+	sUnassignedAcct = 'Unassigned GL Balance Sheet' ;
+	sCons = 'BS';
+ELSEIF(SUBST(vAccountNumber,1,1) @= '4' %
+		SUBST(vAccountNumber,1,1) @= '5' %
+		SUBST(vAccountNumber,1,1) @= '6' %
+		SUBST(vAccountNumber,1,1) @= '7' %
+		SUBST(vAccountNumber,1,1) @= '8' %
+		(SUBST(vAccountNumber,1,1) @= '9' &
+		NUMBR(SUBST(vAccountNumber,1,6)) <= 949999 % NUMBR(SUBST(vAccountNumber,1,6)) >= 955000));
+	sUnassignedAcct = 'Unassigned GL PL Account' ;
+	sCons = 'PL';
+ELSEIF(NUMBR(SUBST(vAccountNumber,1,6)) > 949999 & NUMBR(SUBST(vAccountNumber,1,6)) < 955000);
+	sUnassignedAcct = 'Unassigned GL Statistical' ;
+	sCons = 'ST';
+endif;
+
+IF(DIMIX(sGL,sUnassignedAcct|' '|'SH1')<>0);
+	IF( ELISPAR(sGL,sUnassignedAcct|' '|'SH1',vAccountNumber)=1);
+		ATTRPUTS(sDateAdd,sGL,vAccountNumber,sDateAttr);
+		ATTRPUTS(sUnassignedAcct|' '|'SH1',sGL,vAccountNumber,'SH1Parent1' );
+	EndIf;
+	### Adds the attribute to the BU depending on the value of the parameter pFMorLeases.
+	vLoop = 1;
+	While (vLoop<=vGLAH);
+		sLoop = NumberToString(vLoop);
+		IF(DIMIX(sGL,sUnassignedAcct|' AH'|sLoop)<>0);
+			IF(ELISPAR(sGL,sUnassignedAcct|' AH'|sLoop,vAccountNumber)=1);
+				ATTRPUTS(sUnassignedAcct|' AH'|sLoop,sGL,vAccountNumber,'AH'|sLoop|'Parent1');
+			EndIf;
+		EndIf;
+		vLoop = vLoop + 1;
+	END;
+	IF (sFMorLeases@='Leases');
+		vLoop = 1;
+		While (vLoop<=vGLAL);
+			sLoop = NumberToString(vLoop);
+			IF(DIMIX(sGL,sUnassignedAcct|' AL'|sLoop)<>0);
+				IF(ELISPAR(sGL,sUnassignedAcct|' AL'|sLoop,vAccountNumber)=1);
+					ATTRPUTS(sUnassignedAcct|' AL'|sLoop,sGL,vAccountNumber,'AL'|sLoop|'Parent1');
+				EndIf;
+			EndIf;
+			vLoop = vLoop + 1;
+		END;
+		vLoop = 1;
+		While (vLoop<=vGLAO);
+			sLoop = NumberToString(vLoop);
+			IF(DIMIX(sGL,sUnassignedAcct|' AO'|sLoop)<>0);
+				IF(ELISPAR(sGL,sUnassignedAcct|' AO'|sLoop,vAccountNumber)=1);
+					ATTRPUTS(sUnassignedAcct|' AO'|sLoop,sGL,vAccountNumber,'AO'|sLoop|'Parent1');
+				EndIf;
+			EndIf;
+			vLoop = vLoop + 1;
+		END;
+	endif;
+EndIf;
+
+#################################### Subaccount
+sUnassigned = 'Unassigned Subaccount';  
+IF(DIMIX(sSA,sUnassigned|' '|'SH1')<>0);
+	IF(ELISPAR(sSA,sUnassigned|' '|'SH1',vTrimSubAccountNumber)=1 & ATTRS(sSA,vTrimSubAccountNumber,sDateAttr)@=' ');
+		ATTRPUTS(sUnassigned|' SH1',sSA,vTrimSubAccountNumber,'SH1Parent1' );
+		vLoop = 1;
+		While (vLoop<=vSAAH);
+			vSLoop = NumberToString(vLoop);
+			ATTRPUTS(sUnassigned|' AH'|vSLoop,sSA,vTrimSubAccountNumber,'AH'|vSLoop|'Parent1' );
+			vLoop = vLoop +1;
+		END;
+	endif;
+endif;
+
+################################ Tenure
+### Add Unassigned Parent Attribute
+IF(DIMIX(cTenure,sUnassignedLease|' '|'SH1')<>0);
+	IF( ELISPAR(cTenure,sUnassignedLease|' '|'SH1',vTenureID)=1);
+		AttrPutS(sUnassignedLease|' '|'SH1',cTenure,vTenureID,'SH1Parent1' );
+	EndIf;
+EndIf;
+
+IF(DIMIX(cTenure,sUnassignedLease|' '|'SH1')<>0);
+	IF(ATTRS(cTenure,vTenureID,sDateAttr)@=' ');
+		IF(ELISPAR(cTenure,sUnassignedLease|' '|'SH1',vTenureID)=1);
+			AttrPutS(sDateAdd,cTenure,vTenureID,sDateAttr);
+		EndIf;
+	EndIf;
+EndIf;
+
+### Adds the attribute to the Tenure
+#AH
+vLoop = 1;
+While (vLoop<=pTenureIDAH);
+	sLoop = NumberToString(vLoop);
+	IF(DIMIX(cTenure,sUnassignedLease|' AH'|sLoop)<>0);
+		IF(ELISPAR(cTenure,sUnassignedLease|' AH'|sLoop,vTenureID)=1);
+			AttrPutS(sUnassignedLease|' AH'|sLoop,cTenure,vTenureID,'AH'|sLoop|'Parent1');
+		EndIf;
+	EndIf;
+	vLoop = vLoop + 1;
+END;
+
+#################################### Data Load
+
+### Fiscal Month Year Load
+vDim = 'Fiscal Month Year';
+vSub = 'FiscalMonthsDetail';
+vIndex = 1;
+vIndexFinal = SubsetGetSize(vDim,vSub);
+cMeasure = 'Lease Value';
+While (vIndex <= vIndexFinal);
+	element = SubsetGetElementName(vDim,vSub,vIndex);
+	vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+	vVarM = Expand( '%nM' | Expand( '%vIndexS%' ) | '%' );
+	IF(CELLISUPDATEABLE(cCube,vVersion,cCurrency,element,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure)=1);
+		IF (pIncrement = 0);
+			CellPutN(StringtoNumber(vVarM), cCube,vVersion,cCurrency,element,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure);
+		ELSEIF (pIncrement = 1);
+			CellIncrementN(StringtoNumber(vVarM),cCube,vVersion,cCurrency,element,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure);
+		ENDIF;
+		IF(pDebug = 1);
+			Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,element,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure,NumberToString(StringtoNumber(vVarM)));
+		EndIf;
+	ENDIF;
+	vIndex = vIndex + 1;
+END;
+
+### Event Type Load
+vIndex = 1;
+vIndexFinal = 10;
+cMeasure = 'Event Type';
+While (vIndex <= vIndexFinal);
+               	vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+	vVarM = Expand( '%EventTypeY' | Expand( '%vIndexS%' ) | '%' );
+	IF(CELLISUPDATEABLE(cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure)=1);
+		CellPutS(vVarM, cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure);
+		IF(pDebug = 1);
+			Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Y'|vIndexS,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure,vVarM);
+		ENDIF;
+	EndIf;
+	vIndex = vIndex + 1;
+END;
+
+### Event Dates Load
+vIndex = 1;
+vIndexFinal = 10;
+cMeasure = 'Event Dates';
+While (vIndex <= vIndexFinal);
+               	vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+	vVarM = Expand( '%EventDateY' | Expand( '%vIndexS%' ) | '%' );
+	IF(CELLISUPDATEABLE(cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure)=1);
+		CellPutS(vVarM, cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure);
+		IF(pDebug = 1);
+			Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Y'|vIndexS,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure,vVarM);
+		ENDIF;
+	EndIf;
+	vIndex = vIndex + 1;
+END;
+
+### Assumption Category Load
+vIndex = 1;
+vIndexFinal = 10;
+cMeasure = 'Assumption Category';
+While (vIndex <= vIndexFinal);
+                vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+               	vVarM = Expand( '%CategoryY' | Expand( '%vIndexS%' ) | '%' );
+	IF(CELLISUPDATEABLE(cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure)=1);
+		CellPutS(vVarM, cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure);
+		IF(pDebug = 1);
+			Asciioutput(sDebugFile,cCube,vVersion,vCompany,cCurrency,'Y'|vIndexS,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure,NumberToString(StringtoNumber(vVarM)));
+		EndIf;
+	ENDIF;
+	vIndex = vIndex + 1;
+END;
+
+### Assumption Rate Load
+vIndex = 1;
+vIndexFinal = 10;
+cMeasure = 'Assumption Rate';
+While (vIndex <= vIndexFinal);
+                vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+               	vVarM = Expand( '%RateY' | Expand( '%vIndexS%' ) | '%' );
+	IF(CELLISUPDATEABLE(cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure)=1);
+		CellPutS(vVarM, cCube,vVersion,cCurrency,'Y'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure);
+		IF(pDebug = 1);
+			Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Y'|vIndexS,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure,vVarM);
+		ENDIF;
+	EndIf;
+	vIndex = vIndex + 1;
+END;
+
+### Other Variables Load
+ATTRPUTS(LeaseStartDate,cTenure,vTenureID,'LeaseStartDate');
+ATTRPUTS(LeaseEndDate,cTenure,vTenureID,'LeaseEndDate');
+ATTRPUTS(BudgetRegion,cTenure,vTenureID,'Region');
+ATTRPUTS(BudgetBuildingType,cTenure,vTenureID,'BUType');
+ATTRPUTS(LeaseType,cTenure,vTenureID,'LeaseType');
+
+IF (CellIsUpdateable(cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Cost Amount') = 1);
+	CellPutN(StartAmount,cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Cost Amount');
+ENDIF;
+
+IF (CellIsUpdateable(cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Extension Option') = 1);
+	CellPutS(ExtensionOption,cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Extension Option');
+ENDIF;
+
+IF (CellIsUpdateable(cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'BudgetEndDate') = 1);
+	CellPutS(BudgetEndDate,cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'BudgetEndDate');
+ENDIF;
+
+IF (CellIsUpdateable(cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'ExtensionOption') = 1);
+	CellPutS(BudgetEndDate,cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'ExtensionOption');
+ENDIF;
+
+IF (CellIsUpdateable(cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Review') = 1);
+	CellPutS(BudgetEndDate,cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Review');
+ENDIF;
+
+IF (CellIsUpdateable(cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Commentary') = 1);
+	CellPutS(BudgetEndDate,cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Commentary');
+ENDIF;
+
+IF(pDebug = 1);
+	Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Attribute',vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Cost Amount',NumberToString(StartAmount));
+	Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Attribute',vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Extension Option',ExtensionOption);
+	Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Attribute',vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'BudgetEndDate',BudgetEndDate);
+	Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Attribute',vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Extension Option',ExtensionOption);
+	Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Attribute',vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Review',Review);
+	Asciioutput(sDebugFile, cCube,vVersion,vCompany,cCurrency,'Attribute',vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Commentary',Commentary);
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############### Email File
+IF(Lower(pEmailFile)@='yes') ;
+	### BUs
+	IF (pSendBU=1);
+		vProcess = 'ProcessEmailWFileUnassignedBUSQL';
+		ExecuteProcess(vProcess,'pSendTo',pEmail);
+	ENDIF;
+
+	### GL Accounts
+	IF (pSendGL=1);
+		vProcess = 'ProcessEmailWFileUnassignedGLSQL';
+		ExecuteProcess(vProcess,'pSendTo',pEmail);
+	ENDIF;
+
+	### Sub Accounts
+	IF (pSendSA=1);
+		vProcess = 'ProcessEmailWFileUnassignedSUBACCTSQL';
+		ExecuteProcess(vProcess,'pSendTo',pEmail);
+	ENDIF;
+
+	### Tenure ID
+	IF (pSendTenure=1);
+		vProcess = 'ProcessEmailWFileUnassignedTENURESQL';
+		ExecuteProcess(vProcess,'pSendTo',pEmail);
+	ENDIF;
+ENDIF;
+#endregion

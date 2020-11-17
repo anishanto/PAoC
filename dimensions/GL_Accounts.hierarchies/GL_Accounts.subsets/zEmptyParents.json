@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zEmptyParents",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}"
+}

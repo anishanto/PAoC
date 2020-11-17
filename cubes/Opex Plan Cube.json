@@ -1,0 +1,45 @@
+{
+	"@type":"Cube",
+	"Name":"Opex Plan Cube",
+	"Rules@Code.link":"Opex Plan Cube.rules",
+	"DrillthroughRules@Code.link":"Opex Plan Cube.drillthrough.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('Currency_PM')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Months')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('SubAccounts')"
+		},
+		{
+			"@id":"Dimensions('GL_Accounts')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')"
+		},
+		{
+			"@id":"Dimensions('Plan Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Opex Plan Cube.views/Corrigo Work Orders.json",
+		"Opex Plan Cube.views/Current Month Corrigo Forecast.json",
+		"Opex Plan Cube.views/Opex Plan Cube.json",
+		"Opex Plan Cube.views/Opex Plan Cube - BU.json",
+		"Opex Plan Cube.views/Plan - Load Review.json",
+		"Opex Plan Cube.views/Suppression Flag.json"
+	]
+}

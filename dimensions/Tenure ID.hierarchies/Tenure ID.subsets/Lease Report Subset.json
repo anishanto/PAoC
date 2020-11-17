@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Lease Report Subset",
+	"Expression":"{TM1DRILLDOWNMEMBER( {[Tenure ID].[AHIT]}, ALL, RECURSIVE )}"
+}

@@ -1,0 +1,112 @@
+{
+	"@type":"Hierarchy",
+	"Name":"CommentsPicklist",
+	"Elements":
+	[
+		{
+			"Name":"Area Change",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Baseline Adjustments     ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Budgeted Not Invoiced",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Consumption Estimate",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Contingency",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Contract / Fixed",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Cost Saving Achieved",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Deferred Cost",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Global/Regional Push Down",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Inflation Allowance",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Major Maintenance",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Non Budgeted Expense",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"One-Off",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Other Budget",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Other Explain",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Planned Preventative Maintenance",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Preventative Maintenance    ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Prior Year Carryover",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Prior Year Deferred Expense  ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reclass From",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reclass To",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Repairs",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Scope Change",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Supplies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Tasked Saving",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Un Accrued Expense",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}

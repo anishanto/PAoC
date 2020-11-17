@@ -1,0 +1,187 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####Define Variables#####
+sProcessNm = getProcessName();
+sView = 'VE-' | sProcessNm;
+sSub = 'VE-' | sProcessNm;
+cCube = '}Capabilities';
+dGrp = '}Groups';
+dDim='}Permissions';
+dDim2='}Features';
+
+CubeSetLogChanges(cCube, 0);
+
+#####Destroy previous views and subsets#####
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1) @<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+
+#####Create Dim Subset#####
+
+#####Create Features#####
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [' | dDim2 | '] )}, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+#####Create Permission#####
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [' | dDim | '] )}, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+######Create Groups#####
+sMDX= '{ EXCEPT( {TM1SUBSETALL( ['|dGrp|'] )}, { ['|dGrp|'].[ADMIN], ['|dGrp|'].[SecurityAdmin], ['|dGrp|'].[DataAdmin] ,  ['|dGrp|'].[OperationsAdmin]}) }';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+#####Create View#####
+ViewCreate(cCube, sView);
+ViewSubsetAssign(cCube, sView,dDim, sView);
+ViewSubsetAssign(cCube, sView,dDim2, sView);
+ViewSubsetAssign(cCube, sView,dGrp, sView);
+
+ViewRowDimensionSet(cCube, sView,dDim2, 1);
+ViewRowDimensionSet(cCube, sView,dDim, 1);
+ViewColumnDimensionSet(cCube, sView,dGrp,1);
+
+
+#####Set View Filters#####
+ViewExtractSkipCalcsSet(cCube, sView, 0);
+ViewExtractSkipZeroesSet(cCube, sView, 0);
+
+
+#####Zero Out View#####
+VIEWZEROOUT(cCube, sView ) ;
+
+
+#####Set new views as the datasource#####
+    DatasourceNameForServer = cCube;
+    DatasourceCubeView = sView;
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####PROCESS SUMMARY#####
+# DENY Access to Consolidation TypeIn Spreading, GRANT to all other capabilities
+#Default balance to BLANK  including the 'Everyone' group
+
+
+IF(1= 1);
+#####DEFINE VARIABLES#####
+cCube='Global Control';
+vClient = CellGetS(cCube, 'Client Name', 'String');
+vSecurityGroup1 = LOWER(CellGetS(cCube, 'Security Group 1', 'String'));
+vSecurityGroup2 = LOWER(CellGetS(cCube, 'Security Group 2', 'String'));
+vSecurityGroup3 = LOWER(CellGetS(cCube, 'Security Group 3', 'String'));
+vCorp = 'JLL\CorpTM1';
+eGrp = ATTRS(dGrp, vGrp, '}TM1_DefaultDisplayValue');
+vExcludedFeature  =  '>>Consolidation TypeIn Spreading' ; 
+vIncludedPermissions =  '>>WRITE>>EXECUTE' ;
+
+
+#####DEFINE PATH#####
+vPath = LOWER(CellGetS(cCube, 'Export Folder', 'String'));
+vFile = vPath | vClient | sProcessNm | '.csv';
+
+
+#####ASSIGN SECURITY#####
+
+cCube = '}Capabilities';
+
+if (vFeature@='UsePersonalWorkspaceWritebackMode');
+	ItemSkip;
+endif;
+
+#####Assign WRITE######
+IF(SCAN(vClient, eGrp) <> 0 
+% SCAN(vCorp, eGrp) <> 0
+% SCAN(vSecurityGroup1, eGrp) <> 0
+% SCAN(vSecurityGroup2, eGrp) <> 0
+% SCAN(vSecurityGroup3, eGrp) <> 0);
+     IF(SCAN( '>>' | vFeature, vExcludedFeature ) = 0   &  SCAN('>>' | vPermission , vIncludedPermissions ) >0  );
+          CELLPUTS( 'GRANT', cCube, vFeature, vPermission, vGrp);
+     ELSEIF(SCAN( '>>' | vFeature, vExcludedFeature ) > 0    &  SCAN('>>' | vPermission , vIncludedPermissions ) >0  ) ;
+          CELLPUTS( 'DENY', cCube, vFeature, vPermission, vGrp); 
+     ENDIF;
+
+# Everyone will be assigned a blank, not DENY
+ELSEIF ( SCAN('::Everyone', vGrp) <>0 );
+    CELLPUTS( '', cCube, vFeature, vPermission, vGrp);     
+ELSE;
+     CELLPUTS( '', cCube, vFeature, vPermission, vGrp); 
+ENDIF;
+
+
+ENDIF;
+
+#####EXPORT ISSUE LOG#####
+ASCIIOUTPUT(vFile, vClient, eGrp, cCube, vGrp, vAccess);
+
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####Cleanup Views & Subsets#####
+
+CubeSetLogChanges(cCube, 1);
+
+IF(pDebug <> 1);
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+#ViewCreate( cCube, sView);
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1) @<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+ENDIF;
+#endregion

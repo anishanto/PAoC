@@ -1,0 +1,35 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+vCYear=CELLGETS(cubGlobalControl, 'E1 Calendar', 'String');
+vFYear=CELLGETS(cubGlobalControl, 'Reporting Year', 'String');
+vMonth=CELLGETS(cubGlobalControl, 'Reporting Actuals Month', 'String');
+vEmail=CELLGETS(cubGlobalControl, 'CoreTeam Email', 'String');
+vClientType=CELLGETN(cubGlobalControl, 'Client SubAcct Type', 'Value');
+vLedger=pLedger;
+
+#####################################Populate Process E1 Load Data Detail #################################################
+sProcessName='ProcessLoadE1Detail';
+EXECUTEPROCESS(sProcessName,'pVersion',pVersion,'pEmail',vEmail,'pSubAccount',vClientType,'pCYear',vCYear,'pFYear',vFYear,'pLedger',pLedger,'bDebug',1,'pCompany',pCompany, 'pMonthStart', '1', 'pMonthEnd','12','pCurrency',pCurrency);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

@@ -1,0 +1,12 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Work Orders",
+	"Elements":[],
+	"Subsets@Code.links":
+	[
+		"Work Orders.subsets/DetailLevel.json",
+		"Work Orders.subsets/WODrillWork Orders.json",
+		"Work Orders.subsets/WOPlanDrillWork Orders.json",
+		"Work Orders.subsets/Work Order Detail.json"
+	]
+}

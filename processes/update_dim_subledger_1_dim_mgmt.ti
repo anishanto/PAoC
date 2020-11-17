@@ -1,0 +1,105 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################################Constants
+cDimName = 'Subledger';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+cCubeName = '}ElementAttributes_'|cDimName;
+sLocalCube = 'local:'|cCubeName;
+pSubLedger = CELLGETN('Global Control', 'SubLedger AH Hierarchies', 'Value');
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+######################Add NA and All Subledger and Other
+IF(DIMIX(cDimName,'NA')=0);
+ DIMENSIONELEMENTINSERT(cDimName,'','NA','N');
+EndIf;
+IF(DIMIX(cDimName,'All Subledger and Other')=0);
+ DIMENSIONELEMENTINSERT(cDimName,'','All Subledger and Other','n');  
+EndIF;
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##########No SubLedger Type
+sSubledgerType = CELLGETS( 'Global Control', 'Client Subledger Type' , 'String' );
+
+
+##############################################################Check Validation if value is 1 then error
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+   ElName = DIMNM( cDimName , x );
+   IF( ATTRS(cDimName,ElName,'Validation')@='1');
+      vMessage = 'ERROR: '| cDimName | ' Validation Error.  There are dupicate parents within a single hierarchy';
+      CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSERROR;
+   ENDIF;
+    x=x-1;
+END;
+
+
+###############################################Create Standard Hierarchy
+
+
+
+
+IF( pSubLedger >= 0 & pSubLedger < 4 );
+ExecuteProcess('update_dim_subledger_2_hierarchy_build',
+       'pHierarchy','SH1',
+        'pDebug',0
+);
+
+
+
+IF( pSubLedger > 0 & pSubLedger < 4 );
+ExecuteProcess('update_dim_subledger_2_hierarchy_build',
+       'pHierarchy','AH1',
+        'pDebug',0
+);
+
+EndIf;
+
+IF( pSubLedger > 1 & pSubLedger < 4 );
+ExecuteProcess('update_dim_subledger_2_hierarchy_build',
+       'pHierarchy','AH2',
+        'pDebug',0
+);
+
+EndIf;
+
+IF( pSubLedger = 3 );
+ExecuteProcess('update_dim_subledger_2_hierarchy_build',
+       'pHierarchy','AH3',
+        'pDebug',0
+);
+
+EndIf;
+
+EndIf;
+#endregion

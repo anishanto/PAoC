@@ -1,0 +1,70 @@
+{
+	"@type":"Subset",
+	"Name":"Measures",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Total Amount')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Actuals to Date')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Adjustment')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Corrigo Work Orders')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Corrigo Closed WO')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Corrigo Open WO')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Value')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Census')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Rate')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Assumptions')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Comments Std')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Comments')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Comments - Finance')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Variance Explanations Bud to Act')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Variance Explanations Bud to Bud')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Variance Explanations Bud to FCST')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Variance Explanations FCST to Act')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Variance Explanations FCST to Bud')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Variance Explanations FCST to FCST')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Restatement')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('FX Variance')"
+		}
+	]
+}

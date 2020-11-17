@@ -1,0 +1,98 @@
+{
+	"@type":"NativeView",
+	"Name":"Strategic Management Forecast",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Subsets('FiscalMonthYearF')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('AH1 Expand All')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('99001')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('All Hierarchies CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('9901000001')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('NA')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Subsets('No Tenure Assigned')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Elements('NA')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Forecast')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Subsets('LeaseValues')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Elements('Lease Value')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

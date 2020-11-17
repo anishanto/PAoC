@@ -1,0 +1,26 @@
+{
+	"@type":"Hierarchy",
+	"Name":"AP Status",
+	"Elements":
+	[
+		{
+			"Name":"Exported",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"None",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Authorized No Charge",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"AP Status.subsets/APStatusDetail.json",
+		"AP Status.subsets/VE-Opex Work Order Cube-CopyToPlan.json",
+		"AP Status.subsets/WODrillAP Status.json",
+		"AP Status.subsets/WOPlanDrillAP Status.json"
+	]
+}

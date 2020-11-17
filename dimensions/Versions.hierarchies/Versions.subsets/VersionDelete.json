@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"VersionDelete",
+	"Expression":"{FILTER( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Versions] )}, 0)}, [Versions].[Retain] = \"\")}"
+}

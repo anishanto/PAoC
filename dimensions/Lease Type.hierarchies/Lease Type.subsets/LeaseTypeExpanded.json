@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"LeaseTypeExpanded",
+	"Expression":"{TM1SUBSETALL( [Lease Type] )}"
+}

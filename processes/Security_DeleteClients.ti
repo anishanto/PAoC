@@ -1,0 +1,46 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+cDimClient = '}Clients';
+cClientSubset = 'JLL-ADClients';
+sMDX = '
+{UNION(
+{TM1FILTERBYPATTERN( {TM1SUBSETALL( [}Clients] )}, "CAMID(*JLL:*")},
+{TM1FILTERBYPATTERN( {TM1SUBSETALL( [}Clients] )}, "CAMID(*DELPHIPrd_ldap:*")}
+)}
+';
+if (SubsetExists(cDimClient, cClientSubset)=0);
+	SubsetCreate(cDimClient,cClientSubset);
+endif;
+
+SubsetMDXSet(cDimClient, cClientSubset, sMDX);
+SubsetMDXSet(cDimClient, cClientSubset, '');
+
+vLine = 0;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vLine = vLine +1 ;
+DimensionElementDeleteDirect(cDimClient, vClient);
+#Asciioutput('..\Test.txt',vClient);
+
+if (vLine=10);
+	#ProcessQuit;
+endif;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

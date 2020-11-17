@@ -1,0 +1,25 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreLoadDataLeases",
+	"StartTime":"2019-01-11T10:00Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"MultipleCommit",
+	"Frequency":"P1DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"pTester",
+					"Value":0
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('RunChoreLoadDataLeases')"
+			}
+		}
+	]
+}

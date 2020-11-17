@@ -1,0 +1,191 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Budget Region",
+	"Elements":
+	[
+		{
+			"Name":"All Budget Region",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"All",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Chatswood",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Chatswood - A",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Macquarie Park",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Macquarie Park - A",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Major Regional",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Metropolitan",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Newcastle",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"North Sydney",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"North Sydney - A",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Parramatta",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Parramatta - A",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Regional",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"St Leonards",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"St Leonards - A",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Sydney CBD",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Sydney CBD - A",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Sydney CBD - B",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Wollongong",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"All",
+			"Weight":0
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Chatswood",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Chatswood - A",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Macquarie Park",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Macquarie Park - A",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Major Regional",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Metropolitan",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Newcastle",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"North Sydney",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"North Sydney - A",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Parramatta",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Parramatta - A",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Regional",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"St Leonards",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"St Leonards - A",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Sydney CBD",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Sydney CBD - A",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Sydney CBD - B",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Budget Region",
+			"ComponentName":"Wollongong",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Budget Region.subsets/BudgetRegionDetail.json",
+		"Budget Region.subsets/BudgetRegionExpanded.json",
+		"Budget Region.subsets/level0.json"
+	]
+}

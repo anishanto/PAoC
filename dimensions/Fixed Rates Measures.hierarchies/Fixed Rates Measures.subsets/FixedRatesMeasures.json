@@ -1,0 +1,25 @@
+{
+	"@type":"Subset",
+	"Name":"FixedRatesMeasures",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')/Elements('Event Name')"
+		},
+		{
+			"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')/Elements('Status')"
+		},
+		{
+			"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')/Elements('Event Date')"
+		},
+		{
+			"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')/Elements('Event Notes')"
+		},
+		{
+			"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')/Elements('Rates')"
+		},
+		{
+			"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')/Elements('Check Rate')"
+		}
+	]
+}

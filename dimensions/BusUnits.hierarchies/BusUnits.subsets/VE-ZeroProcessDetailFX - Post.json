@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"VE-ZeroProcessDetailFX - Post",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [BusUnits] )} ) }, 0)}, ASC)}"
+}

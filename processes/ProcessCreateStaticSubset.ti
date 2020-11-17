@@ -1,0 +1,55 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Chris Malone 111716 New Code
+#Define Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cSubset = 'Approval '|cClient;
+
+#Old Code
+#IF (SubsetExists ( pDimName, pSubset ) = 1 );
+#    SubsetDestroy ( pDimName, pSubset );
+#ELSE;
+#SubsetCreate ( pDimName, pSubSet ) ;
+#ENDIF;
+
+#vPathFile = '..\DataSources\Exports\debug.csv';
+
+#ASCIIOutput (vPathfile, pDimName, pSubset, pMDX );
+
+#New Code
+IF (SubsetExists ( pDimName, cSubset ) = 1 );
+    SubsetDestroy ( pDimName, cSubset );
+ELSE;
+SubsetCreate ( pDimName, cSubSet ) ;
+ENDIF;
+
+vPathFile = '..\DataSources\Exports\debug.csv';
+
+ASCIIOutput (vPathfile, pDimName, cSubset, pMDX );
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#OldCode
+#SubSetCreateByMDX ( pSubSet, pMDX);
+#SubsetAliasSet( pDimName, pSubset, pAlias );
+
+
+#NewCode
+SubSetCreateByMDX ( cSubSet, pMDX);
+SubsetAliasSet( pDimName, cSubset, pAlias );
+#endregion

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"PortfolioAssumptionsDetail",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Portfolio Assumptions] )}, 0)}"
+}

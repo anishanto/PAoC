@@ -1,0 +1,66 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Versions_PM",
+	"Elements":
+	[
+		{
+			"Name":"All Versions",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Actuals",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Budget",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Forecast",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"PriorForecast",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Versions",
+			"ComponentName":"Actuals",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Versions",
+			"ComponentName":"Budget",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Versions",
+			"ComponentName":"Forecast",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Versions",
+			"ComponentName":"PriorForecast",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Versions_PM.subsets/tp_{0ca7f1a2-0695-4e1b-b585-de68315d6ce5}.json",
+		"Versions_PM.subsets/tp_{4d22248f-d9ff-4388-82ce-47ad52c3a0bb}.json",
+		"Versions_PM.subsets/tp_{7fc51930-4eae-4a12-9808-482a99ae2919}.json",
+		"Versions_PM.subsets/tp_{8c2fd890-945f-4173-9480-bea30c82538c}.json",
+		"Versions_PM.subsets/VE-Opex Detail Cube-ZeroOut.json",
+		"Versions_PM.subsets/VE-Opex Plan  Cube-PlanZero.json",
+		"Versions_PM.subsets/VE-ZeroProcessDetailFX - Post.json",
+		"Versions_PM.subsets/VersionsCopySource.json",
+		"Versions_PM.subsets/VersionsCopyTarget.json",
+		"Versions_PM.subsets/VersionsLoadFileFM.json",
+		"Versions_PM.subsets/VersionsLoadFileLeases.json",
+		"Versions_PM.subsets/VersionsPMDetail.json",
+		"Versions_PM.subsets/ViewZeroOutFlag.json"
+	]
+}

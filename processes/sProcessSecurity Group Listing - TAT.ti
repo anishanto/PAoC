@@ -1,0 +1,97 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# This process will dump the list of Clients and their Group(s) to the specified text file
+
+
+vGlobal = 'Global Control';
+vTime = TIMST ( NOW, '\Y\m\d\h');
+
+vClient = CellGetS(vGlobal, 'Client Name', 'String');
+vServer = CellGetS(vGlobal, 'Client Server Name', 'String');
+vSecurity = CellGetS(vGlobal, 'Security Folder', 'String');
+vEnv = CellGetS(vGlobal, 'TAT Environment', 'String');
+vSecurityGroup = '..\..\AdminServer\security\Groups\';
+
+vOutput = vSecurity | vClient | 'Security.csv';
+vOutputGroup = vSecurityGroup | vClient | 'GrpSecurity.csv';
+
+
+ASCIIOUTPUT ( vOutputGroup, 'SERVER', 'ACCOUNT', 'GROUP', 'TimeStamp', 'Environment') ;
+vClientDim = '}Clients' ;
+vGroupDim = '}Groups'  ;
+vClientGrpCube = '}ClientGroups' ;
+vNumClients = DIMSIZ ( vClientDim ) ;
+vNumGroups = DIMSIZ ( vGroupDim ) ;
+
+##Load all groups
+
+K=1;
+WHILE ( K <= vNumGroups ) ;
+               vGroup = DIMNM ( vGroupDim, k )  ;
+               vCurGroup = ATTRS ( vGroupDim, vGroup , '}TM1_DefaultDisplayValue' ) ;
+IF ( vCurGroup @='' ) ;
+                       vCurGroup = vGroup ;
+               ENDIF;
+
+ IF ( SCAN('Everyone', vCurGroup) = 0 ) ;
+ASCIIOUTPUT ( vOutputGroup, vServer, vClient, vCurGroup, vTime, vEnv) ;
+EndIF;
+
+K=K+1;
+END;
+
+
+##  Load only logged in users
+i = 1;
+k = 1 ;
+
+ASCIIOUTPUT ( vOutput, 'SERVER', 'ACCOUNT', 'CLIENT', 'GROUP', 'TimeStamp', 'Environment') ;
+WHILE ( i <= vNumClients );
+         vCurElement = DIMNM ( vClientDim, i ) ;
+          IF ( vCurElement @<> '' ) ;
+         vCurClient = ATTRS ( vClientDim, vCurElement , '}TM1_DefaultDisplayValue' ) ;
+          IF ( vCurClient @='' ) ;
+                  vCurClient = vCurElement ;
+          ENDIF;
+          k = 1 ;
+          WHILE ( K <= vNumGroups ) ;
+               vGroup = DIMNM ( vGroupDim, k )  ;
+               vCurGroup = ATTRS ( vGroupDim, vGroup , '}TM1_DefaultDisplayValue' ) ;
+               IF ( vCurGroup @='' ) ;
+                       vCurGroup = vGroup ;
+               ENDIF;
+               vMember = CELLGETS ( vClientGrpCube, vCurClient, vCurGroup ) ;
+               IF ( vMember @<> '' & SCAN('Everyone', vCurGroup) = 0 ) ;
+                    sStringWithQuotes  = vCurElement;
+                    vLocNext = Scan ( Char(34), sStringWithQuotes  );
+                    While ( vLocNext > 0 );
+                       sStringWithQuotes  = Subst ( sStringWithQuotes , 1, vLocNext - 1) | Char(39) | Subst ( sStringWithQuotes , vLocNext+1, Long (sStringWithQuotes ) - vLocNext );
+                       vLocNext = Scan ( Char(34), sStringWithQuotes  );
+                    End;
+                    ASCIIOUTPUT ( vOutput, vServer, vClient, vCurClient, vCurGroup, vTime, vEnv, sStringWithQuotes) ;
+
+               ENDIF ; 
+               k = k + 1; 
+           END;
+           ENDIF;
+          i = i + 1 ;  
+END;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

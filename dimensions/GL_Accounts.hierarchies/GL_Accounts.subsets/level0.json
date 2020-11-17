@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"level0",
+	"Expression":"EXCEPT({TM1SORT(  {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[GL_Accounts].[SH1]}, ALL, RECURSIVE )}, 0)}, ASC)},{[GL_Accounts].[Total GL],[GL_Accounts].[NA]})"
+}

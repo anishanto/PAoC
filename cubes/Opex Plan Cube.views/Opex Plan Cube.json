@@ -1,0 +1,106 @@
+{
+	"@type":"NativeView",
+	"Name":"Opex Plan Cube",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthsWithTotal')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail - AltName')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Company')/Hierarchies('Company')"
+				},
+				"Expression":"[Company].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')"
+				},
+				"Expression":"TM1SubsetAll([BusUnits])"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('All GL Account CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Plan Measures')/Hierarchies('Plan Measures')/Subsets('PlanMeasuresValues')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Plan Measures')/Hierarchies('Plan Measures')/Elements('Adjustment')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')"
+				},
+				"Expression":"[Currency_PM].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

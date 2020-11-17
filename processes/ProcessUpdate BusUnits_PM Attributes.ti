@@ -1,0 +1,100 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####################################################
+# This process updates the BusUnits_PM attributes
+#####################################################
+
+###Chris Malone New Code 111716
+#Create Constants
+cClientName = CELLGETS('Global Control', 'Client Name', 'String');
+ 
+
+
+RowCount= 0;
+CubeSetLogChanges(pCubeName, 0);
+
+
+ViewNameTransfer =  'VE-'  | pCubeName | '-Get' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (pCubeName, ViewNameTransfer);
+SubsetDestroy (pDimName, ViewNameTransfer);
+SubsetDestroy (pDimName2, ViewNameTransfer);
+
+
+#Create BusUnits
+sMDX = '{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SORT( {TM1SUBSETALL( [BusUnits] )}, ASC)}, 0)}, { [BusUnits].[NA] }) }';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+# create attributes
+#sMDX= '{TM1SORT( {TM1SUBSETALL( [}ElementAttributes_BusUnits] )}, ASC)}';
+sMDX= '{ EXCEPT( {TM1SORT( {TM1SUBSETALL( [}ElementAttributes_BusUnits] )}, ASC)}, { [}ElementAttributes_BusUnits].[CodeName], [}ElementAttributes_BusUnits].[Company], [}ElementAttributes_BusUnits].[DisplayName], [}ElementAttributes_BusUnits].[DisplayNameCustom], [}ElementAttributes_BusUnits].[NameCode] }) }';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+ViewCreate( pCubeName, ViewNameTransfer);
+ViewSubsetAssign (pCubeName, ViewNameTransfer, pDimName, ViewNameTransfer);
+ViewSubsetAssign (pCubeName, ViewNameTransfer, pDimName2, ViewNameTransfer);
+ViewRowDimensionSet (pCubeName, ViewNameTransfer, pDimName, 1);
+ViewColumnDimensionSet (pCubeName, ViewNameTransfer, pDimName2,1);
+
+ViewExtractSkipCalcsSet(pCubeName, ViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(pCubeName, ViewNameTransfer, 0);
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vCurTimestamp = NOW() ;
+vCurDate = TIMST (vCurTimestamp, '\Y\m\d')  ;
+
+
+IF ( DIMIX ( pDimNameTo, vDim) > 0);
+ATTRPUTS(vValue, pDimNameTo, vDim, vAttr );
+ATTRPUTS(vCurDate, pDimNameTo, vDim, 'LastUpdate');
+ENDIF;
+
+
+vPath = '..\DataSources\Exports\' | cClientName |  'BUPMUD.CSV';
+
+IF(1=1);
+IF( RowCount = 0 );
+ASCIIOutput(vPath,'DimName', 'DimName2', 'Element', 'Attribute', 'Attribute txt' , 'Date' );
+RowCount = RowCount + 1;
+ENDIF;
+    
+    ASCIIOutput(vPath,pDimName, pDimname2, vDim,  vattr, vValue, vCurDate);
+ENDIF;
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeSetLogChanges(pCubeName, 1);
+
+ViewNameTransfer =  'VE-'  | pCubeName | '-Get' ;
+
+IF(1=1);
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (pCubeName, ViewNameTransfer);
+SubsetDestroy (pDimName, ViewNameTransfer);
+SubsetDestroy (pDimName2, ViewNameTransfer);
+ENDIF;
+
+#endregion

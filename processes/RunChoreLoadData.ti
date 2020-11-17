@@ -1,0 +1,61 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+### This is a WRAPPER process for chore ChoreLoadData
+### The purpose of this process is to stop the ChoreLoadData from running if the TAT Environment is not PRD.
+### There exists the possibility of running it manually if the TAT Environrment is not PRD, by assigning 1 to the 'pTester' parameter.
+
+
+## 1)  Evaluates TAT Environment and decides to continue/quit.
+
+cCube = 'Global Control';
+cGlobalControlItem1 = 'TAT Environment';
+cGlobalControlMeasure = 'String';
+cTATEnvironment = CellGetS(cCube,cGlobalControlItem1,cGlobalControlMeasure);
+cClientCorrigoName = IF (DIMIX('Global Control Items','Client Corrigo Name')<>0,CellGetS(cCube,'Client Corrigo Name',cGlobalControlMeasure),'');
+
+IF (cTATEnvironment @<>'PRD' & pTester<>1);
+	ChoreQuit;
+ENDIF;
+
+## 2) Runs the rest of the processes
+
+cGlobalControlItem2 = 'Core Team Email';
+pGlobalControlEmail = CellGetS(cCube,cGlobalControlItem2,cGlobalControlMeasure);
+
+# Updates Dimensions
+ExecuteProcess('update_dim_company_sql','pDebug',0,'pEmailFile','Yes','pEmail',pGlobalControlEmail);
+ExecuteProcess('update_dim_bus_units_sql','pDebug',0,'pEmail',pGlobalControlEmail,'pEmailFile','Yes');
+ExecuteProcess('update_dim_accounts_sql','pDebug',0,'pEmailFile','Yes','pEmail',pGlobalControlEmail,'pDebugExport',1);
+ExecuteProcess('update_dim_sub_accounts_sql','pDebug',0,'pEmailFile','Yes','pEmail',pGlobalControlEmail);
+ExecuteProcess('update_dim_subledgr_sql','pDebug',0,'pEmail',pGlobalControlEmail,'pEmailFile','Yes');
+ExecuteProcess('update_dim_vendor_sql','pEmail',pGlobalControlEmail,'bDebug',0,'pCompany','All Companies');
+
+# Updates Actual Data
+ExecuteProcess('ProcessLoadData_Wrapper','pVersion','Actuals','pLedger','AA','pCompany','All Companies','pCurrency','Local');
+
+# Updates Corrigo Data
+IF(cClientCorrigoName@<>'');
+	ExecuteProcess('ProcessLoadCorrigo - Wrapper');
+ENDIF;
+
+# Updates BU Properties
+ExecuteProcess('ProcessLoadPHData','pEmail',pGlobalControlEmail,'bDebug',0);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

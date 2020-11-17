@@ -1,0 +1,69 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# This process will dump the list of Clients and their Group(s) to the specified text file
+
+
+
+
+####Chris Malone New Code 111617 for client informatoin
+cServer = CELLGETS('Global Control', 'Client Server Name', 'String');
+cClientName = CELLGETS('Global Control', 'Client Name', 'String');
+
+
+
+vOutput = pPath | cClientName | pFileName ;
+vServer = cServer ;
+
+vClientDim = '}Clients' ;
+vGroupDim = '}Groups'  ;
+vClientGrpCube = '}ClientGroups' ;
+vNumClients = DIMSIZ ( vClientDim ) ;
+vNumGroups = DIMSIZ ( vGroupDim ) ;
+
+
+i = 1;
+k = 1 ;
+
+ASCIIOUTPUT ( vOutput, 'SERVER', 'CLIENT', 'GROUP') ;
+WHILE ( i <= vNumClients );
+         vCurElement = DIMNM ( vClientDim, i ) ;
+          IF ( vCurElement @<> '' ) ;
+         vCurClient = ATTRS ( vClientDim, vCurElement , '}TM1_DefaultDisplayValue' ) ;
+          IF ( vCurClient @='' ) ;
+                  vCurClient = vCurElement ;
+          ENDIF;
+          k = 1 ;
+          WHILE ( K <= vNumGroups ) ;
+               vGroup = DIMNM ( vGroupDim, k )  ;
+               vCurGroup = ATTRS ( vGroupDim, vGroup , '}TM1_DefaultDisplayValue' ) ;
+               IF ( vCurGroup @='' ) ;
+                       vCurGroup = vGroup ;
+               ENDIF;
+               vMember = CELLGETS ( vClientGrpCube, vCurClient, vCurGroup ) ;
+               IF ( vMember @<> '' ) ;
+                    ASCIIOUTPUT ( vOutput, vServer, vCurClient, vCurGroup) ;
+               ENDIF ; 
+               k = k + 1; 
+           END;
+           ENDIF;
+          i = i + 1 ;  
+END;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

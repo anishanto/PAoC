@@ -1,0 +1,161 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+vDim='Tenure ID';
+TenureDim='TenureID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+LeasesCube='Leases Cube';
+
+pCurrency='Local';
+pVersion='Actuals';
+pAttr='Attribute';
+
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmFailureMessage = 'Failure' ;
+CellPutS('',cubMessages,cProcess,elmfailureMessage);
+
+#########################################
+
+
+# create Source view to copy from
+CubeName=LeasesCube;
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+# Delete view prior to creating the source
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Currency_PM', ViewNameSource);
+SubsetDestroy ('Fiscal Month Year', ViewNameSource);
+SubsetDestroy ('Company', ViewNameSource);
+SubsetDestroy ('SubAccounts', ViewNameSource);
+SubsetDestroy ('GL_Accounts', ViewNameSource);
+SubsetDestroy ('BusUnits', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Leases Measures', ViewNameSource);
+
+# create Versions_PM
+SubsetCreate ('Versions_PM', ViewNameSource);
+SubsetElementInsert ( 'Versions_PM',  ViewNameSource, pVersion, 1);
+
+#Create currency
+SubsetCreate ('Currency_PM', ViewNameSource);
+SubsetElementInsert ( 'Currency_PM',  ViewNameSource, 'Local', 1);
+
+#Create Company
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create fiscal months
+SubsetCreate ('Fiscal Month Year', ViewNameSource);
+SubsetElementInsert ( 'Fiscal Month Year',  ViewNameSource, 'Attribute', 1);
+
+#Create SubAccounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create GL_Accounts
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create BusUnits_Leases
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Tenure
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Lease Measures
+SubsetCreate ('Leases Measures', ViewNameSource);
+SubsetElementInsert ( 'Leases Measures',  ViewNameSource, 'Cost Amount', 1);
+
+
+# Create the Source view
+ViewCreate( CubeName, ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Versions_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Company', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Currency_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Fiscal Month Year', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Tenure ID', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'BusUnits', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'SubAccounts', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'GL_Accounts', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Leases Measures', ViewNameSource);
+ViewRowDimensionSet(CubeName, ViewNameSource,  'Versions_PM', 1);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Company', 2);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Currency_PM', 3);
+ViewRowDimensionSet(CubeName, ViewNameSource, 'Fiscal Month Year',4);
+ViewRowDimensionSet(CubeName, ViewNameSource, 'Tenure ID', 5);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'SubAccounts', 6);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'GL_Accounts',7);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'BusUnits', 8);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Leases Measures',9);
+
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameSource, 1);
+
+DatasourceNameForServer = CubeName;
+DatasourceCubeView = ViewNameSource;
+#endregion
+#region Metadata
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+sTenureType=ATTRS(TenureDim,TenureID,'TenureType');
+sParentKey=ATTRS(TenureDim,TenureID,'TenureParentKey');
+sEventType=ATTRS(TenureDim,TenureID,'EventType');
+sLeaseEnd=ATTRS(TenureDim,TenureID,'LeaseEndDate');
+sLeaseStart=ATTRS(TenureDim,TenureID,'LeaseStartDate');
+
+CellPutS(sTenureType,LeasesCube,pVersion,pCurrency,pAttr,Company,SubAccounts,GL_Accounts,BusUnits,TenureID,'TenureType');
+CellPutS(sParentKey,LeasesCube,pVersion,pCurrency,pAttr,Company,SubAccounts,GL_Accounts,BusUnits,TenureID,'TenureParentID');
+CellPutS(sEventType,LeasesCube,pVersion,pCurrency,pAttr,Company,SubAccounts,GL_Accounts,BusUnits,TenureID,'Event Type');
+CellPutS(sLeaseEnd,LeasesCube,pVersion,pCurrency,pAttr,Company,SubAccounts,GL_Accounts,BusUnits,TenureID,'LeaseEndDate');
+CellPutS(sLeaseStart,LeasesCube,pVersion,pCurrency,pAttr,Company,SubAccounts,GL_Accounts,BusUnits,TenureID,'LeaseStartDate');
+
+
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName=LeasesCube;
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Currency_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Month Year', ViewNameTarget);
+SubsetDestroy ('Company', ViewNameTarget);
+SubsetDestroy ('SubAccounts', ViewNameTarget);
+SubsetDestroy ('GL_Accounts', ViewNameTarget);
+SubsetDestroy ('BusUnits', ViewNameTarget);
+SubsetDestroy ('Tenure ID', ViewNameTarget);
+SubsetDestroy ('Leases Measures', ViewNameTarget);
+
+CubeName=LeasesCube;
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Currency_PM', ViewNameSource);
+SubsetDestroy ('Fiscal Month Year', ViewNameSource);
+SubsetDestroy ('Company', ViewNameSource);
+SubsetDestroy ('SubAccounts', ViewNameSource);
+SubsetDestroy ('GL_Accounts', ViewNameSource);
+SubsetDestroy ('BusUnits', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Leases Measures', ViewNameSource);
+
+
+#ExecuteProcess('LeaseCalcs_4Currency','pVersion',pVersion);
+#endregion

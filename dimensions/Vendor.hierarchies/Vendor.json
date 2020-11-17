@@ -1,0 +1,49 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Vendor",
+	"Elements":
+	[
+		{
+			"Name":"SH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"NA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"AHIT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"All Vendor and Other",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"SH1",
+			"ComponentName":"NA",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Vendor.subsets/All Vendors.json",
+		"Vendor.subsets/Default.json",
+		"Vendor.subsets/DimMgmtUnassigned.json",
+		"Vendor.subsets/DrillVendor.json",
+		"Vendor.subsets/InputVendor.json",
+		"Vendor.subsets/level0.json",
+		"Vendor.subsets/TopParentsVendor.json",
+		"Vendor.subsets/Vendor_All.json",
+		"Vendor.subsets/Vendor Expanded.json",
+		"Vendor.subsets/ViewZeroOutFlag.json",
+		"Vendor.subsets/WODrillVendor.json",
+		"Vendor.subsets/WOPlanDrillVendor.json",
+		"Vendor.subsets/zDimMgmt.json",
+		"Vendor.subsets/zDimMmgtUnassigned.json",
+		"Vendor.subsets/zDimParents.json"
+	]
+}

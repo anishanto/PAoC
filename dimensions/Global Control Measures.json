@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Global Control Measures",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Global Control Measures')/Hierarchies('Global Control Measures')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Global Control Measures.hierarchies/Global Control Measures.json"
+	]
+}

@@ -1,0 +1,74 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Cost Category Type",
+	"Elements":
+	[
+		{
+			"Name":"All Cost CategoryType",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"All",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Base Rent",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CAM/Op Ex",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HVAC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Parking",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Utility",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Cost CategoryType",
+			"ComponentName":"All",
+			"Weight":0
+		},
+		{
+			"ParentName":"All Cost CategoryType",
+			"ComponentName":"Base Rent",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost CategoryType",
+			"ComponentName":"CAM/Op Ex",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost CategoryType",
+			"ComponentName":"HVAC",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost CategoryType",
+			"ComponentName":"Parking",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost CategoryType",
+			"ComponentName":"Utility",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Cost Category Type.subsets/CostCategoryTypeDetail.json",
+		"Cost Category Type.subsets/CostCategoryTypeExpanded.json",
+		"Cost Category Type.subsets/Level0.json"
+	]
+}

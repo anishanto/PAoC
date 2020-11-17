@@ -1,0 +1,45 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_budgetregion",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"update_dim_budgetregion.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"}ElementAttributes_Tenure ID",
+		"dataSourceNameForServer":"}ElementAttributes_Tenure ID",
+		"view":"View1"
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"vTenure",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vAttr",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vBUdgetRegion",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"SubAccounts Parents",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 1,2,3,4,5)}, ASC)}"
+}

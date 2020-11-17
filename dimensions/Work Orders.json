@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Work Orders",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Work Orders')/Hierarchies('Work Orders')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Work Orders.hierarchies/Work Orders.json"
+	]
+}

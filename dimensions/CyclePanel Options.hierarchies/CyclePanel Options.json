@@ -1,0 +1,33 @@
+{
+	"@type":"Hierarchy",
+	"Name":"CyclePanel Options",
+	"Elements":
+	[
+		{
+			"Name":"Input",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Analysis",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Full",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Partial",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Review",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"CyclePanel Options.subsets/FullorPartial.json",
+		"CyclePanel Options.subsets/InputorAnalysis.json",
+		"CyclePanel Options.subsets/InputorReview.json"
+	]
+}

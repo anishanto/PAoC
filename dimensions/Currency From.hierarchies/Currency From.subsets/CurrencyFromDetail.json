@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CurrencyFromDetail",
+	"Expression":"{TM1SORTBYINDEX( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency From] )}, 0)}, ASC)}"
+}

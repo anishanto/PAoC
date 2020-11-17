@@ -1,0 +1,12 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+['Actuals','Value'] = S:IF(DB('Opex Plan Cube',!Versions_PM,!Company,!Currency_PM,!Fiscal Months,!Fiscal Years,!SubAccounts,!GL_Accounts,!BusUnits,!Plan Measures)<>0, 'Transaction Detail Drill',CONTINUE);
+['Forecast','Value'] = S:IF(NUMBR(SUBST(!Fiscal Months,2,2))<=DB('Global Control','Actuals Month','Value'),IF(DB('Opex Plan Cube',!Versions_PM,!Company,!Currency_PM,!Fiscal Months,!Fiscal Years,!SubAccounts,!GL_Accounts,!BusUnits,!Plan Measures)<>0, 'Transaction Detail Drill',CONTINUE),CONTINUE);
+
+['Forecast','Actuals to Date'] = S:IF(NUMBR(SUBST(!Fiscal Months,2,2))<=DB('Global Control','Actuals Month','Value')+1,IF(DB('Opex Plan Cube',!Versions_PM,!Company,!Currency_PM,!Fiscal Months,!Fiscal Years,!SubAccounts,!GL_Accounts,!BusUnits,!Plan Measures)<>0, 'Transaction Actuals to Date Detail Drill',CONTINUE),CONTINUE);
+
+[{'Corrigo Closed WO','Corrigo Open WO'},'Local'] = S:IF(DB('Opex Plan Cube',!Versions_PM,!Company,!Currency_PM,!Fiscal Months,!Fiscal Years,!SubAccounts,!GL_Accounts,!BusUnits,!Plan Measures)<>0, ' Opex Plan to Work Order Detail',CONTINUE);
+

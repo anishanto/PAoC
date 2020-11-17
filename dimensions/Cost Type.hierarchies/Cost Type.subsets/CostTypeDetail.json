@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CostTypeDetail",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Cost Type] )}, 0)}"
+}

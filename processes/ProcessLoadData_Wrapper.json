@@ -1,0 +1,39 @@
+{
+	"@type":"Process",
+	"Name":"ProcessLoadData_Wrapper",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessLoadData_Wrapper.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pVersion",
+			"Prompt":"",
+			"Value":"Actuals",
+			"Type":"String"
+		},
+		{
+			"Name":"pLedger",
+			"Prompt":"",
+			"Value":"AA",
+			"Type":"String"
+		},
+		{
+			"Name":"pCompany",
+			"Prompt":"",
+			"Value":"All Companies",
+			"Type":"String"
+		},
+		{
+			"Name":"pCurrency",
+			"Prompt":"",
+			"Value":"Local",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

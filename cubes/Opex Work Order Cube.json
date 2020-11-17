@@ -1,0 +1,57 @@
+{
+	"@type":"Cube",
+	"Name":"Opex Work Order Cube",
+	"Rules@Code.link":"Opex Work Order Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('Currency')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Months')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('SubAccounts')"
+		},
+		{
+			"@id":"Dimensions('GL_Accounts')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')"
+		},
+		{
+			"@id":"Dimensions('Subledger')"
+		},
+		{
+			"@id":"Dimensions('Vendor')"
+		},
+		{
+			"@id":"Dimensions('Work Orders')"
+		},
+		{
+			"@id":"Dimensions('AP Status')"
+		},
+		{
+			"@id":"Dimensions('WO Status')"
+		},
+		{
+			"@id":"Dimensions('Corrigo Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Opex Work Order Cube.views/Corrigo WO#.json",
+		"Opex Work Order Cube.views/DrillFromWorkOrder.json",
+		"Opex Work Order Cube.views/Tieout to Opex Detail.json",
+		"Opex Work Order Cube.views/Tieout to Opex Plan.json"
+	]
+}

@@ -1,0 +1,22 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+['Corrigo Closed WO'] = N:
+	IF (!WO Status@='Completed'
+		& !AP Status @<> 'Authorized No Charge'
+		& !AP Status @<> 'Exported'
+		& !AP Status @<> 'None',
+		['Vendor NTE'] + ['Total Spot Purchase Cost'],
+		0);
+
+['Corrigo Open WO'] = N:
+	IF (!WO Status@<>'Completed'
+		& !WO Status@<>'Cancelled'
+		& !AP Status @<> 'Exported',
+		['Vendor NTE'],
+		0);
+
+FEEDERS;
+[{'Total Spot Purchase Cost','Vendor NTE'}]=>['Corrigo Closed WO'],['Corrigo Open WO'];

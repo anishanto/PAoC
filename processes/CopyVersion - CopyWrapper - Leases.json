@@ -1,0 +1,33 @@
+{
+	"@type":"Process",
+	"Name":"CopyVersion - CopyWrapper - Leases",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"CopyVersion - CopyWrapper - Leases.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pInputorAnalysis",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pSourceVersion",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pTargetVersion",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

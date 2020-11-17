@@ -1,0 +1,16 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Epic 2.4
+AttrInsert( 'GL_Accounts', '', 'Global Assumption GLA category', 'S' );
+
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Epic 2.4
+CellPutN(SubsetGetSize( '}ElementAttributes_GL_Accounts', 'zDimMgmt'),'}ElementAttributes_}ElementAttributes_GL_Accounts', 'Global Assumption GLA category', 'SortAttr' );
+
+#endregion

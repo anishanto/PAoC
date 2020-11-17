@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Plan MeasuresMaint",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Plan Measures] )}, 0)}, ASC)}+ { [Plan Measures] . [Total Amount]}"
+}

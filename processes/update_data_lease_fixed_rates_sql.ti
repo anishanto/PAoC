@@ -1,0 +1,125 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientIDOneView = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+vRecNo = 1;
+vdim = 'Vendor';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+
+####################################Define Datasource Tab#####################################
+sActionStatus ='''Unactioned''';
+sEventType='''Rent Review (Fixed)''';
+sEventType_Other='''Rent Review (Other)''';
+sSQL='SELECT * FROM [DW_All_Clients].[OVLA].[vw_OVLA_Budget_APAC_Events] WHERE OneViewClientID = ' | sClientIDOneView | ' and ActionStatus = ' | sActionStatus | '  and  (EventType = ' | sEventType | ' or EventType = ' | sEventType_Other | ' ) ' ;
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);
+ASCIIOUTPUT('..\logs\System\DebugLeaseFixedRates.sql.txt', sSQL);
+ENDIF;
+#WITH (READUNCOMMITTED)
+
+CUBESETLOGCHANGES('Leases Fixed Rates', 0);
+
+CubeName = 'Leases Fixed Rates';
+ViewNameSource = 'VE-' | CubeName | '-zSource' ;
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+vCur = 'Local';
+RC=0;
+
+pTargetVersion = 'Actuals';
+
+# delete view prior to creation
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+
+# Create views and subsets to Zero out
+SubsetCreate ('Versions_PM', ViewNameTarget);
+SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, pTargetVersion, 1);
+
+ViewCreate(CubeName, ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Event Name', 'level0');
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Tenure ID', 'level0');
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Fixed Rates Measures', 'level0');
+
+ViewRowDimensionSet(CubeName, ViewNameTarget,  'Versions_PM', 1);
+ViewRowDimensionSet (CubeName, ViewNameTarget, 'Event Name', 2);
+ViewRowDimensionSet (CubeName, ViewNameTarget, 'Tenure ID', 3);
+ViewRowDimensionSet(CubeName, ViewNameTarget, 'Fixed Rates Measures', 4);
+
+# Zero out the Target values
+VIEWZEROOUT(CubeName, ViewNameTarget);
+
+
+
+ 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDebugFile_Error = cDebugFile | 'Error.Data.debug';
+
+IF (DIMIX ('Tenure ID',TenureID)<>0);
+
+	IF (DIMIX('Event Name',EventID)<>0);
+
+		# Filter date string and build date for cube#
+		#sEventDateMonth = SUBST(EventDate,6,2);
+		#sEventDateDay = SUBST(EventDate,9,2);
+		#sEventDateYear = SUBST(EventDate,1,4);
+		#sEventDate = sEventDateMonth | '/' | sEventDateDay | '/' | sEventDateYear;
+		seventDAte=SubSt(EventDate, 1, 10);
+		sElement= EventID;
+	
+		CellPutS(sElement,CubeName,pTargetVersion,sElement,TenureID, 'Event Name');
+		CellPutS(ActionStatus,CubeName,pTargetVersion,sElement,TenureID,'Status');
+		CellPutS(sEventDate,CubeName,pTargetVersion,sElement,TenureID,'Event Date');
+		CellPutS(EventNotes,CubeName,pTargetVersion,sElement,TenureID,'Event Notes');	
+				
+	ENDIF;
+
+	sMessage= TenureID|' is not valid.';
+	AsciiOutput( sDebugFile_Error, sMessage,'Tenure does not exist in the model.');
+
+ENDIF;
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CUBESETLOGCHANGES(CubeName, 1);
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+
+
+
+
+
+
+#endregion

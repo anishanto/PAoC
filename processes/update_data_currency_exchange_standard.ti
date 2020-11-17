@@ -1,0 +1,275 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+###This Process will create the company dimension from file and load standard attributes CM111916
+
+######################################################Constants
+cCube = 'Currency Exchange Cube';
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cFileName = 'FX_Rates_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cDimension = 'Company';
+cDimension1 = 'Currency';
+cDimension2 = 'Currency From';
+cDimension3 = 'Currency To';
+cDimension4 = 'Fiscal Years';
+cDimensionParent = 'All Companies';
+cDimension1Parent = 'All Currency';
+cDimension2Parent = 'All Currency';
+cDimension3Parent = 'All Currency';
+cDimension4Parent = 'All Fiscal Years';
+
+nRecordProcessedCount = 0;
+nRecordPostedCount = 0;
+
+
+
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+   #Log Variables, Constants and Strings
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            cFileName                   : '| cFileName);
+   AsciiOutput( sDebugFile, '            sFullPath                     : '| sFullPath);
+   AsciiOutput( sDebugFile, '            cCube                         : '| cCube);
+   AsciiOutput( sDebugFile, '            pCurrencyType            : '| vCurrencyType);
+   AsciiOutput( sDebugFile, '            pMeasure                    : '| pMeasure);
+
+EndIf;
+
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check to make sure file path exists
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+
+##############################################################Check if Cube Constant Exists
+   IF( Trim( cCube ) @=' ');
+     nErrors = 1;
+     sMessage = 'No Cube named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+
+##############################################################Check if Dimension Element Constant Exists
+  
+
+   IF( Trim( pMeasure ) @=' ');
+     nErrors = 1;
+     sMessage = 'Measure Parameter Empty Please.  Please enter a Measure.';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+
+#### Assign DataSource 
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ ##########################IF Elements exist in the data load file that do not exist in the dimension load file - add the elements under a review parent within the dimension - Chris to discuss with  Suresh 112516
+##########################Adding elements from currency from and currency to to the currency element. CM 122716
+ 
+
+IF( pDebug <= 1 );
+   
+ 
+   DIMENSIONELEMENTINSERT(cDimension,'',vCompany,'n');
+   DIMENSIONELEMENTINSERT(cDimension1,'',vCurrencyFrom ,'n');
+   DIMENSIONELEMENTINSERT(cDimension2,'',vCurrencyFrom ,'n');
+   DIMENSIONELEMENTINSERT(cDimension1,'',vCurrencyTo ,'n');
+   DIMENSIONELEMENTINSERT(cDimension3,'',vCurrencyTo ,'n');
+   DIMENSIONELEMENTINSERT(cDimension4,'',vYear,'n'); 
+    
+
+   DIMENSIONELEMENTCOMPONENTADD(cDimension, cDimensionParent, vCompany,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension1, cDimension1Parent, vCurrencyFrom,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension1, cDimension1Parent, vCurrencyTo,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension2, cDimension2Parent, vCurrencyFrom,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension3, cDimension3Parent, vCurrencyTo,1); 
+   DIMENSIONELEMENTCOMPONENTADD(cDimension4, cDimension4Parent, vYear,1); 
+
+ 
+ 
+
+
+ENDIF;
+
+If( pDebug >=1 );
+
+   ASCIIOUTPUT (sDebugFile, 'Review Version Elements.','Company',vCompany);
+   ASCIIOUTPUT (sDebugFile, 'Review Year Elements.','Fiscal Year',vYear);
+   ASCIIOUTPUT (sDebugFile, 'Review Currency From Elements.','Currency From', vCurrencyFrom);
+   ASCIIOUTPUT (sDebugFile, 'Review Currency To Elements.','Currency To', vCurrencyTo);
+   ASCIIOUTPUT (sDebugFile, 'Review Currency Type Elements.','Currency Type', vCurrencyType);
+
+ENDIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+######Continue Debug
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Data.debug';
+EndIf;
+
+######Set Record Counter
+nRecordProcessedCount = nRecordProcessedCount +1;
+
+###############Update Data
+
+IF( pDebug <= 1 );
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M01',vYear,pMeasure )=1);
+       CellPutN(nM01, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M01',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M02',vYear,pMeasure )=1);
+       CellPutN(nM02, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M02',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M03',vYear,pMeasure )=1);
+       CellPutN(nM03, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M03',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M04',vYear,pMeasure )=1);
+       CellPutN(nM04, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M04',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M05',vYear,pMeasure )=1);
+       CellPutN(nM05, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M05',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M06',vYear,pMeasure )=1);
+       CellPutN(nM06, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M06',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M07',vYear,pMeasure )=1);
+       CellPutN(nM07, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M07',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M08',vYear,pMeasure )=1);
+       CellPutN(nM08, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M08',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M09',vYear,pMeasure )=1);
+       CellPutN(nM09, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M09',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M10',vYear,pMeasure )=1);
+       CellPutN(nM10, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M10',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M11',vYear,pMeasure )=1);
+       CellPutN(nM11, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M11',vYear,pMeasure );
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M12',vYear,pMeasure )=1);
+       CellPutN(nM12, cCube,vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M12',vYear,pMeasure );
+    EndIf;  
+
+ENDIF;
+
+
+
+IF( pDebug >= 1 );
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M01',vYear,pMeasure,NumberToString( nM01));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M02',vYear,pMeasure,NumberToString( nM02));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M03',vYear,pMeasure,NumberToString( nM03));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M04',vYear,pMeasure,NumberToString( nM04));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M05',vYear,pMeasure,NumberToString( nM05));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M06',vYear,pMeasure,NumberToString( nM06));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M07',vYear,pMeasure,NumberToString( nM07));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M08',vYear,pMeasure,NumberToString( nM08));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M09',vYear,pMeasure,NumberToString( nM09));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M10',vYear,pMeasure,NumberToString( nM10));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M11',vYear,pMeasure,NumberToString( nM11));
+       Asciioutput(sDebugFile, cCube, vVersions,vCompany,vCurrencyType,vCurrencyFrom,vCurrencyTo,'M12',vYear,pMeasure,NumberToString( nM12));
+ 
+
+ENDIF;
+
+
+#Increase Record Count
+  nRecordPostedCount = nRecordPostedCount +1;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+##############Continue Debug for Epilog
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Epilog.debug';
+
+ 
+###############Log Error information
+   IF( nErrors <>0 );
+        AsciiOutput(sDebugFile, 'Errors Occured. Review fiile data and code');
+   EndIf;
+
+################Log Finish Time
+          AsciiOutput ( sDebugFile, 'Record Processed: ' | NumberToString ( nRecordProcessedCount ) );
+          AsciiOutput ( sDebugFile, 'Record Load: ' |  NumberToString ( nRecordPostedCount) );
+          AsciiOutPut ( sDebugFile, 'Process Finished: ' | TimSt ( Now, '\d-\m-\Y \h:\i:\s' ) );
+   EndIf;
+
+################If Errors Occur Quit the process
+     IF( nError <> 0 );
+         ProcessQuit;
+     EndIf;
+#endregion

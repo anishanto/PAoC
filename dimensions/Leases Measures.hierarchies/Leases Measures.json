@@ -1,0 +1,134 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Leases Measures",
+	"Elements":
+	[
+		{
+			"Name":"Restatement",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"FX Variance",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Event Type",
+			"Type":"String"
+		},
+		{
+			"Name":"TenureType",
+			"Type":"String"
+		},
+		{
+			"Name":"TenureParentID",
+			"Type":"String"
+		},
+		{
+			"Name":"CompanyCurrency",
+			"Type":"String"
+		},
+		{
+			"Name":"CostTypeKey",
+			"Type":"String"
+		},
+		{
+			"Name":"OVCP_ID",
+			"Type":"String"
+		},
+		{
+			"Name":"Lease Value",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Month Rate",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Monthly Base Amount",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CostCategoryType",
+			"Type":"String"
+		},
+		{
+			"Name":"CostCurrency",
+			"Type":"String"
+		},
+		{
+			"Name":"CostAmount",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CostStartDate",
+			"Type":"String"
+		},
+		{
+			"Name":"CostEndDate",
+			"Type":"String"
+		},
+		{
+			"Name":"LeaseStartDate",
+			"Type":"String"
+		},
+		{
+			"Name":"LeaseEndDate",
+			"Type":"String"
+		},
+		{
+			"Name":"Frequency",
+			"Type":"String"
+		},
+		{
+			"Name":"ExtensionOption",
+			"Type":"String"
+		},
+		{
+			"Name":"BudgetEndDate",
+			"Type":"String"
+		},
+		{
+			"Name":"ProcessingGroup",
+			"Type":"String"
+		},
+		{
+			"Name":"TermStatus",
+			"Type":"String"
+		},
+		{
+			"Name":"TenureStatus",
+			"Type":"String"
+		},
+		{
+			"Name":"Event Dates",
+			"Type":"String"
+		},
+		{
+			"Name":"Assumption Category",
+			"Type":"String"
+		},
+		{
+			"Name":"Assumption Rate",
+			"Type":"String"
+		},
+		{
+			"Name":"Rate",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Review",
+			"Type":"String"
+		},
+		{
+			"Name":"Commentary",
+			"Type":"String"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Leases Measures.subsets/All Members.json",
+		"Leases Measures.subsets/Conversion Measures.json",
+		"Leases Measures.subsets/LeasesMeasuresValues.json",
+		"Leases Measures.subsets/LeaseValues.json"
+	]
+}

@@ -1,0 +1,99 @@
+{
+	"@type":"Process",
+	"Name":"update_data_delete_history_general",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_data_delete_history_general.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pType",
+			"Prompt":"Detail or Balances",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCube",
+			"Prompt":"Cube Name",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim1",
+			"Prompt":"1st dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim2",
+			"Prompt":"2nd dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim3",
+			"Prompt":"3rd dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim4",
+			"Prompt":"4th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim5",
+			"Prompt":"5th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim6",
+			"Prompt":"6th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim7",
+			"Prompt":"7th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim8",
+			"Prompt":"8th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim9",
+			"Prompt":"9th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim10",
+			"Prompt":"10th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim11",
+			"Prompt":"11th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim12",
+			"Prompt":"12th dimension of the cube",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

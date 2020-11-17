@@ -1,0 +1,56 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vClientType = CellGetS('Global Control', 'Client Model Type', 'String');
+####################################################Setup if Consolidation
+cPlanningLevel='No';
+if (DIMIX('Global Control Items','Consolidated Level Planning')>0);
+  cPlanningLevel=CellGetS('Global Control','Consolidated Level Planning','String');
+endif;
+
+
+AttrPutS('', '}Processes', GetProcessName(), 'Failure');
+
+if (cPlanningLevel@<>'Yes');
+  vMSG = 'Allocation data is not available.';
+  AttrPutS(vMSG, '}Processes', GetProcessName(), 'Failure');
+  CubeSaveData('ElementAttributes_}Processes');
+ 
+else;
+  if (vClientType@='Balances');
+  	ExecuteProcess('update_data_allocate_balance',
+  		 'pVersion', pVersion,
+  		 'pYear',  pYear,
+  		 'pNode', pNode
+  		);
+  else;
+  	ExecuteProcess('update_data_allocate_detail',
+  	 'pVersion', pVersion,
+  	 'pYear',  pYear,
+  	 'pNode', pNode
+  	);
+  	
+  endif;
+endif;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+if (cPlanningLevel@<>'Yes');
+	ProcessQuit();
+endif;
+#endregion

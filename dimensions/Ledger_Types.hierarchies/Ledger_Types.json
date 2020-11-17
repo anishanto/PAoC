@@ -1,0 +1,19 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Ledger_Types",
+	"Elements":
+	[
+		{
+			"Name":"AA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"AZ",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Ledger_Types.subsets/all_ledgers.json"
+	]
+}

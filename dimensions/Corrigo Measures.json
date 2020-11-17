@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Corrigo Measures",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Corrigo Measures')/Hierarchies('Corrigo Measures')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Corrigo Measures.hierarchies/Corrigo Measures.json"
+	]
+}

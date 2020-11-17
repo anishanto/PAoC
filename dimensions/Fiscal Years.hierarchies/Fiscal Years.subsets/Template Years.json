@@ -1,0 +1,19 @@
+{
+	"@type":"Subset",
+	"Name":"Template Years",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2016')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2017')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2018')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2019')"
+		}
+	]
+}

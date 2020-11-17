@@ -1,0 +1,19 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreSecurityRefresh",
+	"StartTime":"2017-05-25T03:00Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P0DT01H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":[],
+			"Process":
+			{
+				"@id":"Processes('SecurityRefresh')"
+			}
+		}
+	]
+}

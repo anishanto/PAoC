@@ -1,0 +1,250 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####Define Variables#####
+sProcessNm = getProcessName();
+sView = 'VE-' | sProcessNm | '-' | pDim;
+sSub = 'VE-' | sProcessNm | '-' | pDim;
+cCube = '}ElementSecurity_' | pDim;
+dGrp = '}Groups';
+
+
+CubeSetLogChanges(cCube, 0);
+
+#####Destroy previous views and subsets#####
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+IF(SubsetExists(pDim, sSub)= 1);
+     SubsetDestroy(pDim, sSub);
+ENDIF;
+
+IF(SubsetExists(dGrp, sSub)= 1);
+     SubsetDestroy(dGrp, sSub);
+ENDIF;
+
+#####Create Dim Subset#####
+sMDX = '{ HIERARCHIZE( {TM1SUBSETALL( [' | pDim | '] )} ) }}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+######Create Groups#####
+sMDX= '{ EXCEPT( {TM1SUBSETALL( ['|dGrp|'] )}, { ['|dGrp|'].[ADMIN], ['|dGrp|'].[SecurityAdmin], ['|dGrp|'].[DataAdmin], ['|dGrp|'].[OperationsAdmin] }) }';
+SubsetCreatebyMDX( sSub, sMDX);
+
+
+#####Create View#####
+ViewCreate(cCube, sView);
+ViewSubsetAssign(cCube, sSub, pDim, sView);
+ViewSubsetAssign(cCube, sSub, dGrp, sView);
+ViewRowDimensionSet(cCube, sSub, pDim, 1);
+ViewColumnDimensionSet(cCube, sSub, dGrp,1);
+
+
+#####Set View Filters#####
+ViewExtractSkipCalcsSet(cCube, sView, 0);
+ViewExtractSkipZeroesSet(cCube, sView, 0);
+
+
+#####Zero Out View####
+VIEWZEROOUT(cCube, sView ) ;
+
+
+#####Set new views as the datasource#####
+    DatasourceNameForServer = cCube;
+    DatasourceCubeView = sView;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####PROCESS SUMMARY#####
+# Allow Write back access for WB & DA groups
+#Allow Read Only access  for RO & ProcR groups
+#Default balance to NONE including the 'Everyone' group
+
+
+#####DEFINE VARIABLES#####
+cCube='Global Control';
+vClient = LOWER(CellGetS(cCube, 'Client Name', 'String'));
+vSecurityGroup1 = LOWER(CellGetS(cCube, 'Security Group 1', 'String'));
+vSecurityGroup2 = LOWER(CellGetS(cCube, 'Security Group 2', 'String'));
+vSecurityGroup3 = LOWER(CellGetS(cCube, 'Security Group 3', 'String'));
+vCorp = LOWER('CorpTM1 PlanOpex');
+eGrp = LOWER(ATTRS(dGrp, vGrp, '}TM1_DefaultDisplayValue'));
+
+
+#####DEFINE PATH#####
+vPath = LOWER(CellGetS(cCube, 'Export Folder', 'String'));
+vFile = vPath | vClient | sProcessNm | '.csv';
+
+
+#####ASSIGN SECURITY#####
+cCube = '}ElementSecurity_' | pDim;
+
+IF(SCAN(vClient, eGrp) <> 0 
+% SCAN(vCorp, eGrp) <> 0
+% SCAN(vSecurityGroup1, eGrp) <> 0
+% SCAN(vSecurityGroup2, eGrp) <> 0
+% SCAN(vSecurityGroup3, eGrp) <> 0);
+
+	vWriteValue = 'WRITE';
+	#Global Control Items
+	if (pDim @= 'Global Control Items');
+		if (ATTRS('Global Control Items',vDimElements,'Unlock')@='');
+			vWriteValue='Read';
+		endif;
+                                IF(SCAN('opexwb_', eGrp) <> 0 % SCAN('opexfa_', eGrp) <> 0 % SCAN('opexec_', eGrp) <> 0);
+                                                ElementSecurityPut('READ',pDim ,vDimElements, vGrp);
+                                endif;
+
+	endif;
+
+	
+	#Assign DA & TA Group Access
+	IF(SCAN('opexda_', eGrp) <> 0 %  SCAN('opexta_', eGrp) <> 0) ;
+		IF(SUBST(pDim,1,1)@='}');
+			IF(ATTRS(pDim,vDimElements,'Security')@='READ');
+				ElementSecurityPut('READ',pDim ,vDimElements, vGrp);
+			ELSE;
+				ElementSecurityPut(vWriteValue,pDim ,vDimElements, vGrp);
+			ENDIF;
+		ENDIF;
+	ENDIF;
+	
+	IF(SUBST(pDim,1,1)@<>'}');
+		IF(SCAN('opexda_', eGrp) <> 0 %  SCAN('opexta_', eGrp) <> 0) ;
+			IF( Ellev(pDim, vDimElements ) = 0 );
+				ElementSecurityPut(vWriteValue,pDim , vDimElements, vGrp);
+			ELSE;
+				ElementSecurityPut('READ',pDim , vDimElements, vGrp);
+			ENDIF;
+		ENDIF;
+	ENDIF;
+	
+	IF(SCAN('opexda_', eGrp) <> 0 %  SCAN('opexta_', eGrp) <> 0) ;
+		IF(pDim@='Currency_PM');
+			ElementSecurityPut('WRITE',pDim ,'Local', vGrp);
+			ElementSecurityPut('READ',pDim , vDimElements, vGrp);
+		ENDIF;
+	ENDIF;
+	
+	
+	#Assign WB & FA & EC Group Access
+	IF(SCAN('opexwb_', eGrp) <> 0 % SCAN('opexfa_', eGrp) <> 0 % SCAN('opexec_', eGrp) <> 0);
+		IF(SUBST(pDim,1,1)@='}');
+			ElementSecurityPut('READ',pDim ,vDimElements, vGrp);
+		ENDIF;	
+	ENDIF;
+	
+	
+	IF(SCAN('opexfa_', eGrp) <> 0);
+		IF(pDim@='BusUnits');
+			ElementSecurityPut('READ',pDim ,vDimElements, vGrp);
+		ENDIF;
+	ENDIF;
+	
+	
+	IF(pDim @='Leases Measures');
+		
+		IF(SCAN('opexwb_', eGrp) <> 0 % SCAN('opexfa_', eGrp) <> 0 % SCAN('opexda_', eGrp) <> 0 % SCAN('opexta_', eGrp) <> 0);
+			IF(ATTRS(pDim,vDimElements,'WB Security')@='WRITE');
+				ElementSecurityPut('WRITE',pDim ,vDimElements, vGrp);
+			ELSE;
+				ElementSecurityPut('READ',pDim ,vDimElements, vGrp);
+			ENDIF;
+		ENDIF;
+		
+		IF(SCAN('opexec_', eGrp) <> 0 );
+			IF(ATTRS(pDim,vDimElements,'EC Security')@='WRITE');
+				ElementSecurityPut('WRITE',pDim ,vDimElements, vGrp);
+			ELSE;
+				ElementSecurityPut('READ',pDim ,vDimElements, vGrp);
+			ENDIF;
+		ENDIF;
+	
+	ENDIF;
+	
+	#####Assign READ Access#####
+	IF(SCAN('opexro_',  eGrp ) <> 0 % SCAN('opexprocr_', eGrp ) <> 0) ;
+		ElementSecurityPut('READ',pDim , vDimElements, vGrp);
+	ENDIF;
+	
+	
+	#####Assign GL_Accounts###########################
+	IF(pDim @='GL_Accounts' % pDim @='Subledger' % pDim @='Currency_PM');
+		#Assign WB & FA & EC Group Access
+		IF(SCAN('opexwb_', eGrp) <> 0 % SCAN('opexfa_', eGrp) <> 0 % SCAN('opexec_', eGrp) <> 0);
+			IF(pDim@='GL_Accounts' & ATTRS('GL_Accounts',vDimElements,'CT_Acct_Only')@<>'Yes');
+				ElementSecurityPut('WRITE',pDim , vDimElements, vGrp);
+			
+			ELSEIF(pDim@='Subledger' & ATTRS('Subledger',vDimElements,'CT_Subledger_Only')@<>'Yes');
+				ElementSecurityPut('WRITE',pDim , vDimElements, vGrp);
+			
+			ELSEIF(pDim@='Currency_PM');
+				ElementSecurityPut('WRITE',pDim ,'Local', vGrp);
+				ElementSecurityPut('READ',pDim , vDimElements, vGrp);
+			
+			ELSE;
+				ElementSecurityPut('READ',pDim , vDimElements, vGrp);
+		ENDIF;
+		
+		ENDIF;
+	ENDIF;
+	
+	IF(pDim @='GL_Accounts');
+	
+		ElementSecurityPut('NONE',pDim , 'NA', vGrp);
+		
+		ElementSecurityPut('NONE',pDim , 'Total GL', vGrp);
+	
+	ENDIF;
+	
+	##############################################
+	#####Assign NONE Access#####
+	ELSE;
+		ElementSecurityPut('NONE',pDim , vDimElements, vGrp);
+ENDIF;
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####Cleanup Views & Subsets#####
+
+CubeSetLogChanges(cCube, 1);
+
+IF(pDebug <> 1);
+cCube = '}ElementSecurity_' | pDim;
+
+IF(1=1);
+
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+IF(SubsetExists(pDim, sSub)= 1);
+     SubsetDestroy(pDim, sSub);
+ENDIF;
+
+IF(SubsetExists(dGrp, sSub)= 1);
+     SubsetDestroy(dGrp, sSub);
+ENDIF;
+ENDIF;
+
+
+
+ENDIF;
+#endregion

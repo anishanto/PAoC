@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"GLA Detail WTotal",
+	"Expression":"{TM1FILTERBYPATTERN( { HIERARCHIZE( {TM1SUBSETALL( [GL_Accounts] )} ) }, \"Total Expense\")} + {TM1SORT( {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [GL_Accounts] )}, \"Total Expense*\")}, ALL, RECURSIVE )}, 0)}, ASC)}"
+}

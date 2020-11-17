@@ -1,0 +1,151 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+vClientName = CellGetS('Global Control', 'Security Group TAT', 'String');
+cCubeName = '}ClientGroups';
+vViewZeroOut = 'VZO-'|GetProcessName();
+cDimClient = '}Clients';
+cDimGroup ='}Groups';
+
+if (vClientName@='');
+	vClientName = 'CorpTM1 PlanOpex';
+endif;
+
+sSQL = 'exec sp_TM1_GetUsers ''%'|vClientName|'%''';
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'ASATATDB';
+DataSourceUserName = 'ibmcloudintegration';
+DataSourcePassword = '1bmc10ud@J11';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);
+	ASCIIOUTPUT('..\logs\System\Security_AssignClients.prolog.txt', vClientName, sSQL);
+ENDIF;
+
+#ViewZeroout Region
+
+#Client Subset
+sMDX = '
+{TM1FILTERBYPATTERN( {TM1SUBSETALL( [}Clients] )}, "CAMID(*")}
+';
+if (SubsetExists(cDimClient, vViewZeroOut)=0);
+	SubsetCreate(cDimClient,vViewZeroOut);
+endif;
+SubsetMDXSet(cDimClient, vViewZeroOut, sMDX);
+SubsetMDXSet(cDimClient, vViewZeroOut, '');
+
+#Group Subset
+sMDX = '
+{TM1SORT( { EXCEPT( {TM1SUBSETALL( [}Groups] )}, { [}Groups].[ADMIN], [}Groups].[SecurityAdmin], [}Groups].[DataAdmin],[}Groups].[OperationsAdmin] }) }, ASC)}
+';
+if (SubsetExists(cDimGroup, vViewZeroOut)=0);
+	SubsetCreate(cDimGroup,vViewZeroOut);
+endif;
+SubsetMDXSet(cDimGroup, vViewZeroOut, sMDX);
+SubsetMDXSet(cDimGroup, vViewZeroOut, '');
+
+
+if (ViewExists(cCubeName, vViewZeroOut)=0);
+	ViewCreate( cCubeName, vViewZeroOut);
+endif;
+ViewSubsetAssign (cCubeName, vViewZeroOut, cDimClient, vViewZeroOut);
+ViewSubsetAssign (cCubeName, vViewZeroOut, cDimGroup, vViewZeroOut);
+
+ViewZeroOut(cCubeName, vViewZeroOut);
+
+vMail = 'cyb.paadmin1$@am.jll.com';
+vClientFullName = ' CAMID("pans:u:'|vMail|'")';
+AddClient(vClientFullName);
+
+vMail = 'cyb.paadmin2$@am.jll.com';
+vClientFullName = ' CAMID("pans:u:'|vMail|'")';
+AddClient(vClientFullName);
+
+vMail = 'cyb.paadmin3$@am.jll.com';
+vClientFullName = ' CAMID("pans:u:'|vMail|'")';
+AddClient(vClientFullName);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(DIMIX('}Groups',vRole)<>0);
+
+	vLowMail = Lower(vMail);
+	vClientFullName = ' CAMID("pans:u:'|vLowMail|'")';
+
+	AddClient(vClientFullName);
+
+ENDIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+IF(DIMIX('}Groups',vRole)<>0);
+
+	vLowMail = Lower(vMail);
+	vClientFullName = ' CAMID("pans:u:'|vLowMail|'")';
+
+
+	vAlias = 'Planning Analytics/'|vDisplayName;
+
+
+
+
+	AssignClientToGroup(vClientFullName, vRole);
+
+	if (DIMIX('}Clients',vAlias)=0);
+		AttrPutS (vAlias, '}Clients', vClientFullName , '}TM1_DefaultDisplayValue');
+		AttrPutS (vDisplayName, '}Clients', vClientFullName , 'Name');
+	endif;
+
+	IF(bDebug=1);
+		ASCIIOUTPUT('..\logs\System\Security_AssignClients.data.txt', vClientFullName, vAlias, vRole);
+	ENDIF;
+
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+ODBCClose(DataSourceNameForServer );
+ViewDestroy (cCubeName, vViewZeroOut);
+SubsetDestroy (cDimClient, vViewZeroOut);
+SubsetDestroy (cDimGroup, vViewZeroOut);
+
+
+vMail = 'cyb.paadmin1$@am.jll.com';
+vDisplayName = 'CYB PAAdmin1$';
+vClientFullName = ' CAMID("pans:u:'|vMail|'")';
+vAlias = 'Planning Analytics/'|vDisplayName;
+AttrPutS (vAlias, '}Clients', vClientFullName , '}TM1_DefaultDisplayValue');
+AssignClientToGroup(vClientFullName, 'ADMIN');
+AttrPutS (vDisplayName, '}Clients', vClientFullName , 'Name');
+
+vMail = 'cyb.paadmin2$@am.jll.com';
+vDisplayName = 'CYB PAAdmin2$';
+vClientFullName = ' CAMID("pans:u:'|vMail|'")';
+vAlias = 'Planning Analytics/'|vDisplayName;
+AttrPutS (vAlias, '}Clients', vClientFullName , '}TM1_DefaultDisplayValue');
+AssignClientToGroup(vClientFullName, 'ADMIN');
+AttrPutS (vDisplayName, '}Clients', vClientFullName , 'Name');
+
+vMail = 'cyb.paadmin3$@am.jll.com';
+vDisplayName = 'CYB PAAdmin3$';
+vClientFullName = ' CAMID("pans:u:'|vMail|'")';
+vAlias = 'Planning Analytics/'|vDisplayName;
+AttrPutS (vAlias, '}Clients', vClientFullName , '}TM1_DefaultDisplayValue');
+AssignClientToGroup(vClientFullName, 'ADMIN');
+AttrPutS (vDisplayName, '}Clients', vClientFullName , 'Name');
+#endregion

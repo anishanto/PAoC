@@ -1,0 +1,33 @@
+{
+	"@type":"Process",
+	"Name":"ProcessUpdateYearsLeases",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessUpdateYearsLeases.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pYearE1",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pYearActual",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pYearDWPushCurrent",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

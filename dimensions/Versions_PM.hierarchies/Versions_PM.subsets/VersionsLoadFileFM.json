@@ -1,0 +1,16 @@
+{
+	"@type":"Subset",
+	"Name":"VersionsLoadFileFM",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Actuals')"
+		},
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Budget')"
+		},
+		{
+			"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Forecast')"
+		}
+	]
+}

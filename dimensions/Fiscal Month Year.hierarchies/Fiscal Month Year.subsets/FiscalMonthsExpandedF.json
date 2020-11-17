@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"FiscalMonthsExpandedF",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Attribute')"
+		}
+	]
+}

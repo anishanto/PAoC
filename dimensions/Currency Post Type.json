@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Currency Post Type",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Currency Post Type')/Hierarchies('Currency Post Type')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Currency Post Type.hierarchies/Currency Post Type.json"
+	]
+}

@@ -1,0 +1,73 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vClientSubAcctType = CellGetN('Global Control','Client SubAcct Type','Value');
+
+aDim = 'BusUnits';
+bDim = 'SubAccounts';
+cDim = 'Subledger';
+
+sSubName = 'Consolidated Report Subset';
+
+SubsetDestroy(aDim, sSubName);
+SubsetDestroy(bDim, sSubName);
+SubsetDestroy(cDim, sSubName);
+
+SubsetCreate(aDim, sSubName);
+SubsetCreate(bDim, sSubName);
+SubsetCreate(cDim, sSubName);
+
+#### BusUnits
+
+sMDX = '{TM1DRILLDOWNMEMBER( {[' | aDim | '].[SH1]}, ALL, RECURSIVE )}';
+SubsetMDXSet(aDim, sSubName, sMDX);
+
+### SubAccounts
+
+IF(vClientSubAcctType=1);
+	IF(pReportingSubAcct@='InputTemplate');
+		sMDX = '{TM1DRILLDOWNMEMBER( {[' | bDim | '].[AHIT]}, ALL, RECURSIVE )}';
+	ELSEIF(SUBST(pReportingSubAcct,1,3)@='SH1');
+		sMDX = '{TM1DRILLDOWNMEMBER( {[' | bDim | '].[SH1]}, ALL, RECURSIVE )}';
+	ELSE;
+		sBase = SUBST(pReportingSubAcct,1,3);
+		sMDX = '{TM1DRILLDOWNMEMBER( {[' | bDim | '].[' | sBase | ']}, ALL, RECURSIVE )}';
+	ENDIF;
+ELSE;
+	sMDX = '{[' | bDim | '].[NA]}';
+ENDIF;
+
+SubsetMDXSet(bDim, sSubName, sMDX);
+
+
+
+#### Subledger
+
+IF(pReportingSubledger@='InputTemplate');
+	sMDX = '{TM1DRILLDOWNMEMBER( {[' | cDim | '].[AHIT]}, ALL, RECURSIVE )}';
+ELSEIF(SUBST(pReportingSubledger,1,3)@='SH1');
+	sMDX = '{TM1DRILLDOWNMEMBER( {[' | cDim | '].[SH1]}, ALL, RECURSIVE )}';
+ELSE;
+	sBase = SUBST(pReportingSubledger,1,3);
+	sMDX = '{TM1DRILLDOWNMEMBER( {[' | cDim | '].[' | sBase | ']}, ALL, RECURSIVE )}';
+ENDIF;
+
+SubsetMDXSet(cDim, sSubName, sMDX);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

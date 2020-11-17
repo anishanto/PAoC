@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CurrencyCodesAscending",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency_Codes] )}, 0)}, ASC)}"
+}

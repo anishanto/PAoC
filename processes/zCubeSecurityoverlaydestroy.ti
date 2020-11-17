@@ -1,0 +1,25 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+SecurityOverlayDestroyGlobalDefault ('}SecurityOverlayGlobal_Opex Plan Cube');
+SecurityOverlayDestroyGlobalDefault ('}SecurityOverlayGlobal_Opex Analysis Cube');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

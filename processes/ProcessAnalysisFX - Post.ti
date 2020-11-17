@@ -1,0 +1,359 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Converts to one currency.  If client requires more then one currency to conversion then this needs to be re-evaluated.
+#TI process will error out if there are no Companies with currency not equal to pCurrencyTo
+#TI process will not zero out the view if the company selected has the same currency as the pCurrencyTo.
+
+
+#######Set Variables##########################
+sProcessNm = getProcessName();
+sView = 'VE-' | sProcessNm;
+sSub = 'VE-' | sProcessNm;
+sViewZero = 'VE-Zero' | sProcessNm;
+sSubZero = 'VE-Zero' | sProcessNm;
+
+#Define File path and name
+vPath = CellGetS('Global Control', 'Export Folder', 'String');
+vFileName = sProcessNm;
+vFile= vPath|vFileName|'.csv';
+
+#Extract
+vExtractCalc = IF( lower(pExtractCalc) @= 'yes', 0, 1);
+TopRow=0;
+
+#Define Cube
+cCube = 'Opex Detail Analysis Cube';
+
+#Define Scale Elements
+vSM = 'No Scale';
+
+#Set Cube Log Changes
+OldCubeLogChanges = CUBEGETLOGCHANGES(cCube);
+CUBESETLOGCHANGES(cCube, 0);
+
+
+####Cleanup Views & Subsets##########################
+#Destroy previous views and subsets
+#Delete View
+IF(ViewExists(cCube, sView)=1);
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+IF(ViewExists(cCube, sViewZero)=1);
+     ViewDestroy(cCube, sViewZero);
+ENDIF;
+
+# Delete Subsets
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1)@<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1)@<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSubZero)=1);
+          SubsetDestroy(vDim, sSubZero);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+
+
+###Create Target View####################
+#Create views and subsets for Zero
+#Create Version
+SubsetCreate ('Versions', sSubZero);
+SubsetElementInsert ('Versions',  sSubZero, pVersion, 1);
+
+#Create BusUnits
+IF(pPost @= 'All Posts');
+    sMDX = '{TM1FILTERBYLEVEL( {FILTER( {TM1SUBSETALL( [BusUnits] )}, [BusUnits].[PostFlag] = "Yes")}, 0)}';
+Else;
+    sMDX ='{TM1FILTERBYLEVEL( {FILTER( {TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [BusUnits] )}, ALL, RECURSIVE )}, [BusUnits].[Post] ="' |  pPost | '")}, 0)}';
+EndIf;
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+#Create BusUnits
+#sDim = 'BusUnits';
+#SubsetCreate (sDim, sSubZero);
+#IF(pPost @= 'All Posts') ;
+#nMax = DIMSIZ(sDim);
+#nCtr = 1;
+#WHILE(nCtr <= nMax);
+#                sEl = DIMNM(sDim, nCtr);
+#vBusUnitPost = ATTRS(sDim,sEL,'Post');
+#vCurFrom = ATTRS('Post',vBusUnitPost,'CurrencyCalc');
+#IF(vCurFrom@<>pCurrencyTo & ELLEV(sDim,sEL)=0);
+#SubsetElementInsert (sDim,  sSubZero,sEl, 1);
+#ENDIF;
+ #               nCtr = nCtr + 1;
+#END;
+
+#ELSE;
+ #   IF(vCurFrom@<>pCurrencyTo);
+  #    sMDX ='{TM1FILTERBYLEVEL( {FILTER( {TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [BusUnits] )}, ALL, RECURSIVE )}, [BusUnits].[Post] ="' |  pPost | '")}, 0)}';
+    #  SubsetCreatebyMDX(sSubZero, sMDX);
+     # EndIf;
+#ENDIF;
+
+#Create currency
+SubsetCreate ('Currency', sSubZero);
+SubsetElementInsert ('Currency',  sSubZero, pCurrencyTo, 1);
+
+#Create Months
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Months] )}, 0)}';
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+# create year
+SubsetCreate ('Fiscal Years', sSubZero);
+SubsetElementInsert ('Fiscal Years',  sSubZero, pYear, 1);
+
+#Create Company
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Company] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+#Create SubLedger
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [SubLedger] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+# create SubAccounts
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [SubAccounts] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+#Create GL_Accounts
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [GL_Accounts] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+#Create Vendor
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Vendor] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+# create Scale Measure
+SubsetCreate ('Scale Measure', sSubZero);
+SubsetElementInsert ('Scale Measure',  sSubZero, vSM , 1);
+
+#Create Measure
+sMDX = '{FILTER( {TM1SUBSETALL( [Detail Measures] )}, [Detail Measures].[CurrencyAdj] = "Yes")}';
+SubsetCreatebyMDX(sSubZero, sMDX);
+
+ViewCreate( cCube, sViewZero);
+
+ViewSubsetAssign(cCube, sViewZero, 'Versions', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'Currency', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'Company', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'SubAccounts', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'GL_Accounts', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'SubLedger', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'Vendor', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'Fiscal Years', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'Fiscal Months', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'BusUnits', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'Scale Measure', sSubZero);
+ViewSubsetAssign(cCube, sViewZero, 'Detail Measures', sSubZero);
+
+ViewTitleDimensionSet(cCube, sViewZero, 'Versions');
+ViewTitleDimensionSet(cCube, sViewZero, 'Currency');
+ViewTitleDimensionSet(cCube, sViewZero, 'Fiscal Years');
+ViewTitleDimensionSet(cCube, sViewZero, 'SubLedger');
+ViewTitleDimensionSet(cCube, sViewZero, 'Vendor');
+ViewTitleDimensionSet(cCube, sViewZero, 'Scale Measure');
+ViewRowDimensionSet(cCube, sViewZero, 'Company', 1);
+ViewRowDimensionSet(cCube, sViewZero, 'BusUnits', 2);
+ViewRowDimensionSet(cCube, sViewZero, 'GL_Accounts', 3);
+ViewRowDimensionSet(cCube, sViewZero, 'SubAccounts', 4);
+ViewRowDimensionSet(cCube, sViewZero, 'Detail Measures', 5);
+ViewColumnDimensionSet(cCube, sViewZero, 'Fiscal Months', 1);
+
+ViewExtractSkipCalcsSet(cCube, sViewZero, 1);
+ViewExtractSkipZeroesSet(cCube, sViewZero, 1);
+ViewSuppressZeroesSet(cCube, sViewZero, 1);
+
+#View Clear - Save Data All MUST run in order to commit the zero-out prior to the data tab running
+ViewZeroOut(cCube,sViewZero);
+savedataall;
+
+####Create Source View##################
+#Create Analysis Cube View and Subsets
+#Create Version
+SubsetCreate ('Versions', sSub);
+SubsetElementInsert ('Versions',  sSub, pVersion, 1);
+
+#Create BusUnits
+IF(pPost @= 'All Posts');
+    sMDX ='{TM1FILTERBYLEVEL( {FILTER( {TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [BusUnits] )}, ALL, RECURSIVE )}, [BusUnits].[PostFlag] ="Yes")}, 0)}';
+ELSE;
+    sMDX ='{TM1FILTERBYLEVEL( {FILTER( {TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [BusUnits] )}, ALL, RECURSIVE )}, [BusUnits].[Post] ="' |  pPost | '")}, 0)}';
+ENDIF;
+SubsetCreatebyMDX(sSub, sMDX);
+
+#Create currency
+sMDX= '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency] )}, 0)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+#Create Months
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Months] )}, 0)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+# create year
+SubsetCreate ('Fiscal Years', sSub);
+SubsetElementInsert ('Fiscal Years',  sSub, pYear, 1);
+
+# create SubAccounts
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Company] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+# create SubAccounts
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [SubAccounts] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+# create SubLedger
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [SubLedger] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+# create Vendor
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Vendor] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+#Create GL_Accounts
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [GL_Accounts] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+# create Scale Measure
+SubsetCreate ('Scale Measure', sSub);
+SubsetElementInsert ('Scale Measure',  sSub, vSM , 1);
+
+#Create Measure
+sMDX = '{FILTER( {TM1SUBSETALL( [Detail Measures] )}, [Detail Measures].[CurrencyAdj] = "Yes")}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+ViewCreate(cCube, sView);
+ViewSubsetAssign(cCube, sView, 'Versions', sSub);
+ViewSubsetAssign(cCube, sView, 'Company', sSub);
+ViewSubsetAssign(cCube, sView, 'Currency', sSub);
+ViewSubsetAssign(cCube, sView, 'Fiscal Months', sSub);
+ViewSubsetAssign(cCube, sView, 'Fiscal Years', sSub);
+ViewSubsetAssign(cCube, sView, 'SubAccounts', sSub);
+ViewSubsetAssign(cCube, sView, 'SubLedger', sSub);
+ViewSubsetAssign(cCube, sView, 'Vendor', sSub);
+ViewSubsetAssign(cCube, sView, 'GL_Accounts', sSub);
+ViewSubsetAssign(cCube, sView, 'BusUnits', sSub);
+ViewSubsetAssign(cCube, sView, 'Scale Measure', sSub);
+ViewSubsetAssign(cCube, sView, 'Detail Measures', sSub);
+
+ViewRowDimensionSet(cCube, sView, 'Versions', 1);
+ViewRowDimensionSet(cCube, sView, 'Company', 2);
+ViewRowDimensionSet(cCube, sView, 'Currency', 3);
+ViewRowDimensionSet(cCube, sView, 'Fiscal Months',4);
+ViewRowDimensionSet(cCube, sView, 'Fiscal Years', 5);
+ViewRowDimensionSet(cCube, sView, 'SubAccounts', 6);
+ViewRowDimensionSet(cCube, sView, 'GL_Accounts', 7);
+ViewRowDimensionSet(cCube, sView, 'BusUnits', 8);
+ViewRowDimensionSet(cCube, sView, 'SubLedger', 9);
+ViewRowDimensionSet(cCube, sView, 'Vendor', 10);
+ViewRowDimensionSet(cCube, sView, 'Scale Measure', 11);
+ViewRowDimensionSet(cCube, sView, 'Analysis Measures',12);
+
+ViewExtractSkipCalcsSet(cCube, sView, 1);
+ViewExtractSkipZeroesSet(cCube, sView, 1);
+ViewSuppressZeroesSet(cCube, sView, 1);
+
+# Set new views as the datasource:
+DatasourceNameForServer = cCube;
+DatasourceCubeView = sView;
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###Define Variables
+vBusUnitPost = ATTRS('BusUnits',BusUnits,'Post');
+vCurType = 'Opex';
+vCM = 'Rate';
+
+
+###If currency from = currency to then multiply original value by 1 else multiply by value in the exchange rate cube
+           vCurFrom = ATTRS('Post',vBusUnitPost,'CurrencyCalc');
+           IF(vCurFrom@<>pCurrencyTo);
+              vRate = CELLGETN('Currency Exchange Post Cube',pVersion,vBusUnitPost,vCurType,vCurFrom,pCurrencyTo,vMon,vYr,vCM);
+              vConValue = (Value * vRate);
+              CellPutN (vConValue,cCube,pVersion,pCurrencyTo,vYr,vMon,vCO, SubAccounts, GL_Accounts,Subledger,BusUnits,Vendor,vSAS,vDM);
+           ELSE;
+              vConValue = (Value);
+              CellPutN (vConValue,cCube,pVersion,pCurrencyTo,vYr,vMon,vCO, SubAccounts, GL_Accounts,Subledger,BusUnits,Vendor,vSAS,vDM);
+           ENDIF;
+
+###Testing output extract
+IF(1 = vExtractCalc);
+     IF(TopRow=0,ASCIIOUTPUT(vFile, 'Original Value', 'Rate', 'Calc Value', 'Version', 'Company', 'Curr From', 'Curr To', 'Month', 'Year', 'GL Account', 'Sub','SBL','Vendor', 'Bus Unit', 'Measure'),0);
+          TopRow = 1;
+
+     ASCIIOUTPUT(vFile, NumberToString(Value), NumberToString(vRate),NumberToString(vConValue), pVersion, vCo, vCurFrom, pCurrencyTo, vMon, vYr, GL_Accounts, SubAccounts, Subledger, Vendor, BusUnits, vDM);
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Set Cube Log Changes
+CUBESETLOGCHANGES(cCube, OldCubeLogChanges);
+CUBESETLOGCHANGES(cCube, 1);
+
+####Clear Views & Subsets##################
+
+IF(1 = vExtractCalc);
+
+#Destroy previous views and subsets
+#Delete View
+IF(ViewExists(cCube, sView)=1);
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+IF(ViewExists(cCube, sViewZero)=1);
+     ViewDestroy(cCube, sViewZero);
+ENDIF;
+
+#Delete Subsets
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1)@<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1)@<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSubZero)=1);
+          SubsetDestroy(vDim, sSubZero);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+ENDIF;
+#endregion

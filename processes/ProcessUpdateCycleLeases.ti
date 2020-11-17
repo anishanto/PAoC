@@ -1,0 +1,208 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+if (pCopyAnaName@='Forecast' % pCopyAnaName@='Budget' % pCopyAnaName@='Actuals');
+	vMSG = 'Process failed: Leases analysis target name is invalid';
+	AttrPutS(vMSG, '}Processes', 'LeaseCalcs_0Base', 'Failure');
+	CubeSaveData('ElementAttributes_}Processes');
+	ItemReject(vMSG);
+endif;
+vCube = 'Global Control';
+dVerPM = 'Versions_PM';
+dVer = 'Versions';
+dFiscalMon = 'Fiscal Months';
+dYear = 'Fiscal Years'; 
+
+pCompany=DimensionElementPrincipalName('Company', pCompany);
+
+sProcessNm = getProcessName();
+sLogFilePath = CellGetS(vCube, 'Export Folder', 'String');
+sLogFile = sLogFilePath | sProcessNm | '.csv';
+
+
+if (pInputTenureID@='InputTemplate');
+	vInputSubsetElement = 'AHIT';
+elseif(pInputTenureID@='TenureKey');
+	vInputSubsetElement = 'AHG';
+else;
+	vInputSubsetElement = SUBST( pInputTenureID, 1, 3 );
+endif;
+
+###################################BUDGET##############################################################
+IF(pType @= 'Budget');
+     vActMonBud = STR((NUMBR(pYear) -1), 4, 0) | '12';
+     vGrp = 'Bud';
+
+     #Update Budget Base Year Attributes
+          CellPutS(pYear, vCube, 'Lease Budget Year', 'String');
+          ExecuteProcess('ProcessUpdateSubsetFiscalMonthYear');
+
+          sBudget=CellGetS('Global Control', 'Lease Load Budget File', 'String');
+
+     IF(pImportBaseLease @= 'Yes' & sBudget@='No');
+          ExecuteProcess('CopyVersion - LeasesCube', 'pSourceVersion', 'Actuals', 'pTargetVersion', pType,'pMonthStart','1','pMonthEnd','12','pMonths','No');
+          ExecuteProcess('CopyVersion - LeasesFixedRates','pSourceVersion','Actuals','pTargetVersion',pType);
+          ExecuteProcess('update_dim_eventname_subset','pVersion','Budget');
+     ENDIF;
+
+     IF(pLeaseCalculation@= 'Yes');
+          ExecuteProcess('LeaseCalcs_0Base', 'pVersion', 'Budget','pNode','AL1');
+          ExecuteProcess('LeaseCalcs_4Currency','pVersion','Budget');
+     ENDIF;
+
+     IF(pCopyPlan @= 'Yes');
+          ExecuteProcess('CopyVersion - LeasesCube', 'pSourceVersion', pType, 'pTargetVersion', 'Forecast','pMonthStart','1','pMonthEnd','12','pMonths','Yes');
+     ENDIF;
+
+     IF(pCopyAnalysis @<> 'No' &  (pCopyAnaName @<> '' & pCopyAnaName @<> 'Actuals'));
+          vCurrentYear = CellGetS(vCube, 'Lease Budget Year', 'String');
+          vActFP = ATTRS(dVerPM, pType, 'ActualFiscalPeriod_Leases');
+          vCopyAnalysis = DimensionElementPrincipalName('Indicator_Leases', pCopyAnalysis );
+          CellPutS(vCopyAnalysis, vCube, 'Lease Currency Filter', 'String');
+          ExecuteProcess('CopyVersion - Leases to Leases Analysis', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+
+	#Update Versions Attributes
+         	AttrPutS(vActFP, dVer, pCopyAnaName, 'ActualFiscalPeriod_Leases');
+         	 AttrPutS(pYear, dVer, pCopyAnaName, 'CurrentFiscalYr_Leases');
+					AttrPutS(vGrp, dVer, pCopyAnaName, 'ForecastGrp');
+     ENDIF;
+
+
+     IF(pCopyAnalysisArchive @= 'Yes' & (pCopyAnaName @<> '' & pCopyAnaName @<> 'Actuals'));
+          vCurrentYear = CellGetS(vCube, 'Lease Budget Year', 'String');
+          ExecuteProcess('CopyVersion - LeasesAnalysisCube', 'pCompany',pCompany,'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName,'pSourceVersion', pCopyAnaNameFrom);
+     ENDIF;
+
+
+     CellPutS(pInputGLA, vCube, 'Lease Bud Input GLA Subset', 'String');
+     CellPutS(pInputSubAcct, vCube, 'Lease Bud Input SubAcct Subset', 'String');
+     CellPutS(pInputTenureID, vCube, 'Lease Bud Input TenureID Subset', 'String');
+
+     vTenureMDX = '{TM1DRILLDOWNMEMBER( {[Tenure ID].['|vInputSubsetElement|']}, ALL, RECURSIVE )}';
+     SubsetMDXSet( 'Tenure ID', 'Lease Input Budget Subset', vTenureMDX );
+     
+     AttrPutS(pName, dVerPM, pType, 'AltName_Leases');
+     AttrPutS(vActMonBud, dVerPM, pType, 'ActualFiscalPeriod_Leases');
+     AttrPutS(pYear, dVerPM, pType, 'CurrentFiscalYr_Leases');
+
+ENDIF;
+
+###################################FORECAST##############################################################
+IF(pType @= 'Forecast');
+     vMon = DimensionElementPrincipalName(dFiscalMon, pActMonth);
+     vActMon = pYear |  SUBST(vMon, 2, 2);
+     vGrp = 'Fcst';
+
+     #Update Forecast Base Year Attributes
+     CellPutS(pYear, vCube, 'Lease Forecast Year', 'String');
+     ExecuteProcess('ProcessUpdateSubsetFiscalMonthYear');
+
+     sForecast=CellGetS('Global Control', 'Lease Load Forecast File', 'String');
+
+     IF(pImportBaseLease @= 'Yes' & sForecast@='No');
+          ExecuteProcess('CopyVersion - LeasesCube', 'pSourceVersion', 'Actuals', 'pTargetVersion', pType,'pMonthStart','1','pMonthEnd','12','pMonths','No');
+          ExecuteProcess('CopyVersion - LeasesFixedRates','pSourceVersion','Actuals','pTargetVersion',pType);
+          ExecuteProcess('update_dim_eventname_subset','pVersion','Forecast');
+     ENDIF;
+
+     IF(pLeaseCalculation@= 'Yes');
+          ExecuteProcess('LeaseCalcs_0Base', 'pVersion', 'Forecast','pNode','AL1');
+          ExecuteProcess('LeaseCalcs_4Currency','pVersion','Forecast');
+     ENDIF;
+
+     IF(pCopyPlan @= 'Yes');
+          ExecuteProcess('CopyVersion - LeasesCube', 'pSourceVersion', pType, 'pTargetVersion', 'PriorForecast','pMonthStart','1','pMonthEnd','12','pMonths','Yes');
+     ENDIF;
+
+
+          IF(pCopyAnalysis @<> 'No' & (pCopyAnaName @<> '' & pCopyAnaName @<> 'Actuals'));
+          vCurrentYear = CellGetS(vCube, 'Lease Forecast Year', 'String');
+          vActFP = ATTRS(dVerPM, pType, 'ActualFiscalPeriod_Leases');
+          vCopyAnalysis = DimensionElementPrincipalName('Indicator_Leases', pCopyAnalysis );
+          CellPutS(vCopyAnalysis, vCube, 'Lease Currency Filter', 'String');
+          ExecuteProcess('CopyVersion - Leases to Leases Analysis', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+
+         	 #Update Versions Attributes
+     	  AttrPutS(vActFP, dVer, pCopyAnaName, 'ActualFiscalPeriod_Leases');
+        	 AttrPutS(vCurrentYear, dVer, pCopyAnaName, 'CurrentFiscalYr_Leases');
+        	 AttrPutS(vGrp, dVer, pCopyAnaName, 'ForecastGrp');
+     ENDIF;
+
+     IF(pCopyAnalysisArchive @= 'Yes' & (pCopyAnaName @<> '' & pCopyAnaName @<> 'Actuals'));
+          vCurrentYear = CellGetS(vCube, 'Lease Forecast Year', 'String');
+          ExecuteProcess('CopyVersion - LeasesAnalysisCube', 'pCompany',pCompany,'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName,'pSourceVersion',pCopyAnaNameFrom);
+     ENDIF;
+
+
+     CellPutS(vMon, vCube, 'Lease Actuals Month', 'String');
+     CellPutS(pInputGLA, vCube, 'Lease Fcst Input GLA Subset', 'String');
+     CellPutS(pInputSubAcct, vCube, 'Lease Fcst Input SubAcct Subset', 'String');
+     CellPutS(pInputTenureID, vCube, 'Lease Fcst Input TenureID Subset', 'String');
+     
+
+     
+     vTenureMDX = '{TM1DRILLDOWNMEMBER( {[Tenure ID].['|vInputSubsetElement|']}, ALL, RECURSIVE )}';
+     SubsetMDXSet( 'Tenure ID', 'Lease Input Forecast Subset', vTenureMDX );
+
+     
+     #Update Versions_PM Attributes
+     AttrPutS(pName, dVerPM, pType, 'AltName_Leases');
+     AttrPutS(vActMon, dVerPM, pType, 'ActualFiscalPeriod_Leases');
+     AttrPutS(pYear, dVerPM, pType, 'CurrentFiscalYr_Leases');
+
+
+     IF(pUpdateActuals @= 'Yes');
+	vActEndMon = NumberToString(CellGetN(vCube, 'Lease Actuals Month', 'Value'));
+	IF (vActEndMon@<>'0');
+          		ExecuteProcess('CopyVersion - LeasesCube', 'pSourceVersion', 'Actuals', 'pTargetVersion', 'Forecast', 'pMonthStart', '1', 'pMonthEnd', vActEndMon,'pMonths','Yes');
+	ENDIF;
+     ENDIF;
+
+ENDIF;
+###################################REPORTING##################################################
+IF(pType @= 'Reporting');
+     vMon = DimensionElementPrincipalName(dFiscalMon, pActMonth);
+     vCMon = DimensionElementPrincipalName(dFiscalMon, pChartMonth);
+
+     CellPutS(pYear, vCube, 'Lease Reporting Year', 'String');
+     CellPutS(vMon, vCube, 'Lease Reporting Actuals Month', 'String');
+     CellPutS(pFcstVer, vCube, 'Lease Reporting Comparison Version 1', 'String');
+     CellPutS(pPrFcstVer, vCube, 'Lease Reporting Comparison Version 2', 'String');
+     CellPutS(pFcstBudVer, vCube, 'Lease Reporting Budget Version', 'String');
+     CellPutS(pCurrency, vCube, 'Lease Reporting Currency', 'String');
+     CellPutS(pScale, vCube, 'Lease Reporting Scale', 'String');
+     CellPutS(pMeasure, vCube, 'Lease Reporting Measure', 'String');
+     CellPutS(pChartVer, vCube, 'Lease Reporting Chart Version', 'String');
+     CellPutS(pChartCpVer, vCube, 'Lease Reporting Chart Comparison Version', 'String');
+     CellPutS(vCMon, vCube, 'Lease Reporting Chart Month', 'String');
+     CellPutS(pReportingGLA, vCube, 'Lease Reporting GLA Subset', 'String');
+     CellPutS(pReportingSubAcct, vCube, 'Lease Reporting SubAcct Subset', 'String');
+     CellPutS(pReportingTenureID, vCube, 'Lease Reporting TenureID Subset', 'String');
+     CellPutS(pReportingBusUnits, vCube, 'Lease Reporting BusUnits Subset', 'String');
+
+    vTenureMDX = '{TM1DRILLDOWNMEMBER( {[Tenure ID].['|vInputSubsetElement|']}, ALL, RECURSIVE )}';
+    SubsetMDXSet( 'Tenure ID', 'Lease Report Subset', vTenureMDX );
+ENDIF;
+
+###################################EXPORT#######################################################
+ASCIIOutput(sLogFile, pType, vActMon, vActMonBud, vMon, pActMonth, pYear, pFcstVer, pPrFcstVer, pFcstBudVer);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion

@@ -1,0 +1,53 @@
+{
+	"@type":"Process",
+	"Name":"DWPush - Fiscal_Month",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"DWPush - Fiscal_Month.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"}ElementAttributes_Fiscal Months",
+		"dataSourceNameForServer":"}ElementAttributes_Fiscal Months",
+		"view":"VE-}ElementAttributes_Fiscal Months-DW"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDim",
+			"Prompt":"Input Dimension Name",
+			"Value":"Fiscal Months",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"Dim",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vAttribute",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vValue",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

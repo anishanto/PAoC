@@ -1,0 +1,98 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientIDOneView = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+vRecNo = 1;
+vdim = 'Vendor';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+
+####################################Define Datasource Tab#####################################
+sActionStatus ='''Unactioned''';
+sEventType='''Rent Review (Fixed)''';
+sEventType_Other='''Rent Review (Other)''';
+sSQL='SELECT * FROM [DW_All_Clients].[OVLA].[vw_OVLA_Budget_APAC_Events] WHERE OneViewClientID = ' | sClientIDOneView | ' and ActionStatus = ' | sActionStatus | '  and (EventType = ' | sEventType | ' or EventType = ' | sEventType_Other | ' ) ' ;
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);	
+	ASCIIOUTPUT('..\logs\System\DebugEventName.sql.txt', sSQL);
+	ASCIIOUTPUT('..\logs\System\DebugEventName.sql.Error.txt', sSQL);	
+ENDIF;
+
+########### Update EventName
+cDim = 'Event Name';
+DIMENSIONSORTORDER('Event Name','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+#DimensionDeleteAllElements('Event Name');
+
+#########
+sEl_All = 'All Event Names';
+#sEl_NA = 'NA';
+
+IF(DIMIX(cDim, sEl_All)=0);
+   DimensionElementInsert(cDim,'',sEl_All,'n');
+EndIF;
+
+
+ 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDebugFile = cDebugFile | 'Metadata.debug';
+
+##########  Create Dimension
+sEl = EventID;
+
+cDimTenure = 'Tenure ID';
+sElTenure = TenureID;
+
+IF (DIMIX(cDimTenure,sElTenure)<>0);
+	IF(DIMIX(cDim, sEl)=0 & ActionStatus @= 'Unactioned' & (EventType @= 'Rent Review (Fixed)' % EventType@='Rent Review (Other)'));
+		DimensionElementInsert(cDim,'',sEl,'n');
+		DimensionElementComponentAdd(cDim,sEl_All,sEl, 1);
+		IF( bDebug >= 1);
+			sMessage = 'Component: ' | EventID | ' has been added in' | cDim | ' dimension.';
+			AsciiOutput( sDebugFile, sMessage);
+		ENDIF;
+	ENDIF;
+ENDIF;
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+#endregion

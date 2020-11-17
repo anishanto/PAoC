@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"EventTypeExpanded",
+	"Expression":"{TM1SUBSETALL( [Event Type] )}"
+}

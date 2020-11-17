@@ -1,0 +1,46 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+cClientType =  CellGetS('Global Control','Client Model Type','String');
+
+IF(cClientType@='Balances');
+	IF(pInputorAnalysis@='Input');
+		ExecuteProcess('CopyVersion - OpexPlan Values','pSourceVersion',pSourceVersion,'pTargetVersion',pTargetVersion,'pSourceYear',pSourceYear,'pTargetYear',pTargetYear,'pMonthStart','1','pMonthEnd','12');
+		ExecuteProcess('CopyVersion - OpexPlanText','pSourceVersion',pSourceVersion,'pTargetVersion',pTargetVersion,'pSourceYear',pSourceYear,'pTargetYear',pTargetYear);
+	ELSEIF(pInputorAnalysis@='Analysis');
+		ExecuteProcess('CopyVersion - CopyOpexAnalysis','pSourceVersion',pSourceVersion,'pTargetVersion',pTargetVersion,'pSourceYear',pSourceYear,'pTargetYear',pTargetYear);
+	ENDIF;
+ELSEIF(cClientType@='Detail');
+	IF(pInputorAnalysis@='Input');
+		ExecuteProcess('CopyVersion - OpexDetail Values','pSourceVersion',pSourceVersion,'pTargetVersion',pTargetVersion,'pSourceYear',pSourceYear,'pTargetYear',pTargetYear,'pMonthStart','1','pMonthEnd','12');
+		ExecuteProcess('CopyVersion - OpexDetailText','pSourceVersion',pSourceVersion,'pTargetVersion',pTargetVersion,'pSourceYear',pSourceYear,'pTargetYear',pTargetYear);
+	ELSEIF(pInputorAnalysis@='Analysis');
+		ExecuteProcess('CopyVersion - CopyDetailAnalysis','pSourceVersion',pSourceVersion,'pTargetVersion',pTargetVersion,'pSourceYear',pSourceYear,'pTargetYear',pTargetYear);	
+	ENDIF;
+
+ENDIF;
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

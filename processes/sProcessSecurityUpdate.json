@@ -1,0 +1,29 @@
+{
+	"@type":"Process",
+	"Name":"sProcessSecurityUpdate",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"sProcessSecurityUpdate.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1DimensionSubset",
+		"dataSourceNameForClient":"}Dimensions",
+		"dataSourceNameForServer":"}Dimensions",
+		"subset":"VE-sProcessSecurityUpdate"
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"vDim",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

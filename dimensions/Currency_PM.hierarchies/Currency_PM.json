@@ -1,0 +1,23 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Currency_PM",
+	"Elements":
+	[
+		{
+			"Name":"Local",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Local_Portfolio",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Currency_PM.subsets/CurrencyDetail.json",
+		"Currency_PM.subsets/Default.json",
+		"Currency_PM.subsets/VE-Opex Detail Cube-ZeroOut.json",
+		"Currency_PM.subsets/VE-ZeroProcessDetailFX - Post.json",
+		"Currency_PM.subsets/ViewZeroOutFlag.json"
+	]
+}

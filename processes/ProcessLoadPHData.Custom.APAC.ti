@@ -1,0 +1,170 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+vDim='BusUnits';
+
+####################################Define Datasource Tab#####################################
+
+sSQL = 'SELECT
+[Details: Property Details: E1 BU]
+,[Details: Property Details: In Country BU]
+,[Details: Property Details: Property ID]
+,[Details: Property Summary: Property Name]
+,[Details: Property Details: Occupied/Vacant]
+,[Details: Property Details: Leased/Owned]
+,[Details: Property Details: Campus]
+,[Details: Property Summary: City]
+,[Details: Property Details: Post]
+,[Details: Property Summary: Country]
+,[Details: Property Details: FM Hub]
+,[Details: Property Details: Property Type]
+,[Details: Property Details: Property SubType]
+,[Details: Property Details: Property Size]
+,[Details: Property Details: Property Status]
+FROM [CDW_DFAT].[ssdv].[vw_OneView_Client_Property_Custom] with (readuncommitted)
+WHERE ( [Details: Property Details: E1 BU] is not null)';
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);
+ASCIIOUTPUT('..\logs\System\PHDebugCustomAPAC.sql.txt', sSQL);
+ENDIF;
+
+cDimName='BusUnits';
+
+####Code below is turned off because it clears out the sort order attribute values assigned - this was only need for the initial setup#########
+########Newly Added attributes Detail Cube
+  #ATTRDELETE(cDimName,'AlternateE1BU');
+  #ATTRDELETE(cDimName,'PropertyID');
+  #ATTRDELETE(cDimName,'PropertyName');
+  #ATTRDELETE(cDimName,'LeasedOrOwned');
+  #ATTRDELETE(cDimName,'OccupiedOrVacant');
+  #ATTRDELETE(cDimName,'PropertySubType');
+  #ATTRDELETE(cDimName,'PropertyType');
+  #ATTRDELETE(cDimName,'PropertyStatus');
+  #ATTRDELETE(cDimName,'PropertySize');
+  #ATTRDELETE(cDimName,'Campus');
+  #ATTRDELETE(cDimName,'City');
+  #ATTRDELETE(cDimName,'Post');
+  #ATTRDELETE(cDimName,'Country');
+  #ATTRDELETE(cDimName,'FMHub');
+  #ATTRDELETE(cDimName,'SH1Parent1');
+ #ATTRDELETE(cDimName,'SH1Parent2');
+  #ATTRDELETE(cDimName,'AH1Parent1');
+  #ATTRDELETE(cDimName,'AH1Parent2');
+
+
+ ########Newly Added attributes Detail Cube
+   #ATTRINSERT(cDimName,'','AlternateE1BU','S');
+   #ATTRINSERT(cDimName,'','PropertyID','S');
+   #ATTRINSERT(cDimName,'','PropertyName','S');
+   #ATTRINSERT(cDimName,'','LeasedOrOwned','S');
+   #ATTRINSERT(cDimName,'','OccupiedOrVacant','S');
+   #ATTRINSERT(cDimName,'','PropertySubType','S');
+   #ATTRINSERT(cDimName,'','PropertyType','S');
+   #ATTRINSERT(cDimName,'','PropertyStatus','S');
+   #ATTRINSERT(cDimName,'','PropertySize','S');
+   #ATTRINSERT(cDimName,'','Campus','S');
+   #ATTRINSERT(cDimName,'','City','S');
+   #ATTRINSERT(cDimName,'','Post','S');
+   #ATTRINSERT(cDimName,'','Country','S');
+   #ATTRINSERT(cDimName,'','FM Hub','S');
+  #ATTRINSERT(cDimName,'','SH1Parent1','S');
+   #ATTRINSERT(cDimName,'','SH1Parent2','S');
+   #ATTRINSERT(cDimName,'','AH1Parent1','S');
+   #ATTRINSERT(cDimName,'','AH1Parent2','S');
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+IF(DIMIX(vDim, E1BU)=0);
+ITEMSKIP;
+ENDIF;
+
+
+
+
+###Load Property Hub Attributes to BU Dimension
+ATTRPUTS(AlternateE1BU,vDim,E1BU,'Alternate E1 BU');
+ATTRPUTS(PropertyID,vDim,E1BU,'Property ID');
+ATTRPUTS(PropertyName,vDim,E1BU,'Property Name');
+ATTRPUTS(PropertyName,vDim,E1BU,'Name');
+ATTRPUTS(OccupiedVacant,vDim,E1BU,'OccupiedOrVacant');
+ATTRPUTS(LeasedOwned,vDim,E1BU,'LeasedOrOwned');
+ATTRPUTS(Campus,vDim,E1BU,'Campus');
+ATTRPUTS(City,vDim,E1BU,'City');
+ATTRPUTS(Post,vDim,E1BU,'Post');
+ATTRPUTS(Country,vDim,E1BU,'Country');
+ATTRPUTS(FMHub,vDim,E1BU,'FM Hub');
+ATTRPUTS(PropertyType,vDim,E1BU,'Property Type');
+ATTRPUTS(PropertySubType,vDim,E1BU,'Property Sub Type');
+ATTRPUTS(PropertySize,vDim,E1BU,'Property Size');
+ATTRPUTS(PropertyStatus,vDim,E1BU,'Property Status');
+
+
+
+
+#Create SH1 & AH1 Hierarchy
+vPost=Post|' - Post';
+vFMHub=FMHub|' - Hub';
+
+ATTRPUTS(vPost,vDim,E1BU,'SH1Parent1');
+ATTRPUTS(vFMHub,vDim,E1BU,'SH1Parent2');
+
+#Create AH1 Hierarchy
+ATTRPUTS(vPost|' Approval',vDim,E1BU,'AH1Parent1');
+ATTRPUTS(vFMHub|' Approval',vDim,E1BU,'AH1Parent2');
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####################################Cleanup Views & Subsets####################################################
+#ViewDestroy (vCubeName, ViewTransfer);
+#SubsetDestroy ('Versions_PM', ViewTransfer);
+
+
+#####################################Messages displayed in Emails##################################################
+#Set Email Address
+#Execute Email Process
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase); 
+#endregion

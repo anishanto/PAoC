@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"All GL Account CodeName",
+	"Expression":"{ HIERARCHIZE( \r\r                                         {TM1SUBSETALL( [GL_Accounts] )}\r                        ) \r}\r"
+}

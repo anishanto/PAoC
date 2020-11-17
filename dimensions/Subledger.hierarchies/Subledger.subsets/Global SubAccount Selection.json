@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Global SubAccount Selection",
+	"Expression":"{[Subledger].[SH1]}+{[Subledger].[AH1]}+{[Subledger].[AHIT]}"
+}

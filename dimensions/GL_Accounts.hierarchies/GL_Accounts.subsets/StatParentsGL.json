@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"StatParentsGL",
+	"Expression":"{EXCEPT({DESCENDANTS(GL_Accounts.[Total Statistics])},{TM1FILTERBYLEVEL({DESCENDANTS(GL_Accounts.[Total Statistics])},0)})}"
+}

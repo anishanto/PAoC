@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"GLAcctsPALDetail",
+	"Expression":"{FILTER( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}, [GL_Accounts].[AcctType] = \"Expense\")} +  {FILTER( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}, [GL_Accounts].[AcctType] = \"Revenue\")}"
+}

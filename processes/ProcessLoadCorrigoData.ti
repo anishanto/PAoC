@@ -1,0 +1,581 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vDatabase = 'TM1RODW';
+DataSourceType = 'ODBC';
+DataSourceNameForServer = vDatabase ;
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+
+DIMENSIONSORTORDER('Work Orders','','','BYNAME','ASCENDING');
+OldCubeLogChanges = CUBEGETLOGCHANGES('Opex Work Order Cube');
+CUBESETLOGCHANGES('Opex Work Order Cube', 0);
+vUseHeader= 'yes' ;
+
+CubeName = 'Opex Work Order Cube';
+ViewNameZero =  'VE-' | CubeName | '-AnalysisZero' ;
+cubGlobalControl = 'Global Control';
+vActMonN=CELLGETN(cubGlobalControl, 'Actuals Month', 'Value');
+vActMon=CELLGETS(cubGlobalControl, 'Actuals Month', 'String');
+vFcstMon = ATTRS('Fiscal Months',vActMon,'NextMonth');
+vRecNo = 0;
+vClient=CELLGETS(cubGlobalControl, 'Client Corrigo Name', 'String');
+
+vSubAcctType = CELLGETN(cubGlobalControl, 'Client SubAcct Type', 'Value');
+vSubLedgerType = CELLGETN(cubGlobalControl, 'Client Subledger Type', 'Value');
+vVendorType = CELLGETN(cubGlobalControl, 'Client Vendor Type', 'Value');
+
+###########Constants
+sBU = 'BusUnits';
+vUnassignedBU = 'Unassigned BusUnits SH1' ;
+sGL ='GL_Accounts' ;
+sSA ='SubAccounts' ;
+vUnassignedSub = 'Unassigned SubAccount SH1';  
+sSL ='Subledger' ;
+vUnassignedSubledger = 'Unassigned Subledger SH1';  
+sVD='Vendor' ;
+vUnassignedVendor = 'SH1';  
+
+IF(DIMIX('Global Control Items','Consolidated level planning')<>0 & DIMIX('Global Control Items','Select level of planning')<>0);
+	cConsolidatedPlanning=CellGetS('Global Control','Consolidated level planning','String');
+	cLevel=CellGetS('Global Control','Select level of planning','String');
+ELSE;
+	cConsolidatedPlanning='No';
+	cLevel='';
+ENDIF;
+
+cUnassignedElement = 'Unassigned BusUnits AC1';
+
+#------------------Create Zero out view 
+IF(DIMSIZ('Work Orders')>0);
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameZero);
+SubsetDestroy ('Versions', ViewNameZero);
+SubsetDestroy ('Company', ViewNameZero);
+SubsetDestroy ('Currency', ViewNameZero);
+SubsetDestroy ('Fiscal Months', ViewNameZero);
+SubsetDestroy ('Fiscal Years', ViewNameZero);
+SubsetDestroy ('SubAccounts', ViewNameZero);
+SubsetDestroy ('GL_Accounts', ViewNameZero);
+SubsetDestroy ('BusUnits', ViewNameZero);
+SubsetDestroy ('Subledger', ViewNameZero);
+SubsetDestroy ('Vendor', ViewNameZero);
+SubsetDestroy ('Work Orders', ViewNameZero);
+SubsetDestroy ('AP Status', ViewNameZero);
+SubsetDestroy ('WO Status', ViewNameZero);
+SubsetDestroy ('Corrigo Measures', ViewNameZero);
+
+# Create views and subsets for Export
+
+# Create Version
+SubsetCreate ('Versions', ViewNameZero);
+SubsetElementInsert ( 'Versions',  ViewNameZero, pVersion, 1);
+
+# Create Company
+IF(pCompany @= 'All Companies') ;
+    sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Company] )} ) }, 0)}, ASC)}';
+ELSE;
+    sMDX = '{TM1FILTERBYPATTERN( {TM1SUBSETALL( [Company] )}, "' |  pCompany | '")}';
+ENDIF;
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create Currency
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency] )}, 0)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create Fiscal Months
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Fiscal Months] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create Fiscal Years
+SubsetCreate ('Fiscal Years', ViewNameZero);
+SubsetElementInsert ( 'Fiscal Years',  ViewNameZero, pYear, 1);
+
+# Create SubAccounts
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [SubAccounts] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create GL_Accounts
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [GL_Accounts] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create BusUnits
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create SubLedger
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Subledger] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create Vendor
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Vendor] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create Work Orders
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Work Orders] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create AP Status
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [AP Status] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create WO Status
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [WO Status] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+# Create Measure
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Corrigo Measures] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+ViewCreate( CubeName, ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Versions', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Currency', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Company', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'SubAccounts', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'GL_Accounts', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Fiscal Years', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Fiscal Months', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'BusUnits', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'SubLedger', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Vendor', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Work Orders', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'AP Status', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'WO Status', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, 'Corrigo Measures', ViewNameZero);
+
+ViewRowDimensionSet(CubeName, ViewNameZero,  'Versions', 1);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'Currency', 2);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'Company', 3);
+ViewRowDimensionSet(CubeName, ViewNameZero, 'Fiscal Months',4);
+ViewRowDimensionSet(CubeName, ViewNameZero, 'Fiscal Years', 5);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'SubAccounts',6);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'GL_Accounts', 7);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'BusUnits', 8);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'Subledger', 9);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'Vendor', 10);
+ViewRowDimensionSet(CubeName, ViewNameZero, 'Work Orders',11);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'AP Status', 12);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'WO Status', 13);
+ViewRowDimensionSet (CubeName, ViewNameZero, 'Corrigo Measures',14);
+
+ViewZeroOut(CubeName, ViewNameZero);
+ENDIF;
+#################### Delete All Elements
+cDimName='Work Orders';
+IF( pDeleteAllElements = 1);
+	DIMENSIONDELETEALLELEMENTS(cDimName);
+Endif;
+
+#################### Define Datasource Tab #####################################
+sSQL = 'SELECT A.[ID] ,A.[WO#] ,A.[Complete SLA] ,A.[Work Description] ,A.[Scheduled Start Date], A.[Created By] ,A.[Created By Role] ,A.[Property Name],A.[Status],A.[Priority],A.[Assigned ID], A.[First Name] ,A.[Last Name] 
+,A.[User Screen Name] ,A.[User ID],A.[Type Category] ,A.[Type], A.[Vendor NTE],A.[Last Action Date],A.[Expense Account] ,A.[Vendor Invoice Number], A.[Vendor Invoice Total],A.[AP Status] ,A.[Comments],A.[Date Completed - First]
+, A.[Date/Time Completed - Last], A.[BU Number], B.[Asset ID] ,B.[Asset Name] ,B.[Asset Model] ,B.[Asset Category] ,B.[Task] ,B.[Description] ,A.[Total Spot Purchase Cost], A.[Assigned To], A.[Subledger],A.[Provider Code]
+FROM [DW_IFM].[ssdv].[vw_work_orders] A with (readuncommitted) LEFT OUTER JOIN [DW_IFM].[ssdv].[vw_work_order_line_items] B ON A.[ID] =B.[Work Order ID] 
+WHERE  A.[WO#]<>''''  and A.[Status]<> ''Exported'' and A.[ID] <> ''''  and A.[Expense Account] <>''''  and A.[BU Number]<>''''  and A.[Client_Name]= ''' | vClient | ''' and B.[Client_Name]= ''' | vClient | '''';
+
+
+DataSourceQuery = sSQL;
+
+cTopNode='Total';
+DIMENSIONELEMENTINSERT('Work Orders','',cTopNode,'c');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vGLA=SUBST(vAccount,1,6);
+vSub=SUBST(vAccount,8,3);
+vGLASub=vGLA|'-'|vSub;
+vGLAcct = IF (vSubAcctType=0,vGLASub,vGLA);
+vSubAcct=IF(vSubAcctType=0,'NA',vSub);
+
+vSubledger = IF (vSubledger@='','NA',vSubledger);
+vVendor = IF (vVendor@='','NA',vVendor);
+
+vCompany=SUBST(vBU,1,5);
+
+vVersion=pVersion;
+
+################### Empty Variable Values
+IF(vAccount@='');
+	ASCIIOUTPUT('..\logs\System\DebugCorrigoNoAcctLoad.txt',ID,vWO,vDueDate,vWOStatus,NUMBERTOSTRING(vVendorNTE));
+ENDIF;
+
+IF(vBU@='');
+	ASCIIOUTPUT('..\logs\System\DebugCorrigoNoBULoad.txt',ID,vWO,vDueDate,vWOStatus,NUMBERTOSTRING(vVendorNTE));
+ENDIF;
+
+IF (vSubAcctType=1);
+	IF (vSub@='');
+		ASCIIOUTPUT('..\logs\System\DebugCorrigoNoSubAcctLoad.txt',ID,vWO,vDueDate,vWOStatus,NUMBERTOSTRING(vVendorNTE));
+	ENDIF;
+ENDIF;
+
+IF (vSubLedgerType=1);
+	IF (vSubLedger@='');
+		ASCIIOUTPUT('..\logs\System\DebugCorrigoNoSubLedgerLoad.txt',ID,vWO,vDueDate,vWOStatus,NUMBERTOSTRING(vVendorNTE));
+	ENDIF;
+ENDIF;
+
+IF (vVendorType=1);
+	IF (vVendor@='');
+		ASCIIOUTPUT('..\logs\System\DebugCorrigoNoVendorLoad.txt',ID,vWO,vDueDate,vWOStatus,NUMBERTOSTRING(vVendorNTE));
+	ENDIF;
+ENDIF;
+
+IF (vGLAcct@='' % vBU@='' %  vDueDate@='' % vCompleteDateFirst@='' % vSubLedger@='' % vVendor@='' % DIMIX('Company',vCompany)=0);
+	ITEMSKIP;
+ELSE;
+	################### Create Work Order Dimension####################
+	DIMENSIONELEMENTINSERT('Work Orders','',vWO,'n');
+	DIMENSIONELEMENTCOMPONENTADD('Work Orders',cTopNode,vWO,1.000000);
+	###########################################################
+
+	#### Add new elements based on new variable values
+
+	IF(DIMIX('AP Status',vAPStatus)=0);
+		DimensionElementInsert('AP Status', '1', vAPStatus,'N');
+	ENDIF;
+
+	IF(DIMIX('WO Status',vWOStatus)=0);
+		DimensionElementInsert('WO Status', '1', vWOStatus,'N');
+	ENDIF;
+
+	###########Update Business Units
+	#Insert unassigned BusUnit
+	IF(DIMIX(sBU, vBU) = 0);
+		DimensionElementInsert(sBU, '',  vBU, 'N');
+		IF(DIMIX(sBU, vUnassignedBU ) = 0);
+			DimensionElementInsert(sBU, '', vUnassignedBU , 'C');   
+		EndIf;
+		DimensionElementComponentAdd(sBU, vUnassignedBU, vBU, 1);
+	ENDIF;
+
+	###########Update Subledger
+	IF(DIMIX(sSL, vSubledger ) = 0);
+		DimensionElementInsertDirect(sSL,'',vSubledger,'n');
+		IF(DIMIX(sSL, vUnassignedSubledger ) = 0);
+			DimensionElementInsertDirect(sSL, '', vUnassignedSubledger, 'C');  
+		EndIf;
+		DimensionElementComponentAdd(sSL, vUnassignedSubledger,vSubledger, 1);
+	ENDIF;
+
+	DimensionElementInsertDirect(sSL,'','NA','n');
+	DimensionElementComponentAdd(sSL,'SH1','NA', 1);
+	DimensionElementInsertDirect(sSL,'','All Subledger and Other','n');
+
+	###########Update Vendor
+
+	#Set dimension sort order
+	DIMENSIONSORTORDER(sVD,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+	IF(DIMIX(sVD, vVendor ) = 0);
+		DimensionElementInsert(sVD,'',vVendor,'n');
+		IF(DIMIX(sVD, vUnassignedVendor ) = 0);
+			DimensionElementInsert(sVD, '', vUnassignedVendor, 'C');  
+		EndIf;
+		DimensionElementComponentAdd(sVD, vUnassignedVendor,vVendor, 1);
+	ENDIF;
+
+	DimensionElementInsert(sVD,'','NA','n');
+	DimensionElementComponentAdd(sVD,vUnassignedVendor,'NA', 1);
+	DimensionElementInsert(sVD,'','All Vendor and Other','n');
+	DimensionElementInsert(sVD,'','AHIT','C');
+
+	###########Update General Ledger
+	vDim = 'GL_Accounts';
+	vElement = vGLAcct;
+
+	IF(STRINGTONUMBER(SUBST(vElement,1,1))>=4);
+		vUnassignedAcct = 'Unassigned GL PL Account SH1' ;
+		vParent='PL';
+	ELSEIF(STRINGTONUMBER(SUBST(vElement,1,1))<=3);
+		vUnassignedAcct = 'Unassigned GL Balance Sheet SH1' ;
+		vParent='BS';
+	ELSE;
+		vUnassignedAcct = 'Unassigned GL Statistical SH1' ;
+		vParent='ST';
+	ENDIF;
+
+	# Insert unassigned General Ledger
+	IF(DIMIX(sGL, vGLAcct ) = 0);
+		DimensionElementInsert(sGL, '', vGLAcct, 'N');
+		IF(DIMIX(sGL, vUnassignedAcct ) = 0);
+				DimensionElementInsert(sGL, '', vUnassignedAcct , 'C'); 
+				DimensionElementComponentAdd(sGL, vParent,vUnassignedAcct, 1); 
+		EndIf;
+		DimensionElementComponentAdd(sGL, vUnassignedAcct,vGLAcct, 1);
+	ENDIF;
+
+	########### Update SubAccount
+	#SKIP if client is no sub
+	vDim = 'SubAccounts';
+	IF(vSubAcctType=0);
+		ITEMSKIP;
+	ENDIF;
+
+	IF(DIMIX(sSA, vSubAcct) = 0);
+		DIMENSIONELEMENTINSERT(sSA,'',vSubAcct,'n');
+		IF(DIMIX(sSA, vUnassignedSub ) = 0);
+			DimensionElementInsert(sSA, '', vUnassignedSub , 'C');  
+		EndIf;
+		DimensionElementComponentAdd(sSA, vUnassignedSub,vSubAcct, 1);
+	ENDIF;
+	#####################################################################
+ENDIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+####################Define Variables############################
+vGLA=SUBST(vAccount,1,6);
+vSub=SUBST(vAccount,8,3);
+vGLASub=vGLA|'-'|vSub;
+vGLAcct = IF (vSubAcctType=0,vGLASub,vGLA);
+vSubAcct=IF(vSubAcctType=0,'NA',vSub);
+
+vCompany=SUBST(vBU,1,5);
+
+vVersion=pVersion;
+
+vSubledger = IF (vSubledger@='','NA',vSubledger);
+vVendor = IF (vVendor@='','NA',vVendor);
+
+IF (DIMIX('GL_Accounts',vGLAcct)=0 % DIMIX('BusUnits',vBU)=0 %  vDueDate@='' % vCompleteDateFirst@='' % DIMIX('Subledger',vSubLedger)=0 % DIMIX('Vendor',vVendor)=0 % DIMIX('Company',vCompany)=0);
+	ITEMSKIP;
+ELSE;
+	IF(AttrS('BusUnits',vBU,'Company')@='');
+		ATTRPUTS(vCompany,'BusUnits',vBU,'Company');
+	ENDIF;
+	
+	##### Load Actuals######
+ 
+	# Load Completed Work Orders using the CompleteDateFirst Field
+	# Load New/Open Work Orders using the DueDate Field
+	# Translate Date into Month (i.e M01 - M12)
+
+	IF(pVersion@='Actuals');
+		IF(vWOStatus@<>'Completed');
+			vFMAlias=SUBST(vDueDate,6,2);
+			vFM = DimensionElementPrincipalName('Fiscal Months',vFMAlias);
+		ELSE;
+			vFMAlias=SUBST(vCompleteDateFirst,6,2);
+			vFM = DimensionElementPrincipalName('Fiscal Months',vFMAlias);
+		ENDIF;
+
+		IF(vWOStatus@<>'Completed');
+			vFMYearM01= AttrS('Fiscal Months','M01','Year');
+			vFMYear = AttrS('Fiscal Months',vFM,'Year');
+			vFY=IF(vFMYearM01@='PY', 
+				IF(vFMYear@='FY',	NumberToString(StringToNumber(SUBST(vDueDate,1,4))-1),	SUBST(vDueDate,1,4)),
+				NumberToString(StringToNumber(SUBST(vDueDate,1,4))
+				)
+			          );
+		ELSE;
+			vFMYearM01= AttrS('Fiscal Months','M01','Year');
+			vFMYear = AttrS('Fiscal Months',vFM,'Year');
+			vFY= IF(vFMYearM01@='PY',
+				IF(vFMYear@='FY',NumberToString(StringToNumber(SUBST(vCompleteDateFirst,1,4))-1),SUBST(vCompleteDateFirst,1,4)),
+				NumberToString(StringToNumber(SUBST(vCompleteDateFirst,1,4))
+				)
+			         );
+		ENDIF;
+	ELSE;
+
+	#### Load Forecast######
+	# Comparison Logic for Forecast 
+
+	########## Set DueDate to Numeric so it can be used in the comparison below
+
+		IF(STRINGTONUMBER(SUBST(vDueDate,6,1))>0);
+			vDueDateCheck=SUBST(DimensionElementPrincipalName('Fiscal Months',SUBST(vDueDate,6,2)),2,2);
+		ELSE;
+			vDueDateCheck=SUBST(DimensionElementPrincipalName('Fiscal Months','0'|SUBST(vDueDate,7,1)),2,2);
+		ENDIF;
+
+	########## Set CompleteDateFirst to Numeric so it can be used in the comparison below
+
+		IF(STRINGTONUMBER(SUBST(vCompleteDateFirst,6,1))>0);
+			vCompleteDateFirstCheck=SUBST(DimensionElementPrincipalName('Fiscal Months',SUBST(vCompleteDateFirst,6,2)),2,2);
+		ELSE;
+			vCompleteDateFirstCheck=SUBST(DimensionElementPrincipalName('Fiscal Months','0'|SUBST(vCompleteDateFirst,7,1)),2,2);
+		ENDIF;
+
+	########## Load Cancelled Orders using DueDate Field
+
+		IF(vWOStatus@='Cancelled');
+			vFMAlias=SUBST(vDueDate,6,2);
+			vFM = DimensionElementPrincipalName('Fiscal Months',vFMAlias);
+		ENDIF;
+
+	########## Load Open/New Orders
+
+		# Compare DueDate to Actual Month (is the due date less than the actual Month) for Non Exported orders (exported orders are in E1).  If yes, then carry forward the work order to the current forecast period, otherwise load using Due Date.
+		# Example - Open Work Order Not exported with a due date of January will be carried forward into the February forecast
+		
+		IF(vWOStatus@<>'Completed' & vWOStatus@<>'Cancelled');
+			IF(STRINGTONUMBER(vDueDateCheck)<=vActMonN & vAPStatus@<>'Exported');
+				vFM=vFcstMon;
+			ELSE;
+				vFMAlias=SUBST(vDueDate,6,2);
+				vFM = DimensionElementPrincipalName('Fiscal Months',vFMAlias);
+			ENDIF;
+		ENDIF;   
+
+	########## Load Closed Orders
+		# Compare CompleteDateFirst  to Actual Month (is the complete date less than the actual Month) for Non Exported orders (exported orders are in E1).  If yes, then carry forward the work order to the current forecast period, otherwise load using CompleteDateFirst.
+		# Example - Closed Work Order Not exported with a due date of January will be carried forward into the February forecast
+
+		IF(vWOStatus@='Completed');
+			IF(STRINGTONUMBER(vCompleteDateFirstCheck)<=vActMonN & vAPStatus@<>'Exported' & vAPStatus@<>'None' );
+				vFM=vFcstMon;
+			ELSE;
+				vFMAlias=SUBST(vCompleteDateFirst,6,2);
+				vFM = DimensionElementPrincipalName('Fiscal Months',vFMAlias);
+			ENDIF;
+		ENDIF;
+
+		IF(vWOStatus@<>'Completed');
+			vFMYearM01= AttrS('Fiscal Months','M01','Year');
+			vFMYear = AttrS('Fiscal Months',vFM,'Year');
+			vFY=IF(vFMYearM01@='PY', 
+				IF(vFMYear@='FY',	NumberToString(StringToNumber(SUBST(vDueDate,1,4))-1),	SUBST(vDueDate,1,4)),
+				NumberToString(StringToNumber(SUBST(vDueDate,1,4))
+				)
+			          );
+		ELSE;
+			vFMYearM01= AttrS('Fiscal Months','M01','Year');
+			vFMYear = AttrS('Fiscal Months',vFM,'Year');
+			vFY= IF(vFMYearM01@='PY',
+				IF(vFMYear@='FY',NumberToString(StringToNumber(SUBST(vCompleteDateFirst,1,4))-1),SUBST(vCompleteDateFirst,1,4)),
+				NumberToString(StringToNumber(SUBST(vCompleteDateFirst,1,4))
+				)
+			         );
+		ENDIF;
+
+	ENDIF;
+
+
+	################# LOAD DATA########################################
+	###### DO NOT LOAD Chart of Accounts not setup in TM1 all elements will be automated from data warehouse).
+
+	IF(DIMIX('Fiscal Months',vFM)=0 %  DIMIX('Fiscal Years',vFY)=0);
+		ITEMSKIP;
+	ENDIF;
+
+IF(vFY@=pYear);
+	vCurrency=ATTRS('Company',vCompany,'Currency');
+
+	CellPutS(vDueDate,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Due Date');
+	CellPutS(vWorkDesc,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Work Description');
+	CellPutS(vScheduledStart,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Scheduled Start');
+	CellPutS(vCreatedby,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Created By');
+	CellPutS(vPropertyName,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Property Name');
+	CellPutS(Priority,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Priority');
+	CellPutS(vTypeCategory,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Type Category');
+	CellPutS(Type,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Type');
+	CellPutN(vVendorNTE,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Vendor NTE');
+	CellPutS(vDateTime,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Date Time Last Action');
+	CellPutS(vVendorInv,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Vendor Invoice Number');
+	CellPutN(vVendorInvTotal,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Vendor Invoice Total');
+	CellPutS(Comments,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Comments');
+	CellPutS(vAssetID,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset ID');
+	CellPutS(Asset,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset');
+	CellPutS(vAssetModel,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset Model');
+	CellPutS(vAssetType,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset Type');
+	CellPutS(Task,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Task');
+	CellPutS(Description,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Description');
+	CellPutS(vCompleteDateFirst,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Date Time Completed - First');
+	CellPutS(vCompleteDateLast,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Date Time Completed - Last');
+	CellPutN(vTotalSpotCost,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Total Spot Purchase Cost');
+
+	#If client is allocation, then values are pasted at planning level
+	IF(cConsolidatedPlanning@='Yes');
+		vConsolidate=AttrS('BusUnits',vBU,cLevel);
+	ENDIF;
+
+	IF (lower( ATTRS('BusUnits',vBU,'HierarchyStatus')) @='yes' & cConsolidatedPlanning@='Yes');
+		IF(vConsolidate@='');
+			vConsolidateBU=cUnassignedElement;
+		ELSE;
+			vConsolidateBU=vConsolidate|' Hierarchy';
+		ENDIF;
+
+		CellPutS(vDueDate,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Due Date');
+		CellPutS(vWorkDesc,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Work Description');
+		CellPutS(vScheduledStart,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Scheduled Start');
+		CellPutS(vCreatedby,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Created By');
+		CellPutS(vPropertyName,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Property Name');
+		CellPutS(Priority,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Priority');
+		CellPutS(vTypeCategory,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Type Category');
+		CellPutS(Type,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Type');
+		CellPutN(vVendorNTE,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Vendor NTE');
+		CellPutS(vDateTime,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Date Time Last Action');
+		CellPutS(vVendorInv,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Vendor Invoice Number');
+		CellPutN(vVendorInvTotal,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Vendor Invoice Total');
+		CellPutS(Comments,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Comments');
+		CellPutS(vAssetID,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset ID');
+		CellPutS(Asset,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset');
+		CellPutS(vAssetModel,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset Model');
+		CellPutS(vAssetType,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Asset Type');
+		CellPutS(Task,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Task');
+		CellPutS(Description,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Description');
+		CellPutS(vCompleteDateFirst,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Date Time Completed - First');
+		CellPutS(vCompleteDateLast,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Date Time Completed - Last');
+		CellPutN(vTotalSpotCost,'Opex Work Order Cube',vVersion,vCompany,vCurrency,vFM,vFY,vSubAcct,vGLAcct,vConsolidateBU,vSubledger,vVendor,vWO,vAPStatus,vWOStatus,'Total Spot Purchase Cost');
+	ENDIF;
+ENDIF;
+
+ENDIF;
+
+################################################ EXPORT FILE################################################
+
+IF(bDebug=1);
+	IF( vUseHeader @= 'yes' ) ;
+		vUseHeader = 'no';
+		ASCIIOUTPUT('..\logs\System\DebugCorrigoLoad.txt','ID','WO','Due Date','Work Desc','Scheduled Start','Created by','Createby Role','Property Name','WO Status','Priority',
+		'AssignedID','First Name','Last Name','User Screen Name','User Id','Type Category','Type','Vendor NTE','Date Time','Account','SubAccount', 'Subledger','Vendor','AP Status','VendorInv','VendorInvTotal','Comments','Complete Date First',
+		'Complete Date Last','BU','AssetID','Asset','Asset Model','AssetType','Task','Description');
+	ENDIF;
+
+	ASCIIOUTPUT('..\logs\System\DebugCorrigoLoad.txt',ID,vWO,vDueDate,vWorkDesc,vScheduledStart,vCreatedby,vCreatedbyRole,vPropertyName,vWOStatus,Priority,vAssignedID,vFirstName,vLastName,vUserScreenName,
+	vUserId,vTypeCategory,Type,NUMBERTOSTRING(vVendorNTE),vDateTime,vAccount,vSub,vSubledger,vVendor,vVendorInv,NUMBERTOSTRING(vVendorInvTotal),vAPStatus,Comments,vCompleteDateFirst,vCompleteDateLast,
+	vBU,vAssetID,Asset,vAssetModel,vAssetType,Task,Description);
+ENDIF;
+
+#######################################################################################################################
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+
+ViewDestroy (CubeName, ViewNameZero);
+SubsetDestroy ('Versions', ViewNameZero);
+SubsetDestroy ('Company', ViewNameZero);
+SubsetDestroy ('Currency', ViewNameZero);
+SubsetDestroy ('Fiscal Months', ViewNameZero);
+SubsetDestroy ('Fiscal Years', ViewNameZero);
+SubsetDestroy ('SubAccounts', ViewNameZero);
+SubsetDestroy ('GL_Accounts', ViewNameZero);
+SubsetDestroy ('BusUnits', ViewNameZero);
+SubsetDestroy ('Subledger', ViewNameZero);
+SubsetDestroy ('Vendor', ViewNameZero);
+SubsetDestroy ('Work Orders', ViewNameZero);
+SubsetDestroy ('AP Status', ViewNameZero);
+SubsetDestroy ('WO Status', ViewNameZero);
+SubsetDestroy ('Corrigo Measures', ViewNameZero);
+
+DimensionSortOrder('AP Status', 'ByName', 'Ascending', 'By Name', 'By Name');
+DimensionSortOrder('WO Status', 'ByName', 'Ascending', 'By Name', 'By Name');
+
+#Close Database Connection
+ODBCClose(vDataBase); 
+#endregion

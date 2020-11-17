@@ -1,0 +1,68 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####Define Variables#####
+sProcessNm = getProcessName();
+sSub = 'VE-' | sProcessNm;
+sDim = '}Dimensions';
+
+#####EXECUTE PROCESSES#####
+ExecuteProcess( 'sProcessSecurityCubes' );
+ExecuteProcess( 'sProcessSecurityDimensions' );
+ExecuteProcess( 'sProcessSecurityProcesses' );
+ExecuteProcess( 'sProcessSecurityChores' );
+ExecuteProcess( 'sProcessSecurityCapabilities' );
+ExecuteProcess( 'sProcessSecurityApplication' );
+
+
+
+
+#####Destroy previous views and subsets#####
+SubsetDestroy (sDim, sSub);
+
+
+
+#Create subset of all Dimensions where the SecurityType = Opex
+
+sMDX= '{FILTER( {TM1SORT( {TM1SUBSETALL( [' | sDim | '] )}, ASC)}, [' | sDim | '].[SecurityType] = "Opex")}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+ExecuteProcess( 'sProcessElementSecurity', 'pDim', vDim);
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+cEnablePlanningLevel=DIMIX('Global Control Items','Select Level of Planning');
+if (cEnablePlanningLevel>0);
+	cConsolidatePlanning = CellGetS('Global Control','Consolidated level planning','String');
+	cPlanningLevel=CellGetS('Global Control','Select Level of Planning','String');
+	if (cConsolidatePlanning@='Yes' & cPlanningLevel@<>'');
+		ExecuteProcess('sProcessSecurityACContributor');
+	endif;
+endif;
+
+SecurityRefresh;
+
+#endregion

@@ -1,0 +1,65 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Lease Type",
+	"Elements":
+	[
+		{
+			"Name":"All Lease Type",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"All",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Gross",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Modified Gross",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Net",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Not Specified",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Lease Type",
+			"ComponentName":"All",
+			"Weight":0
+		},
+		{
+			"ParentName":"All Lease Type",
+			"ComponentName":"Gross",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Lease Type",
+			"ComponentName":"Modified Gross",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Lease Type",
+			"ComponentName":"Net",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Lease Type",
+			"ComponentName":"Not Specified",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Lease Type.subsets/LeaseTypeDetail.json",
+		"Lease Type.subsets/LeaseTypeExpanded.json",
+		"Lease Type.subsets/Level0.json"
+	]
+}

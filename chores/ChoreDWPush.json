@@ -1,0 +1,123 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreDWPush",
+	"StartTime":"2018-12-26T05:15Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P1DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"pDebug",
+					"Value":0
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - Wrapper')"
+			}
+		},
+		{
+			"Step":1,
+			"Parameters":
+			[
+				{
+					"Name":"pDim",
+					"Value":"BusUnits"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - BusUnit')"
+			}
+		},
+		{
+			"Step":2,
+			"Parameters":
+			[
+				{
+					"Name":"pDim",
+					"Value":"Company"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - Company')"
+			}
+		},
+		{
+			"Step":3,
+			"Parameters":
+			[
+				{
+					"Name":"pDim",
+					"Value":"Fiscal Months"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - Fiscal_Month')"
+			}
+		},
+		{
+			"Step":4,
+			"Parameters":
+			[
+				{
+					"Name":"pDim",
+					"Value":"GL_Accounts"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - GLAccount')"
+			}
+		},
+		{
+			"Step":5,
+			"Parameters":
+			[
+				{
+					"Name":"pDim",
+					"Value":"SubAccounts"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - SubAccount')"
+			}
+		},
+		{
+			"Step":6,
+			"Parameters":
+			[
+				{
+					"Name":"pDim",
+					"Value":"Subledger"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - Subledger')"
+			}
+		},
+		{
+			"Step":7,
+			"Parameters":
+			[
+				{
+					"Name":"pDim",
+					"Value":"Vendor"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('DWPush - Vendor')"
+			}
+		}
+	]
+}

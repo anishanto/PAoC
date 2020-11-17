@@ -1,0 +1,113 @@
+{
+	"@type":"Process",
+	"Name":"CubeExtractAll_Currency Exchange",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"CubeExtractAll_Currency Exchange.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=33\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"Currency Exchange Cube",
+		"dataSourceNameForServer":"Currency Exchange Cube",
+		"view":"VE-Currency Exchange Cube-Export"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pEmailFile",
+			"Prompt":"Yes Email file",
+			"Value":"No",
+			"Type":"String"
+		},
+		{
+			"Name":"pSendTo",
+			"Prompt":"Input Email Distirbution and or Email address as needed",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pVersion",
+			"Prompt":"Leave Blank to Export all Versions",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"vVer",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCo",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCurType",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCurFrom",
+			"Type":"String",
+			"Position":4,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCurTo",
+			"Type":"String",
+			"Position":5,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vFY",
+			"Type":"String",
+			"Position":7,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCM",
+			"Type":"String",
+			"Position":8,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vFM",
+			"Type":"String",
+			"Position":8,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vValue",
+			"Type":"Numeric",
+			"Position":9,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

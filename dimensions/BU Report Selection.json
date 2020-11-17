@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"BU Report Selection",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('BU Report Selection')/Hierarchies('BU Report Selection')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"BU Report Selection.hierarchies/BU Report Selection.json"
+	]
+}

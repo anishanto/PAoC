@@ -1,0 +1,57 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vInsertionPoint = 'Balance Cube - Retention Number of Years';
+
+DimensionElementInsert('Global Control Items', vInsertionPoint, 'Consolidated level planning', 'N');
+DimensionElementInsert('Global Control Items', vInsertionPoint, 'Select Level of Planning', 'N');
+DimensionElementInsert('Global Control Items', vInsertionPoint, 'Select Allocation', 'N');
+
+
+
+AttrInsert('BusUnits', '', 'Allocation Element', 'S');
+AttrInsert('BusUnits', '', 'Allocation Validation', 'S');
+AttrInsert('BusUnits', '', 'Allocation Component', 'S');
+AttrInsert('BusUnits', '', 'Allocation Company', 'S');
+AttrInsert('BusUnits', '', 'Allocation', 'S');
+
+ExecuteProcess('update_dim_business_units_3_WF_hierarchy_build');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vDim = '}ElementAttributes_BusUnits';
+vSub = 'zDimMgmt';
+vSize = SubsetGetSize(vDim, vSub);
+vSubsetElement = SubsetGetElementName(vDim, vSub, vSize);
+vSortNum = AttrN(vDim, vSubsetElement, 'SortAttr');
+AttrPutN(vSortNum+1, vDim, 'Allocation Element', 'SortAttr');
+AttrPutN(vSortNum+2, vDim, 'Allocation Validation', 'SortAttr');
+AttrPutN(vSortNum+3, vDim, 'Allocation Component', 'SortAttr');
+AttrPutN(vSortNum+4, vDim, 'Allocation Company', 'SortAttr');
+AttrPutN(vSortNum+5, vDim, 'Allocation', 'SortAttr');
+
+SubsetDeleteAllElements(vDim, 'Allocation');
+SubsetElementInsert(vDim, 'Allocation', 'Allocation Element', 0);
+SubsetElementInsert(vDim, 'Allocation', 'Allocation Validation', 0);
+SubsetElementInsert(vDim, 'Allocation', 'Allocation Component', 0);
+SubsetElementInsert(vDim, 'Allocation', 'Allocation Company', 0);
+
+SubsetDeleteAllElements(vDim, 'Allocation_S3');
+SubsetElementInsert(vDim, 'Allocation_S3', 'Allocation Element', 0);
+#endregion

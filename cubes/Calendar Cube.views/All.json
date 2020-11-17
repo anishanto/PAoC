@@ -1,0 +1,50 @@
+{
+	"@type":"NativeView",
+	"Name":"All",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Calendar Months')/Hierarchies('Calendar Months')"
+				},
+				"Expression":"[Calendar Months].MEMBERS"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')"
+				},
+				"Expression":"[Fiscal Years].MEMBERS"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Calendar Cube Measures')/Hierarchies('Calendar Cube Measures')"
+				},
+				"Expression":"[Calendar Cube Measures].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Calendar Cube Measures')/Hierarchies('Calendar Cube Measures')/Elements('Days')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

@@ -1,0 +1,48 @@
+{
+	"@type":"NativeView",
+	"Name":"Fixed Rates",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')/Subsets('FixedRatesMeasures')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Subsets('level0')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Subsets('TenureDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Elements('100870')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Budget')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.#########"
+}

@@ -1,0 +1,207 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#============================        NOTES     =================================================
+#    Date                   Initials        Note
+#    2016-06-06           John Petrovik           		Initial Build
+#
+#  Adds new dimension element in appropriate hierarchies
+#
+#==========================================================================================
+
+#==========================================================================================
+
+#===============================    Process statistics  ===========================================
+cProcess = GETPROCESSNAME ;
+sProcess = TRIM (cProcess);
+WHILE ( SCAN ( ' ', sProcess )  > 0 );
+    sProcess = DELET ( sProcess, SCAN ( ' ' , sProcess ) , 1 ) ;
+END ;
+
+sUser = TM1USER() ;
+
+sNow = TIMST( NOW , '\M \D, \Y at \H \p \i min \s sec' ) ;
+vNowStart = NOW ;
+
+cubMessages = '}ElementAttributes_}Processes';
+
+#========================================================================================
+
+#============================= Define User Log =============================================
+cubGblCube = 'Global Settings';
+logPath = '..\logs\tunit\';
+exportPath = '..\DataSources\Exports\';
+
+IF ( SUBST ( logPath , LONG ( logPath ) - 1 , 1 ) @<> '\' ) ;
+    logPath = logPath | '\' ;
+ENDIF;
+
+logName = TRIM ( sProcess ) | '_' | sNow | '.log' ;
+errName =  TRIM ( sProcess ) | '_' | sNow | '.err' ;
+logNameMeta = TRIM ( sProcess ) | '_' | sNow | '-KICKOUT.csv' ;
+errNameMeta = TRIM ( sProcess ) | '_' | sNow | '-META.err' ;
+logFile = logPath | logName ;
+errFile = logPath | errName ;
+logFileMeta = logPath | logNameMeta ;
+errFileMeta = logPath | errNameMeta ;
+
+#===================================================================================
+
+
+#===============================   Process Variables  ====================================
+
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+vProcessStatusCube = 'Process Status';
+vDimension = pDimension;
+
+vFlag = 0;
+vExists = 0;
+
+vTimeStamp = TIMST(NOW, '\m-\d-\Y @ \H:\i \p PST');
+vMessage = 'No Message';
+
+DIMENSIONSORTORDER(vDimension, 'ByName','Ascending','ByHierarchy','Ascending');
+
+pElementParent = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pElementParent);
+pElementParentAH = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pElementParentAH);
+
+#Check that the fields have been entered and valid
+IF(pElement @= '');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: '| pDimension | ' not entered.';
+   ENDIF;
+ENDIF;
+
+IF (pNumericValidation <> 0);
+IF(LONG(pElement) <> pNumericValidation % CODE(pElement,1) < 48 % CODE(pElement,1) > 57 % CODE(pElement,2) < 48 % CODE(pElement,2) > 57 % CODE(pElement,3) < 48 % CODE(pElement,3) > 57
+    % CODE(pElement,4) < 48 % CODE(pElement,4) > 57 );
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: ' |pDimension |' code must be a ' | NUMBERTOSTRING(pNumericValidation) |' digit numeric value.';
+   ENDIF;
+ENDIF;
+ENDIF;
+
+#Check that Element does not exist
+IF(vFlag = 0);
+   IF(DIMIX(vDimension, pElement) <> 0 & vDimension @<> 'GL_Accounts');
+      vFlag = 1;
+      vMessage = 'ERROR: The "'| pElement | ' "already exists.';
+      PROCESSBREAK();
+      IF(pValidationFlag @= 'FALSE' & pElementAlias @<> '0');
+           # Update Description attribute in dimension
+           DIMENSIONELEMENTCOMPONENTADD(vDimension, pElementParent, pElement, 1);
+           IF(pElementParentAH @<>'' & pElementParentAH @<>'0');
+               DIMENSIONELEMENTCOMPONENTADD(vDimension, pElementParentAH, pElement, 1);
+           ENDIF;
+           ATTRPUTS(DIMENSIONELEMENTPRINCIPALNAME(vDimension, pElement) | ' - ' | pElementAlias,vDimension,pElement,'Name');
+           IF(vDimension @= 'BusUnits' & ATTRS(vDimension, pElement, 'HierarchyStatus') @= 'yes');
+              DIMENSIONELEMENTCOMPONENTADD('BusUnits_PM', pElementParent, pElement, 1);
+              IF(pElementParentAH @<>'' & pElementParentAH @<>'0');
+                  DIMENSIONELEMENTCOMPONENTADD('BusUnits_PM', pElementParentAH, pElement, 1);
+              ENDIF;
+              ATTRPUTS(DIMENSIONELEMENTPRINCIPALNAME(vDimension, pElement)  | ' - ' | pElementAlias,'BusUnits_PM',pElement,'Name');
+           ENDIF;
+           vMessage = 'SUCCESS: The element "'| pElement | ' " is added to all hierarchies.';
+       ENDIF;
+
+   ENDIF;
+ENDIF;
+
+IF(pElementAlias @= '');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: '| pDimension | ' Alias not entered.';
+   ENDIF;
+ENDIF;
+
+vDimension = pDimension;
+vElementParent = pElementParent;
+IF(pElementParent @= '' % pElementParent @= '0');
+  vElementParent = DIMNM(vDimension, 1);
+ENDIF;
+
+IF(ELLEV(pDimension, vElementParent) = 0 & SUBST(vElementParent,1,3)@<>'All');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: Invalid Parent selection.';
+   ENDIF;
+ENDIF;
+
+IF(pDimension @= 'Currency' & LONG(pElement)<>3);
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: New Currency Code length should be 3 characters.';
+   ENDIF;
+ENDIF;
+
+#Add Element
+IF(vFlag = 0);
+   IF(pValidationFlag @= 'TRUE');
+      vMessageSuccess = 'SUCCESS: Validation successful.  Click Complete New '| pDimension |' to add the new ' |pElement |' '| pDimension | '.';
+   ELSE;
+       vMessageSuccess = 'SUCCESS: Element ' | pElement | ' added to the ' | pDimension | ' hierarchy.' ;
+      #To Dimension
+      DIMENSIONELEMENTINSERT(pDimension, '', pElement, 'N');
+      DIMENSIONELEMENTCOMPONENTADD(vDimension, pElementParent, pElement, 1);
+      IF(pElementParentAH @<>'' & pElementParentAH @<>'0');
+           DIMENSIONELEMENTCOMPONENTADD(vDimension, pElementParentAH, pElement, 1);
+      ENDIF;
+      IF(vDimension @= 'BusUnits');
+         DIMENSIONELEMENTINSERT('BusUnits_PM', '', pElement, 'N');
+         DIMENSIONELEMENTCOMPONENTADD('BusUnits_PM', pElementParent, pElement, 1);
+         IF(pElementParentAH @<>'' & pElementParentAH @<>'0');
+              DIMENSIONELEMENTCOMPONENTADD('BusUnits_PM', pElementParentAH, pElement, 1);
+         ENDIF;
+      ENDIF;
+      IF(vDimension @= 'Currency');
+          DIMENSIONELEMENTINSERT('CurrencyFrom', '', pElement, 'N');
+          DIMENSIONELEMENTCOMPONENTADD('CurrencyFrom', 'All Currency', pElement, 1);
+      ENDIF;
+   ENDIF;
+ENDIF;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Update Process Status cube with messages
+CELLPUTS ( vMessageSuccess , cubMessages, cProcess, elmSuccessMessage);
+CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+
+IF(vFlag = 1);
+   ProcessQuit;
+ELSE;
+   ATTRPUTS(pElementAlias,vDimension,pElement,'Name');
+ENDIF;
+
+#Update Hierarrchy Attributes
+IF(ELLEV(pDimension, pElement) = 0);
+     EXECUTEPROCESS('ProcessUpdate Hierarchy Attributes', 'pDimName', vDimension, 'pElement', pElement); 
+ENDIF;
+
+#Update Security
+sSecurityUpadate = 'sProcessSecurityUpdate';
+ExecuteProcess(sSecurityUpadate);
+
+# Refresh Security
+vSecurity_Refresh = 'SecurityRefresh';
+EXECUTEPROCESS(vSecurity_Refresh);
+#endregion

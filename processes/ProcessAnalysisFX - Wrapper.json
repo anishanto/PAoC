@@ -1,0 +1,57 @@
+{
+	"@type":"Process",
+	"Name":"ProcessAnalysisFX - Wrapper",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessAnalysisFX - Wrapper.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pVersion",
+			"Prompt":"Version to Convert",
+			"Value":"Actuals",
+			"Type":"String"
+		},
+		{
+			"Name":"pYear",
+			"Prompt":"Year to Convert",
+			"Value":"2018",
+			"Type":"String"
+		},
+		{
+			"Name":"pCompany",
+			"Prompt":"Company to Convert",
+			"Value":"All Companies",
+			"Type":"String"
+		},
+		{
+			"Name":"pCurrency",
+			"Prompt":"Yes/No Run Currency Conversion",
+			"Value":"No",
+			"Type":"String"
+		},
+		{
+			"Name":"pRestatement",
+			"Prompt":"Yes/No Run Restatement",
+			"Value":"No",
+			"Type":"String"
+		},
+		{
+			"Name":"pVariation",
+			"Prompt":"Yes/No Run Currency FX Variance",
+			"Value":"No",
+			"Type":"String"
+		},
+		{
+			"Name":"pCurrencyTo",
+			"Prompt":"Currency to Convert To",
+			"Value":"USD",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

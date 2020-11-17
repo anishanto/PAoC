@@ -1,0 +1,202 @@
+{
+	"@type":"Subset",
+	"Name":"FiscalMonthYearF",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M01 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M02 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M03 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M04 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M05 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M06 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M07 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M08 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M09 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M10 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M11 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M12 Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Y01')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M01 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M02 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M03 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M04 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M05 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M06 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M07 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M08 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M09 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M10 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M11 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M12 Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Y02')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M01 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M02 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M03 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M04 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M05 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M06 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M07 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M08 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M09 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M10 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M11 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M12 Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Y03')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M01 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M02 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M03 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M04 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M05 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M06 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M07 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M08 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M09 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M10 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M11 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M12 Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Y04')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M01 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M02 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M03 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M04 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M05 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M06 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M07 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M08 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M09 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M10 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M11 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('M12 Y05')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Y05')"
+		}
+	]
+}

@@ -1,0 +1,45 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#### copy file
+
+###Chris Malone 111716 Define Constants
+cFilePath = 'E:\TM1Models\';
+cClientName = CellGetS('Global Control', 'Client Server Name','String');
+cSourceFolder = '\DataSources\imports\';
+cTargetFolder = '\DataSources\imports\';
+
+
+####Define String Path
+sLocation = cFilePath|cClientName|cSourceFolder;
+
+#Commented out Line Not sure why these are here - follow up with Suresh.
+#vLocation = 'E:\TM1Models\PlanOpex44181\DataSources\imports\';
+#vTargetFile = 'LoadCubeOpexFile.csv';
+
+#Chris Malone - Change to new path
+#Old Line
+#vCombine = 'cmd /c copy /Y ' | pSourceLocation|pSourceFile |' '| pTargetLocation|pTargetFile;
+
+#New Line
+#Note Original Parameters - Path for source and target are the same
+vCombine = 'cmd /c copy /Y ' | sLocation|pSourceFile |' '| sLocation|pTargetFile;
+ExecuteCommand(vCombine,0 );
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

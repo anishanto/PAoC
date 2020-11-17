@@ -1,0 +1,144 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vClientID=CellGetS('Global Control','Client Server Name','String');
+
+sSQLDel = '  Delete from [DW_TM1_Budget].ssdi.BusUnitAttr where ClientID=''' |vClientID|''' ';
+ODBCOPEN('BudgetWB','TM1_readonly','tm1readonly');
+ODBCOutput('BudgetWB',sSQLDel); 
+
+
+CubeName ='}ElementAttributes_'|pDim;
+ViewNameTransfer =  'VE-' | CubeName | '-DW' ;
+vUseHeader= 'yes' ;
+vDim='}ElementAttributes_'|pDim;
+
+DATASOURCEASCIIQUOTECHARACTER = '';
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+# Create views and subsets for Export
+#Create BusUnits
+#Create BusUnits
+cPlanningLevel='No';
+if (DIMIX('Global Control Items','Consolidated Level Planning')>0);
+  cPlanningLevel=CellGetS('Global Control','Consolidated Level Planning','String');
+endif;
+
+if (cPlanningLevel@='Yes');
+  sMDX = '{EXCEPT ({TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}, ASC)},
+          {FILTER( {TM1SUBSETALL( [BusUnits] )}, [BusUnits].[Allocation] = "Y")})}';
+else;
+    sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}, ASC)}';
+endif;       
+
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( ['| pDim |'] )} ) }, 0)}, ASC)}';
+#SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create }ElementAttributes_BusUnits
+SubsetCreate (vDim, ViewNameTransfer);
+SubsetElementInsert ( vDim,  ViewNameTransfer, 'CodeName' , 1);
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,pDim, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,vDim, ViewNameTransfer);
+
+ViewColumnDimensionSet(CubeName, ViewNameTransfer,vDim,1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, pDim, 1);
+
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vCubeName ='}ElementAttributes_'|pDim;
+vBUID=Dim;
+vLastUpdated=TODAY(1);
+
+
+sSQLVar = 'Insert into DW_TM1_Budget.ssdi.BusUnitAttr (ClientID,BUID,LastUpdated,';
+sSQLData = '( ''' |vClientID| ''',''' |vBUID|''',''' |vLastUpdated|''',';
+
+i=1;
+sSize=DIMSIZ(vCubeName);
+While(i<=sSize);
+sEle=DIMNM(vCubeName,i);
+IF(sEle@='Name' % sEle@='NameCode' % sEle@='DisplayName' % sEle@='DisplayNameCustom' % sEle@='Country' % sEle@='Currency' % 
+sEle@='CreationDate' % sEle@='CodeName' % sEle@='Company' % sEle@='SquareFeet' % sEle@='FacStatus' % sEle@='FacType' % sEle@='FacMgr' % sEle@='FacSrMgr' % 
+sEle@='FacRegMgr' % sEle@='SH1Parent1' % sEle@='SH1Parent2' % sEle@='SH1Parent3' % sEle@='SH1Parent4' % sEle@='SH1Parent5' % sEle@='HierarchyStatus' % 
+sEle@='AH1Parent1' % sEle@='AH1Parent2' % sEle@='AH1Parent3' % sEle@='AH1Parent4' % sEle@='AH1Parent5' % sEle@='AH2Parent1' % sEle@='AH2Parent2' % 
+sEle@='AH2Parent3' % sEle@='AH2Parent4' % sEle@='AH2Parent5' % sEle@='AH3Parent1' % sEle@='AH3Parent2' % sEle@='AH3Parent3' % sEle@='AH3Parent4' % 
+sEle@='AH3Parent5' % sEle@='AH4Parent1' % sEle@='AH4Parent2' % sEle@='AH4Parent3' % sEle@='AH4Parent4' % sEle@='AH4Parent5' % sEle@='AH5Parent1' % 
+sEle@='AH5Parent2' % sEle@='AH5Parent3' % sEle@='AH5Parent4' % sEle@='AH5Parent5' % sEle@='AH6Parent1' % sEle@='AH6Parent2' % sEle@='AH6Parent3' % 
+sEle@='AH6Parent4' % sEle@='AH6Parent5' % sEle@='AH7Parent1' % sEle@='AH7Parent2' % sEle@='AH7Parent3' % sEle@='AH7Parent4' % sEle@='AH7Parent5' % 
+sEle@='AH8Parent1' % sEle@='AH8Parent2' % sEle@='AH8Parent3' % sEle@='AH8Parent4' % sEle@='AH8Parent5' % sEle@='AH9Parent1' % sEle@='AH9Parent2' % 
+sEle@='AH9Parent3' % sEle@='AH9Parent4' % sEle@='AH9Parent5' % sEle@='AH10Parent1' % sEle@='AH10Parent2' % sEle@='AH10Parent3' % sEle@='AH10Parent4' % 
+sEle@='AH10Parent5' % sEle@='ClientNumberandDescription' % sEle@='PropIDNumberName' % sEle@='PropIDNumberNameDisplay' % sEle@='CodeAddress' % 
+sEle@='AddressCode' % sEle@='BUType' % sEle@='DID' % sEle@='Division' % sEle@='Post' % sEle@='PostFlag'% sEle@='TM1E1');
+sValue=CellGetS (vCubeName, Dim, sEle );
+sData = '';
+nCounter = Long(sValue);
+While(nCounter > 0);
+sCharacter = SubSt(sValue, nCounter, 1);
+If ( sCharacter @= '''' );
+sCharacter = '''''';
+EndIf;
+sData = sCharacter | sData;
+nCounter = nCounter - 1;
+End;
+IF(i=sSize);
+sSQLVar = sSQLVar | sEle | ')';
+sSQLData = sSQLData | ''''|sData|'''' | ')';
+ELSE;
+sSQLVar = sSQLVar | sEle | ',';
+sSQLData = sSQLData | ''''|sData|'''' | ',';
+ENDIF;
+ENDIF;
+i=i+1;
+END;
+
+sSQLFinal = sSQLVar | 'Values' | sSQLData;
+#ASCIIOUTPUT('SqlFinal.txt',sSQLFinal);
+
+ODBCOutput('BudgetWB',sSQLFinal); 
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ODBCClose('BudgetWB');
+
+ViewNameTransfer =  'VE-' | CubeName | '-DW' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+#endregion

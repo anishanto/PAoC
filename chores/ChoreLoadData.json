@@ -1,0 +1,25 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreLoadData",
+	"StartTime":"2019-04-15T09:20Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P1DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"pTester",
+					"Value":0
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('RunChoreLoadData')"
+			}
+		}
+	]
+}

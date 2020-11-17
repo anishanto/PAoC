@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"FiscalMonthsExpanded",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1SubsetBasis()}, ALL, RECURSIVE )}"
+}

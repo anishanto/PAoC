@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Global SubAccount Selection",
+	"Expression":"{[SubAccounts].[SH1]}+{[SubAccounts].[AH1]}+{[SubAccounts].[AHIT]}"
+}

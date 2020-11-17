@@ -1,0 +1,604 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############################################# Prolog relaced Dynamic Subsets with Static to allow delete to be added. 1/4/17
+########################### Constants 1/4/17
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'GL_Accounts';
+cTnode = UPPER(pHierarchy);
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_GL_Accounts';
+cDimName2 = '}ElementAttributes_GL_Accounts';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExportPath = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImportPath = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cFileName = 'Accounts.csv';
+cMetadataFileName = 'GeneralLedger.csv';
+cDataFileName = 'GLStdNames.csv';
+cMetadataPath = cExportPath | cMetadataFileName;
+cDataPath = cExportPath | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cSubset1 = 'Global GLA Selection';
+vHeaderInsert1 ='yes';
+vHeaderInsert2 ='yes';
+vClientTenureType = CellGetN('Global Control','Client Tenure Type','Value');
+
+############################################################# Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+ 	sFulPath = cImportPath|cFileName;
+
+   	# Set Debug file name
+   	sDebugFile = cDebugFile|'Prolog.debug';
+
+  	 # Log start time
+   	AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+   	AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   	AsciiOutput( sDebugFile, '            GLCode : '| GLCode);
+   	AsciiOutput( sDebugFile, '            V2                  : '| V2);
+   	AsciiOutput( sDebugFile, '            Value              :'| Value);
+EndIf;
+
+############################################################## Validate Constants
+nErrors = 0;
+
+############################################################## Check if Dimension Constant Exists
+
+IF( Trim( cDimName ) @=' ');
+     	nErrors = 1;
+     	sMessage = 'No dimension named in Constant Section of Process';
+
+     	If( pDebug >= 1);
+      		AsciiOutput ( sDebugFile, sMessage );
+     	EndIf;    
+     
+	DatSourceType = 'NULL';   
+     	ItemReject (sMessage);
+EndIf;
+
+############################################################## Add Top Node Parent
+
+IF(DIMIX(cDimName, cTnode)=0);
+	DimensionElementInsert(cDimName,' ', cTnode ,'c');
+ENDIF;
+
+IF(DIMIX(cDimName, 'NA')=0);
+    	DimensionElementInsert(cDimName,' ', 'NA' ,'n');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'NA',1);
+ENDIF;
+
+############################################################## Delete Consolidations
+
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+
+	ElName = DIMNM( cDimName , x );
+
+   	IF( DTYPE ( cDimName, ElName) @='C' & ELISANC( cDimName , cTnode  , ElName) = 1);
+		asciioutput(GetProcessErrorFileDirectory|cProcessName|'_'|cTimeStamp|'.txt',cDimName,cTnode,'Deleting: '|ElName);
+      		DimensionElementDelete(cDimName, ElName); 
+   	ENDIF;
+
+    	x=x-1;
+END;
+
+############################################################# Delete View Subsets if they exist
+
+IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+	ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+     	SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+     	SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+############################################################# Create Dimension Attribute Subset
+
+############ GL AccountDimension
+
+##### Create GL Subset
+
+sMDX = '{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SORT( {TM1SUBSETALL( ['| cDimName |'] )}, ASC)}, 0)}, {['| cDimName |'].[Total GL], ['| cDimName |'].[NA] }) }';
+SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+
+############ GL Account Attribute
+
+SUBSETCREATE(cDimName2,cViewNameTransfer);
+
+###### For Input Template Hierarchy (AHIT)
+
+IF(cTnode@='AHIT');
+   	SubsetElementInsert(cDimName2, cViewNameTransfer, 'InputTemplate',1);
+EndIf;
+
+###### For the rest of the Alt Hierarchies (SH1 / AH1-AH4 / AL1-AL4 / AO1)
+
+IF(cTnode@<>'AHIT');
+	IF( DIMIX(cDimName2,cTnode|'Parent1') > 0 );
+	  	SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent1',1);
+	EndIf;
+
+	IF( DIMIX(cDimName2,cTnode|'Parent2') > 0 );
+	  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent2',1);
+	EndIf;
+	
+	IF( DIMIX(cDimName2,cTnode|'Parent3') > 0 );
+	  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent3',1);
+	EndIf;
+
+	IF( DIMIX(cDimName2,cTnode|'Parent4') > 0 );
+	  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent4',1);
+	EndIf;
+EndIf;
+
+############################################################### Create and assign View
+
+ViewCreate(cCubeName, cViewNameTransfer);
+
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName, cViewNameTransfer);
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName2, cViewNameTransfer);
+ViewRowDimensionSet (cCubeName, cViewNameTransfer, cDimName, 1);
+ViewColumnDimensionSet (cCubeName, cViewNameTransfer, cDimName2,1);
+
+ViewExtractSkipCalcsSet(cCubeName, cViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(cCubeName, cViewNameTransfer, 0);
+
+
+
+########Deleting AHIT for Rebuilding AHIT based on Input Template Yes/No
+IF(cTnode @='SH1' & DIMIX(cDimName,'AHIT')>0);
+       DimensionElementDelete(cDimName,'AHIT');
+ENDIF;
+
+############################################################## Set dimension sort order
+
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+############################################################## DEFINE LOCAL VARIABLES
+
+DatasourceNameForServer = cCubeName;
+DatasourceNameForClient = cCubeName;
+DataSourceType = 'VIEW';
+DatasourceCubeview= cViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+###################################### Continue Debug
+
+IF( pDebug >=1 );
+   	# Set Debug File
+   	sDebugFile = cDebugFile | 'Metadata.debug';
+ENDIF;
+
+###################################### Continue Check from Prolog
+
+IF( nErrors > 0 );
+   	ProcessBreak;
+ENDIF;
+
+###################################### GL Account Flag [2019.01.03]
+
+vGLAccFlag = IF (vClientTenureType = 0, 'F', CellGetS('}ElementAttributes_GL_Accounts',GLCode,'Lease or FM Flag'));
+
+###################################### Metadata Constants Existing Code 1/4/17
+
+vElement = GLCode;
+
+IF(Attrs(cDimName,GLCode,'AcctCategory') @= 'BalanceSheet');
+	vUAP = 'Unassigned GL Balance Sheet'|' '|cTnode;
+ELSEIF(Attrs(cDimName,GLCode,'AcctCategory') @= 'PNL');
+   	vUAP = 'Unassigned GL PL Account'|' '|cTnode;
+ELSEIF(Attrs(cDimName,GLCode,'AcctCategory') @= 'STAT');
+   	vUAP = 'Unassigned GL Statistical'|' '|cTnode;
+ENDIF;
+
+vEnd = vUAP;
+
+IF( pDebug <=1 );
+	IF(DIMIX(cDimName2,cTnode|'Parent1')<>0);
+        		vP1 = ATTRS(cDimName,vElement,cTnode|'Parent1');
+	ENDIF;
+ 
+	IF(DIMIX(cDimName2,cTnode|'Parent2')<>0);
+        		vP2 = ATTRS(cDimName,vElement,cTnode|'Parent2');
+	ENDIF;
+ 
+	IF(DIMIX(cDimName2,cTnode|'Parent3')<>0);
+        		vP3 = ATTRS(cDimName,vElement,cTnode|'Parent3');
+	ENDIF;
+ 
+	IF(DIMIX(cDimName2,cTnode|'Parent4')<>0);
+        		vP4 = ATTRS(cDimName,vElement,cTnode|'Parent4');
+	ENDIF;
+ENDIF;
+
+IF( pDebug >=1 );
+      	ASCIIOUTPUT(  sDebugFile , 'Parent1: ' ,vP1,  'Parent2: ' ,vP2, 'Parent3: ' ,vP3, 'Parent4: ' ,vP4,' For Dimension ',cDimName);
+ENDIF;
+ 
+######################################## CREATE AHIT
+
+cParent = 'AHIT';
+IF(cTnode @='SH1');
+       	IF(Lower(ATTRS(cDimName,GLCode,'InputTemplate')) @= 'yes');
+        		DIMENSIONELEMENTINSERT(cDimName,'',cParent,'c');
+        		DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,GLCode,1.000000);
+	ENDIF;
+ENDIF;
+
+######################################### Create Consolidation for NA
+
+DIMENSIONELEMENTINSERT(cDimName,'','Total GL','N');
+   
+######################################### Create Hardcoded Elements Cm 11/8/17
+
+IF(vElement@='GLCode');
+   	ITEMSKIP;
+ENDIF;
+
+######################################### Create Hierarchy Existing Code 1/4/17
+
+########################### Parent is unassigned
+
+######### SH1 - No Parents
+
+IF( vP1 @= 'Unassigned GL Balance Sheet'|' '|cTnode   & Attrs(cDimName,GLCode,'AcctCategory') @= 'BalanceSheet' & cTnode@='SH1' & GLCode@<>'Total GL');
+	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'','BS','c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,'BS',vUAP,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'BS',1.000000);
+ELSEIF( vP1 @= 'Unassigned GL PL Account'|' '|cTnode & Attrs(cDimName,GLCode,'AcctCategory') @= 'PNL' & cTnode@='SH1' & GLCode@<>'Total GL');
+	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'','PL','c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,'PL',vUAP,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'PL',1.000000);
+ELSEIF(vP1 @= 'Unassigned GL Statistical'|' '|cTnode & Attrs(cDimName,GLCode,'AcctCategory') @= 'STAT' & cTnode@='SH1');
+	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'','STAT','c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,'STAT',vUAP,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'STAT',1.000000);
+
+######## No Parents For the rest of the Alt Hierarchies (AH1-AH4 / AL1-AL4 / AO1)
+
+ELSEIF(vP1 @= 'Unassigned GL Balance Sheet'|' '|cTnode & Attrs(cDimName,GLCode,'AcctCategory') @= 'BalanceSheet' & cTnode@<>'SH1' & GLCode@<>'Total GL');
+	IF ((vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+		DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+		DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'','BS '|cTnode,'c');
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,'BS '|cTnode,vUAP,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'BS '|cTnode,1.000000);
+	ENDIF;
+ELSEIF(vP1 @='Unassigned GL PL Account'|' '|cTnode & Attrs(cDimName,GLCode,'AcctCategory') @= 'PNL' & cTnode@<>'SH1' & GLCode@<>'Total GL');
+	IF ((vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+		DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+		DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'','PL '|cTnode,'c');
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,'PL '|cTnode,vUAP,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'PL '|cTnode,1.000000);
+	ENDIF;
+ELSEIF(vP1 @= 'Unassigned GL Statistical'|' '|cTnode & Attrs(cDimName,GLCode,'AcctCategory') @= 'STAT' & cTnode@<>'SH1' & GLCode@<>'Total GL');
+	IF ((vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+		DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+		DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'','STAT '|cTnode,'c');
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,'STAT '|cTnode,vUAP,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'STAT '|cTnode,1.000000);
+	ENDIF;
+
+######################## No Parent1
+
+################# Total GL
+
+ELSEIF( (vP1 @= '' % vP1 @= vP2)  & GLCode@='Total GL');
+	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+
+################# SH1 No Parents
+
+ELSEIF( (vP1 @= '' % vP1 @= vP2)  & Attrs(cDimName,GLCode,'AcctCategory') @= 'BalanceSheet' & cTnode@='SH1' & GLCode@<>'Total GL');
+	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'','BS','c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,'BS',vUAP,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'BS',1.000000);
+ELSEIF( (vP1 @= ' ' % vP1 @= vP2) & Attrs(cDimName,GLCode,'AcctCategory') @= 'PNL' & cTnode@='SH1' & GLCode@<>'Total GL');
+	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'','PL','c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,'PL',vUAP,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'PL',1.000000);
+ELSEIF(( vP1 @= '' % vP1 @= vP2) & Attrs(cDimName,GLCode,'AcctCategory') @= 'STAT' & cTnode@='SH1' & GLCode@<>'Total GL');
+	DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'','STAT','c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,'STAT',vUAP,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'STAT',1.000000);
+
+################# All Other Hierarchies No Parents
+
+ELSEIF((vP1 @= '' % vP1 @= vP2) & Attrs(cDimName,GLCode,'AcctCategory') @= 'BalanceSheet' & cTnode@<>'SH1' & GLCode@<>'Total GL');
+	IF ((vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+		DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+		DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'','BS '|cTnode,'c');
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,'BS '|cTnode,vUAP,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'BS '|cTnode,1.000000);
+	ENDIF;
+ELSEIF(( vP1 @= '' % vP1 @= vP2) & Attrs(cDimName,GLCode,'AcctCategory') @= 'PNL' & cTnode@<>'SH1' & GLCode@<>'Total GL');
+	IF ((vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+		DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+		DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'','PL '|cTnode,'c');
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,'PL '|cTnode,vUAP,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'PL '|cTnode,1.000000);
+	ENDIF;
+ELSEIF(( vP1 @= '' % vP1 @= vP2) & Attrs(cDimName,GLCode,'AcctCategory') @= 'STAT' & cTnode@<>'SH1' & GLCode@<>'Total GL');
+	IF ((vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+		DIMENSIONELEMENTINSERT(cDimName,'',GLCode,'n');
+		DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'','STAT '|cTnode,'c');
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,GLCode,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,'STAT '|cTnode,vUAP,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'STAT '|cTnode,1.000000);
+	ENDIF;
+
+################ Parents exists and are not equal
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP3 @<> vP4 & vP2 @<> '' & vP3 @<> '' & vP4 @<> '' );
+
+	IF ((SUBST(cTnode,1,2)@='SH')
+	    % (vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+
+		DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+
+		IF(vP4@='Total Statistics');
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+		Else;
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP4,1.000000);
+		EndIf;
+	ENDIF;
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @<> ''  & vP4 @= '');
+	IF ((SUBST(cTnode,1,2)@='SH')
+	    % (vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+
+		DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+
+		IF(vP3@='Total Statistics');
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+		Else;
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP3,1.000000);
+		EndIf;
+	ENDIF;
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @= '' );
+	IF ((SUBST(cTnode,1,2)@='SH')
+	    % (vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+
+		DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+		DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+
+		IF(vP2@='Total Statistics');
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+		Else;
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP2,1.000000);
+		EndIf;
+	ENDIF;
+
+ELSEIF( vP1 @<> vP2 & vP2 @= '' );
+	IF ((SUBST(cTnode,1,2)@='SH')
+	    % (vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+	
+		DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+
+		IF(vP1@='Total Statistics');
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+		Else;
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP1,1.000000);
+		EndIf;
+	ENDIF;
+ELSE;
+	IF ((SUBST(cTnode,1,2)@='SH')
+	    % (vGLAccFlag@='F' & SUBST(cTnode,1,2)@='AH') 
+	    % (vGLAccFlag@='L' & SUBST(cTnode,1,2)@='AL') 
+	    % (vGLAccFlag@='O' & SUBST(cTnode,1,2)@='AO'));
+		DIMENSIONELEMENTINSERT(cDimName,'',vEnd,'c');
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,vEnd,vElement,1.000000);
+		DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vEnd,1.000000);
+	ENDIF;
+ENDIF;
+
+
+ 
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+####### Remove Top Node from Total GL [ CURRENTLY NOT IN USE ]
+
+IF (1 = 0);
+
+## SH
+
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet SH1') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet SH1','Total GL');
+	EndIf;
+
+## AH1-AH4
+
+	IF (DIMIX(cDimName,'Unassigned GL Balance Sheet AH1') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AH1','Total GL');
+	EndIf;
+
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AH2') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AH2','Total GL');
+	EndIf;
+
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AH3') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AH3','Total GL');
+	EndIf;
+
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AH4') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AH4','Total GL');
+	EndIf;
+
+## AL1-AL4
+ 
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AL1') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AL1','Total GL');
+	EndIf;
+
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AL2') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AL2','Total GL');
+	EndIf;
+
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AL3') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AL3','Total GL');
+	EndIf;
+
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AL4') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AL4','Total GL');
+	EndIf;
+
+## AO1 
+	IF(DIMIX(cDimName,'Unassigned GL Balance Sheet AO1') <>0 & DIMIX(cDimName,'Total GL')<>0);
+		DIMENSIONELEMENTCOMPONENTDELETE(cDimName, 'Unassigned GL Balance Sheet AO1','Total GL');
+	EndIf;
+
+ENDIF;
+
+
+IF(pDebug >= 1 );  
+	# Set the Debug File for Epilog
+   	sDebugFile = cDebugFile | 'Epilog.debug';
+
+	# Check for Errors
+   	IF( nErrors <> 0 );
+      		ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   	EndIf;
+
+  	# Log Finish Time
+	ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+ 
+####### If errors occurred terminate process with error status
+
+IF( nErrors <> 0 );
+       	ProcessQuit;
+Endif;
+
+
+
+####### Delete View Subsets if they Exists
+
+IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+	ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+     	SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+     	SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+
+If(pSecurityRefresh@='1');
+SecurityRefresh;
+ENDIF;
+#endregion

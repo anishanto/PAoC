@@ -1,0 +1,137 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CubeName = '}ElementSecurity_BusUnits';
+cDimGroup = '}Groups';
+cSecurityCube = '}ElementSecurity_Allocation_BusUnits';
+cAllocBusUnitDim = 'Allocation_Busunits';
+ViewNameSource =  'VE-' | GetProcessName() | '-Source' ;
+ViewNameZero =  'VE-' | GetProcessName()  | '-VZO' ;
+
+CUBESETLOGCHANGES(CubeName, 0);
+
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy (cDimGroup, ViewNameSource);
+
+#create Groups
+SubsetCreate(cDimGroup,ViewNameSource);
+sMDX = 
+'{UNION(
+{TM1FILTERBYPATTERN( {TM1SubsetToSet([}Groups],"All Groups")}, "*Tm1PlanOpexWB*")},
+{TM1FILTERBYPATTERN( {TM1SubsetToSet([}Groups],"All Groups")}, "*CorpTM1*")})}';
+SubsetMDXSet(cDimGroup, ViewNameSource, sMDX);
+
+
+
+ViewCreate( CubeName, ViewNameSource, 1);
+ViewSubsetAssign (CubeName, ViewNameSource, 'BusUnits', 'Approval WF');
+ViewSubsetAssign (CubeName, ViewNameSource, '}Groups', ViewNameSource);
+
+ViewExtractSkipRuleValuesSet (CubeName, ViewNameSource, 0);
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource, 0);
+ViewExtractSkipZeroesSet(CubeName, ViewNameSource, 0);
+
+# Set new views as the datasource:
+DatasourceNameForServer = CubeName;
+DatasourceCubeView = ViewNameSource;
+
+
+#------------------Create Zero out view 
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameZero);
+SubsetDestroy ('BusUnits', ViewNameZero);
+SubsetDestroy (cDimGroup, ViewNameZero);
+
+sMDX = '{TM1DRILLDOWNMEMBER( {[BusUnits].[AH1]}, ALL, RECURSIVE ) }';
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+#create Groups
+SubsetCreate(cDimGroup,ViewNameZero);
+sMDX = 
+'{UNION(
+{TM1FILTERBYPATTERN( {TM1SubsetToSet([}Groups],"All Groups")}, "*Tm1PlanOpexWB*")},
+{TM1FILTERBYPATTERN( {TM1SubsetToSet([}Groups],"All Groups")}, "*CorpTM1*")})}';
+SubsetMDXSet(cDimGroup, ViewNameZero, sMDX);
+
+ViewCreate( CubeName, ViewNameZero, 1);
+
+ViewSubsetAssign (CubeName, ViewNameZero, 'BusUnits', ViewNameZero);
+ViewSubsetAssign (CubeName, ViewNameZero, '}Groups', ViewNameZero);
+
+
+ViewZeroOut(CubeName, ViewNameZero);
+
+if (CubeExists(cSecurityCube)=1);
+	#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+	ViewDestroy (cSecurityCube, ViewNameZero);
+	SubsetDestroy (cAllocBusUnitDim, ViewNameZero);
+	
+	sMDX = '{TM1DRILLDOWNMEMBER( {[Allocation_BusUnits].[AH1]}, ALL, RECURSIVE ) }';
+	SubsetCreatebyMDX( ViewNameZero, sMDX);
+	
+	ViewCreate( cSecurityCube, ViewNameZero, 1);
+	
+	ViewSubsetAssign (cSecurityCube, ViewNameZero, cAllocBusUnitDim, ViewNameZero);
+	ViewSubsetAssign (cSecurityCube, ViewNameZero, '}Groups', ViewNameZero);
+	
+	
+	ViewZeroOut(cSecurityCube, ViewNameZero);
+	
+endif;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+if (vValue@='');
+	Itemskip;
+endif;
+
+#vBusUnits = DimensionElementPrincipalName('BusUnits', vBusUnits);
+sDim = 'Allocation_BusUnits';
+sSub = 'zH-'|vBusUnits;
+nMax = SubsetGetSize( sDim, sSub );
+nCtr = 1;
+While( nCtr <= nMax );
+	sEle = SubsetGetElementName( sDim, sSub, nCtr );
+	if (CellIsUpdateable( CubeName, sEle, vGroups)=1);
+		CellPutS(vValue, CubeName, sEle, vGroups);
+	endif;
+	ElementSecurityPut(vValue, cAllocBusUnitDim, sEle, vGroups);
+	# do something here
+	nCtr = nCtr + 1;
+End;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CUBESETLOGCHANGES(CubeName, 1);
+
+
+IF( 1 = 1 );
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameSource);
+ViewDestroy (CubeName, ViewNameZero);
+ViewDestroy (cSecurityCube, ViewNameZero);
+SubsetDestroy ('}Groups', ViewNameSource);
+
+SubsetDestroy ('BusUnits', ViewNameZero);
+SubsetDestroy ('}Groups', ViewNameZero);
+
+ENDIF;
+#endregion

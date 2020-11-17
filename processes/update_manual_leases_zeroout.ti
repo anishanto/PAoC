@@ -1,0 +1,112 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# The purpose of the process is to load data to the leases cube for the selected version.
+# Final user can choose to zero out the data, make a partial load, or accumulate. 
+
+CubeLockOverride(1);
+
+##### Constants
+cImportPath = CELLGETS('Global Control','Import Shared Folder', 'String');  
+cFileName = 'Leases_Load.csv';
+sFullPath = cImportPath|cFileName;
+
+cCube = 'Leases Cube';
+cCurrency = 'Local';
+
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+
+sViewZero = cProcessName|' Zero';
+pSubsetZero = cProcessName|' Zero';
+pZeroSubAccounts ='SH1';
+
+cSubType = CELLGETS('Global Control','Client SubAcct Type', 'String');
+sFMorLeases =  IF (DIMIX('Global Control Items','Client Tenure Type')<>0, IF (CELLGETS('Global Control','Client Tenure Type', 'String')@='Tenure','Leases','FM'),'FM');
+sYR = 'Fiscal Years';
+sAllYR = 'All Fiscal Years';
+
+cBU = 'BusUnits';
+cUnassignedBU = 'Unassigned BusUnits';
+pBusAH = CELLGETN('Global Control', 'BusUnits AH Hierarchies', 'Value');
+pBusAL = CELLGETN('Global Control', 'BusUnits AL Hierarchies', 'Value');
+pBusAO = CELLGETN('Global Control', 'BusUnits AO Hierarchies', 'Value');
+
+sGL ='GL_Accounts' ;
+vGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+vGLAL = CELLGETN('Global Control', 'GA Accounts AL Hierarchies', 'Value');
+vGLAO = CELLGETN('Global Control', 'GA Accounts AO Hierarchies', 'Value');
+
+sSA ='SubAccounts' ;
+cASA = '}ElementAttributes_SubAccounts';
+cUnassignedSub = 'Unassigned SubAccount';
+vSAAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+  
+cTenure='Tenure ID';
+sUnassignedLease='Unassigned Tenure ID';
+pTenureIDAH = CELLGETN('Global Control', 'Tenure AH Hierarchies', 'Value');
+
+sDateAttr = 'CreationDate';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vTrimSubAccountNumber=IF(cSubType @= 'Sub',Subst(vAccountNumberSource,8,3 ),'NA');
+vAccountNumber=IF(cSubType @= 'Sub',Subst(vAccountNumberSource,1,6 ),vAccountNumberSource);
+
+IF(vTenureID@='');			
+	vTenureID='NA';
+ENDIF;
+
+### For existing elements: Put a 0 under the file combination for numeric fields.  
+### For unexisting elements: Elements coming in from load file will be added to unassigned buckets under each hierarchy. 
+IF (DIMIX(cBU, vBusUnits ) = 1 & DIMIX(sGL,vAccountNumber) = 1 & DIMIX(sSA,vTrimSubAccountNumber) = 1 & DIMIX(cTenure,vTenureID) = 1);
+	### Fiscal Month Year Load
+	vDim = 'Fiscal Month Year';
+	vSub = 'FiscalMonthsDetail';
+	vIndex = 1;
+	vIndexFinal = SubsetGetSize(vDim,vSub);
+	cMeasure = 'Lease Value';
+	While (vIndex <= vIndexFinal);
+		element = SubsetGetElementName(vDim,vSub,vIndex);
+		vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+		vVarM = Expand( '%nM' | Expand( '%vIndexS%' ) | '%' );
+		IF(CELLISUPDATEABLE(cCube,vVersion,cCurrency,element,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure)=1);
+			CellPutN(0, cCube,vVersion,cCurrency,element,vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,cMeasure);
+		ENDIF;
+		vIndex = vIndex + 1;
+	END;
+
+	IF (CellIsUpdateable(cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Cost Amount') = 1);
+		CellPutN(0,cCube,vVersion,cCurrency,'Attribute',vCompany,vTrimSubAccountNumber,vAccountNumber,vBusUnits,vTenureID,'Cost Amount');
+	ENDIF;
+
+ELSE;
+	ItemSkip;	
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

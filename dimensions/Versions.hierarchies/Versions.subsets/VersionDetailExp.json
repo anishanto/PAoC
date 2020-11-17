@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"VersionDetailExp",
+	"Expression":"{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Versions] )}, 0)}, { [Versions].[Budget], [Versions].[Forecast], [Versions].[PriorForecast] }) }"
+}

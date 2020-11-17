@@ -1,0 +1,190 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+TenureID=pTenureID;
+Version=pVersion;
+Currency=pCurrency;
+Company=pCompany;
+SubAccount=pSubAccount;
+GLAccount=pGLAccount;
+BusUnits=pBusUnits;
+
+TenureDim='Tenure ID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+PortfolioAssumptionsCube='Lease Portfolio Assumptions';
+LeasesCube='Leases Cube';
+CalendarCube='Calendar Cube';
+ForecastMonth=CellGetS('Global Control', 'Lease Actuals Month', 'String')|' Y01';
+
+LeaseEndDate=CellGetS(LeasesCube, Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BusUnits, TenureID, 'BudgetEndDate');
+LeaseEndYear=SubSt(LeaseEndDate, 1, 4);
+nLeaseEndYear=StringtoNumber(LeaseEndYEar);
+LeaseEndMonth=SubSt(LeaseEndDate, 6, 2);
+nLeaseEndMonth=StringtoNumber(LeaseEndMonth);
+
+LeaseStartDate=AttrS(TenureDim, TenureID, 'LeaseEndDate');
+LeaseStartYear=SubSt(LeaseStartDate, 1, 4);
+nLeaseStartYear=StringtoNumber(LEaseStartYear);
+LeaseStartMonth=SubSt(LeaseStartDate, 6, 2);
+nLeaseStartMonth=StringtoNumber(LeaseStartMonth);
+sDim = 'Fiscal Month Year'; 
+
+IF(pVersion@='Forecast');	
+	LeaseEndPeriod=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseStartMonth, 'MonthName')|' '|LeaseStartYear|'F');
+	LeaseStartMap=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseStartMonth, 'MonthName')|' '|LeaseStartYear|'F');
+	LeaseEnd=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseEndMonth, 'MonthName')|' '|LeaseEndYear|'F');
+ELSE;
+	LeaseEndPeriod=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseStartMonth, 'MonthName')|' '|LeaseStartYear);
+	LeaseEnd=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseEndMonth, 'MonthName')|' '|LeaseEndYear);
+	LeaseStartMap=DimensionElementPrincipalName(sDim, AttrS('Calendar Months',LeaseStartMonth, 'MonthName')|' '|LeaseStartYear);
+ENDIF;
+
+LeaseStart=LeaseStartMap;
+
+#IF(nLeaseStartMonth=12);
+#	LeaseStart='M01 '|Dnext(sDim, LeaseStartMap);
+#ELSE;
+#	LeaseStart=DNext(sDim,LeaseStartMap);
+#ENDIF;
+
+
+sSub = 'FiscalMonthsDetail';
+nMax = SubsetGetSize(sDim, sSub);
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	
+	sMonth = SubsetGetElementName(sDim,sSub,nCtr);
+	sYear = 'Y'|AttrS(sDim, sMonth, 'Year');
+
+	IF(pVersion@='Forecast');
+		sMonthCalendar=AttrS(sDim, sMonth, 'MOnthCalendarF');
+		sYearCalendar=AttrS(sDIm, sMonth, 'YearCalendarF');
+	ELSE;
+		sMonthCalendar=AttrS(sDim, sMonth, 'MOnthCalendar');
+		sYearCalendar=AttrS(sDIm, sMonth, 'YearCalendar');
+	ENDIF;
+
+	nMonth = StringtoNumber(DImensionElementPrincipalName('calendar months',sMonthCalendar));
+	nYear = StringtoNumber(sYearCalendar);
+	
+	EventDate=CellGetS(LeasesCube, Version, Currency,sYear, Company, SubAccount, GLAccount, BusUnits, TenureID,'Event Dates');
+	IF(EventDate@<>'');
+		IF(pVersion@='Forecast');
+			EventMonth=AttrS('Calendar Months' ,SubSt(EventDate, 6,2), 'MonthName')|' '|SubSt(EventDate, 1,4)|'F';
+		ELSE;
+			EventMonth=AttrS('Calendar Months' ,SubSt(EventDate, 6,2), 'MonthName')|' '|SubSt(EventDate, 1,4);
+		ENDIF;
+	ENDIF;
+
+	IF( (nLeaseStartYear=nYear & nLeaseStartMonth <= nMonth)
+	% (nLeaseStartYear<nYear & nLeaseEndYear>nYear)
+	% (nLeaseEndYear=nYear & nLeaseEndMonth >= nMonth));
+	IF(Version@='Forecast' & DIMIX(sDim, sMonth) <= DIMIX(sDim, ForecastMonth));
+
+	ELSE;
+
+	IF(sMonth@=LeaseStart);
+		EventDay=StringtoNumber(SubSt(LeaseStartDate, 9, 2));
+		DaysinMonth=CellGetN(CalendarCube, sYearCalendar, sMonthCalendar, 'Days');
+		PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+		IF(DaysinMonth=EventDay);
+		ELSEIF(EventDay=1);
+			Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			LeaseCalc=Base * (1+Rate);
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		ELSE;
+			Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			Base=CellGetN(LeasesCube, Version, Currency,PrevMonth , Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			LeaseCalc= Base * (1+Rate) \ DaysinMonth * (DaysinMonth - EventDay);
+			CellIncrementN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		ENDIF;
+	ELSEIF( sMonth@=LeaseEnd);
+
+		PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+		EventDay=StringtoNumber(SubSt(LeaseEndDate, 9, 2));
+		DaysinMonth=CellGetN(CalendarCube, sYearCalendar, sMonthCalendar, 'Days');
+		IF(eventday=1);
+		ELSE;
+			PrevRate=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			IF(PrevRate=0);
+				Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			ELSE;
+				PrevPrevMonth=SubsetGetElementName(sDim,sSub,nCtr-2);
+				Base=CellGetN(LeasesCube, Version, Currency, PrevPrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+				Rate=PrevRate;
+			ENDIF;	
+			IF(DaysinMonth = EventDay);
+				LeaseCalc=Base * (1+Rate);
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			ELSE;
+				LeaseCalc= Base * (1+Rate) \ DaysinMonth * EventDay;
+				CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			ENDIF;
+		ENDIF;
+	ELSEIF(sMonth @= DimensionElementPrincipalName(sDim, EventMonth));
+		PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+		EventDay=StringtoNumber(SubSt(EventDate, 9, 2));
+		DaysinMonth=CellGetN(CalendarCube, sYearCalendar, sMonthCalendar, 'Days');
+		IF(EventDay=1);
+			Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			LeaseCalc=Base * (1+Rate);
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		ELSE;
+			Rate=CellGetN(LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+			Base=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			LeaseCalc= Base \ DaysinMonth * EventDay + Base * (1+Rate) \ DAYSINMONTH * (DaysinMonth - EventDay) ;
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		ENDIF;
+	
+	ELSE;
+
+		PrevMonth=SubsetGetElementName(sDim,sSub,nCtr-1);
+		PrevRate=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');
+		IF(PrevRate=0);
+			LeaseCalc=CellGetN(LeasesCube, Version, Currency, PrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			CellPutN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		ELSE;
+			PrevPrevMonth=SubsetGetElementName(sDim,sSub,nCtr-2);
+			Base=CellGetN(LeasesCube, Version, Currency, PrevPrevMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+			LeaseCalc=Base * (1+PrevRate);
+			CellputN(LeaseCalc,LeasesCube, Version, Currency, sMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Lease Value');
+		
+		ENDIF;
+
+	ENDIF;
+	ENDIF;
+	ENDIF;
+		
+	nCtr = nCtr + 1;
+END;
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

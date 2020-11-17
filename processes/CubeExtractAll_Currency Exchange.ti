@@ -1,0 +1,179 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName = 'Currency Exchange Cube';
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+vUseHeader= 'yes' ;
+
+
+DATASOURCEASCIIQUOTECHARACTER = '';
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy ('Versions', ViewNameTransfer);
+SubsetDestroy ('Company', ViewNameTransfer);
+SubsetDestroy ('Currency Type', ViewNameTransfer);
+SubsetDestroy ('Currency From', ViewNameTransfer);
+SubsetDestroy ('Currency To', ViewNameTransfer);
+SubsetDestroy ('Fiscal Months', ViewNameTransfer);
+SubsetDestroy ('Fiscal Years', ViewNameTransfer);
+SubsetDestroy ('Currency Measures', ViewNameTransfer);
+
+# Create views and subsets for Export
+#Create Version
+
+IF(pVersion@='');
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Versions] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+ELSE;
+SubsetCreate ('Versions', ViewNameTransfer);
+SubsetElementInsert ( 'Versions',  ViewNameTransfer,pVersion, 1);
+
+ENDIF;
+
+#Create Company
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Company] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Currency Type
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Currency Type] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Currency From
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Currency From] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Currency To
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Currency To] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Months
+SubsetCreate ('Fiscal Months', ViewNameTransfer);
+SubsetElementInsert ( 'Fiscal Months',  ViewNameTransfer, 'Total Months', 1);
+
+# create year
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Fiscal Years] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Meassure
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Currency Measures] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Versions', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Company', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Currency Type', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Currency From', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Currency To', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Fiscal Months', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Fiscal Years', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Currency Measures', ViewNameTransfer);
+ViewColumnDimensionSet(CubeName, ViewNameTransfer, 'Fiscal Months',1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer,  'Versions', 1);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Company', 2);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Currency Type', 3);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Currency From', 4);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Currency To', 5);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, 'Fiscal Years', 6);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Currency Measures',7);
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipRuleValuesSet (CubeName, ViewNameTransfer, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+vCubeName = 'Currency Exchange Cube';
+
+vM01 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom,vCurTo, 'M01', vFY,  vCM );
+vM02 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom,vCurTo, 'M02', vFY,  vCM );
+vM03 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom,vCurTo, 'M03', vFy, vCM );
+vM04 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom, vCurTo, 'M04', vFY, vCM );
+vM05 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom,vCurTo, 'M05', vFY, vCM );
+vM06 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom, vCurTo, 'M06', vFY, vCM );
+vM07 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom, vCurTo, 'M07', vFY, vCM );
+vM08 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom, vCurTo, 'M08', vFY, vCM );
+vM09 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom, vCurTo, 'M09', vFY, vCM );
+vM10 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom, vCurTo,  'M10', vFY, vCM );
+vM11 = CellGetN (vCubeName, vVer, vCo, vCurType, vCurFrom, vCurTo, 'M11', vFY, vCM );
+vM12 = CellGetN (vCubeName, vVer, vCo, vCurType,vCurFrom, vCurTo,'M12', vFY, vCM );
+
+sM01 = NumbertoString(vM01);
+sM02 = NumbertoString(vM02);
+sM03 = NumbertoString(vM03);
+sM04 = NumbertoString(vM04);
+sM05 = NumbertoString(vM05);
+sM06 = NumbertoString(vM06);
+sM07 = NumbertoString(vM07);
+sM08 = NumbertoString(vM08);
+sM09 = NumbertoString(vM09);
+sM10 = NumbertoString(vM10);
+sM11 = NumbertoString(vM11);
+sM12 = NumbertoString(vM12);
+
+
+
+
+
+vBlank = '';
+vFileName = 'Currency Exchange Export.csv';
+vLocation = '..\DataSources\Exports\' ;
+
+IF( vUseHeader @= 'yes' ) ;
+    vUseHeader = 'no';
+   ASCIIOUTPUT(vLocation|vFilename, 'Version','Year', 'Company', 'Currency From', 'CurrencyTo', 'CurrencyType', 'M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12') ;
+
+ENDIF ;
+
+ASCIIOUTPUT(vLocation|vFilename,vVer, vFY, vCo, vCurFrom, vCurTo, vCurType, sM01,sM02,sM03,sM04,sM05,sM06,sM07,sM08,sM09,sM10,sM11,sM12);
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CubeName = 'Opex Plan Cube';
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy ('Versions', ViewNameTransfer);
+SubsetDestroy ('Company', ViewNameTransfer);
+SubsetDestroy ('Currency Type', ViewNameTransfer);
+SubsetDestroy ('Currency From', ViewNameTransfer);
+SubsetDestroy ('Currency To', ViewNameTransfer);
+SubsetDestroy ('Fiscal Months', ViewNameTransfer);
+SubsetDestroy ('Fiscal Years', ViewNameTransfer);
+SubsetDestroy ('Currency Measures', ViewNameTransfer);
+
+
+#email file
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFile' ;
+    ExecuteProcess(vProcess,'pSendTo', pSendTo,'pFilename',vFileName );
+ENDIF;
+#endregion

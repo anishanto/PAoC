@@ -1,0 +1,419 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+############################################################# Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');  
+cSubType = CELLGETS('Global Control', 'Client SubAcct Type', 'String');
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+cDimName = 'GL_Accounts';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+cDimName3 = 'SubAccounts';
+cDimName4 =  '}ElementAttributes_'|cDimName3; 
+sUnassignedAcct = 'Unassigned GL' ;
+sUnassignedAcctBS = 'Unassigned GL Balance Sheet' ;
+sUnassignedAcctPL = 'Unassigned GL PL Account' ;
+sUnassignedAcctST = 'Unassigned GL Statistical' ;
+vGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+pSubAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+
+cFMorLeases='FM';
+IF(DIMIX('Global Control Items', 'Client Tenure Type')<>0);
+	cClientIsLease=CellGetS('Global Control', 'Client Tenure Type', 'String');
+	IF(cClientIsLease@='Tenure');
+		cFMorLeases='Leases';
+	ENDIF;
+ENDIF;
+
+IF(cFMorLeases@='Leases');
+	vGLAL = CELLGETN('Global Control', 'GA Accounts AL Hierarchies', 'Value');
+	vGLAO = CELLGETN('Global Control', 'GA Accounts AO Hierarchies', 'Value');
+ENDIF;
+
+
+sAcct = CELLGETN('Global Control','Client SubAcct Type','Value');
+sUnassignedSub = 'Unassigned SubAccount';  
+sTM1E1 = 'TM1E1';
+sDateAttr = 'CreationDate';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+
+sExportFile = '..\DataSources\Exports\Export_Accounts.csv';
+CubeNameAttr = '}ElementAttributes_GL_Accounts';
+ViewNameZero =  'VE-' | CubeNameAttr | '-Zero' ;
+
+DIMENSIONSORTORDER(cDimName,'ByInput','ASCENDING','ByHierarchy','ASCENDING'); 
+
+############################################################### Initialize Debug
+
+If( pDebug >= 1 );
+
+	# Set debug file name
+  	sDebugFile = cDebugFile | 'Prolog.debug';
+
+ 	 # Log start time
+  	AsciiOutput( sDebugFile, 'Process Started: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+  	# Log parameters
+  	AsciiOutput( sDebugFile, '            Account Code 	    	: ' | vAccount );
+  	AsciiOutput( sDebugFile, '            SubAccount Code       : ' | vSubAccount );
+  	AsciiOutput( sDebugFile, '            EditFlag				: ' | vEditFlag );
+  	AsciiOutput( sDebugFile, '            Account Name			: ' | vAccName );
+  	AsciiOutput( sDebugFile, '            SubAccount Name		: ' | vSubAccName );
+  	AsciiOutput( sDebugFile, '            Account type			: ' | vAccType );
+
+############################################################### Debug
+
+	nErrors = 0;
+
+	# Validate source file
+
+	IF(DimensionExists(cDimName) = 0);
+		nErrors = 1;
+  
+		If( pDebug >= 1 );
+	    		sMessage = 'Dimension does not exist. Please review';
+	    		AsciiOutput( sDebugFile, sMessage );
+	  	EndIf;
+  
+		ProcessQuit;
+	EndIf;
+EndIf;
+
+
+############################################################## Create Company Loop
+ 
+######################################Create Company Loop####################################
+dimCompany = 'Company';
+subCompanyLevel0 = 'zCompanyLevel0';
+
+SUBSETDESTROY(dimCompany, subCompanyLevel0);
+SUBSETCREATEBYMDX(subCompanyLevel0, '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}, ASC)}');
+# loop through the elements of the subset
+j=1;
+sCompanyString = '';
+WHILE(j<=SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+	vElem=SUBSETGETELEMENTNAME(dimCompany, subCompanyLevel0,j);
+	IF(  j =SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+		sCompanyString = sCompanyString | '''' |  vElem  | '''';
+	ELSE;
+		sCompanyString = sCompanyString | '''' |  vElem  | '''' | ',';
+	ENDIF;
+	j=j+1;
+END;	
+
+################################################################ SQL
+ 
+################################################SQL
+sSQL =  '
+SELECT * FROM  DW_TM1_Budget.[ssdi].[TM1_Financial_COA] WITH (NOLOCK) where [Company] in ('|sCompanyString | ')';
+
+
+
+#####################################Local Variables
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+#####################################################################################Add Attributes
+IF(DIMIX(cDimName2,sDateAttr) = 0);
+  	AttrInsert(cDimName,'Name' ,sDateAttr,'S');
+EndIf;
+
+IF(DIMIX(cDimName2,sTM1E1) = 0);
+  	AttrInsert(cDimName,sDateAttr,sTM1E1,'S');
+EndIf;
+
+IF(DIMIX(cDimName2,'AcctType') = 0);
+  	AttrInsert(cDimName,sTM1E1,'AcctType','S');
+EndIf;
+
+IF(DIMIX(cDimName2,'Name') = 0);
+  	AttrInsert(cDimName,'AcctType','Name','S');
+EndIf;
+
+IF(DIMIX(cDimName2,'Flag') = 0);
+  	AttrInsert(cDimName,'AcctType','Flag','S');
+	SubsetElementInsert ( '}ElementAttributes_GL_Accounts',  'Visible', 'Flag', 1);
+	vNewAttr = 1;
+EndIf;
+
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeNameAttr, ViewNameZero);
+SubsetDestroy ('GL_Accounts', ViewNameZero);
+SubsetDestroy ('}ElementAttributes_GL_Accounts', ViewNameZero);
+
+#Create Version
+SubsetCreate ('}ElementAttributes_GL_Accounts', ViewNameZero);
+SubsetElementInsert ( '}ElementAttributes_GL_Accounts',  ViewNameZero, 'Flag', 1);
+
+#Create GL_Accounts
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}, ASC)}' ;
+SubsetCreatebyMDX( ViewNameZero, sMDX);
+
+ViewCreate( CubeNameAttr, ViewNameZero);
+ViewSubsetAssign (CubeNameAttr, ViewNameZero, '}ElementAttributes_GL_Accounts', ViewNameZero);
+ViewSubsetAssign (CubeNameAttr, ViewNameZero, 'GL_Accounts', ViewNameZero);
+
+ViewZeroOut(CubeNameAttr, ViewNameZero);
+
+
+vFirstLine=0;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vAccount = TRIM(vAccount);
+vSubAccount =TRIM(vSubAccount);
+
+vGLCode='';
+
+if(sAcct=1);
+                vGLCode = vAccount;
+elseif(sAcct=0 & vSubAccount@='');
+                vGLCode = vAccount;
+elseif(sAcct=0 & vSubAccount@<>'');
+                vGLCode = vAccount|'-'|vSubAccount;
+EndIf;
+
+if (vGLCode@='');
+                ItemSkip;
+endif;
+
+if (vEditFlag@='N' % vEditFlag@='I');
+                ItemSkip;
+endif;
+
+####################################################### Build GL for Sub and No Sub
+########AccountCategory
+#400000 – 499999 Revenue - PNL
+#500000 – 899999 Expenses - PNL
+#900000 – 919999 Depreciation - PNL
+#920000 – 929999 Divestment - PNL
+#930000 – 949999 NOC - PNL
+#950000 – 954999 Statistical - Stat
+#955000 – 999999 Other non-property costs - PNL
+
+#################################################################### AH Hierarchies #########################################################
+
+#Account
+IF(DIMIX(cDimName,vGLCode) = 0);
+                IF(   SUBST(vGLCode,1,1) @= '1' %
+                                   SUBST(vGLCode,1,1) @= '2' %
+                                  SUBST(vGLCode,1,1) @= '3');
+                                sUnassignedAcct = 'Unassigned GL Balance Sheet' ;
+                                sCons = 'BS';
+                ELSEIF(SUBST(vGLCode,1,1) @= '4' %
+                                                SUBST(vGLCode,1,1) @= '5' %
+                                                SUBST(vGLCode,1,1) @= '6' %
+                                                SUBST(vGLCode,1,1) @= '7' %
+                                                SUBST(vGLCode,1,1) @= '8' %
+                                                (SUBST(vGLCode,1,1) @= '9' &
+                                                NUMBR(SUBST(vGLCode,1,6)) <= 949999 & NUMBR(SUBST(vGLCode,1,6)) >= 955000));
+                                sUnassignedAcct = 'Unassigned GL PL Account' ;
+                                sCons = 'PL';
+                ELSEIF(NUMBR(SUBST(vGLCode,1,6)) > 949999 & NUMBR(SUBST(vGLCode,1,6)) < 955000);
+                                sUnassignedAcct = 'Unassigned GL Statistical' ;
+                                sCons = 'ST';
+                endif;
+
+                DimensionElementInsert(cDimName, '',  vGLCode, 'N');
+                DimensionElementInsert(cDimName, '', sUnassignedAcct|' '|'SH1', 'C');
+                DimensionElementInsert(cDimName, '', sCons, 'C');
+                DimensionElementComponentAdd(cDimName, 'SH1', sCons, 1);
+                DimensionElementComponentAdd(cDimName, sCons, sUnassignedAcct|' '|'SH1', 1);
+                DimensionElementComponentAdd(cDimName, sUnassignedAcct|' '|'SH1',vGLCode,1);
+
+#################################################################### AH Hierarchies #########################################################
+                nCtrAH = 1;
+                
+                WHILE(nCtrAH <= vGLAH); 
+                                sAH = 'AH'|NumberToString(nCtrAH);
+                                sConsAH = sCons | ' ' | sAH;
+                                DimensionElementInsert(cDimName, '',  vGLCode, 'N');
+                                DimensionElementInsert(cDimName, '', sUnassignedAcct|' '|sAH, 'C');
+                                DimensionElementInsert(cDimName, '', sConsAH, 'C');
+                                DimensionElementComponentAdd(cDimName, sAH, sConsAH, 1);
+                                DimensionElementComponentAdd(cDimName, sConsAH, sUnassignedAcct|' '|sAH, 1);
+                                DimensionElementComponentAdd(cDimName, sUnassignedAcct|' '|sAH,vGLCode,1);
+                                nCtrAH=nCtrAH+1;
+                END;
+                #################################################################### AL Hierarchies #########################################################
+
+                IF(cFMorLeases@='Leases');
+                                nCtrAL = 1;
+                                WHILE(nCtrAL <= vGLAL); 
+                                                sAL = 'AL'|NumberToString(nCtrAL);
+                                                sConsAL = sCons | ' ' | sAL;
+                                                DimensionElementInsert(cDimName, '',  vGLCode, 'N');
+                                                DimensionElementInsert(cDimName, '', sUnassignedAcct|' '|sAL, 'C');
+                                                DimensionElementInsert(cDimName, '', sConsAL, 'C');
+                                                DimensionElementComponentAdd(cDimName, sAL, sConsAL, 1);
+                                                DimensionElementComponentAdd(cDimName, sConsAL, sUnassignedAcct|' '|sAL, 1);
+                                                DimensionElementComponentAdd(cDimName, sUnassignedAcct|' '|sAL,vGLCode,1);
+                                                nCtrAL=nCtrAL+1;
+                                END;
+                                nCtrAO = 1;
+                                WHILE(nCtrAO <= vGLAO); 
+                                                sAO = 'AO'|NumberToString(nCtrAO);
+                                                sConsAO = sCons | ' ' | sAO;
+                                                DimensionElementInsert(cDimName, '',  vGLCode, 'N');
+                                                DimensionElementInsert(cDimName, '', sUnassignedAcct|' '|sAO, 'C');
+                                                DimensionElementInsert(cDimName, '', sConsAO, 'C');
+                                                DimensionElementComponentAdd(cDimName, sAO, sConsAO, 1);
+                                                DimensionElementComponentAdd(cDimName, sConsAO, sUnassignedAcct|' '|sAO, 1);
+                                                DimensionElementComponentAdd(cDimName, sUnassignedAcct|' '|sAO,vGLCode,1);
+                                                nCtrAO=nCtrAO+1;
+                                END;
+                ENDIF;
+                pSendGL = 1;
+endif;
+
+################## Total GL ############################
+### DFAT Uses this logic and security will fail if this is missing
+IF(DIMIX(cDimName, 'Total GL' ) = 0);
+                DimensionElementInsert(cDimName, '', 'Total GL', 'N');
+ENDIF;
+############################################################################ Debug
+
+If( pDebug >= 1 );
+                sMessage = 'Component: ' | vGLCode | ' has been added in' | cDimName | ' dimension.';
+                AsciiOutput( sDebugFile, sMessage );
+EndIf;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+if (pDebugExport<>0 & vFirstLine=0);
+	Asciioutput(sExportFile,'OneView_Client_Id', 'Company', 'Object Account', 'SubAccount', 'PostingEditFlag', 'GMUSER', 'UpdateDate', 'Account_Level_6', 'Account_Level_5_Code', 'Account_Level_5', 'Account_Level_4_Code', 'Account_Level_4', 'Account_Level_3_Code', 'Account_Level_3', 'Account_Level_2_Code', 'Account_Level_2', 'Account_Level_1_Code', 'Account_Level_1');
+	vFirstLine=1;
+endif;
+
+if (pDebugExport<>0);
+	Asciioutput(sExportFile,v1,v2,vAccount,vSubAccount,vEditFlag,v6,v7,vSubAccName,v9,vAccName,v11,v12,v13,v14,v15,v16,v17,vAccType);
+endif;
+
+if (vEditFlag@='N' % vEditFlag@='I');
+	ItemSkip;
+endif;
+
+vAccount = TRIM(vAccount);
+vSubAccount =TRIM(vSubAccount);
+
+vGLCode='';
+
+if(sAcct=1);
+	vGLCode = vAccount;
+	vName = vAccName;
+elseif(sAcct=0 & vSubAccount@='');
+	vGLCode = vAccount;
+	vName = vAccName;
+elseif(sAcct=0 & vSubAccount@<>'');
+	vGLCode = vAccount|'-'|vSubAccount;
+	if (vSubAccName@='');
+		vName = vAccName;
+	else;
+		vName = vSubAccName;
+	endif;
+EndIf;
+
+if (vGLCode@='');
+	ItemSkip;
+endif;
+
+
+IF((sAcct=1 & vSubAccount@='') %  sAcct=0);
+	if (ATTRS('GL_Accounts',vGLCode,'Name')@<>vName);
+		ATTRPUTS(vName,'GL_Accounts',vGLCode,'Name');
+	endif;
+EndIf;
+
+if (ATTRS(cDimName,vGLCode,'Flag')@<>'Y');
+	ATTRPUTS('Y',cDimName,vGLCode,'Flag');
+endif;
+
+sDebugFile = cDebugFile | 'Data.debug';
+
+
+###############Add Name and Company Attributes
+If( pDebug <= 1 );
+	if (ATTRS(cDimName,vGLCode,sTM1E1)@<>'Yes');
+		ATTRPUTS('Yes',cDimName,vGLCode,sTM1E1);
+	endif;
+
+	if (ATTRS(cDimName,vGLCode,'AcctType')@<>vAccType);
+		ATTRPUTS(vAccType,cDimName,vGLCode,'AcctType');
+	endif;
+
+	if (ATTRS(cDimName,vGLCode,sDateAttr)@='');
+		ATTRPUTS(sDateAdd,cDimName,vGLCode,sDateAttr);
+	endif;
+EndIf;
+
+If( pDebug >= 1 );
+	sMessage = vGLCode | ' has added the following attributes: Name: '| vName | ', AcctType: ' |vAccType;
+	AsciiOutput( sDebugFile, sMessage );
+EndIf;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+################### Debug
+
+If( pDebug >= 1 );
+	# Set debug file name
+	sDebugFile = cDebugFile | 'Epilog.debug';
+	# Log errors
+	If( nErrors <> 0 );
+		AsciiOutput( sDebugFile, 'Errors Occurred' );
+	EndIf;
+	# Log finish time
+	AsciiOutput( sDebugFile, 'Process Finished: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+ViewDestroy (CubeNameAttr, ViewNameZero);
+SubsetDestroy ('}ElementAttributes_GL_Accounts', ViewNameZero);
+SubsetDestroy ('Company', ViewNameZero);
+
+if (vNewAttr=1);
+	vSize = SubsetGetSize('}ElementAttributes_GL_Accounts','zDimMgmt');
+	vNum = CellGetN('}ElementAttributes_}ElementAttributes_GL_Accounts',SubsetGetElementName('}ElementAttributes_GL_Accounts','zDimMgmt',vSize),'SortAttr');
+	CellPutN(vNum+1,'}ElementAttributes_}ElementAttributes_GL_Accounts','Flag','SortAttr');
+endif;
+
+
+###############Email File
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFileUnassignedGLSQL' ;
+    ExecuteProcess(vProcess,'pSendTo', pEmail);
+ENDIF;
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+### If errors occurred terminate process with a major error status ###
+If( nErrors <> 0 );
+	ProcessQuit;
+EndIf;
+#endregion

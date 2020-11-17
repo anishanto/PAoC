@@ -1,0 +1,116 @@
+{
+	"@type":"NativeView",
+	"Name":"Opex Analysis Cube",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthsWithTotal')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Subsets('VersionsDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Company')/Hierarchies('Company')"
+				},
+				"Expression":"[Company].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('All Hierarchies CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency')/Hierarchies('Currency')"
+				},
+				"Expression":"[Currency].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency')/Hierarchies('Currency')/Elements('All Currency')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('All GL Account CodeName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')"
+				},
+				"Expression":"[Scale Measure].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Elements('No Scale')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Analysis Measures')/Hierarchies('Analysis Measures')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Analysis Measures')/Hierarchies('Analysis Measures')/Elements('Total Amount')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

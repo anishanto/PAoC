@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"SH1ParentsSubAccounts",
+	"Expression":"{EXCEPT({descendants ([SubAccounts].[SH1])}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)})}"
+}

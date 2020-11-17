@@ -1,0 +1,20 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+['Check Rate']= S:
+	IF(['Rates']<=1, 'OK', 'Invalid Rate');
+
+['Valid Rate']= N:
+	IF(DB('Leases Extension Options',!Versions_PM,!Extension Options,!Expiry Years,!Fiscal Years,'Check Rate') @='OK',
+		['Rates'],
+		0);
+
+Feeders;
+['Rates'] => ['Check Rate'], ['Valid Rate'];
+
+
+
+
+

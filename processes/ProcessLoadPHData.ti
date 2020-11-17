@@ -1,0 +1,117 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+vDim='BusUnits';
+
+####################################Define Datasource Tab#####################################
+sSQL =  'SELECT 
+      [DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[OneViewClientID]
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[txtClientName] as ClientName
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Client Property Code] as PropertyID
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Campus]
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Leased/Owned] as LeasedOwned
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Property Type] as PropertyType
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Status]
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[City]
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Country]
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Property Name] as PropertyName
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[State/Province] as StateProvidence
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Occupied Vacant] as OccupiedVacant
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Property SubType] as PropertySubType
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[Property Size] as PropertySize
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[MDM_ID]
+      ,[DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[MDM_TID]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[ID]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[E1_COMPANY]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[BU_PROJ_ID]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[OVC_ID]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[OVCP_ID]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[AB_NUM]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[CREATEBY]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[CREATEDT]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[UPDATEBY]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[UPDATEDT]
+      ,[DW_All_Clients].[Spend].[vw_Spend_MDMHub] .[SRC]
+ FROM [DW_All_Clients].[PRPTY].[vw_PropertyHub_All] with (readuncommitted)
+ INNER JOIN [DW_All_Clients].[Spend].[vw_Spend_MDMHub] with (readuncommitted)
+ ON [DW_All_Clients].[PRPTY].[vw_PropertyHub_All].[MDM_TID] = [DW_All_Clients].[Spend].[vw_Spend_MDMHub].[MDM_ID]';
+
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);
+ASCIIOUTPUT('..\logs\System\PHDebug.txt',sSQL);
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###Trim BusUnits CM22818
+E1BU = TRIM(E1BU);
+
+IF(DIMIX(vDim, E1BU)=0);
+ITEMSKIP;
+ENDIF;
+
+###Load Property Hub Attributes to BU Dimension
+ATTRPUTS(PropertyID,vDim,E1BU,'Property ID');
+ATTRPUTS(PropertyName,vDim,E1BU,'Property Name');
+ATTRPUTS(OccupiedVacant,vDim,E1BU,'OccupiedOrVacant');
+ATTRPUTS(LeasedOwned,vDim,E1BU,'LeasedOrOwned');
+ATTRPUTS(Campus,vDim,E1BU,'Campus');
+ATTRPUTS(City,vDim,E1BU,'City');
+ATTRPUTS(StateProvidence,vDim,E1BU,'State Providence');
+ATTRPUTS(PropertyType,vDim,E1BU,'Property Type');
+ATTRPUTS(PropertySubType,vDim,E1BU,'Property Sub Type');
+ATTRPUTS(PropertySize,vDim,E1BU,'Property Size');
+ATTRPUTS(Status,vDim,E1BU,'Property Status');
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####################################Cleanup Views & Subsets####################################################
+#ViewDestroy (vCubeName, ViewTransfer);
+#SubsetDestroy ('Versions_PM', ViewTransfer);
+
+
+#####################################Messages displayed in Emails##################################################
+#Set Email Address
+#Execute Email Process
+
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+#endregion

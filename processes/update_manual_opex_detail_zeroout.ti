@@ -1,0 +1,103 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeLockOverride(1);
+
+#####ConstantsS
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Shared Folder', 'String');  
+cCube = 'Opex Detail Cube';
+cCurrency = 'Local';
+cMeasure = 'Value';
+cMeasureAssumption = 'Assumptions';
+cFileName = pFileName;
+sFullPath = cImportPath|cFileName;
+cSubLedger = CellGetN('Global Control','Client Subledger Type', 'Value'); 
+cVendor = CellGetN('Global Control','Client Vendor Type', 'Value'); 
+sSubType = CELLGETS('Global Control','Client SubAcct Type', 'String');
+sYR = 'Fiscal Years';
+sAllYR = 'All Fiscal Years';
+sBU = 'BusUnits';
+sGL = 'GL_Accounts';
+sSA = 'SubAccounts';
+sSL = 'Subledger';
+sVD = 'Vendor';
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#If client is not subledger the column Subledger in the file is ignored, 
+if (cSubLedger=0 & pVersion@<>'Actuals');
+	vSubLedger = 'All Subledger and Other';
+endif;
+
+#If client is not vendor the column Vendor in the file is ignored
+if (cVendor=0 & pVersion@<>'Actuals');
+	vVendor = 'All Vendor and Other';
+endif;
+
+vNewElement=0;
+
+vTrimSubAccountNumber=IF(sSubType @= 'Sub',Subst(vAccountNumberSource,8,3 ),'NA');
+vAccountNumber=IF(sSubType @= 'Sub',Subst(vAccountNumberSource,1,6 ),vAccountNumberSource);
+
+#Account
+IF(DIMIX(sGL,vAccountNumber) = 0);
+	ItemSkip;
+endif;
+#Subaccount
+IF(DIMIX(sSA,vTrimSubAccountNumber) = 0);
+	ItemSkip;
+endif;
+
+#Busunit
+IF(DIMIX(sBU, vBusUnits ) = 0);
+	ItemSkip;
+ENDIF;
+
+#Subledger
+IF(DIMIX(sSL,vSubLedger) = 0);
+	ItemSkip;
+ENDIF;
+
+#Vendor
+IF(DIMIX(sVD,vVendor) = 0);
+	ItemSkip;
+ENDIF;
+
+
+
+#ZerooutValues
+CellPutS('',  cCube,vVersion,cCurrency,vYear,'Total Months',vCompany,vTrimSubAccountNumber,vAccountNumber,vSubledger,vBusUnits,vVendor,cMeasureAssumption);
+vIndex = 1;
+vIndexFinal = 12;
+While (vIndex <= vIndexFinal);
+	vIndexS = IF (vIndex < 10, '0'|NumberToString(vIndex),NumberToString(vIndex));
+	vVarM = Expand( '%nM' | Expand( '%vIndexS%' ) | '%' );
+	IF(CELLISUPDATEABLE(cCube,vVersion,cCurrency,vYear,'M'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vSubledger,vBusUnits,vVendor,cMeasure)=1);
+		CellPutN(0,  cCube,vVersion,cCurrency,vYear,'M'|vIndexS,vCompany,vTrimSubAccountNumber,vAccountNumber,vSubledger,vBusUnits,vVendor,cMeasure);
+	EndIf;
+	vIndex = vIndex + 1;	
+END;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

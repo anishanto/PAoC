@@ -1,0 +1,45 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreCurrencyForecast",
+	"StartTime":"2017-11-12T10:05Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P1DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"pConversion",
+					"Value":0
+				},
+				{
+					"Name":"pCurReporting",
+					"Value":"AUD"
+				},
+				{
+					"Name":"pExtractCalc",
+					"Value":"No"
+				},
+				{
+					"Name":"pPost",
+					"Value":"All Posts"
+				},
+				{
+					"Name":"pVersion",
+					"Value":"Forecast"
+				},
+				{
+					"Name":"pYear",
+					"Value":"2018"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('ProcessDetailFX - Post')"
+			}
+		}
+	]
+}

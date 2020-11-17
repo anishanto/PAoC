@@ -1,0 +1,28 @@
+{
+	"@type":"Cube",
+	"Name":"Leases Extension Options",
+	"Rules@Code.link":"Leases Extension Options.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')"
+		},
+		{
+			"@id":"Dimensions('Extension Options')"
+		},
+		{
+			"@id":"Dimensions('Expiry Years')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('Extension Options Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Leases Extension Options.views/Extension Options.json",
+		"Leases Extension Options.views/Extension Options Matrix.json"
+	]
+}

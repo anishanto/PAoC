@@ -1,0 +1,180 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName ='}ElementAttributes_'|pDim;
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+vUseHeader= 'yes' ;
+vDim='}ElementAttributes_'|pDim;
+
+DATASOURCEASCIIQUOTECHARACTER = '';
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+# Create views and subsets for Export
+#Create BusUnits
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( ['| pDim |'] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create }ElementAttributes_BusUnits
+SubsetCreate (vDim, ViewNameTransfer);
+SubsetElementInsert ( vDim,  ViewNameTransfer, 'CodeName' , 1);
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,pDim, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,vDim, ViewNameTransfer);
+
+ViewColumnDimensionSet(CubeName, ViewNameTransfer,vDim,1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, pDim, 1);
+
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameTransfer;
+
+#############Set Delimiter
+DataSourceAsciiDelimiter = ';';
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vCubeName ='}ElementAttributes_'|pDim;
+vName=CellGetS (vCubeName, Dim, 'Name' );
+vCompany=CellGetS (vCubeName, Dim, 'Company' );
+vSquareFeet=CellGetS (vCubeName, Dim, 'SquareFeet' );
+vFacStatus=CellGetS (vCubeName, Dim, 'FacStatus' );
+vFacType=CellGetS (vCubeName, Dim, 'FacType' );
+vFacMgr=CellGetS (vCubeName, Dim, 'FacMgr' );
+vFacSrMgr=CellGetS (vCubeName, Dim, 'FacSrMgr' );
+vFacRegMgr=CellGetS (vCubeName, Dim, 'FacRegMgr' );
+vSH1Parent1=IF(DIMIX(vCubeName,'SH1Parent1')<>0, CellGetS (vCubeName, Dim, 'SH1Parent1' ),'');
+vSH1Parent2=IF(DIMIX(vCubeName,'SH1Parent2')<>0, CellGetS (vCubeName, Dim, 'SH1Parent2' ),'');
+vSH1Parent3=IF(DIMIX(vCubeName,'SH1Parent3')<>0, CellGetS (vCubeName, Dim, 'SH1Parent3' ),'');
+vSH1Parent4=IF(DIMIX(vCubeName,'SH1Parent4')<>0, CellGetS (vCubeName, Dim, 'SH1Parent4' ),'');
+vSH1Parent5=IF(DIMIX(vCubeName,'SH1Parent5')<>0, CellGetS (vCubeName, Dim, 'SH1Parent5' ),'');
+vHierarchyStatus=CellGetS (vCubeName, Dim, 'HierarchyStatus' );
+vAH1Parent1=IF(DIMIX(vCubeName,'AH1Parent1')<>0, CellGetS (vCubeName, Dim, 'AH1Parent1' ),'');
+vAH1Parent2=IF(DIMIX(vCubeName,'AH1Parent2')<>0, CellGetS (vCubeName, Dim, 'AH1Parent2' ),'');
+vAH1Parent3=IF(DIMIX(vCubeName,'AH1Parent3')<>0, CellGetS (vCubeName, Dim, 'AH1Parent3' ),'');
+vAH1Parent4=IF(DIMIX(vCubeName,'AH1Parent4')<>0, CellGetS (vCubeName, Dim, 'AH1Parent4' ),'');
+vAH1Parent5=IF(DIMIX(vCubeName,'AH1Parent5')<>0, CellGetS (vCubeName, Dim, 'AH1Parent5' ),'');
+vAH2Parent1=IF(DIMIX(vCubeName,'AH2Parent1')<>0, CellGetS (vCubeName, Dim, 'AH2Parent1' ),'');
+vAH2Parent2=IF(DIMIX(vCubeName,'AH2Parent2')<>0, CellGetS (vCubeName, Dim, 'AH2Parent2' ),'');
+vAH2Parent3=IF(DIMIX(vCubeName,'AH2Parent3')<>0, CellGetS (vCubeName, Dim, 'AH2Parent3' ),'');
+vAH2Parent4=IF(DIMIX(vCubeName,'AH2Parent4')<>0, CellGetS (vCubeName, Dim, 'AH2Parent4' ),'');
+vAH2Parent5=IF(DIMIX(vCubeName,'AH2Parent5')<>0, CellGetS (vCubeName, Dim, 'AH2Parent5' ),'');
+vAH2Parent6=IF(DIMIX(vCubeName,'AH2Parent6')<>0, CellGetS (vCubeName, Dim, 'AH2Parent6' ),'');
+vAH3Parent1=IF(DIMIX(vCubeName,'AH3Parent1')<>0, CellGetS (vCubeName, Dim, 'AH3Parent1' ),'');
+vAH3Parent2=IF(DIMIX(vCubeName,'AH3Parent2')<>0, CellGetS (vCubeName, Dim, 'AH3Parent2' ),'');
+vAH3Parent3=IF(DIMIX(vCubeName,'AH3Parent3')<>0, CellGetS (vCubeName, Dim, 'AH3Parent3' ),'');
+vAH3Parent4=IF(DIMIX(vCubeName,'AH3Parent4')<>0, CellGetS (vCubeName, Dim, 'AH3Parent4' ),'');
+vAH3Parent5=IF(DIMIX(vCubeName,'AH3Parent5')<>0, CellGetS (vCubeName, Dim, 'AH3Parent5' ),'');
+vAH4Parent1=IF(DIMIX(vCubeName,'AH4Parent1')<>0, CellGetS (vCubeName, Dim, 'AH4Parent1' ),'');
+vAH4Parent2=IF(DIMIX(vCubeName,'AH4Parent2')<>0, CellGetS (vCubeName, Dim, 'AH4Parent2' ),'');
+vAH4Parent3=IF(DIMIX(vCubeName,'AH4Parent3')<>0, CellGetS (vCubeName, Dim, 'AH4Parent3' ),'');
+vAH4Parent4=IF(DIMIX(vCubeName,'AH4Parent4')<>0, CellGetS (vCubeName, Dim, 'AH4Parent4' ),'');
+vAH4Parent5=IF(DIMIX(vCubeName,'AH4Parent5')<>0, CellGetS (vCubeName, Dim, 'AH4Parent5' ),'');
+vAH5Parent1=IF(DIMIX(vCubeName,'AH5Parent1')<>0, CellGetS (vCubeName, Dim, 'AH5Parent1' ),'');
+vAH5Parent2=IF(DIMIX(vCubeName,'AH5Parent2')<>0, CellGetS (vCubeName, Dim, 'AH5Parent2' ),'');
+vAH5Parent3=IF(DIMIX(vCubeName,'AH5Parent3')<>0, CellGetS (vCubeName, Dim, 'AH5Parent3' ),'');
+vAH5Parent4=IF(DIMIX(vCubeName,'AH5Parent4')<>0, CellGetS (vCubeName, Dim, 'AH5Parent4' ),'');
+vAH5Parent5=IF(DIMIX(vCubeName,'AH5Parent5')<>0, CellGetS (vCubeName, Dim, 'AH5Parent5' ),'');
+vAH6Parent1=IF(DIMIX(vCubeName,'AH6Parent1')<>0, CellGetS (vCubeName, Dim, 'AH6Parent1' ),'');
+vAH6Parent2=IF(DIMIX(vCubeName,'AH6Parent2')<>0, CellGetS (vCubeName, Dim, 'AH6Parent2' ),'');
+vAH6Parent3=IF(DIMIX(vCubeName,'AH6Parent3')<>0, CellGetS (vCubeName, Dim, 'AH6Parent3' ),'');
+vAH6Parent4=IF(DIMIX(vCubeName,'AH6Parent4')<>0, CellGetS (vCubeName, Dim, 'AH6Parent4' ),'');
+vAH6Parent5=IF(DIMIX(vCubeName,'AH6Parent5')<>0, CellGetS (vCubeName, Dim, 'AH6Parent5' ),'');
+vAH7Parent1=IF(DIMIX(vCubeName,'AH7Parent1')<>0, CellGetS (vCubeName, Dim, 'AH7Parent1' ),'');
+vAH7Parent2=IF(DIMIX(vCubeName,'AH7Parent2')<>0, CellGetS (vCubeName, Dim, 'AH7Parent2' ),'');
+vAH7Parent3=IF(DIMIX(vCubeName,'AH7Parent3')<>0, CellGetS (vCubeName, Dim, 'AH7Parent3' ),'');
+vAH7Parent4=IF(DIMIX(vCubeName,'AH7Parent4')<>0, CellGetS (vCubeName, Dim, 'AH7Parent4' ),'');
+vAH7Parent5=IF(DIMIX(vCubeName,'AH7Parent5')<>0, CellGetS (vCubeName, Dim, 'AH7Parent5' ),'');
+vAH8Parent1=IF(DIMIX(vCubeName,'AH8Parent1')<>0, CellGetS (vCubeName, Dim, 'AH8Parent1' ),'');
+vAH8Parent2=IF(DIMIX(vCubeName,'AH8Parent2')<>0, CellGetS (vCubeName, Dim, 'AH8Parent2' ),'');
+vAH8Parent3=IF(DIMIX(vCubeName,'AH8Parent3')<>0, CellGetS (vCubeName, Dim, 'AH8Parent3' ),'');
+vAH8Parent4=IF(DIMIX(vCubeName,'AH8Parent4')<>0, CellGetS (vCubeName, Dim, 'AH8Parent4' ),'');
+vAH8Parent5=IF(DIMIX(vCubeName,'AH8Parent5')<>0, CellGetS (vCubeName, Dim, 'AH8Parent5' ),'');
+vAH9Parent1=IF(DIMIX(vCubeName,'AH9Parent1')<>0, CellGetS (vCubeName, Dim, 'AH9Parent1' ),'');
+vAH9Parent2=IF(DIMIX(vCubeName,'AH9Parent2')<>0, CellGetS (vCubeName, Dim, 'AH9Parent2' ),'');
+vAH9Parent3=IF(DIMIX(vCubeName,'AH9Parent3')<>0, CellGetS (vCubeName, Dim, 'AH9Parent3' ),'');
+vAH9Parent4=IF(DIMIX(vCubeName,'AH9Parent4')<>0, CellGetS (vCubeName, Dim, 'AH9Parent4' ),'');
+vAH9Parent5=IF(DIMIX(vCubeName,'AH9Parent5')<>0, CellGetS (vCubeName, Dim, 'AH9Parent5' ),'');
+vAH10Parent1=IF(DIMIX(vCubeName,'AH10Parent1')<>0, CellGetS (vCubeName, Dim, 'AH10Parent1' ),'');
+vAH10Parent2=IF(DIMIX(vCubeName,'AH10Parent2')<>0, CellGetS (vCubeName, Dim, 'AH10Parent2' ),'');
+vAH10Parent3=IF(DIMIX(vCubeName,'AH10Parent3')<>0, CellGetS (vCubeName, Dim, 'AH10Parent3' ),'');
+vAH10Parent4=IF(DIMIX(vCubeName,'AH10Parent4')<>0, CellGetS (vCubeName, Dim, 'AH10Parent4' ),'');
+vAH10Parent5=IF(DIMIX(vCubeName,'AH10Parent5')<>0, CellGetS (vCubeName, Dim, 'AH10Parent5' ),'');
+
+#Added Property Hub fields 2.21.18
+vPropertyID=IF(DIMIX(vCubeName,'Property ID')<>0, CellGetS (vCubeName, Dim, 'Property ID' ),'');
+vPropertyName=IF(DIMIX(vCubeName,'Property Name')<>0, CellGetS (vCubeName, Dim, 'Property Name' ),'');
+vLeasedOwned=IF(DIMIX(vCubeName,'LeasedOrOwned')<>0, CellGetS (vCubeName, Dim, 'LeasedOrOwned' ),'');
+vOccupiedVacant=IF(DIMIX(vCubeName,'OccupiedOrVacant')<>0, CellGetS (vCubeName, Dim, 'OccupiedOrVacant' ),'');
+vPropertySubType=IF(DIMIX(vCubeName,'Property Sub Type')<>0, CellGetS (vCubeName, Dim, 'Property Sub Type' ),'');
+vPropertyType=IF(DIMIX(vCubeName,'Property Type')<>0, CellGetS (vCubeName, Dim, 'Property Type' ),'');
+vPropertyStatus=IF(DIMIX(vCubeName,'Property Status')<>0, CellGetS (vCubeName, Dim, 'Property Status' ),'');
+vCampus=IF(DIMIX(vCubeName,'Campus')<>0, CellGetS (vCubeName, Dim, 'Campus' ),'');
+vCity=IF(DIMIX(vCubeName,'City')<>0, CellGetS (vCubeName, Dim, 'City' ),'');
+vCountry=IF(DIMIX(vCubeName,'Country')<>0, CellGetS (vCubeName, Dim, 'Country' ),'');
+
+###############CM Changed file to .txt for comma export issues 21418
+
+vBlank = '';
+vFileName = pDim|' Export.txt';
+vLocation = '..\DataSources\Exports\' ;
+
+IF( vUseHeader @= 'yes' ) ;
+    vUseHeader = 'no';
+   ASCIIOUTPUT(vLocation|vFilename, 'BUID','Name','Company','SquareFeet','FacStatus','FacType','FacMgr','FacSrMgr','FacRegMgr','SH1Parent1','SH1Parent2','SH1Parent3','SH1Parent4','SH1Parent5','HierarchyStatus','AH1Parent1','AH1Parent2','AH1Parent3','AH1Parent4','AH1Parent5','AH2Parent1','AH2Parent2','AH2Parent3','AH2Parent4','AH2Parent5','AH2Parent6','AH3Parent1','AH3Parent2','AH3Parent3','AH3Parent4','AH3Parent5',
+	'AH4Parent1','AH4Parent2','AH4Parent3','AH4Parent4','AH4Parent5','AH5Parent1','AH5Parent2','AH5Parent3','AH5Parent4','AH5Parent5','AH6Parent1','AH6Parent2','AH6Parent3','AH6Parent4','AH6Parent5','AH7Parent1','AH7Parent2','AH7Parent3','AH7Parent4','AH7Parent5','AH8Parent1','AH8Parent2','AH8Parent3','AH8Parent4','AH8Parent5','AH9Parent1','AH9Parent2','AH9Parent3','AH9Parent4','AH9Parent5','AH10Parent1',
+	'AH10Parent2','AH10Parent3','AH10Parent4','AH10Parent5','Property ID','Property Name','Leased/Owned','Occupied/Vacant','Property Sub Type','Property Type','Property Status','Campus','City','Country') ;
+
+
+ENDIF ;
+
+   ASCIIOUTPUT(vLocation|vFilename,Dim,vName,vCompany,vSquareFeet,vFacStatus,vFacType,vFacMgr,vFacSrMgr,vFacRegMgr,vSH1Parent1,vSH1Parent2,vSH1Parent3,vSH1Parent4,vSH1Parent5,vHierarchyStatus,vAH1Parent1,vAH1Parent2,vAH1Parent3,vAH1Parent4,vAH1Parent5,vAH2Parent1,vAH2Parent2,vAH2Parent3,vAH2Parent4,vAH2Parent5,vAH2Parent6,vAH3Parent1,vAH3Parent2,vAH3Parent3,vAH3Parent4,vAH3Parent5,
+	vAH4Parent1,vAH4Parent2,vAH4Parent3,vAH4Parent4,vAH4Parent5,vAH5Parent1,vAH5Parent2,vAH5Parent3,vAH5Parent4,vAH5Parent5,vAH6Parent1,vAH6Parent2,vAH6Parent3,vAH6Parent4,vAH6Parent5,vAH7Parent1,vAH7Parent2,vAH7Parent3,vAH7Parent4,vAH7Parent5,vAH8Parent1,vAH8Parent2,vAH8Parent3,vAH8Parent4,vAH8Parent5,vAH9Parent1,vAH9Parent2,vAH9Parent3,vAH9Parent4,vAH9Parent5,vAH10Parent1,
+	vAH10Parent2,vAH10Parent3,vAH10Parent4,vAH10Parent5,vPropertyID,vPropertyName,vLeasedOwned,vOccupiedVacant,vPropertySubType,vPropertyType,vPropertyStatus,vCampus,vCity,vCountry);
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+
+
+#email file
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFile' ;
+    ExecuteProcess(vProcess,'pSendTo', pSendTo,'pFilename',vFileName );
+ENDIF;
+#endregion

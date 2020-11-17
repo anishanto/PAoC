@@ -1,0 +1,33 @@
+{
+	"@type":"Process",
+	"Name":"ProcessDimensionEmail",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessDimensionEmail.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f_DeployParams={&quotdimensionConflictResolutions&quot:{}&#044&quotclass&quot:&quotDeployParams&quot&#044&quotdataAction&quot:&quotACCUMULATE&quot}\f_ParseParams={&quotskipRows&quot:&quot0&quot&#044&quotlocale&quot:{&quotlanguange&quot:&quoten&quot&#044&quotvariant&quot:&quot&quot&#044&quotcountry&quot:&quotUS&quot}&#044&quotdimensions&quot:[]&#044&quotmeasures&quot:[]&#044&quotnumColumns&quot:&quot0&quot&#044&quothasHeader&quot:&quotfalse&quot}\f_importSourceDefinition={\"scriptOnlySource\":{},\"sourceType\":\"NONE\",\"originalColumns\":null,\"locale\":{\"localeIsDefault\":false,\"localeCurrencySymbol\":\"$\",\"languageCode\":\"en\",\"languageDisplay\":\"English\",\"thousandsSeparator\":\",\",\"localeCode\":\"en_US\",\"localeCurrencyCode\":\"$\",\"localeDisplay\":\"English (United States)\",\"countryDisplay\":\"United States\",\"countryCode\":\"US\",\"decimalSeparator\":\".\"},\"excludedColumns\":[],\"columns\":[],\"sourceTypeHasBeenChanged\":false}\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pSendTo",
+			"Prompt":"Input email address with a comma between addresses",
+			"Value":"TM1Admin@am.jll.com",
+			"Type":"String"
+		},
+		{
+			"Name":"pSubject",
+			"Prompt":"Input subject",
+			"Value":"Immediate Action Required! BusUnits AH1 Hierarchy Has Been Modified For:",
+			"Type":"String"
+		},
+		{
+			"Name":"pBody",
+			"Prompt":"Input text",
+			"Value":"Developers Please Refresh Production Contributor Security For:",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

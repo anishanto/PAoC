@@ -1,0 +1,20 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Global Control Measures",
+	"Elements":
+	[
+		{
+			"Name":"String",
+			"Type":"String"
+		},
+		{
+			"Name":"Value",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Global Control Measures.subsets/All Members.json",
+		"Global Control Measures.subsets/String.json"
+	]
+}

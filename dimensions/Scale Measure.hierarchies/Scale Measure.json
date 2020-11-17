@@ -1,0 +1,23 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Scale Measure",
+	"Elements":
+	[
+		{
+			"Name":"No Scale",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Thousands",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Millions",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Scale Measure.subsets/Default.json"
+	]
+}

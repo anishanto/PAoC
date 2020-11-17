@@ -1,0 +1,132 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#============================        NOTES     =================================================
+#    Date                   Initials        Note
+#    2016-06-08           John Petrovik           		Initial Build
+#
+#  Moves element in Deleted node
+#
+#==========================================================================================
+
+#==========================================================================================
+
+#===============================    Process statistics  ===========================================
+cProcess = GETPROCESSNAME ;
+sProcess = TRIM (cProcess);
+WHILE ( SCAN ( ' ', sProcess )  > 0 );
+    sProcess = DELET ( sProcess, SCAN ( ' ' , sProcess ) , 1 ) ;
+END ;
+
+sUser = TM1USER() ;
+
+sNow = TIMST( NOW , '\M \D, \Y at \H \p \i min \s sec' ) ;
+vNowStart = NOW ;
+
+cubMessages = '}ElementAttributes_}Processes';
+
+#========================================================================================
+
+#============================= Define User Log =============================================
+cubGblCube = 'Global Settings';
+logPath = '..\logs\tunit\';
+exportPath = '..\DataSources\Exports\';
+
+IF ( SUBST ( logPath , LONG ( logPath ) - 1 , 1 ) @<> '\' ) ;
+    logPath = logPath | '\' ;
+ENDIF;
+
+logName = TRIM ( sProcess ) | '_' | sNow | '.log' ;
+errName =  TRIM ( sProcess ) | '_' | sNow | '.err' ;
+logNameMeta = TRIM ( sProcess ) | '_' | sNow | '-KICKOUT.csv' ;
+errNameMeta = TRIM ( sProcess ) | '_' | sNow | '-META.err' ;
+logFile = logPath | logName ;
+errFile = logPath | errName ;
+logFileMeta = logPath | logNameMeta ;
+errFileMeta = logPath | errNameMeta ;
+
+#===================================================================================
+
+
+#===============================   Process Variables  ====================================
+
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+vProcessStatusCube = 'Process Status';
+vDimension = pDimension;
+vDeletedElement = 'Deleted';
+
+vFlag = 0;
+vExists = 0;
+
+vTimeStamp = TIMST(NOW, '\m-\d-\Y @ \H:\i \p PST');
+vMessage = 'No Message';
+
+pElement = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pElement);
+
+#Check if Deleted element exists and add it to All if not
+IF(DIMIX(vDimension, vDeletedElement) = 0);
+    DIMENSIONELEMENTINSERT(vDimension, '', vDeletedElement, 'C');
+    DIMENSIONELEMENTCOMPONENTADD(vDimension, pAllElement, vDeletedElement, 0);
+    DIMENSIONELEMENTCOMPONENTADD(vDimension, pAllElementAH, vDeletedElement, 0);
+ENDIF;
+
+#Check that the fields have been entered and valid
+IF(pElement @= '');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: '| pDimension | ' not entered.';
+   ENDIF;
+ENDIF;
+
+#Check if Parent is leaf
+vChildrenNo = ELCOMPN(vDimension, pElement);
+IF(vFlag = 0);
+   IF(vChildrenNo > 0 );
+      vFlag = 1;
+      vMessage = 'ERROR: The element  "'| pElement | ' " has valid children. Cannot be deleted.';
+   ENDIF;
+ENDIF;
+
+#Realign Element
+vParentsNo = ELPARN(vDimension, pElement);
+IF(vFlag = 0);
+           vMessageSuccess = 'SUCCESS: Element ' | pElement | ' removed from the ' | pDimension | ' hierarchy.' ;
+           vParent1 = ELPAR(vDimension, pElement, 1);
+            DIMENSIONELEMENTCOMPONENTDELETE(vDimension, vParent1 , pElement);
+
+ #           ASCIIOUTPUT('..\\logs\System\Debug.txt', vParent1, vParent2);
+
+    #Add it to Deleted parent
+    DIMENSIONELEMENTCOMPONENTADD(vDimension, vDeletedElement, pElement, 1);
+ENDIF;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Update Process Status cube with messages
+CELLPUTS ( vMessageSuccess , cubMessages, cProcess, elmSuccessMessage);
+CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+
+IF(vFlag = 1);
+   ProcessQuit;
+ENDIF;
+
+
+#endregion

@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Scale Measure",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Scale Measure.hierarchies/Scale Measure.json"
+	]
+}

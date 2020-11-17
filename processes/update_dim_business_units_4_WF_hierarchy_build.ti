@@ -1,0 +1,66 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###########################Constants###########################
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'BusUnits';
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_BusUnits';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExport = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImport = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cMetadataFileName = 'BusUnitSH1.csv';
+cDataFileName = 'BusUnitsdNames.csv';
+cMetadataPath = cExport | cMetadataFileName;
+cDataPath = cExport | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+
+
+######################Create Workflow Subsets for Business Unit Dimension
+
+######Delete Vanilla WF - This is for creating a new client.
+sAppSubv = 'Approval Vanilla WF';
+IF(SubsetExists(cDimName, sAppSubv)= 1);
+     SubsetDestroy (cDimName, sAppSubv);
+ENDIF;
+
+sAppSub = 'Approval ' | cClientName | ' LEASES WF';
+
+IF(SubsetExists(cDimName, sAppSub)= 1);
+     SubsetDestroy (cDimName, sAppSub);
+ENDIF;
+
+  sMDX = '{TM1DRILLDOWNMEMBER( {[BusUnits].[AL1]}, ALL, RECURSIVE )}';
+  SubsetCreatebyMDX(sAppSub, sMDX);
+ SubsetMDXSet(cDimName, sAppSub, ''); 
+ SubsetAliasSet(cDimName, sAppSub, 'DisplayName' );
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

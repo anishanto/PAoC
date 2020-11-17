@@ -1,0 +1,445 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeLockOverride(1);
+#####################Constants
+cCube = 'Opex Plan Cube';
+sCurrency = 'Local';
+sMeasure = 'Value';
+sMeasureAssumption = 'Assumptions';
+cVersion = 'PriorForecast';
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cFileName = 'PriorFrcst_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+sViewZero = cProcessName| cCube;
+
+nRecordProcessedCount = 0;
+nRecordPostedCount = 0;
+ 
+
+
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+   #Log Variables, Constants and Strings
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '           cFileName                           : '| cFileName);
+   AsciiOutput( sDebugFile, '           sFullPath                             : '| sFullPath);
+   AsciiOutput( sDebugFile, '           cCube                                 : '| cCube);
+   AsciiOutput( sDebugFile, '           sCurrency                           : '| cCube);
+   AsciiOutput( sDebugFile, '           sMeasure                           : '| cCube);
+EndIf;
+
+
+
+
+##############################################################Check to make sure file path exists
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+
+##############################################################Check if Cube Constant Exists
+   IF( Trim( cCube ) @=' ');
+     nErrors = 1;
+     sMessage = 'No Cube named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+#################################################Create View and Zero Out Cube
+
+###################Create MDX subsets for data load existing code 1/4/17
+
+
+   IF( SubsetExists( 'Company',cProcessName|' '|'Company' ) = 0 );
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+    SubsetCreatebyMDX( cProcessName|' '|'Company', sMDX);
+   EndIf;
+#Create Currency_PM
+   IF( SubsetExists( 'Currency_PM', cProcessName|' '|'Currency_PM' ) = 0 );
+       sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency_PM] )}, 0)}';
+      SubsetCreatebyMDX( cProcessName|' '|'Currency_PM', sMDX);
+   EndIf;
+# create SubAccounts
+   IF( SubsetExists( 'SubAccounts', cProcessName|' '|'SubAccounts' ) = 0 );
+        sMDX='{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [SubAccounts] )} ) }, 0)}, ASC)}';
+        SubsetCreatebyMDX( cProcessName|' '|'SubAccounts', sMDX);
+    EndIf;
+#Create GL_Accounts
+   IF( SubsetExists( 'GL_Accounts', cProcessName|' '|'GL_Accounts' ) = 0 );
+        sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [GL_Accounts] )} ) }, 0)}, ASC)}';
+        SubsetCreatebyMDX( cProcessName|' '|'GL_Accounts', sMDX);
+   EndIf;
+#Create Fiscal Year
+    sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Fiscal Years] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( cProcessName|' '|'Fiscal Years', sMDX);
+#Create Fiscal Months
+IF( SubsetExists( 'Fiscal Months', cProcessName|' '|'Fiscal Months' ) = 0 );
+  sMDX = '{{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [Fiscal Months] )} ) }, 0)}, ASC)},[Total Months]}';
+  SubsetCreatebyMDX( cProcessName|' '|'Fiscal Months' , sMDX);
+EndIf;
+#Create BusUnits
+   IF( SubsetExists( 'BusUnits', cProcessName|' '|'BusUnits' ) = 0 );
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [BusUnits] )} ) }, 0)}, ASC)}';
+      SubsetCreatebyMDX( cProcessName|' '|'BusUnits' , sMDX);
+   EndIf;
+#Create Version
+   IF( SubsetExists( 'Versions_PM', cProcessName|' '|'Versions_PM' ) = 0);
+        SubsetCreate ('Versions_PM', cProcessName|' '|'Versions_PM');
+        SubsetElementInsert ( 'Versions_PM',  cProcessName|' '|'Versions_PM', pZeroCubeVersion, 1);
+    EndIf;
+#Create Plan Measure
+IF( SubsetExists( 'Plan Measures', cProcessName|' '|'Plan Measures' ) = 0 );
+	SubsetCreate( 'Plan Measures', cProcessName|' '|'Plan Measures' );
+	SubsetElementInsert( 'Plan Measures', cProcessName|' '|'Plan Measures' , sMeasure,1);
+	if (pDeleteAssumption=1);
+		SubsetElementInsert( 'Plan Measures', cProcessName|' '|'Plan Measures' , sMeasureAssumption,1);
+	endif; 
+EndIf;
+
+#CreateView
+   ####Destroy View if preent
+IF( ViewExists(cCube, sViewZero ) = 1);
+   ViewDestroy( cCube, sViewZero );
+EndIf;
+   ####CreateView
+ViewCreate( cCube, sViewZero );
+
+  #####Assign Dimensions and Subsets to View
+ViewColumnDimensionSet(cCube, sViewZero, 'Fiscal Months',1);
+ViewRowDimensionSet( cCube, sViewZero, 'BusUnits',1);
+ViewTitleDimensionSet(cCube, sViewZero, 'Company' ) ;
+ViewTitleDimensionSet(cCube, sViewZero,  'Currency_PM' );
+ViewTitleDimensionSet(cCube, sViewZero,  'SubAccounts' );
+ViewTitleDimensionSet(cCube, sViewZero,  'GL_Accounts' );
+ViewTitleDimensionSet(cCube, sViewZero, 'Fiscal Years' );
+ViewTitleDimensionSet(cCube, sViewZero, 'Versions_PM' ) ;
+ViewTitleDimensionSet(cCube, sViewZero, 'Plan Measures' ) ;
+
+ViewSubsetAssign(cCube, sViewZero,  'BusUnits', cProcessName|' '|'BusUnits' );
+ViewSubsetAssign(cCube, sViewZero, 'Company',cProcessName|' '|'Company' ) ;
+ViewSubsetAssign(cCube, sViewZero,  'Currency_PM', cProcessName|' '|'Currency_PM' );
+ViewSubsetAssign(cCube, sViewZero,  'SubAccounts', cProcessName|' '|'SubAccounts' );
+ViewSubsetAssign(cCube, sViewZero,  'GL_Accounts', cProcessName|' '|'GL_Accounts' );
+ViewSubsetAssign(cCube, sViewZero,'Fiscal Months', cProcessName|' '|'Fiscal Months' );
+ViewSubsetAssign(cCube, sViewZero,'Fiscal Years', cProcessName|' '|'Fiscal Years' );
+ViewSubsetAssign(cCube, sViewZero, 'Versions_PM', cProcessName|' '|'Versions_PM' ) ;
+ViewSubsetAssign(cCube, sViewZero, 'Plan Measures', cProcessName|' '|'Plan Measures' ) ;
+
+IF(pZeroCube = 1);
+   VIEWZEROOUT(cCube,sViewZero);
+EndIf;
+
+
+
+####Sort Dimensions - used for adding new element if they don't exists in the metadata load but are in the data load
+DIMENSIONSORTORDER('Versions_PM','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Fiscal Years','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('BusUnits','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('GL_Accounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('SubAccounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Company','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Fiscal Months','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Currency_PM','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Plan Measures','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+ 
+ #################################################Delete View and Subset From Zero Out
+ 
+        ViewDestroy( cCube, sViewZero );
+        SubsetDestroy ('Company', cProcessName|' '|'Company');
+        SubsetDestroy ('Currency_PM', cProcessName|' '|'Currency_PM');
+        SubsetDestroy ('SubAccounts', cProcessName|' '|'SubAccounts');
+        SubsetDestroy ('GL_Accounts', cProcessName|' '|'GL_Accounts');
+        SubsetDestroy ('Fiscal Years', cProcessName|' '|'Fiscal Years');
+        SubsetDestroy ('Fiscal Months', cProcessName|' '|'Fiscal Months');
+        SubsetDestroy ('BusUnits', cProcessName|' '|'BusUnits');
+        SubsetDestroy ('Versions_PM', cProcessName|' '|'Versions_PM');
+        SubsetDestroy ('Plan Measures', cProcessName|' '|'Plan Measures');
+
+ #### Assign DataSource 
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+
+
+
+
+ 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+cTrimSubAccountNumber=
+'NA';
+#****End: Generated Statements****
+
+
+######Continue Debug
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'MetaData.debug';
+EndIf;
+
+
+##########################IF Elements exist in the data load file that do not exist in the dimension load file - add the elements under a review parent within the dimension - Chris to discuss with  Suresh 112516
+
+IF( pDebug <= 1 );
+
+
+##############################################Unassigned Elements
+###########Constants
+sYR = 'Fiscal Years';
+sAllYR = 'All Fiscal Years';
+sBU = 'BusUnits';
+vUnassignedBU = 'Unassigned BusUnits' ;
+sGL ='GL_Accounts' ;
+vUnassignedAcct = 'Unassigned GL' ;
+sCO ='Company' ;
+vUnassignedCompany = 'Unassigned Company';
+sSA ='SubAccounts' ;
+vUnassignedSub = 'Unassigned SubAccount';  
+
+############################################ACII OUT Undefined Elements
+#################Unassigned Elements Review FIle
+IF(DIMIX(sBU, vBusUnits ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedBusUnits.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review BusUnits Elements.','BusUnits',vBusUnits);
+EndIf;
+
+IF(DIMIX(sGL, vAccountNumber ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedGLAccounts.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review GL_Accounts Elements.','GL_Accounts',vAccountNumber);
+EndIf;
+
+IF(DIMIX(sSA, cTrimSubAccountNumber ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedSubAccounts.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review SubAccounts Elements.','SubAccounts',cTrimSubAccountNumber);
+EndIf;
+
+
+IF(DIMIX(sCO, vCompany ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedCompany.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review Company Elements.','Company',vCompany);
+EndIf;
+
+###########Update Year Dimension   
+IF(DIMIX(sYR, vYear ) = 0);
+   DIMENSIONELEMENTINSERT(sYR,'',vYear,'n');
+   DIMENSIONELEMENTCOMPONENTADD(sYR,sAllYR,vYear,1);
+EndIf;
+
+###########Update Business Units
+#Insert unassigned BusUnit
+IF(DIMIX(sBU, vBusUnits ) = 0);
+  DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+#  IF(DIMIX(sBU, vUnassignedBU ) = 0);
+  DimensionElementInsert(sBU, '', vUnassignedBU , 'C');   
+#  EndIf;
+  DimensionElementComponentAdd(sBU, vUnassignedBU, vBusUnits, 1);
+  ENDIF;
+
+
+###########Update General Ledger
+#Insert unassigned General Ledger
+IF(DIMIX(sGL, vAccountNumber ) = 0);
+  DimensionElementInsert(sGL, '', vAccountNumber, 'N');
+#  IF(DIMIX(sGL, vUnassignedAcct ) = 0);
+      DimensionElementInsert(sGL, '', vUnassignedAcct , 'C');  
+#   EndIf;
+  DimensionElementComponentAdd(sGL, vUnassignedAcct,vAccountNumber, 1);
+ENDIF;
+
+
+###########Update Company
+
+IF(DIMIX(sCO, vCompany ) = 0);
+   DimensionElementInsert(sCO,'',vCompany,'n');
+#  IF(DIMIX(sCO, vUnassignedCompany ) = 0);
+  DimensionElementInsert(sCO, '', vUnassignedCompany, 'C');  
+#  EndIf;
+  DimensionElementComponentAdd(sCO, vUnassignedCompany,vCompany, 1);
+ENDIF;
+ENDIF;
+
+
+
+
+
+###############################if pDebut is set to 1 ASCII  OUT
+
+If( pDebug >=1 );
+   ASCIIOUTPUT (sDebugFile, 'Review Version Elements.','Versions_PM',vVersion);
+   ASCIIOUTPUT (sDebugFile, 'Review Year Elements.','Fiscal Year',vYear);
+   ASCIIOUTPUT (sDebugFile, 'Review BusUnits Elements.','BusUnits',vBusUnits);
+   ASCIIOUTPUT (sDebugFile, 'Review GL_Accounts Elements.','GL_Accounts',vAccountNumber);
+   ASCIIOUTPUT (sDebugFile, 'Review SubAccounts Elements.','SubAccounts',cTrimSubAccountNumber);
+   ASCIIOUTPUT (sDebugFile, 'Review Company Elements.','Company',vCompany);
+   ASCIIOUTPUT (sDebugFile, 'Review CurrencyPM Elements.','Currency_PM',sCurrency);
+   ASCIIOUTPUT (sDebugFile, 'Review Plan Measure Elements.','Plan Measures',sMeasure);
+   ASCIIOUTPUT (sDebugFile, 'Review M01 Elements.','Fiscal Months','M01');
+   ASCIIOUTPUT (sDebugFile, 'Review M02 Elements.','Fiscal Months','M02');
+   ASCIIOUTPUT (sDebugFile, 'Review M03 Elements.','Fiscal Months','M03');
+   ASCIIOUTPUT (sDebugFile, 'Review M04 Elements.','Fiscal Months','M04');
+   ASCIIOUTPUT (sDebugFile, 'Review M05 Elements.','Fiscal Months','M05');
+   ASCIIOUTPUT (sDebugFile, 'Review M06 Elements.','Fiscal Months','M06');
+   ASCIIOUTPUT (sDebugFile, 'Review M07 Elements.','Fiscal Months','M07');
+   ASCIIOUTPUT (sDebugFile, 'Review M08 Elements.','Fiscal Months','M08');
+   ASCIIOUTPUT (sDebugFile, 'Review M09 Elements.','Fiscal Months','M09');
+   ASCIIOUTPUT (sDebugFile, 'Review M10 Elements.','Fiscal Months','M010');
+   ASCIIOUTPUT (sDebugFile, 'Review M11 Elements.','Fiscal Months','M011');
+   ASCIIOUTPUT (sDebugFile, 'Review M12 Elements.','Fiscal Months','M012');
+ENDIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+cTrimSubAccountNumber=
+'NA';
+#****End: Generated Statements****
+
+
+######Continue Debug
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Data.debug';
+EndIf;
+
+######Set Record Counter
+nRecordProcessedCount = nRecordProcessedCount +1;
+
+###############Update Data
+IF( pDebug <= 1 );
+	IF(CELLISUPDATEABLE( cCube,vVersion,vCompany,sCurrency,'Total Months',vYear,cTrimSubAccountNumber,vAccountNumber,vBusUnits,sMeasureAssumption)=1);
+		CellPutS(vAssumption, cCube ,vVersion , vCompany , sCurrency , 'Total Months' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasureAssumption);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube,vVersion,vCompany,sCurrency,'M01',vYear,cTrimSubAccountNumber,vAccountNumber,vBusUnits,sMeasure)=1);
+		CellPutN(nM01, cCube ,vVersion , vCompany , sCurrency , 'M01' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M02' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM02, cCube ,vVersion , vCompany , sCurrency , 'M02' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M03' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM03, cCube ,vVersion , vCompany , sCurrency , 'M03' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M04' , vYear ,cTrimSubAccountNumber ,vAccountNumber, vBusUnits , sMeasure)=1);
+		CellPutN(nM04, cCube ,vVersion , vCompany , sCurrency , 'M04' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M05' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM05, cCube ,vVersion , vCompany , sCurrency , 'M05' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M06' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM06, cCube ,vVersion , vCompany , sCurrency , 'M06' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M07' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM07, cCube ,vVersion , vCompany , sCurrency , 'M07' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M08' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM08, cCube ,vVersion , vCompany , sCurrency , 'M08' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M09' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM09, cCube ,vVersion , vCompany , sCurrency , 'M09' , vYear , cTrimSubAccountNumber ,vAccountNumber, vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M10' , vYear , cTrimSubAccountNumber ,vAccountNumber, vBusUnits , sMeasure)=1);
+		CellPutN(nM10, cCube ,vVersion , vCompany , sCurrency , 'M10' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M11' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM11, cCube ,vVersion , vCompany , sCurrency , 'M11' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+
+	IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , sCurrency , 'M12' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure)=1);
+		CellPutN(nM12, cCube ,vVersion , vCompany , sCurrency , 'M12' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure);
+	EndIf;
+ENDIF;
+
+
+
+IF( pDebug >= 1 );
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M01' , vYear ,cTrimSubAccountNumber ,vAccountNumber, vBusUnits , sMeasure,NumberToString( nM01));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M02' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure, NumberToString(nM02));
+       Asciioutput( sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M03' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure,NumberToString( nM03));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M04' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure, NumberToString(nM04));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M05' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure, NumberToString(nM05));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M06' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure, NumberToString(nM06));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M07' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure,NumberToString( nM07));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M08' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure, NumberToString(nM08));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M09' , vYear , cTrimSubAccountNumber ,vAccountNumber, vBusUnits , sMeasure,NumberToString( nM09));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M10' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure, NumberToString(nM10));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M11' , vYear , cTrimSubAccountNumber ,vAccountNumber, vBusUnits , sMeasure, NumberToString(nM11));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , sCurrency , 'M12' , vYear , cTrimSubAccountNumber ,vAccountNumber , vBusUnits , sMeasure, NumberToString(nM12));
+ENDIF;
+
+
+#Increase Record Count
+  nRecordPostedCount = nRecordPostedCount +1;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+##############Continue Debug for Epilog
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Epilog.debug';
+
+###############Log Error information
+   IF( nErrors <>0 );
+        AsciiOutput(sDebugFile, 'Errors Occured. Review fiile data and code');
+   EndIf;
+
+################Log Finish Time
+          AsciiOutput ( sDebugFile, 'Record Processed: ' | NumberToString ( nRecordProcessedCount ) );
+          AsciiOutput ( sDebugFile, 'Record Load: ' |  NumberToString ( nRecordPostedCount) );
+          AsciiOutPut ( sDebugFile, 'Process Finished: ' | TimSt ( Now, '\d-\m-\Y \h:\i:\s' ) );
+   EndIf;
+
+################If Errors Occur Quit the process
+     IF( nError <> 0 );
+         ProcessQuit;
+     EndIf;
+#endregion

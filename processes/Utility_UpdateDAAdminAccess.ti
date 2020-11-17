@@ -1,0 +1,96 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName = '}ClientGroups';
+ViewNameSource = 'VE-' | CubeName | '-UpdateDAAdminAccess' ;
+
+#  Destroy previous views and subsets for forecast Source (in case they currently exist)
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('}Clients', ViewNameSource);
+SubsetDestroy ('}Groups', ViewNameSource);
+
+# Create views and subsets
+
+# Create }Clients Subset
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [}Clients] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX(ViewNameSource, sMDX);
+
+# Create }Groups subsets
+SubsetCreate ('}Groups', ViewNameSource);
+vDA='CorpTM1 PlanOpexDA_ALL';
+vFA='CorpTM1 PlanOpexFA_ALL';
+vRO='CorpTM1 PlanOpexRO_ALL';
+vAdmin='CorpTM1 Admin';
+
+if (DIMIX('}Groups', vDA)<>0);
+	SubsetElementInsert ( '}Groups',  ViewNameSource,vDA, 1);
+endif;
+if (DIMIX('}Groups', vFA)<>0);
+	SubsetElementInsert ( '}Groups',  ViewNameSource,vFA, 1);
+endif;
+if (DIMIX('}Groups', vRO)<>0);
+	SubsetElementInsert ( '}Groups',  ViewNameSource,vRO, 1);
+endif;
+if (DIMIX('}Groups', vAdmin)<>0);
+	SubsetElementInsert ( '}Groups',  ViewNameSource,vAdmin, 1);
+endif;
+
+ViewCreate( CubeName, ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, '}Clients', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, '}Groups', ViewNameSource);
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource, 0);
+ViewExtractSkipZeroesSet(CubeName, ViewNameSource, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameSource;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+cTATEnvironment = CellGetS('Global Control','TAT Environment','String');
+
+IF (cTATEnvironment @<> 'PRD');
+	IF (vGroup@=vDA %vGroup@=vFA % vGroup@=vRO);
+		CellPutS('DataAdmin',CubeName,vClient,'DataAdmin');
+	ELSEIF (vGroup @=vAdmin);
+		CellPutS('ADMIN',CubeName,vClient,'ADMIN');
+	ENDIF;
+ELSE;
+	IF (vGroup@=vDA %vGroup@=vFA % vGroup@=vRO);
+		CellPutS('',CubeName,vClient,'DataAdmin');
+	ELSEIF (vGroup @=vAdmin);
+		CellPutS('',CubeName,vClient,'ADMIN');
+	ENDIF;
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CellPutS('ADMIN',CubeName,'Admin','ADMIN');
+#CellPutS('ADMIN',CubeName,'CAMID("jll:u:4c59290deab6344ab8d5f5685616bea7")','ADMIN');
+#CellPutS('ADMIN',CubeName,'CAMID("jll:u:fa88a0151393eb4d85ee1b472d2d0962")','ADMIN');
+#CellPutS('ADMIN',CubeName,'CAMID("jll:u:6c4ad9322bc21247afd7fa3b4a976849")','ADMIN');
+
+CUBESETLOGCHANGES(CubeName, 1);
+
+
+IF( 1 = 1 );
+#  Destroy previous views and subsets 
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('}Clients', ViewNameSource);
+SubsetDestroy ('}Groups', ViewNameSource);
+ENDIF;
+#endregion

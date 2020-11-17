@@ -1,0 +1,56 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+vClientName = CellGetS('Global Control', 'Security Group TAT', 'String');
+
+if (vClientName@='');
+	vClientName = 'CorpTM1 PlanOpex';
+endif;
+sSQL = 'exec sp_TM1_GetRoles ''%'|vClientName|'%''';
+
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'ASATATDB';
+DataSourceUserName = 'ibmcloudintegration';
+DataSourcePassword = '1bmc10ud@J11';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);
+	ASCIIOUTPUT('..\logs\System\Security_AddGroups.prolog.txt', vClientName, sSQL);
+ENDIF;
+
+AddGroup('CAMID("::Everyone")');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+AddGroup(vRole);
+
+IF(bDebug=1);
+	ASCIIOUTPUT('..\logs\System\Security_AddGroups.metadata.txt', vRole);
+ENDIF;
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ATTRPUTS (vRole, '}Groups', vRole, '}TM1_DefaultDisplayValue');
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+if (DIMIX('}Groups','Cognos\Everyone')=0);
+	ATTRPUTS ('Cognos\Everyone', '}Groups', 'CAMID("::Everyone")', '}TM1_DefaultDisplayValue');
+endif;
+ODBCClose(DataSourceNameForServer );
+#endregion

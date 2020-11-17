@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Tenure Type",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Tenure Type')/Hierarchies('Tenure Type')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Tenure Type.hierarchies/Tenure Type.json"
+	]
+}

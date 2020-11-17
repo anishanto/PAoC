@@ -1,0 +1,189 @@
+{
+	"@type":"Process",
+	"Name":"ProcessUpdateCycleLeases",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"ProcessUpdateCycleLeases.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f_ParameterConstraints=e30\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pType",
+			"Prompt":"Budget/Forecast/Reporting",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pName",
+			"Prompt":"Budget/Forecast Alt Name",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pYear",
+			"Prompt":"Year",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pActMonth",
+			"Prompt":"Actuals Month",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pFcstVer",
+			"Prompt":"Reporting Forecast Version",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pPrFcstVer",
+			"Prompt":"Reporting PriorForecast Version",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pFcstBudVer",
+			"Prompt":"Reporting Forecast Budget Version",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCurrency",
+			"Prompt":"Reporting Default Currency",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pScale",
+			"Prompt":"Reporting Default Scale",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pMeasure",
+			"Prompt":"Reporting Default Measure",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pChartVer",
+			"Prompt":"Reporting Default Chart Version",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pChartCpVer",
+			"Prompt":"Reporting Default Chart Comparison Version",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pChartMonth",
+			"Prompt":"Reporting Default Chart Month",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pInputGLA",
+			"Prompt":"Input Templates GLA Subset Selection",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pInputSubAcct",
+			"Prompt":"Input Templates SubAccount Subset Selection",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pInputTenureID",
+			"Prompt":"Input Templates TenureID Subset Selection",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCopyPlan",
+			"Prompt":"Yes/No Copy to Version within Plan Cube",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pUpdateActuals",
+			"Prompt":"Yes/No Update the Actual Months in Forecast Version",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCopyAnalysis",
+			"Prompt":"Yes (E1 or Portfolio)/No Copy Plan to Analysis Version",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCopyAnaName",
+			"Prompt":"Analysis Name to Copy To",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCompany",
+			"Prompt":"Company to Copy",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pReportingGLA",
+			"Prompt":"Reporting GLA Subset Selection",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pReportingSubAcct",
+			"Prompt":"Reporting SubAcct Subset Selection",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pReportingTenureID",
+			"Prompt":"Reporting TenureID Subset Selection",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pLeaseCalculation",
+			"Prompt":"Leases Calculation",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCopyAnalysisArchive",
+			"Prompt":"Leases Archive Versions",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pReportingBusUnits",
+			"Prompt":"Reporting BusUnits Subset Selection",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pImportBaseLease",
+			"Prompt":"Import Base Lease Data",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCopyAnaNameFrom",
+			"Prompt":"Analysis Name to Copy From",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

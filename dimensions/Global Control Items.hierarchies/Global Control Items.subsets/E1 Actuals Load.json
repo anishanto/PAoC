@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"E1 Actuals Load",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Global Control Items')/Hierarchies('Global Control Items')/Elements('E1 Calendar')"
+		},
+		{
+			"@id":"Dimensions('Global Control Items')/Hierarchies('Global Control Items')/Elements('Reporting Year')"
+		}
+	]
+}

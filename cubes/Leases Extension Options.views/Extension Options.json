@@ -1,0 +1,50 @@
+{
+	"@type":"NativeView",
+	"Name":"Extension Options",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Extension Options Measures')/Hierarchies('Extension Options Measures')/Subsets('ExtensionOptionsMeasures')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Extension Options')/Hierarchies('Extension Options')/Subsets('level0_input')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Expiry Years')/Hierarchies('Expiry Years')/Subsets('ExpiryYearsNumber')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearRange')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Budget')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.#########"
+}

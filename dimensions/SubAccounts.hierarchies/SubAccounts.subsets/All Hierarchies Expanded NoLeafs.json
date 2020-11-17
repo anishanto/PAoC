@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"All Hierarchies Expanded NoLeafs",
+	"Expression":"{EXCEPT({TM1DRILLDOWNMEMBER( { HIERARCHIZE( {TM1SUBSETALL( [SubAccounts] )} ) }, ALL, RECURSIVE )}, {TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)})}"
+}

@@ -1,0 +1,47 @@
+{
+	"@type":"Cube",
+	"Name":"Leases Analysis Cube",
+	"Rules@Code.link":"Leases Analysis Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions')"
+		},
+		{
+			"@id":"Dimensions('Currency')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Months')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('SubAccounts')"
+		},
+		{
+			"@id":"Dimensions('GL_Accounts')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')"
+		},
+		{
+			"@id":"Dimensions('Tenure ID')"
+		},
+		{
+			"@id":"Dimensions('Scale Measure')"
+		},
+		{
+			"@id":"Dimensions('Leases Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Leases Analysis Cube.views/Lease Analysis - BU.json",
+		"Leases Analysis Cube.views/Lease Analysis - Load Review.json",
+		"Leases Analysis Cube.views/Leases Analysis - Load Reporting Currency.json"
+	]
+}

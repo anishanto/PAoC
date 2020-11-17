@@ -1,0 +1,35 @@
+{
+	"@type":"NativeView",
+	"Name":"DW Current Year",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Global Control Measures')/Hierarchies('Global Control Measures')/Subsets('String')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Global Control Items')/Hierarchies('Global Control Items')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Global Control Items')/Hierarchies('Global Control Items')/Elements('DW Current Year')"
+					}
+				]
+			}
+		}
+	],
+	"Titles":[],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"All Members",
+	"Expression":"{TM1SUBSETALL( [Fiscal Month Year] )}"
+}

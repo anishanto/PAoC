@@ -1,0 +1,143 @@
+{
+	"@type":"Process",
+	"Name":"CopyVersion - Fx Rates by Post",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"CopyVersion - Fx Rates by Post.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=33\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"Currency Exchange Post Cube",
+		"dataSourceNameForServer":"Currency Exchange Post Cube",
+		"view":"All"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pSourceVersion",
+			"Prompt":"Source Version",
+			"Value":"Actuals",
+			"Type":"String"
+		},
+		{
+			"Name":"pTargetVersion",
+			"Prompt":"Target Version",
+			"Value":"Forecast",
+			"Type":"String"
+		},
+		{
+			"Name":"pSourceYear",
+			"Prompt":"Source Year",
+			"Value":"2018",
+			"Type":"String"
+		},
+		{
+			"Name":"pTargetYear",
+			"Prompt":"Target Year",
+			"Value":"2018",
+			"Type":"String"
+		},
+		{
+			"Name":"pMonthStart",
+			"Prompt":"Input Start Month",
+			"Value":"1",
+			"Type":"String"
+		},
+		{
+			"Name":"pMonthEnd",
+			"Prompt":"Input End Month",
+			"Value":"12",
+			"Type":"String"
+		},
+		{
+			"Name":"pCurrencyType",
+			"Prompt":"Pick Currency Type to Clone",
+			"Value":"Opex",
+			"Type":"String"
+		},
+		{
+			"Name":"pCurrencyTypeTo",
+			"Prompt":"CurrencyType to Copy To",
+			"Value":"Opex",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"vVersions",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vPost",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCurType",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCurFrom",
+			"Type":"String",
+			"Position":4,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCurTo",
+			"Type":"String",
+			"Position":5,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vFM",
+			"Type":"String",
+			"Position":6,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vFY",
+			"Type":"String",
+			"Position":7,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vCM",
+			"Type":"String",
+			"Position":8,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"vValue",
+			"Type":"Numeric",
+			"Position":9,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

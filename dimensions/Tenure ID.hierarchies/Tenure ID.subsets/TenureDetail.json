@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TenureDetail",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}"
+}

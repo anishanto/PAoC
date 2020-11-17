@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Calendar Cube Measures",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Calendar Cube Measures')/Hierarchies('Calendar Cube Measures')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Calendar Cube Measures.hierarchies/Calendar Cube Measures.json"
+	]
+}

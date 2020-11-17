@@ -1,0 +1,100 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#############################################################Constants
+cDimName = 'SubAccounts';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+cCubeName = '}ElementAttributes_'|cDimName;
+sLocalCube = 'local:'|cCubeName;
+pSubAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+pSubType = CELLGETS('Global Control', 'Client SubAcct Type', 'String');
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+
+IF(DIMIX(cDimName,'NA')=0);
+   DIMENSIONELEMENTINSERT(cDimName,'','NA','n');
+EndIf;
+
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+##############################################################Check Validation if value is 1 then error
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+   ElName = DIMNM( cDimName , x );
+   IF( ATTRS(cDimName,ElName,'Validation')@='1');
+      vMessage = 'ERROR: '| cDimName | ' Validation Error.  There are dupicate parents within a single hierarchy';
+      CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSERROR;
+   ENDIF;
+    x=x-1;
+END;
+
+###############################################Create Standard Hierarchy
+
+IF(pSubType @= 'Sub');
+
+IF( pSubAH >= 0 & pSubAH < 4 );
+ExecuteProcess('update_dim_sub_accounts_2_hierarchy_build',
+       'pHierarchy','SH1',
+        'pDebug',0
+);
+
+EndIf;
+
+IF( pSubAH > 0 & pSubAH < 4 );
+ExecuteProcess('update_dim_sub_accounts_2_hierarchy_build',
+       'pHierarchy','AH1',
+        'pDebug',0
+);
+
+EndIf;
+
+IF( pSubAH > 1 & pSubAH < 4 );
+ExecuteProcess('update_dim_sub_accounts_2_hierarchy_build',
+       'pHierarchy','AH2',
+        'pDebug',0
+);
+
+EndIf;
+
+IF( pSubAH = 3 );
+ExecuteProcess('update_dim_sub_accounts_2_hierarchy_build',
+       'pHierarchy','AH3',
+        'pDebug',0
+);
+
+EndIf;
+
+EndIf;
+#endregion

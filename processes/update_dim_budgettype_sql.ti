@@ -1,0 +1,106 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientID = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+vRecNo = 1;
+vdim = 'Budget Type';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+
+####################################Define Datasource Tab#####################################
+
+sSQL='SELECT DISTINCT "BU Type" FROM [DW_All_Clients].[OVLA].[vw_OVLA_Budget_APAC_CostScheduleFinancial] WHERE OneViewCLientID = '|sClientID;
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+ 
+####################################Add Attributes#####################################
+cDim = 'Budget Type';
+sAttr = 'Name';
+
+ATTRINSERT(cDim,'',sAttr,'S');
+
+####################################Update Dim#####################################
+DIMENSIONSORTORDER(cDim,'BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DimensionDeleteAllElements(cDim);
+
+####################################Add unique elements#####################################
+sP1 = 'All Budget Type';
+IF( DIMIX(cDim, sP1)=0);
+    DIMENSIONELEMENTINSERT(cDim,'',sP1,'c');
+EndIf;
+
+sEl='All';
+IF(DIMIX(cDim, sEl)=0);
+   DimensionElementInsert(cDim,'',sEl,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl, 0);
+EndIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Update Dim#####################################
+
+cDim = 'Budget Type';
+
+sEl = BUType;
+
+IF(DIMIX(cDim, sEl)=0 & sEl@<>'');
+   DimensionElementInsert(cDim,'',sEl,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl, 1);
+EndIF;
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Add Attributes#####################################
+
+cDim = 'Budget Type';
+sAttr = 'Name';
+sAttrv =  BUType;
+sEl =BUType;
+
+IF(DIMIX(cDim, sEl)=1 & sEl@<>'');
+	ATTRPUTS(sAttrv,cDim,sEl,sAttr);
+ENDIF;
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+
+
+#endregion

@@ -1,0 +1,163 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####################################################
+# This process updates the hierarchy attributes
+#####################################################
+
+Count = 0;
+Count2 = 0;
+#CubeSetLogChanges(pCubeName, 0);
+
+vPath = '..\DataSources\Exports\Attr.txt';
+
+sAttrDim = '}ElementAttributes_' | pDimName;
+sProcessNM = getProcessName();
+vSubset = 'VE-' | sProcessNM;
+cZeroOut = 'ZeroOutAttribute';
+ASCIIOutput(vPath, pDimName, pElement);
+
+################################################
+
+###Clear View and Subsets if they exist
+
+ IF(ViewExists(sAttrDim, cZeroOut) = 1);
+ViewDestroy(sAttrDim, cZeroOut);
+EndIf;
+
+
+IF(SubsetExists(pDimName,cZeroOut|pDimName)=1);
+   SubsetDestroy(pDimName,cZeroOut|pDimName);
+EndIf;
+
+
+IF(SubsetExists(sAttrDim,cZeroOut|sAttrDim)=1);
+   SubsetDestroy(sAttrDim,cZeroOut|sAttrDim);
+EndIf;
+
+
+#Create Dimension - BusUnits, GLAccounts, and SubAccounts. Based on Parameter in Excel Sheet.
+
+IF( DIMIX(pDimName,pElement) > 0 );
+    SUBSETCREATE(pDimName,cZeroOut|pDimName);
+  SubsetElementInsert(pDimName, cZeroOut|pDimName, pElement,1);
+EndIF;
+
+############Business Units Attribute
+
+SUBSETCREATE(sAttrDim,cZeroOut|sAttrDim);
+
+IF( DIMIX(sAttrDim,pTopParent|'Parent1') > 0 );
+  SubsetElementInsert(sAttrDim, cZeroOut|sAttrDim, pTopParent|'Parent1',1);
+EndIF;
+
+IF( DIMIX(sAttrDim,pTopParent|'Parent2') > 0 );
+  SubsetElementInsert(sAttrDim, cZeroOut|sAttrDim, pTopParent|'Parent2',1);
+EndIF;
+
+IF( DIMIX(sAttrDim,pTopParent|'Parent3') > 0 );
+  SubsetElementInsert(sAttrDim, cZeroOut|sAttrDim, pTopParent|'Parent3',1);
+EndIF;
+
+IF( DIMIX(sAttrDim,pTopParent|'Parent4') > 0 );
+  SubsetElementInsert(sAttrDim, cZeroOut|sAttrDim, pTopParent|'Parent4',1);
+EndIF;
+
+IF( DIMIX(sAttrDim,pTopParent|'Parent5') > 0 );
+  SubsetElementInsert(sAttrDim,cZeroOut|sAttrDim, pTopParent|'Parent5',1);
+EndIF;
+
+#############################################Create and assign View
+
+ IF(ViewExists(sAttrDim, cZeroOut) = 0);
+ViewCreate(sAttrDim, cZeroOut);
+EndIf;
+
+ViewSubsetAssign (sAttrDim, cZeroOut, sAttrDim, cZeroOut|sAttrDim);
+ViewSubsetAssign (sAttrDim, cZeroOut, pDimName, cZeroOut|pDimName);
+ViewRowDimensionSet (sAttrDim, cZeroOut, pDimName, 1);
+ViewColumnDimensionSet (sAttrDim, cZeroOut, sAttrDim,1);
+
+ViewExtractSkipCalcsSet(sAttrDim, cZeroOut, 0);
+ViewExtractSkipZeroesSet(sAttrDim, cZeroOut, 0);
+
+ViewZeroOut(sAttrDim,cZeroOut);
+
+ViewDestroy(sAttrDim, cZeroOut);
+SubsetDestroy(sAttrDim,cZeroOut|sAttrDim);
+SubsetDestroy(pDimName, cZeroOut|pDimName);
+
+
+##### Standard Hierarchy
+
+   vIndex = pIndex;
+
+sAttr = pTopParent|'Parent1';
+IF(DIMIX(sAttrDim, sAttr ) > 0);
+    vParent = ELPAR(pDimName, pElement, vIndex);
+    ATTRPUTS(vParent , pDimName, pElement, sAttr);
+ENDIF;
+
+sAttr = pTopParent|'Parent2';
+IF(DIMIX(sAttrDim, sAttr ) > 0);
+   vGrandParent = ELPAR(pDimName, vParent, 1);
+   IF(vGrandParent @<> pTopParent & vGrandParent @<>'');
+       ATTRPUTS(vGrandParent, pDimName, pElement, sAttr);
+   ENDIF;
+ENDIF;
+
+sAttr = pTopParent|'Parent3';
+IF(DIMIX(sAttrDim, sAttr ) > 0);
+   vGrandGrandParent = ELPAR(pDimName, vGrandParent,1);
+   IF(vGrandGrandParent @<> pTopParent & vGrandGrandParent @<>'');
+       ATTRPUTS( vGrandGrandParent, pDimName, pElement, sAttr);
+   ENDIF;
+ENDIF;
+
+sAttr = pTopParent|'Parent4';
+IF(DIMIX(sAttrDim, sAttr ) > 0);
+   vGrandGrandGrandParent = ELPAR(pDimName, vGrandGrandParent,1);
+   IF(vGrandGrandGrandParent @<> pTopParent & vGrandGrandGrandParent @<>'');
+       ATTRPUTS( vGrandGrandGrandParent, pDimName, pElement, sAttr);
+   ENDIF;
+ENDIF;
+
+sAttr = pTopParent|'Parent5';
+IF(DIMIX(sAttrDim, sAttr ) > 0);
+   vGrandGrandGrandGrandParent = ELPAR(pDimName, vGrandGrandGrandParent,1);
+   IF(vGrandGrandGrandGrandParent @<> pTopParent & vGrandGrandGrandGrandParent @<>'');
+       ATTRPUTS( vGrandGrandGrandGrandParent, pDimName, pElement, sAttr);
+   ENDIF;
+ENDIF;
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+#endregion

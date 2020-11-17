@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"level0_input",
+	"Expression":"{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Extension Options] )}, 0)}, { [Extension Options].[Dispose] }) }"
+}

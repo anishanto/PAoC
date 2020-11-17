@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"All Hierarchies Expanded",
+	"Expression":"{TM1DRILLDOWNMEMBER( { HIERARCHIZE( {TM1SUBSETALL( [BusUnits] )} ) }, ALL, RECURSIVE )}"
+}

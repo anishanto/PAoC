@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Portfolio Assumptions Measures",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Portfolio Assumptions Measures')/Hierarchies('Portfolio Assumptions Measures')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Portfolio Assumptions Measures.hierarchies/Portfolio Assumptions Measures.json"
+	]
+}

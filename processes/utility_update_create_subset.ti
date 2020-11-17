@@ -1,0 +1,70 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+pDelimiter = '+';
+
+############Delete subset if it exists
+
+IF(SubsetExists(pDim, pSubset) = 1);
+	SubsetDestroy(pDim, pSubset);
+EndIf;
+
+#############Undefined Parameter
+IF(pSelection @=' ');
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( ['|pDim|'] )}, 0)}';
+	SubsetCreatebyMDX(pSubset, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pSelection @<>' ' & ELLEV(pDim,pSelection)<>0);
+	sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {['|pDim|'].['| pSelection |']}, ALL, RECURSIVE )}, 0)}';
+	SubsetCreatebyMDX(pSubset, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+IF(SubsetExists(pDim, pSubset) = 0);
+	SubsetCreate(pDim, pSubset);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pSelection;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+	nDelimIndex = Scan( pDelimiter, sElements );
+	If( nDelimIndex <> 0 );
+		sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+		sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+	Else;
+		sElement = Trim( sElements );
+	EndIf;
+
+	If( DimIx( pDim, sElement ) <> 0 );
+		IF(
+		ELLEV( pDim, sElement) = 0);
+		SubsetElementInsert( pDim,pSubset, sElement, nSubsetIndex );
+		ENDIF;
+	EndIf;
+	nSubsetIndex = nSubsetIndex + 1;
+End;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

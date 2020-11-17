@@ -1,0 +1,96 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientID = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+vRecNo = 1;
+vdim = 'Tenure Type';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+
+####################################Define Datasource Tab#####################################
+sSQL= 'SELECT DISTINCT TenureType FROM [DW_All_Clients].[OVLA].[vw_OVLA_Budget_APAC_CostScheduleFinancial] WHERE OneViewCLientID = '|sClientID;
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+ 
+####################################Add Attributes#####################################
+cDim = 'Tenure Type';
+sAttr = 'Name';
+
+ATTRINSERT(cDim,'',sAttr,'S');
+
+####################################Update Dim#####################################
+DIMENSIONSORTORDER(cDim,'BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DimensionDeleteAllElements(cDim);
+
+####################################Add unique elements#####################################
+sP1 = 'All TenureType';
+IF( DIMIX(cDim, sP1)=0);
+    DIMENSIONELEMENTINSERT(cDim,'',sP1,'c');
+EndIf;
+
+sEl='All';
+IF(DIMIX(cDim, sEl)=0);
+   DimensionElementInsert(cDim,'',sEl,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl, 0);
+EndIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Update Dim#####################################
+sEl =TenureType;
+
+IF(DIMIX(cDim, sEl)=0);
+   DimensionElementInsert(cDim,'',sEl,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl, 1);
+EndIF;
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Add Attributes#####################################
+
+sAttr = 'Name';
+sAttrv =  TenureType;
+sEl =TenureType;
+
+ATTRPUTS(sAttrv,cDim,sEl,sAttr);
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+
+#endregion

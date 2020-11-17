@@ -1,0 +1,102 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientID = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+vRecNo = 1;
+vdim = 'Cost Category Type';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+
+####################################Define Datasource Tab#####################################
+
+sSQL='Select [OneViewClientPropertyID], [Details: Property Details: E1 BU]
+FROM [CDW_Government_Property_NSW].[ssdv].[vw_OneView_Client_Property_Custom] 
+with (readuncommitted)';
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+ 
+####################################Add Attributes#####################################
+cDim = 'OVCProperty';
+sAttr = 'Name';
+
+ATTRINSERT(cDim,'',sAttr,'S');
+
+####################################Update Dim#####################################
+DIMENSIONSORTORDER(cDim,'BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DimensionDeleteAllElements(cDim);
+
+####################################Add unique elements#####################################
+sP1 = 'All Properties';
+IF( DIMIX(cDim, sP1)=0);
+    DIMENSIONELEMENTINSERT(cDim,'',sP1,'c');
+EndIf;
+
+#sEl='All';
+#IF(DIMIX(cDim, sEl)=0);
+#   DimensionElementInsert(cDim,'',sEl,'n');
+#   DimensionElementComponentAdd(cDim,sP1,sEl, 0);
+#EndIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Update Dim#####################################
+sEl =OVCPID;
+
+IF(DIMIX(cDim, sEl)=0);
+   DimensionElementInsert(cDim,'',sEl,'n');
+   DimensionElementComponentAdd(cDim,sP1,sEl, 1);
+EndIF;
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+####################################Add Attributes#####################################
+sAttr = 'Name';
+sAttrv =  OVCPID;
+sEl = OVCPID;
+sBU=SUBST(E1BU,1,10);
+
+ATTRPUTS(sAttrv,cDim,sEl,sAttr);
+ATTRPUTS(sBU,cDim,sEl,'BusUnits PH');
+ATTRPUTS(E1BU,cDim,sEl,'BusUnits E1BU');
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+
+#endregion

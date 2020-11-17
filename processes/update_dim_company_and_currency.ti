@@ -1,0 +1,292 @@
+#region Prolog
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###This Process will create the company dimension from file and load standard attributes CM111916
+
+######################################################Constants
+cDimension = 'Company';
+cDimension1 = 'Currency';
+cDimension2 = 'Currency From';
+cDimension3 = 'Currency To';
+cDimension4 = 'Currency_Codes';
+cDimension5 =  '}ElementAttributes_'|cDimension;
+cElmLength = '5';
+cCurrencyLength = '3';
+cDimensionParent = 'All Companies';
+cDimension1Parent = 'All Currency';
+cDimension2Parent = 'All Currency';
+cDimension3Parent = 'All Currency';
+cDimParent = 'All Business Units';
+cAttr1=  'Name';
+cAttr2=  'Currency';
+cAttr3 = 'Name';
+cAttr4 ='Ledger';
+cAttr1Type ='S';
+cAttr2Type ='S';
+cAttr3Type = 'A';
+cAttr4Type ='S';
+cBaseCurrency = 'USD';
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cFileName = 'Company_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+
+ 
+
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+###########################ASCII OUT SECTION
+   #Log Variables, Constants and Strings
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            cFileName             : '| cFileName);
+   AsciiOutput( sDebugFile, '            sFullPath               : '| sFullPath);
+   AsciiOutput( sDebugFile, '            cDimension           : '| cDimension);
+   AsciiOutput( sDebugFile, '            cAttr1                    : '| cAttr1);
+   AsciiOutput( sDebugFile, '            cAttr2                    : '| cAttr2); 
+   AsciiOutput( sDebugFile, '            cAttr1Type            : '| cAttr1Type);
+   AsciiOutput( sDebugFile, '            cAttr2Type            : '| cAttr2Type);
+EndIf;
+
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check to make sure file path exists
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+
+
+##############################################################Check if Dimension Constant Exists
+   IF( Trim( cDimension ) @=' ');
+     nErrors = 1;
+     sMessage = 'No dimension named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+####################Build Dimension if it doesn't exist
+
+IF( DIMENSIONEXISTS(cDimension) = 0);
+     DIMENSIONCREATE(cDimension);
+EndIF;
+
+####################Delete All Elements
+
+IF( pDeleteAllElements = 1);
+DIMENSIONDELETEALLELEMENTS(cDimension);
+DIMENSIONDELETEALLELEMENTS(cDimension1);
+DIMENSIONDELETEALLELEMENTS(cDimension2);
+DIMENSIONDELETEALLELEMENTS(cDimension3);
+
+#ATTRDELETE(cDimension,cAttr1);
+#ATTRDELETE(cDimension,cAttr2);
+Endif;
+
+##Set Sort for Elements
+DIMENSIONSORTORDER(cDimension,'BYNAME','ASCENDING','BYHIERARCHY', 'ASCENDING');
+DIMENSIONSORTORDER(cDimension1,'BYNAME','ASCENDING','BYHIERARCHY', 'ASCENDING');
+DIMENSIONSORTORDER(cDimension2,'BYNAME','ASCENDING','BYHIERARCHY', 'ASCENDING');
+DIMENSIONSORTORDER(cDimension3,'BYNAME','ASCENDING','BYHIERARCHY', 'ASCENDING');
+
+###Insert Attributes
+IF( DIMIX(cDimension5,cAttr1)=0);
+ATTRINSERT(cDimension,'',cAttr1,cAttr1Type);
+EndIf;
+ 
+ATTRINSERT(cDimension,'',cAttr2,cAttr2Type);
+ATTRINSERT(cDimension,'',cAttr4,cAttr4Type);
+
+ATTRINSERT(cDimension1,'',cAttr3,cAttr3Type);
+ATTRINSERT(cDimension2,'',cAttr3,cAttr3Type);
+ATTRINSERT(cDimension3,'',cAttr3,cAttr3Type);
+
+
+#### Assign DataSource 
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+######Continue Debug
+If( pDebug >=1 );
+
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Metadata.debug';
+EndIf;
+
+#####Continue Check from Prolog
+
+If( nErrors > 0 );
+   ProcessBreak;
+EndIf;
+
+
+#####MetdataCount
+nMetaCount  = nMetaCount +1;
+
+###Buid Dimension
+IF( pDebug <=1 );
+   DIMENSIONELEMENTINSERT(cDimension,'',vElements,'n');
+   DIMENSIONELEMENTINSERT(cDimension1,'',vCurrency,'n');
+   DIMENSIONELEMENTINSERT(cDimension2,'',vCurrency,'n');
+   DIMENSIONELEMENTINSERT(cDimension3,'',vCurrency,'n');
+###Add USD as a base.
+   DIMENSIONELEMENTINSERT(cDimension1,'',cBaseCurrency,'n');
+   DIMENSIONELEMENTINSERT(cDimension2,'',cBaseCurrency,'n');
+   DIMENSIONELEMENTINSERT(cDimension3,'',cBaseCurrency,'n');
+
+##Add Parent Elements for Dimensions
+   DIMENSIONELEMENTINSERT(cDimension,'',cDimensionParent,'c');
+   DIMENSIONELEMENTINSERT(cDimension1,'',cDimension1Parent,'c');
+   DIMENSIONELEMENTINSERT(cDimension2,'',cDimension2Parent,'c');
+   DIMENSIONELEMENTINSERT(cDimension3,'',cDimension3Parent,'c');
+
+##Create Child Parent
+   DIMENSIONELEMENTCOMPONENTADD(cDimension, cDimensionParent, vElements,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension1, cDimension1Parent, vCurrency,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension2, cDimension2Parent, vCurrency,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension3, cDimension3Parent, vCurrency,1);
+##ADD USD to Currency Related Dimension Parent
+   DIMENSIONELEMENTCOMPONENTADD(cDimension1, cDimension1Parent, cBaseCurrency,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension2, cDimension2Parent, cBaseCurrency,1);
+   DIMENSIONELEMENTCOMPONENTADD(cDimension3, cDimension3Parent, cBaseCurrency,1);
+
+EndIf;
+
+
+IF( pDebug >=1 );
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , vElements,' For Dimension ',cDimension);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , vCurrency,' For Dimension ',cDimension1);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , vCurrency,' For Dimension ',cDimension2);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , vCurrency,' For Dimension ',cDimension3);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , cBaseCurrency,' For Dimension ',cDimension1);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , cBaseCurrency,' For Dimension ',cDimension2);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , cBaseCurrency,' For Dimension ',cDimension3);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , vCurrency,'To Parent',cDimension1Parent,' For Dimension ',cDimension1);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , vCurrency,'To Parent',cDimension2Parent,' For Dimension ',cDimension2);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , vCurrency,'To Parent',cDimension3Parent,' For Dimension ',cDimension3);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , cBaseCurrency,'To Parent',cDimension1Parent,' For Dimension ',cDimension1);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , cBaseCurrency,'To Parent',cDimension2Parent,' For Dimension ',cDimension2);
+      ASCIIOUTPUT(  sDebugFile , 'Element Added' , cBaseCurrency,'To Parent',cDimension3Parent,' For Dimension ',cDimension3);
+Endif;
+
+
+
+
+
+
+
+ 
+#endregion
+#region Data
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############Currency Name
+sCurrencyAlias = ATTRS(cDimension4,vCurrency,'Name');
+
+######Continue Debug
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Data.debug';
+EndIf;
+
+
+#Data Count
+nDataCount = nDataCount + 1;
+
+
+IF( pDebug <= 1 );
+   IF( DIMIX(cDimension,vElements) <> 0 );
+    ATTRPUTS(vName,cDimension,vElements,cAttr1);
+    ATTRPUTS(vCurrency,cDimension,vElements,cAttr2);
+    ATTRPUTS(vLedger,cDimension,vElements,cAttr4);
+
+    ATTRPUTS(sCurrencyAlias ,cDimension1,vCurrency,cAttr3);
+    ATTRPUTS(sCurrencyAlias ,cDimension2,vCurrency,cAttr3);
+    ATTRPUTS(sCurrencyAlias ,cDimension3,vCurrency,cAttr3);
+
+
+   EndIf;
+ Endif;
+
+
+  If( pDebug >= 1 );
+     ASCIIOUTPUT (sDebugFile, 'Create Attribute.',cAttr1,vName);
+     ASCIIOUTPUT (sDebugFile, 'Create Attribute.',cAttr2,vCurrency);
+     ASCIIOUTPUT (sDebugFile, 'Create Attribute.',cAttr4,vLedger);
+     ASCIIOUTPUT (sDebugFile, 'Create Attribute.',cAttr1,sCurrencyAlias);
+     ASCIIOUTPUT (sDebugFile, 'Create Attribute.',cAttr2,sCurrencyAlias);
+     ASCIIOUTPUT (sDebugFile, 'Create Attribute.',cAttr3,sCurrencyAlias);
+  Endif;
+
+ 
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+IF(pDebug >= 1 );  
+
+   #Set the Debug File for Epilog
+   sDebugFile = cDebugFile | 'Epilog.debug';
+
+   #Check for Errors
+   IF( nErrors <> 0 );
+      ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   EndIf;
+
+  #Log Finish Time
+  ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+####### If Errors occurred terminate process with error status
+  IF( nErrors <> 0 );
+       ProcessQuit;
+Endif;
+
+
+
+#############Refresh Security CM 11317 - Per Jenn's request on 11.2.17
+sProcessName = 'sProcessSecurityUpdate';
+EXECUTEPROCESS(sProcessName);
+
+#endregion

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zDimMgmtUnassigned",
+	"Expression":"{TM1FILTERBYLEVEL( {FILTER( {TM1SubsetBasis()}, [SubLedger].[UnCount] = \"1\")}, 0)}"
+}

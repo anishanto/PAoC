@@ -1,0 +1,10188 @@
+{
+	"@type":"Hierarchy",
+	"Name":"GL_Accounts",
+	"Elements":
+	[
+		{
+			"Name":"SH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Add Parent 1- remove from unassigned SH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"411210-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"NA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"PL",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Expense",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ADMINISTRATIVE EXPENSES",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"611100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611145",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611145-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611145-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611145-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611145-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611150",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611150-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611150-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611150-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611150-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611151",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611152",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611153",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611156",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611157",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611165",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611170",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611170-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611170-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611170-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611170-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611180",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611180-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611180-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611180-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611180-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616100-000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616100-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616100-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616100-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616100-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616100-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616100-999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616140",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616400-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616400-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616400-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616400-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616420",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616421",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616500-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616500-002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616610",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632130",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632150",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632160",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632170",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632180",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632181",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632182",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632183",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632184",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632190",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632230",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632240",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"All Other RGS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"555110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555600",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555640",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Bank Charges & Interest",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"673110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"673120",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"673140",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"673150",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BUSINESS SUPPORT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"616199",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616400-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616410",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616610-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616700",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616790",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631010",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631020",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631030",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631040",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631040-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631040-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631040-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631040-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631040-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631041",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631042",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631043",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631044",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631045",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631050",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631060",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631070",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631080",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631085",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631090",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631101",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631102",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631103",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631104",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631105",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631120",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631121",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631130",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631135",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631140",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631145",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631150",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631155",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631160",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631165",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631170",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631171",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631175",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631177",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631180",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631181",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631182",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631190",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631195",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631215",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631230",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631240",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631250",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CLEANING",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"511100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511205",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511206",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511207",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511207-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511208",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511230",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511240",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511250",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511251",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511252",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511262",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511310",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511950",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521100-500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"ELEVATOR REPAIRS & MAINTENAN",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"523200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523910",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"FIRE / LIFE SAFETY",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"555100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555310",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555610",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555620",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555630",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"FOOD/DIETARY",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"571999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"572330",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"572340",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"572350",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"GENERAL",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"711200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"711920-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"711920-002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"GENL BLDG REPAIRS/MAINTENANC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"522011",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522230",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522350",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522910",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525100-000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525100-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525100-500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525100-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525100-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525100-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525100-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525150",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525250",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525255",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525256",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525257",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525300-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525301",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525302",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525303",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525304",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525305",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525306",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525307",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525310",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525310-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525315",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525320",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525325",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525330",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525333",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525334",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525335",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525337",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525340",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525350",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525355",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525356",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525360",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525365",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525370",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525371",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525375",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525390",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525405",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525410",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525420",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525425",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525430",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525440",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525440-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525440-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525440-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525440-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525450",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525460",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525465",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525470",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525480",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525490",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525500-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525510",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525515",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525520",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525520-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525520-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525520-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525520-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525525",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525526",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525530",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525531",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525540",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525541",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525542",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525545",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525546",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525547",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525547-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525547-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525547-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525547-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525547-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525548",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525549",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525550",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525560",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525570",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525580",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525590",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525610",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525611",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525620",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525625",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525630",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525630-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525630-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525630-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525630-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525630-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525640",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525650",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525710",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525720",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525720-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525725",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525730",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525740",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525750",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525752",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525760",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525761",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525762",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525799",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525800",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525810",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525811",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525815",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525820",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525822",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525824",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525840",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525841",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525842",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525843",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525850",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525855",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525860",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525860-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525865",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525870",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525875",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525880",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525892",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525990",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HVAC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"521210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521230",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521231",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521240",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521910",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521911",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521998",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522010",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"INTERNAL MOVES",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"633110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633111",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633112",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633120",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633130",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633131",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633133",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633134",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633140",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lab Supplies",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"631260",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Landscaping",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"552200-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552405",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LEASED SPACE RENTAL EXPENSE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"712110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Mail Room/Copy Center",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"616411",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Management Fee",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"611145-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"NON RECOVERABLE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"671250",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"671255",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"671260",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"671265",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Other Recoverable Exp.",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"572201",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"572320",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"572360",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"572400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"572900",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"587999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Parking Lot",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"553330",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553340",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"PLUMBING REPAIRS & MAINTENAN",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"524100-500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524200-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524300-100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524300-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524310",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524410",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Professional",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"632020",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632030",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632040",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632050",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632060",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632080",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"632082",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"RECOVERABLE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"671190",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"REPAIRS & MAINTENANCE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"521200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521420",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521900",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522100-500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522950-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522950-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"ROADS GROUNDS & SECURITY",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"551200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"551200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552205",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553310",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553320",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553920",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"SECURITY",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"554100-500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554200-200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554400",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554401",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554402",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554403",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554410",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554450",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554460",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"SIGNAGE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"633210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"634000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Trash/Waste Removal",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"511253",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511263",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511264",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511265",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511266",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"UTILITIES",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"561500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"561999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Total Revenue",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BASE RENT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"411110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Operating Expense Recovery",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"421100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"OTHER MISCELLANEOUS REVENUE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"424100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"444299",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"RECOVERY / PASS-THROUGHS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"411210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"test",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"411115",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Total Statistics",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Bad Debt",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"960000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"960520",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"960525",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"970000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"980000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"990000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"STA NON RECOVERABLE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"950100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"950110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"950120",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"950190",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"950200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"950210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"950220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"950290",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"951000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Unassigned GL PL Account SH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"411210-002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511206-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511207-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511208-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511230-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511240-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511250-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511250-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511251-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511262-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511262-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511310-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"511400-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521300-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521400-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521400-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521400-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521420-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"521420-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522200-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522300-002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522300-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522400-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522400-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522400-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"522400-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523200-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523200-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"523300-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524300-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524300-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524400-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"524400-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525255-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525300-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525301-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525310-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525310-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525310-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525310-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525315-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525315-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525320-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525320-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525330-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525330-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525334-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525340-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525340-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525350-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525350-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525370-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525370-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525370-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525370-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525375-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525375-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525420-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525420-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525450-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525450-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525500-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525500-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525500-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525500-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525510-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525510-002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525510-003",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525525-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525530-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525530-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525530-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525530-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525531-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525531-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525580-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525720-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525820-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"525855-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"551200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552200-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552205-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"552205-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553300-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"553920-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554200-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"554450-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555100-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555300-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555300-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555300-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555300-901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555310-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555310-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555310-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555630-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555630-002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555630-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555630-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"555630-801",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"561530-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"561530-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"562000-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"571999-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"611165-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"616421-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631042-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631070-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631080-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631101-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"631215-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633110-601",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633110-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633120-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"633210-701",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"712110-001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"712110-002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"712117",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Total GL",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"AH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Add Parent 1- remove from unassigned AH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PL AH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OPEXP",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"620010",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"626510",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ACM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ALT ACCOUNT 1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AMM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AUT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BMS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CAT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CCC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"COT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CSP",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CSU",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ELM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ELV",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FCS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FHY",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FRS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FSB",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FSM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FUM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FWS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"GAC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"GEM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"GES",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"GRS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HAZ",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ICC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"JAN",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LAH",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LAN",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LAS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LAU",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LCT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LMH",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LMS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"MAC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"MAS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"MEM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"MFB",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"MFM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"MFP",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"MFR",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"NSF",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OFS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PCS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PLM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PNT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"RAG",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"RPR",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"SHM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"SPG",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"SPM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"SSM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"TAE",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"UTM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"VEM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"WDR",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"STAT",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"9000",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Unassigned GL PL Account AH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Unassigned GL Statistical SH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Unassigned GL Statistical AH1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PL AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Expense AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CLEANING AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Revenue AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BASE RENT AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Operating Expense Recovery AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OTHER MISCELLANEOUS REVENUE AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"RECOVERY / PASS-THROUGHS AL1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PL AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Expense AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CLEANING AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Revenue AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BASE RENT AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Operating Expense Recovery AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OTHER MISCELLANEOUS REVENUE AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"RECOVERY / PASS-THROUGHS AL2",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PL AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Expense AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CLEANING AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Revenue AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BASE RENT AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Operating Expense Recovery AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OTHER MISCELLANEOUS REVENUE AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"RECOVERY / PASS-THROUGHS AL3",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"PL AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Expense AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CLEANING AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Total Revenue AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BASE RENT AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Operating Expense Recovery AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OTHER MISCELLANEOUS REVENUE AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"RECOVERY / PASS-THROUGHS AL4",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AO1",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"AHIT",
+			"Type":"Consolidated"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"SH1",
+			"ComponentName":"Add Parent 1- remove from unassigned SH1",
+			"Weight":1
+		},
+		{
+			"ParentName":"SH1",
+			"ComponentName":"NA",
+			"Weight":1
+		},
+		{
+			"ParentName":"SH1",
+			"ComponentName":"PL",
+			"Weight":1
+		},
+		{
+			"ParentName":"Add Parent 1- remove from unassigned SH1",
+			"ComponentName":"411210-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL",
+			"ComponentName":"Total Expense",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL",
+			"ComponentName":"Total Revenue",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL",
+			"ComponentName":"Total Statistics",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL",
+			"ComponentName":"Unassigned GL PL Account SH1",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"ADMINISTRATIVE EXPENSES",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"All Other RGS",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Bank Charges & Interest",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"BUSINESS SUPPORT",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"CLEANING",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"ELEVATOR REPAIRS & MAINTENAN",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"FIRE / LIFE SAFETY",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"FOOD/DIETARY",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"GENERAL",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"HVAC",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"INTERNAL MOVES",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Lab Supplies",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Landscaping",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"LEASED SPACE RENTAL EXPENSE",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Mail Room/Copy Center",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Management Fee",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"NON RECOVERABLE",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Other Recoverable Exp.",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Parking Lot",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"PLUMBING REPAIRS & MAINTENAN",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Professional",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"RECOVERABLE",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"REPAIRS & MAINTENANCE",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"ROADS GROUNDS & SECURITY",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"SECURITY",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"SIGNAGE",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"Trash/Waste Removal",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense",
+			"ComponentName":"UTILITIES",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611100",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611110",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611145",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611145-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611145-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611145-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611145-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611150",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611150-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611150-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611150-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611150-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611151",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611152",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611153",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611156",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611157",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611165",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611170",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611170-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611170-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611170-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611170-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611180",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611180-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611180-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611180-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"611180-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616100-000",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616100-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616100-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616100-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616100-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616100-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616100-999",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616140",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616400",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616400-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616400-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616420",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616421",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616500-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616500-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616610",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"616999",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632130",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632150",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632160",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632170",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632180",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632181",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632182",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632183",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632184",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632190",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632210",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632220",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632230",
+			"Weight":1
+		},
+		{
+			"ParentName":"ADMINISTRATIVE EXPENSES",
+			"ComponentName":"632240",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Other RGS",
+			"ComponentName":"555110",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Other RGS",
+			"ComponentName":"555600",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Other RGS",
+			"ComponentName":"555640",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Other RGS",
+			"ComponentName":"555999",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bank Charges & Interest",
+			"ComponentName":"673110",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bank Charges & Interest",
+			"ComponentName":"673120",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bank Charges & Interest",
+			"ComponentName":"673140",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bank Charges & Interest",
+			"ComponentName":"673150",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"616199",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"616400-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"616410",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"616610-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"616700",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"616790",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631010",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631020",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631030",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631040",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631040-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631040-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631040-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631040-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631040-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631041",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631042",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631043",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631044",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631045",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631050",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631060",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631070",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631080",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631085",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631090",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631100",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631101",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631102",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631103",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631104",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631105",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631110",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631120",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631121",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631130",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631135",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631140",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631145",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631150",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631155",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631160",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631165",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631170",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631171",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631175",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631177",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631180",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631181",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631182",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631190",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631195",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631215",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631230",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631240",
+			"Weight":1
+		},
+		{
+			"ParentName":"BUSINESS SUPPORT",
+			"ComponentName":"631250",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511100",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511200",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511205",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511206",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511207",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511207-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511208",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511210",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511220",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511230",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511240",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511250",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511251",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511252",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511262",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511300",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511310",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511400",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511950",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"511999",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING",
+			"ComponentName":"521100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELEVATOR REPAIRS & MAINTENAN",
+			"ComponentName":"523200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELEVATOR REPAIRS & MAINTENAN",
+			"ComponentName":"523300",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELEVATOR REPAIRS & MAINTENAN",
+			"ComponentName":"523400",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELEVATOR REPAIRS & MAINTENAN",
+			"ComponentName":"523910",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELEVATOR REPAIRS & MAINTENAN",
+			"ComponentName":"523999",
+			"Weight":1
+		},
+		{
+			"ParentName":"FIRE / LIFE SAFETY",
+			"ComponentName":"555100",
+			"Weight":1
+		},
+		{
+			"ParentName":"FIRE / LIFE SAFETY",
+			"ComponentName":"555300",
+			"Weight":1
+		},
+		{
+			"ParentName":"FIRE / LIFE SAFETY",
+			"ComponentName":"555310",
+			"Weight":1
+		},
+		{
+			"ParentName":"FIRE / LIFE SAFETY",
+			"ComponentName":"555610",
+			"Weight":1
+		},
+		{
+			"ParentName":"FIRE / LIFE SAFETY",
+			"ComponentName":"555620",
+			"Weight":1
+		},
+		{
+			"ParentName":"FIRE / LIFE SAFETY",
+			"ComponentName":"555630",
+			"Weight":1
+		},
+		{
+			"ParentName":"FOOD/DIETARY",
+			"ComponentName":"571999",
+			"Weight":1
+		},
+		{
+			"ParentName":"FOOD/DIETARY",
+			"ComponentName":"572330",
+			"Weight":1
+		},
+		{
+			"ParentName":"FOOD/DIETARY",
+			"ComponentName":"572340",
+			"Weight":1
+		},
+		{
+			"ParentName":"FOOD/DIETARY",
+			"ComponentName":"572350",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENERAL",
+			"ComponentName":"711200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENERAL",
+			"ComponentName":"711920-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENERAL",
+			"ComponentName":"711920-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"522011",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"522210",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"522220",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"522230",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"522350",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"522910",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"522999",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"524999",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525100-000",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525100-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525100-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525100-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525100-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525100-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525150",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525210",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525220",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525250",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525255",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525256",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525257",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525300",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525300-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525301",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525302",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525303",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525304",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525305",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525306",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525307",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525310",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525310-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525315",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525320",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525325",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525330",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525333",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525334",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525335",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525337",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525340",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525350",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525355",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525356",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525360",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525365",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525370",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525371",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525375",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525390",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525400",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525405",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525410",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525420",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525425",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525430",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525440",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525440-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525440-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525440-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525440-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525450",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525460",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525465",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525470",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525480",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525490",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525500",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525500-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525510",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525515",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525520",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525520-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525520-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525520-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525520-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525525",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525526",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525530",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525531",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525540",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525541",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525542",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525545",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525546",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525547",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525547-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525547-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525547-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525547-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525547-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525548",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525549",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525550",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525560",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525570",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525580",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525590",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525610",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525611",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525620",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525625",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525630",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525630-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525630-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525630-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525630-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525630-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525640",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525650",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525710",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525720",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525720-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525725",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525730",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525740",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525750",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525752",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525760",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525761",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525762",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525799",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525800",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525810",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525811",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525815",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525820",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525822",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525824",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525840",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525841",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525842",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525843",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525850",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525855",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525860",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525860-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525865",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525870",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525875",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525880",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525892",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525990",
+			"Weight":1
+		},
+		{
+			"ParentName":"GENL BLDG REPAIRS/MAINTENANC",
+			"ComponentName":"525999",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521210",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521220",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521230",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521231",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521240",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521910",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521911",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521998",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"521999",
+			"Weight":1
+		},
+		{
+			"ParentName":"HVAC",
+			"ComponentName":"522010",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633110",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633111",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633112",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633120",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633130",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633131",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633133",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633134",
+			"Weight":1
+		},
+		{
+			"ParentName":"INTERNAL MOVES",
+			"ComponentName":"633140",
+			"Weight":1
+		},
+		{
+			"ParentName":"Lab Supplies",
+			"ComponentName":"631260",
+			"Weight":1
+		},
+		{
+			"ParentName":"Landscaping",
+			"ComponentName":"552200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"Landscaping",
+			"ComponentName":"552400",
+			"Weight":1
+		},
+		{
+			"ParentName":"Landscaping",
+			"ComponentName":"552405",
+			"Weight":1
+		},
+		{
+			"ParentName":"Landscaping",
+			"ComponentName":"552500",
+			"Weight":1
+		},
+		{
+			"ParentName":"LEASED SPACE RENTAL EXPENSE",
+			"ComponentName":"712110",
+			"Weight":1
+		},
+		{
+			"ParentName":"Mail Room/Copy Center",
+			"ComponentName":"616411",
+			"Weight":1
+		},
+		{
+			"ParentName":"Management Fee",
+			"ComponentName":"611145-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"NON RECOVERABLE",
+			"ComponentName":"671250",
+			"Weight":1
+		},
+		{
+			"ParentName":"NON RECOVERABLE",
+			"ComponentName":"671255",
+			"Weight":1
+		},
+		{
+			"ParentName":"NON RECOVERABLE",
+			"ComponentName":"671260",
+			"Weight":1
+		},
+		{
+			"ParentName":"NON RECOVERABLE",
+			"ComponentName":"671265",
+			"Weight":1
+		},
+		{
+			"ParentName":"Other Recoverable Exp.",
+			"ComponentName":"572201",
+			"Weight":1
+		},
+		{
+			"ParentName":"Other Recoverable Exp.",
+			"ComponentName":"572320",
+			"Weight":1
+		},
+		{
+			"ParentName":"Other Recoverable Exp.",
+			"ComponentName":"572360",
+			"Weight":1
+		},
+		{
+			"ParentName":"Other Recoverable Exp.",
+			"ComponentName":"572400",
+			"Weight":1
+		},
+		{
+			"ParentName":"Other Recoverable Exp.",
+			"ComponentName":"572900",
+			"Weight":1
+		},
+		{
+			"ParentName":"Other Recoverable Exp.",
+			"ComponentName":"587999",
+			"Weight":1
+		},
+		{
+			"ParentName":"Parking Lot",
+			"ComponentName":"553330",
+			"Weight":1
+		},
+		{
+			"ParentName":"Parking Lot",
+			"ComponentName":"553340",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524200",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524300",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524300-100",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524300-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524310",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524400",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLUMBING REPAIRS & MAINTENAN",
+			"ComponentName":"524410",
+			"Weight":1
+		},
+		{
+			"ParentName":"Professional",
+			"ComponentName":"632020",
+			"Weight":1
+		},
+		{
+			"ParentName":"Professional",
+			"ComponentName":"632030",
+			"Weight":1
+		},
+		{
+			"ParentName":"Professional",
+			"ComponentName":"632040",
+			"Weight":1
+		},
+		{
+			"ParentName":"Professional",
+			"ComponentName":"632050",
+			"Weight":1
+		},
+		{
+			"ParentName":"Professional",
+			"ComponentName":"632060",
+			"Weight":1
+		},
+		{
+			"ParentName":"Professional",
+			"ComponentName":"632080",
+			"Weight":1
+		},
+		{
+			"ParentName":"Professional",
+			"ComponentName":"632082",
+			"Weight":1
+		},
+		{
+			"ParentName":"RECOVERABLE",
+			"ComponentName":"671190",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"521200",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"521300",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"521400",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"521420",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"521900",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"522100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"522200",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"522300",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"522400",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"522950-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"REPAIRS & MAINTENANCE",
+			"ComponentName":"522950-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"551200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"551200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"552200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"552205",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"553300",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"553310",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"553320",
+			"Weight":1
+		},
+		{
+			"ParentName":"ROADS GROUNDS & SECURITY",
+			"ComponentName":"553920",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554200",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554210",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554300",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554400",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554401",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554402",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554403",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554410",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554450",
+			"Weight":1
+		},
+		{
+			"ParentName":"SECURITY",
+			"ComponentName":"554460",
+			"Weight":1
+		},
+		{
+			"ParentName":"SIGNAGE",
+			"ComponentName":"633210",
+			"Weight":1
+		},
+		{
+			"ParentName":"SIGNAGE",
+			"ComponentName":"633220",
+			"Weight":1
+		},
+		{
+			"ParentName":"SIGNAGE",
+			"ComponentName":"634000",
+			"Weight":1
+		},
+		{
+			"ParentName":"Trash/Waste Removal",
+			"ComponentName":"511253",
+			"Weight":1
+		},
+		{
+			"ParentName":"Trash/Waste Removal",
+			"ComponentName":"511263",
+			"Weight":1
+		},
+		{
+			"ParentName":"Trash/Waste Removal",
+			"ComponentName":"511264",
+			"Weight":1
+		},
+		{
+			"ParentName":"Trash/Waste Removal",
+			"ComponentName":"511265",
+			"Weight":1
+		},
+		{
+			"ParentName":"Trash/Waste Removal",
+			"ComponentName":"511266",
+			"Weight":1
+		},
+		{
+			"ParentName":"UTILITIES",
+			"ComponentName":"561500",
+			"Weight":1
+		},
+		{
+			"ParentName":"UTILITIES",
+			"ComponentName":"561999",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue",
+			"ComponentName":"BASE RENT",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue",
+			"ComponentName":"Operating Expense Recovery",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue",
+			"ComponentName":"OTHER MISCELLANEOUS REVENUE",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue",
+			"ComponentName":"RECOVERY / PASS-THROUGHS",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue",
+			"ComponentName":"test",
+			"Weight":1
+		},
+		{
+			"ParentName":"BASE RENT",
+			"ComponentName":"411110",
+			"Weight":1
+		},
+		{
+			"ParentName":"Operating Expense Recovery",
+			"ComponentName":"421100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE",
+			"ComponentName":"424100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE",
+			"ComponentName":"444299",
+			"Weight":1
+		},
+		{
+			"ParentName":"RECOVERY / PASS-THROUGHS",
+			"ComponentName":"411210",
+			"Weight":1
+		},
+		{
+			"ParentName":"test",
+			"ComponentName":"411115",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Statistics",
+			"ComponentName":"Bad Debt",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Statistics",
+			"ComponentName":"STA NON RECOVERABLE",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bad Debt",
+			"ComponentName":"960000",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bad Debt",
+			"ComponentName":"960520",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bad Debt",
+			"ComponentName":"960525",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bad Debt",
+			"ComponentName":"970000",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bad Debt",
+			"ComponentName":"980000",
+			"Weight":1
+		},
+		{
+			"ParentName":"Bad Debt",
+			"ComponentName":"990000",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950100",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950110",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950120",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950190",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950200",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950210",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950220",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"950290",
+			"Weight":1
+		},
+		{
+			"ParentName":"STA NON RECOVERABLE",
+			"ComponentName":"951000",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"411210-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511206-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511207-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511208-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511230-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511240-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511250-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511250-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511251-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511262-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511262-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511310-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"511400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521400-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521420-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"521420-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522200-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522300-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522400-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"522400-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"523200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"523200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"523200-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"523200-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"523300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"523300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"524200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"524200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"524300-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"524300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"524300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"524400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"524400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525255-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525301-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525310-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525310-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525310-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525310-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525315-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525315-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525320-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525320-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525330-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525330-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525334-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525340-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525340-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525350-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525350-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525370-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525370-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525370-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525370-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525375-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525375-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525420-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525420-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525450-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525450-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525500-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525500-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525500-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525500-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525510-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525510-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525510-003",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525525-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525530-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525530-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525530-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525530-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525531-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525531-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525580-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525720-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525820-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"525855-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"551200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"552200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"552200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"552205-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"552205-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"553300-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"553300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"553920-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"554200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"554450-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555100-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555300-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555300-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555310-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555310-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555310-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555630-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555630-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555630-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555630-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"555630-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"561530-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"561530-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"562000-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"571999-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"611165-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"616421-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"631042-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"631070-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"631080-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"631101-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"631215-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"633110-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"633110-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"633120-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"633210-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"712110-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"712110-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account SH1",
+			"ComponentName":"712117",
+			"Weight":1
+		},
+		{
+			"ParentName":"AH1",
+			"ComponentName":"Add Parent 1- remove from unassigned AH1",
+			"Weight":1
+		},
+		{
+			"ParentName":"AH1",
+			"ComponentName":"PL AH1",
+			"Weight":1
+		},
+		{
+			"ParentName":"Add Parent 1- remove from unassigned AH1",
+			"ComponentName":"411210-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AH1",
+			"ComponentName":"OPEXP",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AH1",
+			"ComponentName":"STAT",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AH1",
+			"ComponentName":"Unassigned GL PL Account AH1",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"620010",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"626510",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"ACM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"ALT ACCOUNT 1",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"AMM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"AUT",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"BMS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"CAT",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"CCC",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"COT",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"CSP",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"CSU",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"ELM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"ELV",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"FCS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"FHY",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"FRS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"FSB",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"FSM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"FUM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"FWS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"GAC",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"GEM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"GES",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"GRS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"HAZ",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"ICC",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"JAN",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"LAH",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"LAN",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"LAS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"LAU",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"LCT",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"LMH",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"LMS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"MAC",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"MAS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"MEM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"MFB",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"MFM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"MFP",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"MFR",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"NSF",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"OFS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"PCS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"PLM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"PNT",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"RAG",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"RPR",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"SHM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"SPG",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"SPM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"SSM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"TAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"UTM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"VEM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OPEXP",
+			"ComponentName":"WDR",
+			"Weight":1
+		},
+		{
+			"ParentName":"620010",
+			"ComponentName":"611100",
+			"Weight":1
+		},
+		{
+			"ParentName":"626510",
+			"ComponentName":"611170",
+			"Weight":1
+		},
+		{
+			"ParentName":"626510",
+			"ComponentName":"631044",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"521200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"521300",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"521400",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"521420",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"521900",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"521910",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"521999",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"525333",
+			"Weight":1
+		},
+		{
+			"ParentName":"ACM",
+			"ComponentName":"525334",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511205",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511208",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511210",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511220",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511230",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511251",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511253",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511262",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511263",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511264",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511265",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"511266",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"521100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"521210",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"521220",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"521231",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"521240",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"521911",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"521998",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"522010",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"522011",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"522100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"522210",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"522220",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"522350",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"524100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"524310",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"524410",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525150",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525256",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525257",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525307",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525320",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525330",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525337",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525355",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525356",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525360",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525365",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525371",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525375",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525390",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525405",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525420",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525425",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525430",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525440",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525460",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525465",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525480",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525526",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525531",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525541",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525542",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525546",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525548",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525549",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525550",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525570",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525580",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525611",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525620",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525625",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525640",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525650",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525710",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525720",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525720-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525725",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525730",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525740",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525750",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525752",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525760",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525761",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525762",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525799",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525811",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525840",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525841",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525842",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525843",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525855",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525865",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525870",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525880",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525892",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"525990",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"552500",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"553310",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"553320",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"553330",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"553340",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"554100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"554401",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"554402",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"554403",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"554410",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"554450",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"554460",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"555110",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"555640",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"571999",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572201",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572320",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572330",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572340",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572350",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572360",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572400",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"572900",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"587999",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"611110",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"611150",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"611151",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"611152",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"611153",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"611156",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"611157",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"616411",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631030",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631041",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631042",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631043",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631045",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631050",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631060",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631070",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631080",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631085",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631090",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631100",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631101",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631102",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631103",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631104",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631105",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631110",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631120",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631121",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631130",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631135",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631140",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631145",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631155",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631160",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631165",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631170",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631171",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631175",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631177",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631180",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631181",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631182",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631215",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631230",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631240",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"631250",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632020",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632030",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632040",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632050",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632060",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632080",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632082",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632160",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632170",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632180",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632181",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632182",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632183",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632184",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632230",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"632240",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633111",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633112",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633120",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633130",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633131",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633133",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633134",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633140",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633210",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"633220",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"634000",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"671190",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"671250",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"671255",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"671260",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"671265",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"673120",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"673140",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"673150",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"711200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"711920-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"711920-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"ALT ACCOUNT 1",
+			"ComponentName":"712110",
+			"Weight":1
+		},
+		{
+			"ParentName":"AMM",
+			"ComponentName":"631190",
+			"Weight":1
+		},
+		{
+			"ParentName":"AMM",
+			"ComponentName":"631195",
+			"Weight":1
+		},
+		{
+			"ParentName":"AUT",
+			"ComponentName":"521230",
+			"Weight":1
+		},
+		{
+			"ParentName":"BMS",
+			"ComponentName":"524999",
+			"Weight":1
+		},
+		{
+			"ParentName":"BMS",
+			"ComponentName":"525820",
+			"Weight":1
+		},
+		{
+			"ParentName":"BMS",
+			"ComponentName":"525875",
+			"Weight":1
+		},
+		{
+			"ParentName":"CAT",
+			"ComponentName":"631040",
+			"Weight":1
+		},
+		{
+			"ParentName":"CAT",
+			"ComponentName":"631040-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"CAT",
+			"ComponentName":"631040-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"CCC",
+			"ComponentName":"631040-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"COT",
+			"ComponentName":"631040-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"CSP",
+			"ComponentName":"631040-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"CSU",
+			"ComponentName":"511400",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"522200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"522230",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"522300",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"522400",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"522910",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"522999",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"525350",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELM",
+			"ComponentName":"525510",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELV",
+			"ComponentName":"523200",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELV",
+			"ComponentName":"523300",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELV",
+			"ComponentName":"523400",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELV",
+			"ComponentName":"523910",
+			"Weight":1
+		},
+		{
+			"ParentName":"ELV",
+			"ComponentName":"523999",
+			"Weight":1
+		},
+		{
+			"ParentName":"FCS",
+			"ComponentName":"525547-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"FHY",
+			"ComponentName":"525547-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"FRS",
+			"ComponentName":"525306",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSB",
+			"ComponentName":"525547",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSB",
+			"ComponentName":"525547-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSB",
+			"ComponentName":"525547-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSM",
+			"ComponentName":"555100",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSM",
+			"ComponentName":"555300",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSM",
+			"ComponentName":"555310",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSM",
+			"ComponentName":"555600",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSM",
+			"ComponentName":"555620",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSM",
+			"ComponentName":"555630",
+			"Weight":1
+		},
+		{
+			"ParentName":"FSM",
+			"ComponentName":"555999",
+			"Weight":1
+		},
+		{
+			"ParentName":"FUM",
+			"ComponentName":"525520",
+			"Weight":1
+		},
+		{
+			"ParentName":"FUM",
+			"ComponentName":"525520-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"FUM",
+			"ComponentName":"525520-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"FUM",
+			"ComponentName":"525520-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"FUM",
+			"ComponentName":"525520-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"FUM",
+			"ComponentName":"525860",
+			"Weight":1
+		},
+		{
+			"ParentName":"FUM",
+			"ComponentName":"525860-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"FWS",
+			"ComponentName":"525547-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"525410",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"525470",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"611165",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"616140",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"616199",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"616420",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"616610",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"616610-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"616999",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"631010",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"631020",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"631260",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"632130",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"632150",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"632220",
+			"Weight":1
+		},
+		{
+			"ParentName":"GAC",
+			"ComponentName":"673110",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525210",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525220",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525250",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525255",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525300",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525300-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525301",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525310",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525310-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525315",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525325",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525400",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525440-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525440-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525440-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525440-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525450",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525490",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525515",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525525",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525530",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525560",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525630",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525630-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525630-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525630-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525630-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525630-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525822",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525824",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"525999",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"553300",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"553920",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"561999",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"616700",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"616790",
+			"Weight":1
+		},
+		{
+			"ParentName":"GEM",
+			"ComponentName":"632210",
+			"Weight":1
+		},
+		{
+			"ParentName":"GES",
+			"ComponentName":"525800",
+			"Weight":1
+		},
+		{
+			"ParentName":"GES",
+			"ComponentName":"525810",
+			"Weight":1
+		},
+		{
+			"ParentName":"GRS",
+			"ComponentName":"525303",
+			"Weight":1
+		},
+		{
+			"ParentName":"HAZ",
+			"ComponentName":"555610",
+			"Weight":1
+		},
+		{
+			"ParentName":"ICC",
+			"ComponentName":"611150-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"JAN",
+			"ComponentName":"511200",
+			"Weight":1
+		},
+		{
+			"ParentName":"JAN",
+			"ComponentName":"511206",
+			"Weight":1
+		},
+		{
+			"ParentName":"JAN",
+			"ComponentName":"511207",
+			"Weight":1
+		},
+		{
+			"ParentName":"JAN",
+			"ComponentName":"511300",
+			"Weight":1
+		},
+		{
+			"ParentName":"JAN",
+			"ComponentName":"511310",
+			"Weight":1
+		},
+		{
+			"ParentName":"JAN",
+			"ComponentName":"511999",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAH",
+			"ComponentName":"616100-000",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAH",
+			"ComponentName":"616100-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAH",
+			"ComponentName":"616100-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAH",
+			"ComponentName":"616100-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAN",
+			"ComponentName":"552200",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAN",
+			"ComponentName":"552200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAN",
+			"ComponentName":"552205",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAN",
+			"ComponentName":"552400",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAN",
+			"ComponentName":"552405",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAS",
+			"ComponentName":"616100-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAS",
+			"ComponentName":"616100-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"LAU",
+			"ComponentName":"511950",
+			"Weight":1
+		},
+		{
+			"ParentName":"LCT",
+			"ComponentName":"616100-999",
+			"Weight":1
+		},
+		{
+			"ParentName":"LMH",
+			"ComponentName":"525100-000",
+			"Weight":1
+		},
+		{
+			"ParentName":"LMH",
+			"ComponentName":"525100-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"LMH",
+			"ComponentName":"525100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"LMH",
+			"ComponentName":"525100-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"LMH",
+			"ComponentName":"525100-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"LMH",
+			"ComponentName":"525100-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"LMS",
+			"ComponentName":"525100-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"MAC",
+			"ComponentName":"633110",
+			"Weight":1
+		},
+		{
+			"ParentName":"MAS",
+			"ComponentName":"616421",
+			"Weight":1
+		},
+		{
+			"ParentName":"MEM",
+			"ComponentName":"525304",
+			"Weight":1
+		},
+		{
+			"ParentName":"MEM",
+			"ComponentName":"525305",
+			"Weight":1
+		},
+		{
+			"ParentName":"MEM",
+			"ComponentName":"525540",
+			"Weight":1
+		},
+		{
+			"ParentName":"MEM",
+			"ComponentName":"525545",
+			"Weight":1
+		},
+		{
+			"ParentName":"MEM",
+			"ComponentName":"525590",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFB",
+			"ComponentName":"611145",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFB",
+			"ComponentName":"611145-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFB",
+			"ComponentName":"611145-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFB",
+			"ComponentName":"611145-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFB",
+			"ComponentName":"611145-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFB",
+			"ComponentName":"611145-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFM",
+			"ComponentName":"611180",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFM",
+			"ComponentName":"611180-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFM",
+			"ComponentName":"611180-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFM",
+			"ComponentName":"611180-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFM",
+			"ComponentName":"611180-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFP",
+			"ComponentName":"611170-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFP",
+			"ComponentName":"611170-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFP",
+			"ComponentName":"611170-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFP",
+			"ComponentName":"611170-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFR",
+			"ComponentName":"611150-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFR",
+			"ComponentName":"611150-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"MFR",
+			"ComponentName":"611150-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"NSF",
+			"ComponentName":"525302",
+			"Weight":1
+		},
+		{
+			"ParentName":"OFS",
+			"ComponentName":"616400",
+			"Weight":1
+		},
+		{
+			"ParentName":"OFS",
+			"ComponentName":"616400-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"OFS",
+			"ComponentName":"616400-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"OFS",
+			"ComponentName":"616400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"OFS",
+			"ComponentName":"616400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"OFS",
+			"ComponentName":"616400-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"OFS",
+			"ComponentName":"616410",
+			"Weight":1
+		},
+		{
+			"ParentName":"PCS",
+			"ComponentName":"525500",
+			"Weight":1
+		},
+		{
+			"ParentName":"PCS",
+			"ComponentName":"525500-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLM",
+			"ComponentName":"524200",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLM",
+			"ComponentName":"524200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLM",
+			"ComponentName":"524300",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLM",
+			"ComponentName":"524300-100",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLM",
+			"ComponentName":"524300-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"PLM",
+			"ComponentName":"524400",
+			"Weight":1
+		},
+		{
+			"ParentName":"PNT",
+			"ComponentName":"525610",
+			"Weight":1
+		},
+		{
+			"ParentName":"RAG",
+			"ComponentName":"525815",
+			"Weight":1
+		},
+		{
+			"ParentName":"RAG",
+			"ComponentName":"551200",
+			"Weight":1
+		},
+		{
+			"ParentName":"RAG",
+			"ComponentName":"551200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"RPR",
+			"ComponentName":"631150",
+			"Weight":1
+		},
+		{
+			"ParentName":"SHM",
+			"ComponentName":"511240",
+			"Weight":1
+		},
+		{
+			"ParentName":"SHM",
+			"ComponentName":"525335",
+			"Weight":1
+		},
+		{
+			"ParentName":"SHM",
+			"ComponentName":"525340",
+			"Weight":1
+		},
+		{
+			"ParentName":"SHM",
+			"ComponentName":"525370",
+			"Weight":1
+		},
+		{
+			"ParentName":"SPG",
+			"ComponentName":"522950-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"SPM",
+			"ComponentName":"522950-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"SSM",
+			"ComponentName":"554200",
+			"Weight":1
+		},
+		{
+			"ParentName":"SSM",
+			"ComponentName":"554200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"SSM",
+			"ComponentName":"554200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"SSM",
+			"ComponentName":"554210",
+			"Weight":1
+		},
+		{
+			"ParentName":"SSM",
+			"ComponentName":"554300",
+			"Weight":1
+		},
+		{
+			"ParentName":"SSM",
+			"ComponentName":"554400",
+			"Weight":1
+		},
+		{
+			"ParentName":"TAE",
+			"ComponentName":"616500-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TAE",
+			"ComponentName":"616500-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TAE",
+			"ComponentName":"632190",
+			"Weight":1
+		},
+		{
+			"ParentName":"TAE",
+			"ComponentName":"632200",
+			"Weight":1
+		},
+		{
+			"ParentName":"UTM",
+			"ComponentName":"561500",
+			"Weight":1
+		},
+		{
+			"ParentName":"VEM",
+			"ComponentName":"525850",
+			"Weight":1
+		},
+		{
+			"ParentName":"WDR",
+			"ComponentName":"511250",
+			"Weight":1
+		},
+		{
+			"ParentName":"WDR",
+			"ComponentName":"511252",
+			"Weight":1
+		},
+		{
+			"ParentName":"STAT",
+			"ComponentName":"9000",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950100",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950110",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950120",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950190",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950200",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950210",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950220",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"950290",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"951000",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"960000",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"960520",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"960525",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"970000",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"980000",
+			"Weight":1
+		},
+		{
+			"ParentName":"9000",
+			"ComponentName":"990000",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"411115",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"411210-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511207-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511207-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511230-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511240-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511250-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511250-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511251-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511262-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511262-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"511310-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521400-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521420-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"521420-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522200-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522300-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522400-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"522400-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"523200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"523200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"523200-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"523200-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"523300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"523300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"524200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"524200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"524300-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"524300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"524300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"524400-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"524400-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525310-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525310-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525310-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525310-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525315-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525315-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525320-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525320-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525330-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525330-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525340-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525340-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525350-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525350-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525370-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525370-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525370-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525370-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525375-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525375-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525420-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525420-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525450-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525450-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525500-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525500-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525500-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525500-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525510-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525510-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525510-003",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525530-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525530-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525530-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525530-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525531-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525531-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525580-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525820-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"525855-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"551200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"552200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"552200-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"552205-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"552205-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"553300-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"553300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"553920-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555300-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555300-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555300-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555300-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555310-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555310-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555310-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555630-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555630-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555630-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555630-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"555630-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"561530-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"561530-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"562000-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"611165-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"631070-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"633110-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"633110-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"633210-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"712110-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"712110-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"Unassigned GL PL Account AH1",
+			"ComponentName":"712117",
+			"Weight":1
+		},
+		{
+			"ParentName":"AL1",
+			"ComponentName":"PL AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL1",
+			"ComponentName":"Total Expense AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL1",
+			"ComponentName":"Total Revenue AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense AL1",
+			"ComponentName":"CLEANING AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING AL1",
+			"ComponentName":"511100",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL1",
+			"ComponentName":"BASE RENT AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL1",
+			"ComponentName":"Operating Expense Recovery AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL1",
+			"ComponentName":"OTHER MISCELLANEOUS REVENUE AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL1",
+			"ComponentName":"RECOVERY / PASS-THROUGHS AL1",
+			"Weight":1
+		},
+		{
+			"ParentName":"BASE RENT AL1",
+			"ComponentName":"411110",
+			"Weight":1
+		},
+		{
+			"ParentName":"Operating Expense Recovery AL1",
+			"ComponentName":"421100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL1",
+			"ComponentName":"424100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL1",
+			"ComponentName":"444299",
+			"Weight":1
+		},
+		{
+			"ParentName":"RECOVERY / PASS-THROUGHS AL1",
+			"ComponentName":"411210",
+			"Weight":1
+		},
+		{
+			"ParentName":"AL2",
+			"ComponentName":"PL AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL2",
+			"ComponentName":"Total Expense AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL2",
+			"ComponentName":"Total Revenue AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense AL2",
+			"ComponentName":"CLEANING AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING AL2",
+			"ComponentName":"511100",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL2",
+			"ComponentName":"BASE RENT AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL2",
+			"ComponentName":"Operating Expense Recovery AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL2",
+			"ComponentName":"OTHER MISCELLANEOUS REVENUE AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL2",
+			"ComponentName":"RECOVERY / PASS-THROUGHS AL2",
+			"Weight":1
+		},
+		{
+			"ParentName":"BASE RENT AL2",
+			"ComponentName":"411110",
+			"Weight":1
+		},
+		{
+			"ParentName":"Operating Expense Recovery AL2",
+			"ComponentName":"421100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL2",
+			"ComponentName":"424100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL2",
+			"ComponentName":"444299",
+			"Weight":1
+		},
+		{
+			"ParentName":"RECOVERY / PASS-THROUGHS AL2",
+			"ComponentName":"411210",
+			"Weight":1
+		},
+		{
+			"ParentName":"AL3",
+			"ComponentName":"PL AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL3",
+			"ComponentName":"Total Expense AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL3",
+			"ComponentName":"Total Revenue AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense AL3",
+			"ComponentName":"CLEANING AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING AL3",
+			"ComponentName":"511100",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL3",
+			"ComponentName":"BASE RENT AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL3",
+			"ComponentName":"Operating Expense Recovery AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL3",
+			"ComponentName":"OTHER MISCELLANEOUS REVENUE AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL3",
+			"ComponentName":"RECOVERY / PASS-THROUGHS AL3",
+			"Weight":1
+		},
+		{
+			"ParentName":"BASE RENT AL3",
+			"ComponentName":"411110",
+			"Weight":1
+		},
+		{
+			"ParentName":"Operating Expense Recovery AL3",
+			"ComponentName":"421100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL3",
+			"ComponentName":"424100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL3",
+			"ComponentName":"444299",
+			"Weight":1
+		},
+		{
+			"ParentName":"RECOVERY / PASS-THROUGHS AL3",
+			"ComponentName":"411210",
+			"Weight":1
+		},
+		{
+			"ParentName":"AL4",
+			"ComponentName":"PL AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL4",
+			"ComponentName":"Total Expense AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"PL AL4",
+			"ComponentName":"Total Revenue AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Expense AL4",
+			"ComponentName":"CLEANING AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"CLEANING AL4",
+			"ComponentName":"511100",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL4",
+			"ComponentName":"BASE RENT AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL4",
+			"ComponentName":"Operating Expense Recovery AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL4",
+			"ComponentName":"OTHER MISCELLANEOUS REVENUE AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Revenue AL4",
+			"ComponentName":"RECOVERY / PASS-THROUGHS AL4",
+			"Weight":1
+		},
+		{
+			"ParentName":"BASE RENT AL4",
+			"ComponentName":"411110",
+			"Weight":1
+		},
+		{
+			"ParentName":"Operating Expense Recovery AL4",
+			"ComponentName":"421100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL4",
+			"ComponentName":"424100",
+			"Weight":1
+		},
+		{
+			"ParentName":"OTHER MISCELLANEOUS REVENUE AL4",
+			"ComponentName":"444299",
+			"Weight":1
+		},
+		{
+			"ParentName":"RECOVERY / PASS-THROUGHS AL4",
+			"ComponentName":"411210",
+			"Weight":1
+		},
+		{
+			"ParentName":"AO1",
+			"ComponentName":"524100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511206",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511207",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511207-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511240",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511250",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511252",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511310",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511950",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"511999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521230",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521420",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521900",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521910",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"521999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"522200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"522230",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"522300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"522400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"522910",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"522950-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"522999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"523200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"523300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"523400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"523910",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"523999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"524200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"524200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"524300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"524300-100",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"524400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"524999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525100-000",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525100-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525100-500",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525100-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525100-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525100-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525100-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525210",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525220",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525250",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525255",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525300-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525301",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525304",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525305",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525310",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525310-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525315",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525325",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525333",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525334",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525335",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525340",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525350",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525370",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525410",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525440-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525440-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525440-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525440-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525450",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525470",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525490",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525500",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525500-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525510",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525515",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525520",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525520-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525520-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525520-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525520-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525525",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525530",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525540",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525545",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525560",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525590",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525610",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525630",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525630-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525630-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525630-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525630-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525630-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525800",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525810",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525815",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525820",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525822",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525824",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525850",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525860",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525860-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525875",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"525999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"551200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"551200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"552200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"552200-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"552205",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"552400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"552405",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"553300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"553920",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"554200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"554200-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"554210",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"554300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"554400",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555100",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555300",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555310",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555600",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555610",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555620",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555630",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"555999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"561500",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"561999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611145",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611145-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611145-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611145-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611145-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611145-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611150-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611150-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611150-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611150-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611165",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611170-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611170-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611170-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611170-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611180",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611180-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611180-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611180-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"611180-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616100-000",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616100-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616100-601",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616100-701",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616100-801",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616100-901",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616100-999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616140",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616199",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616420",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616421",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616500-001",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616500-002",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616610",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616610-200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616700",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616790",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"616999",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"631010",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"631020",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"631190",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"631195",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"631260",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"632130",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"632150",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"632190",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"632200",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"632210",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"632220",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"633110",
+			"Weight":1
+		},
+		{
+			"ParentName":"AHIT",
+			"ComponentName":"673110",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"GL_Accounts.subsets/AH1 Expand All.json",
+		"GL_Accounts.subsets/AH1ParentsGL.json",
+		"GL_Accounts.subsets/All GL_Accounts NoLeafs.json",
+		"GL_Accounts.subsets/ALL GL Account.json",
+		"GL_Accounts.subsets/All GL Account CodeName.json",
+		"GL_Accounts.subsets/All JLL Expand1.json",
+		"GL_Accounts.subsets/ChildrenGL.json",
+		"GL_Accounts.subsets/Default.json",
+		"GL_Accounts.subsets/DetailLevel.json",
+		"GL_Accounts.subsets/DimMgmtSample.json",
+		"GL_Accounts.subsets/DrillVendor.json",
+		"GL_Accounts.subsets/GL_Accounts_Expanded.json",
+		"GL_Accounts.subsets/GL_AccountsAHITNoLeafs.json",
+		"GL_Accounts.subsets/GL_AccountsAHNoLeafs.json",
+		"GL_Accounts.subsets/GLAccountDetail.json",
+		"GL_Accounts.subsets/GLAcctsNoName.json",
+		"GL_Accounts.subsets/GLAcctsPALDetail.json",
+		"GL_Accounts.subsets/GLA Detail WTotal.json",
+		"GL_Accounts.subsets/InputGLAccount.json",
+		"GL_Accounts.subsets/JLL Expand1.json",
+		"GL_Accounts.subsets/level0.json",
+		"GL_Accounts.subsets/SH1ParentsGL.json",
+		"GL_Accounts.subsets/StatChildrenGL.json",
+		"GL_Accounts.subsets/StatParentsGL.json",
+		"GL_Accounts.subsets/TopParentGL.json",
+		"GL_Accounts.subsets/TopParentGLNoSH1.json",
+		"GL_Accounts.subsets/Total Expense Expand1.json",
+		"GL_Accounts.subsets/TotalExpenseExpanded.json",
+		"GL_Accounts.subsets/TotalExpenseWGLDetail.json",
+		"GL_Accounts.subsets/TotalExpExpand1.json",
+		"GL_Accounts.subsets/ViewZeroOutFlag.json",
+		"GL_Accounts.subsets/zDimMgmt.json",
+		"GL_Accounts.subsets/zDimMgmtParents.json",
+		"GL_Accounts.subsets/zDimMgmtUnassigned.json",
+		"GL_Accounts.subsets/zEmptyParents.json",
+		"GL_Accounts.subsets/zNonPosting.json"
+	]
+}

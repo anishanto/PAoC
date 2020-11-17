@@ -1,0 +1,464 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################Prolog relaced Dynamic Subsets with Static to allow delete to be added. 1/4/17
+###########################Constants 1/4/17
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'BusUnits';
+cTnode = UPPER(pHierarchy);
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_BusUnits';
+cDimName2 = '}ElementAttributes_BusUnits';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExport = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImport = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cMetadataFileName = 'BusUnitSH1.csv';
+cDataFileName = 'BusUnitsdNames.csv';
+cMetadataPath = cExport | cMetadataFileName;
+cDataPath = cExport | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+cBusUnitsAH = CELLGETS( 'Global Control', 'BusUnits AH Hierarchies' , 'Value' );
+
+####################################Ascii outputs - are these needed
+vHeaderInsert1 ='yes';
+vHeaderInsert2 ='yes';
+
+##############################################################Add Top Node Parent
+
+sMDX = '{[cDimName].[SH1] ,  [cDimName].[AH1] , [cDimName].[AH2] , [cDimName].[AH3] , [cDimName].[AH4] , [cDimName].[AH5] , [cDimName].[AH6] , [cDimName].[AH7] , [cDimName].[AH8] , [cDimName].[AH9] , [cDimName].[AH10]}';
+ SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+#############################################################Delete  Consolidations
+
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+   ElName = DIMNM( cDimName , x );
+   IF( DTYPE ( cDimName, ElName) @='C' & ELISANC( cDimName , cTnode  , ElName) = 1);
+      DimensionElementDelete(cDimName, ElName); 
+   ENDIF;
+    x=x-1;
+END;
+
+
+#########################################Delete View Subsets if they Exists
+
+############################Remove Vanilla WF Subset
+IF(SubsetExists(cDimName, 'Approval Vanilla WF')=1);
+   SubsetDestroy(cDimName, 'Approval Vanilla WF');
+EndIf;
+
+sAppSub = 'Approval ' | cClientName | ' WF';
+
+IF(SubsetExists(cDimName, sAppSub)= 1);
+     SubsetDestroy (cDimName, sAppSub);
+ENDIF;
+
+ IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+ IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+ IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+################################################# Create Dimension Attribute Subset
+
+############Business Unit Dimension
+
+
+#Create BusUnits
+ sMDX = '{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SORT( {TM1SUBSETALL( ['| cDimName |'] )}, ASC)}, 0)}, { ['| cDimName |'].[NA] }) }';
+ SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+
+############Business Units Attribute
+
+
+SUBSETCREATE(cDimName2,cViewNameTransfer);
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent1') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent1',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent2') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent2',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent3') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent3',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent4') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent4',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent5') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent5',1);
+EndIF;
+
+#############################################Create and assign View
+
+# IF(ViewExists(cCubeName, cViewNameTransfer) = 0);
+ViewCreate(cCubeName, cViewNameTransfer);
+#EndIf;
+
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName, cViewNameTransfer);
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName2, cViewNameTransfer);
+ViewRowDimensionSet (cCubeName, cViewNameTransfer, cDimName, 1);
+ViewColumnDimensionSet (cCubeName, cViewNameTransfer, cDimName2,1);
+
+ViewExtractSkipCalcsSet(cCubeName, cViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(cCubeName, cViewNameTransfer, 0);
+
+#Set dimension sort order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+###################DEFINE LOCAL VARIABLES
+DatasourceNameForServer = cCubeName;
+DatasourceNameForClient = cCubeName;
+DataSourceType = 'VIEW';
+DatasourceCubeview= cViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+ ########################Metadata Constants Existing Code 1/4/17
+
+
+#######################################SH1 Hierarchy
+ 
+IF( DIMIX(cDimName2,'SH1 Parent1') > 0 );
+pHierarchy = 'SH1';
+vElement = BusUnits;
+vEnd = 'EoutBusUnits'; 
+vUAP = 'UABUSUNITS '|cTnode;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent1') > 0 );
+        vP1 = ATTRS(cDimName,BusUnits,cTnode|'Parent1');
+EndIf;
+IF( DIMIX(cDimName2,pHierarchy|'Parent2') > 0 );
+        vP2 = ATTRS(cDimName,vElement,cTnode|'Parent2');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent3') > 0 );
+        vP3 = ATTRS(cDimName,vElement,cTnode|'Parent3');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent4') > 0 );
+        vP4 = ATTRS(cDimName,vElement,cTnode|'Parent4');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent5') > 0 );
+        vP5 = ATTRS(cDimName,vElement,cTnode|'Parent5');
+EndIf;
+ 
+IF ( lower( ATTRS(cDimName,vElement,'HierarchyStatus')) @<>'yes' & cTnode @='AH1');
+     ITEMSKIP;
+EndIf;
+
+
+###########################Create Hierarchy Existing Code 1/4/17
+
+# no parent1
+IF( vP1 @= '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vUAP,1.000000);
+
+# parents exists and are not equal
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &  vP4 @<> vP5 & vP2 @<> '' & vP3 @<> '' & vP4 @<> ''  & vP5 @<> '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP5,'c');
+
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP5,vP4,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP5,1.000000);
+
+ELSEIF( vP1 @= vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &  vP4 @<> vP5 & vP2 @<> '' & vP3 @<> '' & vP4 @<> '' & vP5 @<> '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP5,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP5,vP4,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP5,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3  &  vP3 @<> vP4  &  vP2 @<> '' & vP3 @<> ''  & vP4 @<> ''  & vP5 @= '');
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP4,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @<> ''  & vP4 @= ''  & vP5 @= '');
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP3,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @= ''  & vP4 @= ''  & vP5 @= '');
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP2,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @= '' & vP3 @= ''  & vP4 @= ''  & vP5 @= '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP1,1.000000);
+
+ELSE;
+
+
+DIMENSIONELEMENTINSERT(cDimName,'',vEnd,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vEnd,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vEnd,1.000000);
+ENDIF;
+ENDIF;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################################AH Hierarchy
+
+eCnt = DIMSIZ( cDimName2 );
+x = eCnt;
+
+WHILE( x >=1);
+   cTNode = DIMNM( cDimName , x );
+   IF(Subst(cTNode,1,3) @='AH'|NumberToString(x));
+pHierarchy = 'AH'|NumberToString(x);
+vElement = BusUnits;
+vEnd = 'EoutBusUnits'; 
+vUAP = 'UABUSUNITS '|cTnode;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent1') > 0 );
+        vP1 = ATTRS(cDimName,BusUnits,cTnode|'Parent1');
+EndIf;
+IF( DIMIX(cDimName2,pHierarchy|'Parent2') > 0 );
+        vP2 = ATTRS(cDimName,vElement,cTnode|'Parent2');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent3') > 0 );
+        vP3 = ATTRS(cDimName,vElement,cTnode|'Parent3');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent4') > 0 );
+        vP4 = ATTRS(cDimName,vElement,cTnode|'Parent4');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent5') > 0 );
+        vP5 = ATTRS(cDimName,vElement,cTnode|'Parent5');
+EndIf;
+ 
+IF ( lower( ATTRS(cDimName,vElement,'HierarchyStatus')) @<>'yes' & cTnode @='AH1');
+     ITEMSKIP;
+EndIf;
+
+
+###########################Create Hierarchy Existing Code 1/4/17
+
+# no parent1
+IF( vP1 @= '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vUAP,1.000000);
+
+# parents exists and are not equal
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &  vP4 @<> vP5 & vP2 @<> '' & vP3 @<> '' & vP4 @<> ''  & vP5 @<> '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP5,'c');
+
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP5,vP4,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP5,1.000000);
+
+ELSEIF( vP1 @= vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &  vP4 @<> vP5 & vP2 @<> '' & vP3 @<> '' & vP4 @<> '' & vP5 @<> '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP5,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP5,vP4,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP5,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3  &  vP3 @<> vP4  &  vP2 @<> '' & vP3 @<> ''  & vP4 @<> ''  & vP5 @= '');
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP4,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @<> ''  & vP4 @= ''  & vP5 @= '');
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP3,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @= ''  & vP4 @= ''  & vP5 @= '');
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP2,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @= '' & vP3 @= ''  & vP4 @= ''  & vP5 @= '' );
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP1,1.000000);
+
+ELSE;
+
+
+DIMENSIONELEMENTINSERT(cDimName,'',vEnd,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vEnd,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vEnd,1.000000);
+ENDIF;
+ENDIF;
+    x=x-1;
+END;
+
+
+
+
+
+
+
+
+###########################ASCII Output Existing Code  1/4/17
+
+IF(1=1);
+IF(vHeaderInsert1 @='yes');
+ASCIIOutput(cMetadataPath, 'DimID', 'P1',  'P2', 'P3', 'P4', 'P5' , 'TopNode');
+vHeaderInsert1 = 'no';    
+ENDIF;
+ ASCIIOutput(cMetadataPath,vElement, vP1, vP2, vP3, vP4,  vP5, cTnode);
+ENDIF;
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######Add code in for "NA" child
+IF(BusUnits@='NA');
+DIMENSIONELEMENTINSERT(cDimName,'','Global','c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,'Global','NA',1.000000);
+ATTRPUTS('Global Account',cDimName, 'NA','Name');
+EndIf;
+
+
+###############################email file..................Discussed with Suresh 21517 Commented out. Spoke with Anna on 217117. She said this needs to stay.
+IF( cTnode@= 'AH1');
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmail BUPM Update' ;
+    ExecuteProcess(vProcess,'pSendTo', pSendTo );
+ENDIF;
+ENDIF;
+
+
+
+####################################Define Top Node Alias
+
+      IF(pHierarchy@='SH1');
+           cTopNodeName = 'All '| cClientName;
+      ElseIf(pHierarchy@='AH1');
+           cTopNodeName = 'Approval '| cClientName;
+      ElseIf(pHierarchy@='AH2');
+           cTopNodeName = 'Total DFAT by Property Type';
+      Else;
+           cTopNodeName =  'Total DFAT by Leased\Owned';
+      EndIF;
+
+
+
+######################Existing Code Alias for Top Node 1/4/17
+  IF(DIMIX(cDimName, cTnode)<>0);
+      ATTRPUTS(cTopNodeName,cDimName, cTnode,'Name');
+ 
+  ENDIF;
+
+
+##########Clean up View and Subset new code 1/4/17
+
+ ViewDestroy(cCubeName, cViewNameTransfer  );
+
+i = 1;
+#loop through all dimensions of the cube
+WHILE (TABDIM(cCubeName,i) @<> '');
+ SubsetDestroy(tabdim(cCubeName,i), cViewNameTransfer );
+ i = i + 1;
+end;
+
+
+#endregion

@@ -1,0 +1,203 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#============================        NOTES     =================================================
+#
+#  Adds new dimension element in appropriate hierarchies
+#
+#==========================================================================================
+
+#==========================================================================================
+
+#===============================    Process statistics  ===========================================
+cProcess = GETPROCESSNAME ;
+sProcess = TRIM (cProcess);
+WHILE ( SCAN ( ' ', sProcess )  > 0 );
+    sProcess = DELET ( sProcess, SCAN ( ' ' , sProcess ) , 1 ) ;
+END ;
+
+sUser = TM1USER() ;
+
+sNow = TIMST( NOW , '\M \D, \Y at \H \p \i min \s sec' ) ;
+vNowStart = NOW ;
+
+cubMessages = '}ElementAttributes_}Processes';
+
+#========================================================================================
+
+#============================= Define User Log =============================================
+cubGblCube = 'Global Settings';
+logPath = '..\logs\tunit\';
+exportPath = '..\DataSources\Exports\';
+
+IF ( SUBST ( logPath , LONG ( logPath ) - 1 , 1 ) @<> '\' ) ;
+    logPath = logPath | '\' ;
+ENDIF;
+
+logName = TRIM ( sProcess ) | '_' | sNow | '.log' ;
+errName =  TRIM ( sProcess ) | '_' | sNow | '.err' ;
+logNameMeta = TRIM ( sProcess ) | '_' | sNow | '-KICKOUT.csv' ;
+errNameMeta = TRIM ( sProcess ) | '_' | sNow | '-META.err' ;
+logFile = logPath | logName ;
+errFile = logPath | errName ;
+logFileMeta = logPath | logNameMeta ;
+errFileMeta = logPath | errNameMeta ;
+
+#===================================================================================
+
+
+#===============================   Process Variables  ====================================
+
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+vProcessStatusCube = 'Process Status';
+vDimension = 'Company';
+pElement = pCo;
+
+vFlag = 0;
+vExists = 0;
+
+vTimeStamp = TIMST(NOW, '\m-\d-\Y @ \H:\i \p PST');
+vMessage = 'No Message';
+
+
+###################################################Check Alias has been added
+sElement = pCoName;
+IF(sElement@=' ');
+      vFlag = 1;
+      vMessage = 'ERROR: The Company Name is Blank.';
+       CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSQUIT;
+ENDIF;
+
+###################################################Check Currency has been added
+sElement = pCur;
+IF(sElement@=' ');
+      vFlag = 1;
+      vMessage = 'ERROR: The Company Currency is Blank.';
+       CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSQUIT;
+ENDIF;
+
+
+
+###################################################Check Ledger has been added
+sElement = pLedger;
+IF(sElement@=' ');
+      vFlag = 1;
+      vMessage = 'ERROR: The Company Ledger is Blank.';
+       CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSQUIT;
+ENDIF;
+
+
+
+pNumericValidation = 5;
+IF(LONG(pElement) <> pNumericValidation % CODE(pElement,1) < 48 % CODE(pElement,1) > 57 % CODE(pElement,2) < 48 % CODE(pElement,2) > 57 % CODE(pElement,3) < 48 % CODE(pElement,3) > 57
+    % CODE(pElement,4) < 48 % CODE(pElement,4) > 57 % CODE(pElement,5) < 48 % CODE(pElement,5) > 57 );
+   IF(vFlag = 0);
+     vFlag = 1;
+      vMessage = 'ERROR: ' |vDimension |' code must be a 5 digit numeric value.';
+      PROCESSBREAK();
+   ENDIF;
+ENDIF;
+
+#Insert new Company
+sDimName = 'Company' ;
+sElement = pCo;
+sDimParent = 'All Companies';
+IF(DIMIX(sDimName, sElement ) = 0);
+       DimensionElementInsert(sDimName, '', sElement, 'N');
+       DimensionElementComponentAdd(sDimName, sDimParent, sElement, 1);
+       vMessageSuccess = 'SUCCESS: Element ' | sElement | ' added to the TM1 ' | vDimension | ' list.  Navigate to Input Exchange Rate view to manage currency. ' ;
+
+ELSE;
+      vFlag = 1;
+      vMessage = 'ERROR: The "'| sElement | ' "already exists.';
+      PROCESSBREAK();
+ENDIF;
+
+#Insert new Company in Company Map
+sDimName = 'CompanyMap' ;
+sElement = pCo;
+IF(DIMIX(sDimName, sElement ) = 0 & pCoMappingReq @= 'Yes');
+  DimensionElementInsert(sDimName, '', sElement, 'N');
+ENDIF;
+
+
+
+#Insert new currency
+sDimName = 'Currency' ;
+sDimParent = 'All Currency' ;
+sElement = pCur;
+IF(DIMIX(sDimName, sElement ) = 0);
+  DimensionElementInsert(sDimName, '', sElement, 'N');
+  DimensionElementComponentAdd(sDimName, sDimParent, sElement, 1);
+ENDIF;
+
+#Insert new currencyTo
+sDimName = 'Currency To' ;
+sDimParent = 'All Currency' ;
+sElement = pCur;
+IF(DIMIX(sDimName, sElement ) = 0);
+  DimensionElementInsert(sDimName, '', sElement, 'N');
+  DimensionElementComponentAdd(sDimName, sDimParent, sElement, 1);
+ENDIF;
+
+#Insert new currencyFrom
+sDimName = 'Currency From' ;
+sDimParent = 'All Currency' ;
+sElement = pCur;
+IF(DIMIX(sDimName, sElement ) = 0);
+  DimensionElementInsert(sDimName, '', sElement, 'N');
+  DimensionElementComponentAdd(sDimName, sDimParent, sElement, 1);
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ATTRPUTS(pCoName,'Company',pCo,'Name');
+ATTRPUTS(pCur,'Company',pCo,'Currency');
+ATTRPUTS(pLedger,'Company',pCo,'Ledger');
+
+ 
+
+
+################################Update for Currency Name
+
+cCurName = CellGetS('}ElementAttributes_Currency_Codes',pCur, 'Name');
+
+ATTRPUTS(cCurName,'Currency',pCur,'Name');
+ATTRPUTS(cCurName,'Currency To',pCur,'Name');
+ATTRPUTS(cCurName,'Currency From',pCur,'Name');
+
+
+
+
+#Update Process Status cube with messages
+CELLPUTS ( vMessageSuccess , cubMessages, cProcess, elmSuccessMessage);
+CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+
+IF(vFlag = 1);
+   ProcessQuit;
+ENDIF;
+
+
+
+
+#endregion

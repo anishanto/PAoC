@@ -1,0 +1,210 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################################Constants
+cDimName = 'BusUnits';
+cDimName2 =  '}ElementAttributes_'|cDimName;
+cCubeName = '}ElementAttributes_'|cDimName;
+sLocalCube = 'local:'|cCubeName;
+sBusAH = CELLGETN('Global Control', 'BusUnits AH Hierarchies', 'Value');
+sBusAL = CELLGETN('Global Control', 'BusUnits AL Hierarchies', 'Value');
+sBusAO = CELLGETN('Global Control', 'BusUnits AO Hierarchies', 'Value');
+sEmail = CELLGETS('Global Control', 'Core Team Email', 'String');
+cProcess = GETPROCESSNAME ;
+cubMessages = '}ElementAttributes_}Processes';
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+##############################################################Check Validation if value is 1 then error
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+   ElName = DIMNM( cDimName , x );
+   IF( ATTRS(cDimName,ElName,'Validation')@='1');
+      vMessage = 'ERROR: '| cDimName | ' Validation Error.  There are dupicate parents within a single hierarchy.  Please correct records where Validation value = 1';
+      CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSERROR;
+   ENDIF;
+    x=x-1;
+END;
+
+
+
+#######################################Create Standard Hierarchy
+
+ 
+
+IF( sBusAH < 11 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','SH1',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+
+IF( sBusAH >0 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH1',
+       'pEmailFile','Yes',
+       'pSendTo',sEmail,
+        'pSecurityRefresh','0'
+);
+EndIf;    
+
+IF( sBusAH >1 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH2',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+
+EndIf;
+
+IF( sBusAH >2 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH3',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+
+EndIf;
+
+IF( sBusAH >3 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH4',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+
+IF( sBusAH >4 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH5',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+
+IF( sBusAH >5 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH6',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+
+IF( sBusAH >6 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH7',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+
+IF( sBusAH >7 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH8',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+
+IF( sBusAH >8 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH9',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+IF( sBusAH >9 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AH10',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;
+
+ 
+########Leases Hierarchies###########
+IF( sBusAL >0 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AL1',
+       'pEmailFile','',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;    
+
+ IF( sBusAO >0 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AO2',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;    
+
+ IF( sBusAO >1 );
+ExecuteProcess('update_dim_business_units_2_hierarchy_build',
+       'pHierarchy','AO3',
+       'pEmailFile',' ',
+        'pSendTo',' ',
+        'pSecurityRefresh','0'
+);
+EndIf;    
+
+#Create / Update AC1 Hierarchy
+cEnablePlanningLevel=DIMIX('Global Control Items','Select Level of Planning');
+IF(cEnablePlanningLevel<>0);
+	cConsolidatePlanning = CellGetS('Global Control','Consolidated level planning','String');
+	cPlanningLevel=CellGetS('Global Control','Select Level of Planning','String');
+ENDIF;
+IF(cPlanningLevel@<>'' & cConsolidatePlanning@='Yes');
+	ExecuteProcess('update_dim_business_units_2_hierarchy_build_2_AC1',
+	'pHierarchy', 'AC1',
+	'pEmailFile', 'no',
+	'pSendTo', 'tm1admin@am.jll.com',
+	'pDeleteAllElements', 1
+	);
+endif;
+
+#############Refresh Security ############################
+pDim='BusUnits';
+sSecurityUpdate = 'sProcessElementSecurity';
+ExecuteProcess( sSecurityUpdate, 'pDim', pDim);
+
+SecurityRefresh;
+#endregion

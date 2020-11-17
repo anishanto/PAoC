@@ -1,0 +1,877 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Event Name",
+	"Elements":
+	[
+		{
+			"Name":"All Event Names",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"17982",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"17983",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"17984",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"17995",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"17996",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18003",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18008",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18009",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18010",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18015",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18016",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18017",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18028",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18029",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18030",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18035",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18036",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18037",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18038",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18049",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18052",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18053",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18054",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18086",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18087",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"18088",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19810",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19811",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19812",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19814",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19815",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19816",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19817",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19842",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19843",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19844",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19846",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19847",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19848",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19849",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19850",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"19851",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"20907",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"20908",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"20909",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"20911",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"20912",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"20913",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"20914",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"30999",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"31000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"31001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"31002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"31003",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"31004",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"51441",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"51785",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"52970",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"52971",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"52972",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"52989",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"52990",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"52991",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53706",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53707",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53708",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53709",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53710",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53711",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53853",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53854",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"53855",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54707",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54708",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54709",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54710",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54711",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54712",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54715",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54716",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54717",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54718",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54719",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"54720",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"55672",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"55673",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"65734",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"65735",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"65736",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"65738",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"65909",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"65910",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"71154",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"17982",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"17983",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"17984",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"17995",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"17996",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18001",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18002",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18003",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18008",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18009",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18010",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18015",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18016",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18017",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18028",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18029",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18030",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18035",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18036",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18037",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18038",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18049",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18052",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18053",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18054",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18086",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18087",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"18088",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19810",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19811",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19812",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19814",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19815",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19816",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19817",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19842",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19843",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19844",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19846",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19847",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19848",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19849",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19850",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"19851",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"20907",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"20908",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"20909",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"20911",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"20912",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"20913",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"20914",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"30999",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"31000",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"31001",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"31002",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"31003",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"31004",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"51441",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"51785",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"52970",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"52971",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"52972",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"52989",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"52990",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"52991",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53706",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53707",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53708",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53709",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53710",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53711",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53853",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53854",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"53855",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54707",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54708",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54709",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54710",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54711",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54712",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54715",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54716",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54717",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54718",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54719",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"54720",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"55672",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"55673",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"65734",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"65735",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"65736",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"65738",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"65909",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"65910",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Event Names",
+			"ComponentName":"71154",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Event Name.subsets/EventNameDetailed.json",
+		"Event Name.subsets/EventNameExpanded.json",
+		"Event Name.subsets/level0.json",
+		"Event Name.subsets/S113303.json",
+		"Event Name.subsets/S143001.json"
+	]
+}

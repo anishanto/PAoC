@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Budget Type",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Budget Type')/Hierarchies('Budget Type')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Budget Type.hierarchies/Budget Type.json"
+	]
+}

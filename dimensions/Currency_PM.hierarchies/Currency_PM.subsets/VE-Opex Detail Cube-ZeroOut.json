@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"VE-Opex Detail Cube-ZeroOut",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+		}
+	]
+}

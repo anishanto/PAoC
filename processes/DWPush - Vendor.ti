@@ -1,0 +1,133 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vClientID=CellGetS('Global Control','Client Server Name','String');
+
+sSQLDel = '  Delete from DW_TM1_Budget.ssdi.VendorAttr where ClientID=''' |vClientID|''' ';
+ODBCOPEN('BudgetWB','TM1_readonly','tm1readonly');
+ODBCOutput('BudgetWB',sSQLDel); 
+
+CubeName ='}ElementAttributes_'|pDim;
+ViewNameTransfer =  'VE-' | CubeName | '-DW' ;
+vUseHeader= 'yes' ;
+vDim='}ElementAttributes_'|pDim;
+
+DATASOURCEASCIIQUOTECHARACTER = '';
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+# Create views and subsets for Export
+#Create Vendor
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( ['| pDim |'] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+#Create }ElementAttributes_Company
+SubsetCreate (vDim, ViewNameTransfer);
+SubsetElementInsert ( vDim,  ViewNameTransfer, 'CodeName' , 1);
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,pDim, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,vDim, ViewNameTransfer);
+
+ViewColumnDimensionSet(CubeName, ViewNameTransfer,vDim,1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, pDim, 1);
+
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameTransfer;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vCubeName ='}ElementAttributes_'|pDim;
+vVendor=Dim;
+vLastUpdated=TODAY(1);
+
+sSQLVar = 'Insert into DW_TM1_Budget.ssdi.VendorAttr (ClientID,Vendor,LastUpdated,';
+sSQLData = '( ''' |vClientID| ''', ''' |vVendor| ''',''' |vLastUpdated|''',';
+
+
+
+i=1;
+sSize=DIMSIZ(vCubeName);
+While(i<=sSize);
+sEle=DIMNM(vCubeName,i);
+IF(sEle@='CodeName' % sEle@='CreationDate' % sEle@='DisplayName' % sEle@='DisplayNameCustom' % sEle@='InputTemplate' % sEle@='Name' 
+% sEle@='NameCode' % sEle@='Name EXA' % sEle@='SH1Parent1' % sEle@='UnCount' % sEle@='Validation');
+sValue=CellGetS (vCubeName, Dim, sEle );
+sData = '';
+nCounter = Long(sValue);
+While(nCounter > 0);
+sCharacter = SubSt(sValue, nCounter, 1);
+If ( sCharacter @= '''' );
+sCharacter = '''''';
+EndIf;
+sData = sCharacter | sData;
+nCounter = nCounter - 1;
+End;
+IF(i=sSize);
+IF(sEle @='Name EXA');
+sEle = '[Name EXA]';
+ENDIF;
+sSQLVar = sSQLVar | sEle | ')';
+sSQLData = sSQLData | ''''|sData|'''' | ')';
+ELSE;
+IF(sEle @='Name EXA');
+sEle = '[Name EXA]';
+ENDIF;
+sSQLVar = sSQLVar | sEle | ',';
+sSQLData = sSQLData | ''''|sData|'''' | ',';
+ENDIF;
+ENDIF;
+i=i+1;
+END;
+
+
+sSQLFinal = sSQLVar | 'Values' | sSQLData;
+ASCIIOUTPUT('SqlFinal.txt',sSQLFinal);
+
+ODBCOutput('BudgetWB',sSQLFinal); 
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ODBCCLOSE('BudgetWB');
+
+ViewNameTransfer =  'VE-' | CubeName | '-DW' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+
+
+#endregion

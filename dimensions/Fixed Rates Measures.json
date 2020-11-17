@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Fixed Rates Measures",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Fixed Rates Measures')/Hierarchies('Fixed Rates Measures')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Fixed Rates Measures.hierarchies/Fixed Rates Measures.json"
+	]
+}

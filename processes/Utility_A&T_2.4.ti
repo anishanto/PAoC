@@ -1,0 +1,83 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vDim = 'Calendar Months';
+vDim = 'Calendar Months';
+vSub = 'Level0';
+vDimFiscalMonths = 'Fiscal Months';
+vSubFiscalMonths = 'Level 0';
+vCube='}Cubes';
+vItem='Opex Work Order Cube';
+vAttr1='Retention Type';
+vAttr2='SecurityType';
+
+ATTRPUTS('Detail','}Cubes',vItem,'Retention Type');
+ATTRPUTS('Opex','}Cubes',vItem,'SecurityType');
+
+AttrInsert('Fiscal Months','', 'AliasCorrigo', 'A');
+
+### Loops for each month element in the Fiscal Month dimension 
+vLoop = 1;
+vMax = 12;
+
+WHILE (vLoop <= vMax);
+	element = SubSetGetElementName(vDim,vSubFiscalMonths,vLoop);
+
+    ### Assigns month number to vMonth 
+	IF (vLoop < 10);
+		vMonth = '0'|NumberToString(vLoop);
+	ELSE;
+		vMonth = NumberToString(vLoop);
+	ENDIF;
+	
+   ### Updates attributes for Fiscal Months Dimension
+	AttrPutS('',vDimFiscalMonths,'M' | vMonth,'AliasCorrigo');
+
+	vLoop = vLoop + 1;
+END;
+
+vLoop = 1;
+vMax = 12;
+WHILE (vLoop <= vMax);
+	element = SubSetGetElementName(vDim,vSubFiscalMonths,vLoop);
+    ### Assigns month number to vMonth 
+	IF (vLoop < 10);
+		vMonth = '0'|NumberToString(vLoop);
+	ELSE;
+		vMonth = NumberToString(vLoop);
+	ENDIF;
+	
+    ### Gets the month name from the Calendar Month dimension.
+	vAliasCorrigo = element;
+
+    ### Updates attributes for Fiscal Months Dimension
+	AttrPutS(vAliasCorrigo,vDimFiscalMonths,'M' | vMonth,'AliasCorrigo');
+
+	vLoop = vLoop + 1;
+END;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vDim = '}ElementAttributes_GL_Accounts';
+vSub = 'zDimMgmt';
+vSize = SubsetGetSize(vDim, vSub);
+vSubsetElement = SubsetGetElementName(vDim, vSub, vSize);
+vSortNum = AttrN(vDim, vSubsetElement, 'SortAttr');
+AttrPutN(vSortNum+1, vDim, 'InputFlag', 'SortAttr');
+#endregion

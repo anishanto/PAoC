@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Post",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Post')/Hierarchies('Post')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Post.hierarchies/Post.json"
+	]
+}

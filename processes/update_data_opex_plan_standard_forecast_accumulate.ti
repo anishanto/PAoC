@@ -1,0 +1,929 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+########################Update 6/217 CM
+#The purpose of the process is to allow zero out selections at a child or consolidation level and then load the data
+#Notes:
+# When selecting children a "+" can be used.  Example  ABC+BCD+CDE
+# When selecting the parent of a section all children under the selection will be used
+# When selecting nothing " " all elements will be used
+# Currently Measure and Version_PM are restricted to the "Value" and "Actuals" but flexible code has been added.
+
+
+
+#####Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+pVersion = 'Forecast';
+cVersion = pVersion;
+cCurrency = 'Local';
+pMeasure = 'Value';
+cMeasure = pMeasure;
+cFileName = 'Frcst_Load.csv';
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cTrimAccountNumber =  Subst(vAccountNumber,1,6 );
+cTrimSubAccountNumber =  Subst(vAccountNumber,8,3 );
+nRecordProcessedCount = 0;
+nRecordPostedCount = 0;
+cProcessName = GetProcessName();
+pSubsetZero = cProcessName|' Zero';
+cCube = 'Opex Plan Cube';
+sViewZero = cProcessName|' Zero';
+pDelimiter = '+';
+
+#######################################Set Debug
+
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+
+   #Log Variables, Constants and Strings
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '           cFileName                           : '| cFileName);
+   AsciiOutput( sDebugFile, '           sFullPath                             : '| sFullPath);
+   AsciiOutput( sDebugFile, '           cCube                                  : '| cCube);
+   AsciiOutput( sDebugFile, '           Company Paramter               : '| pZeroCompany);
+   AsciiOutput( sDebugFile, '           BusUnits Paramter               : '| pZeroBusUnits);
+   AsciiOutput( sDebugFile, '           GL Account Paramter           : '| pZeroGL_Accounts);
+   AsciiOutput( sDebugFile, '           Years Paramter                     : '| pZeroFiscalYears);
+   AsciiOutput( sDebugFile, '           Months Paramter                   : '| pZeroFiscalMonths);
+   AsciiOutput( sDebugFile, '           Version Paramter                   : '| pVersion);
+   AsciiOutput( sDebugFile, '           Measure Paramter                 : '| pMeasure);
+EndIf; 
+
+
+##############################################################Check to make sure file path exists
+
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+
+##############################################################Check if Cube Constant Exists
+
+   IF( Trim( cCube ) @=' ');
+     nErrors = 1;
+     sMessage = 'No Cube named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+
+##########################################Destroy View if preent
+
+
+ IF( ViewExists(cCube, sViewZero ) = 1);
+    ViewDestroy( cCube, sViewZero );
+#SubsetDestroy('BusUnits', pSubsetZero);
+#SubsetDestroy('Company',pSubsetZero) ;
+#SubsetDestroy('Currency_PM', pSubsetZero);
+#SubsetDestroy('SubAccounts', pSubsetZero );
+#SubsetDestroy('GL_Accounts', pSubsetZero );
+#SubsetDestroy('Fiscal Months', pSubsetZero );
+#SubsetDestroy('Fiscal Years', pSubsetZero );
+#SubsetDestroy('Versions_PM', pSubsetZero ) ;
+#SubsetDestroy('Plan Measures', pSubsetZero) ;
+EndIf;
+
+####################################################################################################################################################################################################Company
+
+IF(SubsetExists('Company', pSubsetZero) = 1);
+     SubsetDestroy('Company', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pZeroCompany @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pZeroCompany @<>' ' & ELLEV('Company',pZeroCompany)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Company].['| pZeroCompany |']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('Company', pSubsetZero) = 0);
+     SubsetCreate('Company', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pZeroCompany;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'Company', sElement ) <> 0 );
+       IF(
+       ELLEV( 'Company', sElement) = 0);
+       SubsetElementInsert( 'Company',pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+
+###############################################################################################################################################################################################################BusUnits
+ 
+IF(SubsetExists('BusUnits', pSubsetZero) = 1);
+     SubsetDestroy('BusUnits', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pZeroBusUnits @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pZeroBusUnits @<>' ' & ELLEV('BusUnits',pZeroBusUnits)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[BusUnits].['| pZeroBusUnits |']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('BusUnits', pSubsetZero) = 0);
+     SubsetCreate('BusUnits', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pZeroBusUnits;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'BusUnits', sElement ) <> 0 );
+       IF(
+       ELLEV( 'BusUnits', sElement) = 0);
+       SubsetElementInsert( 'BusUnits', pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+
+##################################################################################################################################################################################################################################GL Accounts
+
+ 
+
+IF(SubsetExists('GL_Accounts', pSubsetZero) = 1);
+     SubsetDestroy('GL_Accounts', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pZeroGL_Accounts @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pZeroGL_Accounts @<>' ' & ELLEV('GL_Accounts',pZeroGL_Accounts)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[GL_Accounts].['| pZeroGL_Accounts |']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('GL_Accounts', pSubsetZero) = 0);
+     SubsetCreate('GL_Accounts', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pZeroGL_Accounts;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'GL_Accounts', sElement ) <> 0 );
+       IF(
+       ELLEV( 'GL_Accounts', sElement) = 0);
+       SubsetElementInsert( 'GL_Accounts', pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+
+
+#######################################################################################################################################################################################################################################Fiscal Months
+ 
+IF(SubsetExists('Fiscal Months', pSubsetZero) = 1);
+     SubsetDestroy('Fiscal Months', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pZeroFiscalMonths @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Months] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pZeroFiscalMonths @<>' ' & ELLEV('Fiscal Months',pZeroFiscalMonths)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Fiscal Months].['| pZeroFiscalMonths |']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('Fiscal Months', pSubsetZero) = 0);
+     SubsetCreate('Fiscal Months', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pZeroFiscalMonths;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'Fiscal Months', sElement ) <> 0 );
+       IF(
+       ELLEV( 'Fiscal Months', sElement) = 0);
+       SubsetElementInsert( 'Fiscal Months', pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+##########################################################################################################################################################################################################################################Fiscal Years
+
+pDimension4 = 'Fiscal Years';
+pElements4 = pZeroFiscalYears; 
+
+IF(SubsetExists('Fiscal Years', pSubsetZero) = 1);
+     SubsetDestroy('Fiscal Years', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pZeroFiscalYears @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Years] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pZeroFiscalYears @<>' ' & ELLEV('Fiscal Years',pZeroFiscalYears)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Fiscal Years].['|pZeroFiscalYears|']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('Fiscal Years', pSubsetZero) = 0);
+     SubsetCreate('Fiscal Years', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pZeroFiscalYears;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'Fiscal Years', sElement ) <> 0 );
+       IF(
+       ELLEV( 'Fiscal Years', sElement) = 0);
+       SubsetElementInsert( 'Fiscal Years', pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+###############################################################################################################################################################################################################################################Measure
+
+ 
+IF(SubsetExists('Plan Measures', pSubsetZero) = 1);
+     SubsetDestroy('Plan Measures', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pMeasure @=' ');
+    sMDX = '{[Plan Measures].[Value]}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pMeasure @<>' ' & ELLEV('Plan Measures',pMeasure)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Plan Measures].['|pMeasure|']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('Plan Measures', pSubsetZero) = 0);
+     SubsetCreate('Plan Measures', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pMeasure;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'Plan Measures', sElement ) <> 0 );
+       IF(
+       ELLEV( 'Plan Measures', sElement) = 0);
+       SubsetElementInsert( 'Plan Measures', pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+
+##############################################################################################################################################################################################################################################Version
+
+IF(SubsetExists('Versions_PM', pSubsetZero) = 1);
+     SubsetDestroy('Versions_PM', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pVersion @=' ');
+    sMDX = '{[Versions_PM].[Actuals]}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pVersion @<>' ' & ELLEV('Versions_PM',pVersion)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Versions_PM].['| pVersion |']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('Versions_PM', pSubsetZero) = 0);
+     SubsetCreate('Versions_PM', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pVersion;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'Versions_PM', sElement ) <> 0 );
+       IF(
+       ELLEV( 'Versions_PM', sElement) = 0);
+       SubsetElementInsert( 'Versions_PM', pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+
+####################################################################################################################################################################################################SubAccounts
+
+IF(SubsetExists('SubAccounts', pSubsetZero) = 1);
+     SubsetDestroy('SubAccounts', pSubsetZero);
+EndIf;
+
+
+#########################################Consolidation Value
+
+#############Undefined Parameter
+IF(pZeroSubAccounts @=' ');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+#############Consolidated Parameter
+IF(pZeroSubAccounts @<>' ' & ELLEV('SubAccounts',pZeroSubAccounts)<>0);
+    sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[SubAccounts].['| pZeroSubAccounts |']}, ALL, RECURSIVE )}, 0)}';
+    SubsetCreatebyMDX(pSubsetZero, sMDX);
+EndIf;
+
+############Child Elements (Multiple Selection)
+
+## Insert elements ###
+
+IF(SubsetExists('SubAccounts', pSubsetZero) = 0);
+     SubsetCreate('SubAccounts', pSubsetZero);
+EndIf;
+
+nSubsetIndex = 1;
+sElements = pZeroSubAccounts;
+nDelimIndex = 1;
+
+# Split filter into seperate dimensions
+While( nDelimIndex <> 0 & Long( sElements ) > 0 );
+
+  nDelimIndex = Scan( pDelimiter, sElements );
+  If( nDelimIndex <> 0 );
+    sElement = Trim( SubSt( sElements, 1, nDelimIndex - 1 ) );
+    sElements = Trim( SubSt( sElements, nDelimIndex + Long( pDelimiter ), Long( sElements ) ) );
+  Else;
+    sElement = Trim( sElements );
+  EndIf;
+
+  If( DimIx( 'SubAccounts', sElement ) <> 0 );
+       IF(
+       ELLEV( 'Company', sElement) = 0);
+       SubsetElementInsert( 'SubAccounts',pSubsetZero, sElement, nSubsetIndex );
+      ENDIF;
+    EndIf;
+    nSubsetIndex = nSubsetIndex + 1;
+End;
+
+
+########################################################################################################################################################################Create Zero View
+###########################Assign Dimensions and Subsets to View for Zero Out
+
+
+#EndIf;
+   ####CreateView
+ViewCreate( cCube, sViewZero );
+
+ViewColumnDimensionSet(cCube, sViewZero, 'Fiscal Months',1);
+ViewRowDimensionSet( cCube, sViewZero, 'BusUnits',1);
+ViewTitleDimensionSet(cCube, sViewZero, 'Company' ) ;
+ViewTitleDimensionSet(cCube, sViewZero,  'Currency_PM' );
+ViewTitleDimensionSet(cCube, sViewZero,  'SubAccounts' );
+ViewTitleDimensionSet(cCube, sViewZero,  'GL_Accounts' );
+ViewTitleDimensionSet(cCube, sViewZero, 'Fiscal Years' );
+ViewTitleDimensionSet(cCube, sViewZero, 'Versions_PM' ) ;
+ViewTitleDimensionSet(cCube, sViewZero, 'Plan Measures' ) ;
+
+ViewSubsetAssign(cCube, sViewZero,  'BusUnits',pSubsetZero);
+ViewSubsetAssign(cCube, sViewZero, 'Company',pSubsetZero) ;
+#ViewSubsetAssign(cCube, sViewZero,  'Currency_PM', pSubsetZero);
+#ViewSubsetAssign(cCube, sViewZero,  'SubAccounts', pSubsetZero );
+ViewSubsetAssign(cCube, sViewZero,  'GL_Accounts', pSubsetZero );
+ViewSubsetAssign(cCube, sViewZero,'Fiscal Months', pSubsetZero );
+ViewSubsetAssign(cCube, sViewZero,'Fiscal Years', pSubsetZero);
+ViewSubsetAssign(cCube, sViewZero, 'Versions_PM', pSubsetZero) ;
+ViewSubsetAssign(cCube, sViewZero, 'Plan Measures', pSubsetZero) ;
+
+
+IF(pZeroCube = 1);
+   VIEWZEROOUT(cCube,sViewZero);
+EndIf;
+
+
+
+####Sort Dimensions - used for adding new element if they don't exists in the metadata load but are in the data load
+
+DIMENSIONSORTORDER('Versions_PM','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Fiscal Years','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('BusUnits','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('GL_Accounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('SubAccounts','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Company','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Fiscal Months','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Currency_PM','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+DIMENSIONSORTORDER('Plan Measures','BYNAME','ASCENDING','BYHIERARCHY','ASCENDING');
+
+
+
+
+
+#################################################Delete View and Subset From Zero Out
+ IF(1=1);
+        ViewDestroy( cCube, sViewZero );
+        SubsetDestroy ('Company', pSubsetZero);
+        SubsetDestroy ('Currency_PM', pSubsetZero);
+        SubsetDestroy ('SubAccounts', pSubsetZero);
+        SubsetDestroy ('GL_Accounts', pSubsetZero);
+        SubsetDestroy ('Fiscal Years', pSubsetZero);
+        SubsetDestroy ('Fiscal Months', pSubsetZero);
+        SubsetDestroy ('BusUnits', pSubsetZero);
+        SubsetDestroy ('Versions_PM', pSubsetZero);
+        SubsetDestroy ('Plan Measures', pSubsetZero);
+EndIf;
+
+############################################################ Assign DataSource 
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+cTrimSubAccountNumber=
+Subst(vAccountNumber,8,3 );
+cTrimAccountNumber=
+Subst(vAccountNumber,1,6 );
+#****End: Generated Statements****
+
+
+
+
+############################Continue Debug
+
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'MetaData.debug';
+EndIf;
+
+##########################IF Elements exist in the data load file that do not exist in the dimension load file - add the elements under a review parent within the dimension - Chris to discuss with  Suresh 112516
+
+IF( pDebug <= 1 );
+
+
+##############################################Unassigned Elements
+###########Constants
+sYR = 'Fiscal Years';
+sAllYR = 'All Fiscal Years';
+sBU = 'BusUnits';
+vUnassignedBU = 'Unassigned BusUnits' ;
+sGL ='GL_Accounts' ;
+vUnassignedAcct = 'Unassigned GL' ;
+sCO ='Company' ;
+vUnassignedCompany = 'Unassigned Company';
+sSA ='SubAccounts' ;
+vUnassignedSub = 'Unassigned SubAccount';  
+
+############################################ACII OUT Undefined Elements
+#################Unassigned Elements Review FIle
+IF(DIMIX(sBU, vBusUnits ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedBusUnits.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review BusUnits Elements.','BusUnits',vBusUnits);
+EndIf;
+
+IF(DIMIX(sGL, vAccountNumber ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedGLAccounts.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review GL_Accounts Elements.','GL_Accounts',vAccountNumber);
+EndIf;
+
+IF(DIMIX(sSA, cTrimSubAccountNumber ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedSubAccounts.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review SubAccounts Elements.','SubAccounts',cTrimSubAccountNumber);
+EndIf;
+
+
+IF(DIMIX(sCO, vCompany ) = 0);
+   #Set Unasigned File
+   sDebugFile = cDebugFile | 'UnassignedCompany.debug';
+   ASCIIOUTPUT (sDebugFile, 'Review Company Elements.','Company',vCompany);
+EndIf;
+
+###########Update Year Dimension   
+IF(DIMIX(sYR, vYear ) = 0);
+   DIMENSIONELEMENTINSERT(sYR,'',vYear,'n');
+   DIMENSIONELEMENTCOMPONENTADD(sYR,sAllYR,vYear,1);
+EndIf;
+
+###########Update Business Units
+#Insert unassigned BusUnit
+IF(DIMIX(sBU, vBusUnits ) = 0);
+  DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+#  IF(DIMIX(sBU, vUnassignedBU ) = 0);
+  DimensionElementInsert(sBU, '', vUnassignedBU , 'C');   
+#  EndIf;
+  DimensionElementComponentAdd(sBU, vUnassignedBU, vBusUnits, 1);
+  ENDIF;
+
+
+###########Update General Ledger
+#Insert unassigned General Ledger
+IF(DIMIX(sGL, cTrimAccountNumber ) = 0);
+  DimensionElementInsert(sGL, '', cTrimAccountNumber, 'N');
+#  IF(DIMIX(sGL, vUnassignedAcct ) = 0);
+      DimensionElementInsert(sGL, '', vUnassignedAcct , 'C');  
+#   EndIf;
+  DimensionElementComponentAdd(sGL, vUnassignedAcct,cTrimAccountNumber, 1);
+ENDIF;
+
+
+###########Update Company
+
+IF(DIMIX(sCO, vCompany ) = 0);
+   DimensionElementInsert(sCO,'',vCompany,'n');
+#  IF(DIMIX(sCO, vUnassignedCompany ) = 0);
+  DimensionElementInsert(sCO, '', vUnassignedCompany, 'C');  
+#  EndIf;
+  DimensionElementComponentAdd(sCO, vUnassignedCompany,vCompany, 1);
+ENDIF;
+
+
+###########Update SubAccount
+IF(DIMIX(sSA, cTrimSubAccountNumber ) = 0);
+    DIMENSIONELEMENTINSERT(sSA,'',cTrimSubAccountNumber,'n');
+#  IF(DIMIX(sSA, vUnassignedSub ) = 0);
+      DimensionElementInsert(sSA, '', vUnassignedSub , 'C');  
+#  EndIf;
+  DimensionElementComponentAdd(sSA, vUnassignedSub,cTrimSubAccountNumber, 1);
+ENDIF;
+ENDIF;
+
+
+###############################if pDebut is set to 1 ASCII  OUT
+
+If( pDebug >=1 );
+   ASCIIOUTPUT (sDebugFile, 'Review Version Elements.','Versions_PM',vVersion);
+   ASCIIOUTPUT (sDebugFile, 'Review Year Elements.','Fiscal Year',vYear);
+   ASCIIOUTPUT (sDebugFile, 'Review BusUnits Elements.','BusUnits',vBusUnits);
+   ASCIIOUTPUT (sDebugFile, 'Review GL_Accounts Elements.','GL_Accounts',cTrimAccountNumber);
+   ASCIIOUTPUT (sDebugFile, 'Review SubAccounts Elements.','SubAccounts',cTrimSubAccountNumber);
+   ASCIIOUTPUT (sDebugFile, 'Review Company Elements.','Company',vCompany);
+   ASCIIOUTPUT (sDebugFile, 'Review CurrencyPM Elements.','Currency_PM',cCurrency);
+   ASCIIOUTPUT (sDebugFile, 'Review Plan Measure Elements.','Plan Measures',cMeasure);
+   ASCIIOUTPUT (sDebugFile, 'Review M01 Elements.','Fiscal Months','M01');
+   ASCIIOUTPUT (sDebugFile, 'Review M02 Elements.','Fiscal Months','M02');
+   ASCIIOUTPUT (sDebugFile, 'Review M03 Elements.','Fiscal Months','M03');
+   ASCIIOUTPUT (sDebugFile, 'Review M04 Elements.','Fiscal Months','M04');
+   ASCIIOUTPUT (sDebugFile, 'Review M05 Elements.','Fiscal Months','M05');
+   ASCIIOUTPUT (sDebugFile, 'Review M06 Elements.','Fiscal Months','M06');
+   ASCIIOUTPUT (sDebugFile, 'Review M07 Elements.','Fiscal Months','M07');
+   ASCIIOUTPUT (sDebugFile, 'Review M08 Elements.','Fiscal Months','M08');
+   ASCIIOUTPUT (sDebugFile, 'Review M09 Elements.','Fiscal Months','M09');
+   ASCIIOUTPUT (sDebugFile, 'Review M10 Elements.','Fiscal Months','M010');
+   ASCIIOUTPUT (sDebugFile, 'Review M11 Elements.','Fiscal Months','M011');
+   ASCIIOUTPUT (sDebugFile, 'Review M12 Elements.','Fiscal Months','M012');
+ENDIF;
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+cTrimSubAccountNumber=
+Subst(vAccountNumber,8,3 );
+cTrimAccountNumber=
+Subst(vAccountNumber,1,6 );
+#****End: Generated Statements****
+
+
+#####################################Continue Debug
+
+IF( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Data.debug';
+EndIf;
+
+######################################Set Record Counter
+
+nRecordProcessedCount = nRecordProcessedCount +1;
+ 
+#########################################Update Numeric Data
+
+IF( pDebug <= 1 );
+   IF(CELLISUPDATEABLE( cCube,vVersion,vCompany,cCurrency,'M01',vYear,cTrimSubAccountNumber,cTrimAccountNumber,vBusUnits,cMeasure)=1);
+      NCellOldValueM01= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M01' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM01+NCellOldValueM01, cCube ,vVersion , vCompany , cCurrency , 'M01' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+    EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M02' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM02= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M02' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM02+NCellOldValueM02, cCube ,vVersion , vCompany , cCurrency , 'M02' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+    EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M03' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM03= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M03' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM03+NCellOldValueM03, cCube ,vVersion , vCompany , cCurrency , 'M03' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+    EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M04' , vYear ,cTrimSubAccountNumber ,cTrimAccountNumber, vBusUnits , cMeasure)=1);
+      NCellOldValueM04= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M04' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM04+NCellOldValueM04, cCube ,vVersion , vCompany , cCurrency , 'M04' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+     EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M05' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM05= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M05' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM05+NCellOldValueM05, cCube ,vVersion , vCompany , cCurrency , 'M05' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+     EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M06' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM06= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M06' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM06+NCellOldValueM06, cCube ,vVersion , vCompany , cCurrency , 'M06' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+     EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M07' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM07= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M07' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM07+NCellOldValueM07, cCube ,vVersion , vCompany , cCurrency , 'M07' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+    EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M08' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM08= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M08' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM08+NCellOldValueM08, cCube ,vVersion , vCompany , cCurrency , 'M08' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+     EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M09' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM09= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M09' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM09+NCellOldValueM09, cCube ,vVersion , vCompany , cCurrency , 'M09' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+    EndIf;
+
+    IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M10' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber, vBusUnits , cMeasure)=1);
+      NCellOldValueM10= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M10' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM10+NCellOldValueM10, cCube ,vVersion , vCompany , cCurrency , 'M10' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+    EndIf;
+
+   IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M11' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM11= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M11' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM11+NCellOldValueM11, cCube ,vVersion , vCompany , cCurrency , 'M11' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+   EndIf;
+
+   IF(CELLISUPDATEABLE( cCube ,vVersion , vCompany , cCurrency , 'M12' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure)=1);
+      NCellOldValueM12= CellGetN (cCube ,vVersion , vCompany , cCurrency , 'M12' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+       CellPutN(nM12+NCellOldValueM12, cCube ,vVersion , vCompany , cCurrency , 'M12' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure);
+   EndIf;
+ENDIF;
+
+################If pDebug =1 then ASCII OUT
+IF( pDebug >= 1 );
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M01' , vYear ,cTrimSubAccountNumber ,cTrimAccountNumber, vBusUnits , cMeasure,NumberToString( nM01));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M02' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure, NumberToString(nM02));
+       Asciioutput( sDebugFile, cCube ,vVersion , vCompany ,cCurrency , 'M03' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure,NumberToString( nM03));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M04' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure, NumberToString(nM04));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M05' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure, NumberToString(nM05));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M06' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure, NumberToString(nM06));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M07' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure,NumberToString( nM07));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M08' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure, NumberToString(nM08));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M09' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber, vBusUnits , cMeasure,NumberToString( nM09));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M10' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure, NumberToString(nM10));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M11' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber, vBusUnits , cMeasure, NumberToString(nM11));
+       Asciioutput(sDebugFile, cCube ,vVersion , vCompany , cCurrency , 'M12' , vYear , cTrimSubAccountNumber ,cTrimAccountNumber , vBusUnits , cMeasure, NumberToString(nM12));
+ENDIF;
+
+
+#Increase Record Count
+  nRecordPostedCount = nRecordPostedCount +1;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#################Send Actuals from Planning Opex to Planning Analsysis - No Paremter for this Discuss with Suresh  2/12/17
+
+#ExecuteProcess( 'update_data_opex_analysis_actuals_from_plan_initial_load');
+
+##############Continue Debug for Epilog
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Epilog.debug';
+
+ 
+###############Log Error information
+   IF( nErrors <>0 );
+        AsciiOutput(sDebugFile, 'Errors Occured. Review fiile data and code');
+   EndIf;
+
+################Log Finish Time
+          AsciiOutput ( sDebugFile, 'Record Processed: ' | NumberToString ( nRecordProcessedCount ) );
+          AsciiOutput ( sDebugFile, 'Record Load: ' |  NumberToString ( nRecordPostedCount) );
+          AsciiOutPut ( sDebugFile, 'Process Finished: ' | TimSt ( Now, '\d-\m-\Y \h:\i:\s' ) );
+   EndIf;
+
+################If Errors Occur Quit the process
+     IF( nError <> 0 );
+         ProcessQuit;
+     EndIf;
+
+################ Delete VIew and Subset
+#endregion

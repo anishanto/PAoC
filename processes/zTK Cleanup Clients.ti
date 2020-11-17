@@ -1,0 +1,87 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+sProcessNM = getProcessName();
+ViewTransfer = 'VE-' | sProcessNM;
+
+CubeSetLogChanges(pCubeName, 0);
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (pCubeName, ViewTransfer);
+SubsetDestroy (pDimName, ViewTransfer);
+SubsetDestroy (pDimName2, ViewTransfer);
+
+#Create Dimensions
+sMDX = '{ HIERARCHIZE( {TM1SUBSETALL( [' | pDimName | '] )} ) }}';
+SubsetCreatebyMDX( ViewTransfer, sMDX);
+
+# create Groups
+sMDX= '{TM1SORT( { EXCEPT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [}Groups] )}, 0)}, { [}Groups].[ADMIN], [}Groups].[SecurityAdmin], [}Groups].[DataAdmin] }) }, ASC)}';
+SubsetCreatebyMDX( ViewTransfer, sMDX);
+
+
+ViewCreate( pCubeName, ViewTransfer);
+ViewSubsetAssign (pCubeName, ViewTransfer, pDimName, ViewTransfer);
+ViewSubsetAssign (pCubeName, ViewTransfer, pDimName2, ViewTransfer);
+ViewRowDimensionSet (pCubeName, ViewTransfer, pDimName, 1);
+ViewColumnDimensionSet (pCubeName, ViewTransfer, pDimName2,1);
+
+ViewExtractSkipCalcsSet(pCubeName, ViewTransfer, 0);
+ViewExtractSkipZeroesSet(pCubeName, ViewTransfer, 0);
+
+# Set new views as the datasource:
+#    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewTransfer;
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF( 1 =  pRun);
+vPath= '..\datasources\exports\DeleteClients.csv' ;
+# prod developer
+vDevPrd1 = 'Mitchell, Anna';
+# non prod developers
+IF( pENV @<> 'Prod');
+vDev1 = 'Petrovik, John';
+ENDIF;
+IF( DIMIX ( pDimName, vDim) > 0);
+vCurUser = ATTRS(pDimName, vDim, '}TM1_DefaultDisplayValue' ) ;
+IF ( SCAN('Klerekoper, Tod', vCurUser) = 0 &  SCAN( vDevPrd1, vCurUser) = 0  &  SCAN(vDev1, vCurUser) = 0 &  SCAN('Admin', vCurUser) = 0 & SCAN('Admin', vDim )=0 )  ;
+     DeleteClient( vDim  );
+ASCIIOUTPUT ( vPath, pDimName, vCurUser, vDim );
+ENDIF;
+ENDIF;
+ENDIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CubeSetLogChanges(pCubeName, 1);
+
+IF ( 1 = 1 );
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (pCubeName, ViewTransfer);
+SubsetDestroy (pDimName, ViewTransfer);
+SubsetDestroy (pDimName2, ViewTransfer);
+ENDIF;
+#endregion

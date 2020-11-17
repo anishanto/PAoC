@@ -1,0 +1,32 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_tenuretype_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_tenuretype_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"mH8hJKzGt0]C`l^4WHcCEX`?dOqr4uaGwDMacpfvv93=VjMs]@r:m6I<iGFc0GatZ4@>aA7pWXR^pm7YMFN4fhX58>e_E?SJaZjM@Cf<FdxX\\wurIzJRdKslq`XdYAtoFiyjNO26e<26ueImyKumE=D]HD2KxFQonPmLnP47YY8cb1z:iY;JolM7cZy5m`5qDvtcNxqw",
+		"query":"SELECT 1",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"TenureType",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

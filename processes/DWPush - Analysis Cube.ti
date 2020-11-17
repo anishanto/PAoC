@@ -1,0 +1,211 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CubeName = 'Opex Analysis Cube';
+ViewNameTransfer =  'VE-' | CubeName | '-DWPush' ;
+
+vDebugFileName = '..\logs\System\DWPush - Analysis Cube.txt';
+vDataBase= 'BudgetWB';
+vTable = '[ssdi].[DetailAnalysisCube]';
+vClientID = CellGetS('Global Control','Client Server Name','String');
+sClientID = ''''|vClientID|'''';
+ODBCOPEN('BudgetWB','TM1_readonly','tm1readonly');
+
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy ('Versions', ViewNameTransfer);
+SubsetDestroy ('Currency', ViewNameTransfer);
+SubsetDestroy ('Fiscal Years', ViewNameTransfer);
+SubsetDestroy ('Fiscal Months', ViewNameTransfer);
+SubsetDestroy ('Company', ViewNameTransfer);
+SubsetDestroy ('SubAccounts', ViewNameTransfer);
+SubsetDestroy ('GL_Accounts', ViewNameTransfer);
+SubsetDestroy ('BusUnits', ViewNameTransfer);
+SubsetDestroy ('Scale Measure', ViewNameTransfer);
+SubsetDestroy ('Analysis Measures', ViewNameTransfer);
+
+
+# Create views and subsets for Export
+#Create Version
+SubsetCreate ('Versions', ViewNameTransfer);
+pDim = 'Versions';
+pSub = 'All Members';
+subsetSize =  SubsetGetSize(pDim,pSub);
+enumerator=1;
+while (enumerator <= subsetSize);
+	eVersion = SubsetGetElementName(pDim,pSub,enumerator);
+	if (ATTRS( 'Versions' , eVersion, 'DW Flag')@='Yes');
+		SubsetElementInsert ( 'Versions',  ViewNameTransfer, eVersion, 1);
+	endif;
+	enumerator=enumerator+1;
+end;
+
+#Create Company
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create currency
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+
+#Create BusUnits
+cPlanningLevel='No';
+if (DIMIX('Global Control Items','Consolidated Level Planning')>0);
+  cPlanningLevel=CellGetS('Global Control','Consolidated Level Planning','String');
+endif;
+
+if (cPlanningLevel@='Yes');
+  sMDX = '{EXCEPT ({TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}, ASC)},
+          {FILTER( {TM1SUBSETALL( [BusUnits] )}, [BusUnits].[Allocation] = "Y")})}';
+else;
+    sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}, ASC)}';
+endif;       
+
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+# create SubAccounts
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create GL_Accounts
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+# create year
+sMDX='{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Years] )}, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Months
+#sMDX='{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Months] )}, 0)}, ASC)}';
+#SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+sSubMonth='FiscalMonthsWithTotal';
+
+
+#Create Scale
+SubSetCreate('Scale Measure', ViewNameTransfer);
+SubsetElementInsert ( 'Scale Measure',  ViewNameTransfer, 'No Scale', 1);
+
+#Create Measure
+sMDX='{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [Analysis Measures] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Versions', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Currency', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Company', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'SubAccounts', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'GL_Accounts', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Fiscal Years', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Fiscal Months', sSubMonth);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'BusUnits', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Scale Measure', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Analysis Measures', ViewNameTransfer);
+
+ViewColumnDimensionSet(CubeName, ViewNameTransfer, 'Fiscal Months',1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer,  'Versions', 1);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Currency', 2);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Company', 3);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, 'Fiscal Years', 4);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'BusUnits', 5);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'GL_Accounts', 6);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'SubAccounts',7);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Scale Measures',8);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Analysis Measures',9);
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipRuleValuesSet(CubeName, ViewNameTransfer, 0);
+
+# Set new views as the datasource:
+DatasourceNameForServer = CubeName;
+DatasourceCubeView = ViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Skip if account is Total GL
+if (vGLAccount@='Total GL');
+	ItemSkip;
+endif;
+
+
+sVersion = ''''|vVersion|'''';
+sCurrency = ''''|vCurrency|'''';
+sCompany = ''''|vCompany|'''';
+sFYear = ''''|vFYear|'''';
+sBusUnit = ''''|vBusUnit|'''';
+sGLAccount = ''''|vGLAccount|'''';
+sSubAccount = ''''|vSubAccount|'''';
+sScale = ''''|vScale|'''';
+sSubLedger = ''''|''|'''';
+sVendor = ''''|''|'''';
+sMeasures = ''''|vMeasure|'''';
+sFMonth = ''''|vFMonth|'''';
+vLastUpdated=TODAY(1);
+#sLastUpdated=StringtoNumber(vLastUpdated);
+Asciioutput('date.txt',vLastUpdated);
+
+
+
+if (VALUE_IS_STRING=1);
+#Handling apostrophe(delimeter)
+zValue = '';
+nCounter = Long ( sValue );
+While ( nCounter > 0 );
+sCharacter = SubSt ( sValue, nCounter, 1 );
+If ( sCharacter @= '''' );
+sCharacter = '''''';
+EndIf;
+zValue = sCharacter | zValue;
+nCounter = nCounter - 1;
+End;
+	vValueFinal = ''''|zVALUE|'''';
+else;
+	vValueFinal = ''''|NumberToString(NVALUE)|'''';
+endif;
+	vSQL = 'INSERT INTO '|vTable|' VALUES('|sClientID|','|sVersion|','|sCurrency|','|sFYear|','|sFMonth|','|sCompany|','|sSubAccount|','|sGLAccount|','|sSubLedger|','|sBusUnit|','|sVendor|','|sScale|','|sMeasures|','|vValueFinal|',''' |vLastUpdated|''')';
+
+
+
+ODBCOutput(vDataBase,vSQL);
+
+if (pDebug=1);
+	asciioutput(vDebugFileName,vSQL);
+endif;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy ('Versions', ViewNameTransfer);
+SubsetDestroy ('Currency', ViewNameTransfer);
+SubsetDestroy ('Fiscal Years', ViewNameTransfer);
+SubsetDestroy ('Fiscal Months', ViewNameTransfer);
+SubsetDestroy ('Company', ViewNameTransfer);
+SubsetDestroy ('SubAccounts', ViewNameTransfer);
+SubsetDestroy ('GL_Accounts', ViewNameTransfer);
+SubsetDestroy ('SubLedger', ViewNameTransfer);
+SubsetDestroy ('BusUnits', ViewNameTransfer);
+SubsetDestroy ('Vendor', ViewNameTransfer);
+SubsetDestroy ('Scale Measure', ViewNameTransfer);
+SubsetDestroy ('Analysis Measures', ViewNameTransfer);
+
+ODBCClose(vDataBase);
+#endregion

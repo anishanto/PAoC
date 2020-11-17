@@ -1,0 +1,200 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#============================        NOTES     =================================================
+#    Date                   Initials        Note
+#    2014-06-09           John Petrovik           		Initial Build
+#    2017-05-16 Chris Malone  Changes to process
+#
+#  Realign element in appropriate hierarchies
+#
+#==========================================================================================
+
+#==========================================================================================
+
+#===============================    Process statistics  ===========================================
+cProcess = GETPROCESSNAME ;
+sProcess = TRIM (cProcess);
+WHILE ( SCAN ( ' ', sProcess )  > 0 );
+    sProcess = DELET ( sProcess, SCAN ( ' ' , sProcess ) , 1 ) ;
+END ;
+
+sUser = TM1USER() ;
+
+sNow = TIMST( NOW , '\M \D, \Y at \H \p \i min \s sec' ) ;
+vNowStart = NOW ;
+
+cubMessages = '}ElementAttributes_}Processes';
+
+#========================================================================================
+
+#============================= Define User Log =============================================
+cubGblCube = 'Global Settings';
+logPath = '..\logs\tunit\';
+exportPath = '..\DataSources\Exports\';
+
+
+IF ( SUBST ( logPath , LONG ( logPath ) - 1 , 1 ) @<> '\' ) ;
+    logPath = logPath | '\' ;
+ENDIF;
+
+logName = TRIM ( sProcess ) | '_' | sNow | '.log' ;
+errName =  TRIM ( sProcess ) | '_' | sNow | '.err' ;
+logNameMeta = TRIM ( sProcess ) | '_' | sNow | '-KICKOUT.csv' ;
+errNameMeta = TRIM ( sProcess ) | '_' | sNow | '-META.err' ;
+logFile = logPath | logName ;
+errFile = logPath | errName ;
+logFileMeta = logPath | logNameMeta ;
+errFileMeta = logPath | errNameMeta ;
+
+#===================================================================================
+
+
+#===============================   Process Variables  ====================================
+
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+vProcessStatusCube = 'Process Status';
+vDimension = pDimension;
+
+vFlag = 0;
+vExists = 0;
+
+vTimeStamp = TIMST(NOW, '\m-\d-\Y @ \H:\i \p PST');
+vMessage = 'No Message';
+
+pElement = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pElement);
+pOldParent = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pOldParent);
+pNewParent = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pNewParent);
+
+
+#Check that the fields have been entered and valid
+IF(pElement @= '');
+   IF(vFlag = 0);
+      vFlag = 1;
+      vMessage = 'ERROR: '| pDimension | ' not entered.';
+   ENDIF;
+ENDIF;
+
+#Check if Element is leaf
+#IF(vFlag = 0);
+#   IF(ELCOMPN(vDimension, pElement) <> 0);
+#      vFlag = 1;
+#      vMessage = 'ERROR: The "'| pElement | ' "is not leaf.';
+#   ENDIF;
+#ENDIF;
+
+#Check if Element has multiple parents
+#IF(vFlag = 0);
+#   IF(ELPARN(vDimension, pElement) > 1);
+#      vFlag = 1;
+#      vMessage = 'ERROR: The "'| pElement | ' "has multiple parents.';
+#   ENDIF;
+#ENDIF;
+
+
+#Check if Parent is leaf
+IF(vFlag = 0);
+   IF(DTYPE(vDimension, pOldParent) @<> 'C' );
+      vFlag = 1;
+      vMessage = 'ERROR: The parent element "'| pOldParent | ' "is invalid.';
+   ENDIF;
+ENDIF;
+
+IF(vFlag = 0);
+   IF(DTYPE(vDimension, pNewParent) @<> 'C' );
+      vFlag = 1;
+      vMessage = 'ERROR: The parent element "'| pNewParent | ' "is invalid.';
+   ENDIF;
+ENDIF;
+ASCIIOUTPUT('..\\logs\System\Debug.txt',vDimension, pElement,  pOldParent, pNewParent, DTYPE(vDimension, pOldParent), DTYPE(vDimension, pNewParent)  );
+
+#Realign Element
+IF(vFlag = 0);
+ IF(pValidationFlag @= 'TRUE');
+      vMessageSuccess = 'SUCCESS: Validation OK.  Click Complete Realignment.';
+ ELSE;
+      vMessageSuccess = 'SUCCESS: Element ' | pElement | ' realigned in the ' | pDimension | ' hierarchy.' ;
+   #IF(vDimension @= 'BusUnits' % vDimension @= 'GLAccount');
+   IF(vDimension @<> ' ');
+       IF(((ELISANC(vDimension, pTopParent,  pOldParent) = 1 %  pOldParent@=pTopParent) & (ELISANC(vDimension, pTopParent,  pNewParent) = 1 %  pNewParent@=pTopParent)));
+
+         DIMENSIONELEMENTCOMPONENTDELETE(vDimension, pOldParent, pElement);
+         DIMENSIONELEMENTCOMPONENTADD(vDimension, pNewParent, pElement, 1);
+       ELSE;
+        vFlag = 1;
+        vMessage = 'ERROR: The new parent element "'| pNewParent | ' "not in the same hierarchy as the old one.';
+      ENDIF;       
+#   ELSEIF(vDimension @= 'GL_Accounts');
+#       IF(((ELISANC(vDimension, pTopParent,  pOldParent) = 1 %  pOldParent@=pTopParent)  & (ELISANC(vDimension, pTopParent,  pNewParent) = 1 %  pNewParent@=pTopParent)));
+#         DIMENSIONELEMENTCOMPONENTDELETE(vDimension, pOldParent, pElement);
+#         DIMENSIONELEMENTCOMPONENTADD(vDimension, pNewParent, pElement, 1);
+#      ELSE;
+#         vFlag = 1;
+#         vMessage = 'ERROR: The new parent element "'| pNewParent | ' "not in the same hierarchy as the old one.';
+#     ENDIF;   
+#   ELSE;
+#         DIMENSIONELEMENTCOMPONENTDELETE(vDimension, pOldParent, pElement);
+#         DIMENSIONELEMENTCOMPONENTADD(vDimension, pNewParent, pElement, 1);
+  ENDIF;
+ENDIF;
+ENDIF;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Update Process Status cube with messages
+CELLPUTS ( vMessageSuccess , cubMessages, cProcess, elmSuccessMessage);
+CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+
+IF(vFlag = 1);
+   ProcessQuit;
+ENDIF;
+
+#############Delete Parents without Children
+EXECUTEPROCESS('ProcessDimensionParentCleanUp', 'pDimension', vDimension,'pTopParent',pTopParent);
+
+
+#Update Hierarrchy Attributes
+IF(ELLEV(pDimension, pElement) = 0);
+     EXECUTEPROCESS('ProcessUpdate Hierarchy Attributes', 'pDimName', vDimension, 'pElement', pElement,'pTopParent',pTopParent,'pIndex',pIndex); 
+ENDIF;
+
+#############Business Units AH1 Hierarchy Email
+
+sTopParent = DIMENSIONELEMENTPRINCIPALNAME(vDimension, pTopParent);
+IF(vDimension@='BusUnits' & sTopParent@='AH1');
+#cSendTo = 'ChrisA.Malone@am.jll.com';
+vProcess = 'ProcessDimensionEmail' ;
+vProcess1 = 'update_dim_business_units_3_WF_hierarchy_build';
+ExecuteProcess(vProcess);
+ExecuteProcess(vProcess1);  
+
+EndIf;
+
+#Update Security
+sSecurityUpadate = 'sProcessSecurityUpdate';
+ExecuteProcess(sSecurityUpadate);
+
+# Refresh Security
+vSecurity_Refresh = 'SecurityRefresh';
+EXECUTEPROCESS(vSecurity_Refresh);
+
+
+#endregion

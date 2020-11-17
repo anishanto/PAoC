@@ -1,0 +1,39 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');  
+sDateAttr = 'CreationDate';
+
+
+
+ExecuteProcess('ProcessEmailWFileUnassignedCOSQL','pSendTo', pSendTo);
+Sleep(10000);
+ExecuteProcess('ProcessEmailWFileUnassignedBUSQL','pSendTo', pSendTo);
+Sleep(10000);
+ExecuteProcess('ProcessEmailWFileUnassignedGLSQL','pSendTo', pSendTo);
+Sleep(10000);
+ExecuteProcess('ProcessEmailWFileUnassignedSUBACCTSQL','pSendTo', pSendTo);
+Sleep(10000);
+ExecuteProcess('ProcessEmailWFileUnassignedSLSQL','pSendTo', pSendTo);
+ 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

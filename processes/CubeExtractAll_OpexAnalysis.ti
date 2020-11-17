@@ -1,0 +1,169 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName = 'Opex Analysis Cube';
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+vUseHeader= 'yes' ;
+
+
+DATASOURCEASCIIQUOTECHARACTER = '';
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy ('Versions', ViewNameTransfer);
+SubsetDestroy ('Company', ViewNameTransfer);
+SubsetDestroy ('Currency', ViewNameTransfer);
+SubsetDestroy ('Fiscal Months', ViewNameTransfer);
+SubsetDestroy ('Fiscal Years', ViewNameTransfer);
+SubsetDestroy ('SubAccounts', ViewNameTransfer);
+SubsetDestroy ('GL_Accounts', ViewNameTransfer);
+SubsetDestroy ('BusUnits', ViewNameTransfer);
+SubsetDestroy ('Scale Measure', ViewNameTransfer);
+SubsetDestroy ('Analysis Measures', ViewNameTransfer);
+
+# Create views and subsets for Export
+#Create Version
+
+IF(pVersion@='');
+sMDX = '{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [Versions] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+ELSE;
+SubsetCreate ('Versions', ViewNameTransfer);
+SubsetElementInsert ( 'Versions',  ViewNameTransfer,pVersion, 1);
+
+ENDIF;
+
+#Create Company
+sMDX = '{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [Company] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create currency
+sMDX='{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [Currency] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create BusUnits
+sMDX = '{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [BusUnits] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+# create SubAccounts
+sMDX='{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [SubAccounts] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create GL_Accounts
+sMDX='{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [GL_Accounts] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+# create year
+sMDX='{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [Fiscal Years] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Months
+sMDX='{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [Fiscal Months] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+#Create Scale
+SubsetCreate ('Scale Measure', ViewNameTransfer);
+SubsetElementInsert ( 'Scale Measure',  ViewNameTransfer,'No Scale', 1);
+
+#Create Measure
+sMDX='{TM1SORT( { HIERARCHIZE( {TM1SUBSETALL( [Analysis Measures] )} ) }, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Versions', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Currency', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Company', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'SubAccounts', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'GL_Accounts', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Fiscal Years', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Fiscal Months', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'BusUnits', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Scale Measure', ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer, 'Analysis Measures', ViewNameTransfer);
+ViewColumnDimensionSet(CubeName, ViewNameTransfer, 'Fiscal Months',1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer,  'Versions', 1);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Currency', 2);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Company', 3);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, 'Fiscal Years', 4);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'BusUnits', 5);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'GL_Accounts', 6);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'SubAccounts',7);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Scale Measures',8);
+ViewRowDimensionSet (CubeName, ViewNameTransfer, 'Analysis Measures',9);
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameTransfer;
+
+#############Set Delimiter
+DataSourceAsciiDelimiter = ';';
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+vCubeName = 'Opex Plan Cube';
+
+###############CM Changed file to .txt for comma export issues 21418
+
+vBlank = '';
+vFileName = 'OpexAnalysis Cube Export.txt';
+vLocation = '..\DataSources\Exports\' ;
+
+IF( vUseHeader @= 'yes' ) ;
+    vUseHeader = 'no';
+   ASCIIOUTPUT(vLocation|vFilename, 'Version', 'Currency', 'Company', 'Year', 'BUID', 'GLAccount', 'Sub-GLAcct', 'Analysis Measures', 'Months','Scale','Value') ;
+
+ENDIF ;
+
+ASCIIOUTPUT(vLocation|vFilename,vVer, vCur, vCo, vYr, vBU, vAccts, vSub, vAM, vMons, vScale, vValue);
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CubeName = 'Opex Analysis Cube';
+
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy ('Versions', ViewNameTransfer);
+SubsetDestroy ('Company', ViewNameTransfer);
+SubsetDestroy ('Currency', ViewNameTransfer);
+SubsetDestroy ('Fiscal Months', ViewNameTransfer);
+SubsetDestroy ('Fiscal Years', ViewNameTransfer);
+SubsetDestroy ('SubAccounts', ViewNameTransfer);
+SubsetDestroy ('GL_Accounts', ViewNameTransfer);
+SubsetDestroy ('BusUnits', ViewNameTransfer);
+SubsetDestroy ('Scale Measure', ViewNameTransfer);
+SubsetDestroy ('Analysis Measures', ViewNameTransfer);
+
+#email file
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFile' ;
+    ExecuteProcess(vProcess,'pSendTo', pSendTo,'pFilename',vFileName );
+ENDIF;
+#endregion

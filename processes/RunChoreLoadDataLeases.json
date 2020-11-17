@@ -1,0 +1,21 @@
+{
+	"@type":"Process",
+	"Name":"RunChoreLoadDataLeases",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"RunChoreLoadDataLeases.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pTester",
+			"Prompt":"0 to run only in PRD environment, 1 to allow running in a DE or TST environment.",
+			"Value":0,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}

@@ -1,0 +1,48 @@
+{
+	"@type":"Cube",
+	"Name":"Leases Cube",
+	"Rules@Code.link":"Leases Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')"
+		},
+		{
+			"@id":"Dimensions('Currency_PM')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Month Year')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('SubAccounts')"
+		},
+		{
+			"@id":"Dimensions('GL_Accounts')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')"
+		},
+		{
+			"@id":"Dimensions('Tenure ID')"
+		},
+		{
+			"@id":"Dimensions('Leases Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Leases Cube.views/All.json",
+		"Leases Cube.views/Leases - Load Review.json",
+		"Leases Cube.views/Leases Attributes.json",
+		"Leases Cube.views/Leases by Month.json",
+		"Leases Cube.views/Leases Cube.json",
+		"Leases Cube.views/Leases Cube - BU.json",
+		"Leases Cube.views/Leases Yearly Totals.json",
+		"Leases Cube.views/Strategic Management Budget.json",
+		"Leases Cube.views/Strategic Management Forecast.json",
+		"Leases Cube.views/Suppression Flag.json"
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TopParentSubAccounts",
+	"Expression":"{[SubAccounts].[SH1] ,  [SubAccounts].[AH1]}, [SubAccounts].[AH2]}, [SubAccounts].[AH3]},"
+}

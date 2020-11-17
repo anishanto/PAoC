@@ -1,0 +1,15 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Currency Measures",
+	"Elements":
+	[
+		{
+			"Name":"Rate",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Currency Measures.subsets/Default.json"
+	]
+}

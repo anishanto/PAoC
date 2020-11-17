@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"FullorPartial",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('CyclePanel Options')/Hierarchies('CyclePanel Options')/Elements('Full')"
+		},
+		{
+			"@id":"Dimensions('CyclePanel Options')/Hierarchies('CyclePanel Options')/Elements('Partial')"
+		}
+	]
+}

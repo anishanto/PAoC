@@ -1,0 +1,222 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vCube='}ElementAttributes_Fiscal Month Year';
+vView='ViewZeroOut_UpdateDim';
+ViewZeroOut(vCube, vView);
+
+LeaseNumberofYears=CellGetN('Global Control', 'Lease Number of Years Projection', 'Value'); 
+
+## Budget ##
+LeaseBaseYear=StringtoNumber(CellGetS('Global Control', 'Lease Budget Year', 'String')); 
+
+sDim = 'Fiscal Month Year';
+sSub1='FiscalMonthsDetail';
+sSub2='FiscalMonthsExpanded';
+sSub3='FiscalMonthswithTotal';
+
+IF(SubsetExists(sDim, sSub1)=0);
+	SubsetCreate(sDim, sSub1);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub1);
+ENDIF;
+
+IF(SubsetExists(sDim, sSub2)=0);
+	SubsetCreate(sDim, sSub2);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub2);
+ENDIF;
+
+IF(SubsetExists(sDim, sSub3)=0);
+	SubsetCreate(sDim, sSub3);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub3);
+ENDIF;
+
+#count nbr year * 12 + nbr years + 1 to set subset enduser and level0
+#put name as alias in attr cube
+
+sDim = 'Fiscal Month Year';
+nMax = LeaseNumberofYears * 12 + LeaseNumberOfYears + 2;
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sEl = DIMNM(sDim, nCtr);
+  	sLev=ELLEV(sDim, sEl);
+	IF(sLev=0 & sEL@<>'Attribute');
+		SubsetElementInsert(sDim, sSub1, sEl, 0);
+		NameMonth=AttrS('Fiscal Months', 'M'|AttrS(sDim, sEl, 'Month'), 'Name');
+		AttrPutS(NameMonth, sDim, sEl, 'MonthCalendar');
+		BaseNameYear=AttrS('Fiscal Months', 'M'|AttrS(sDim, sEl, 'Month'), 'Year');
+		IF(BaseNameYear@='PY');		
+			NameYear_Month=Numbertostring(LeaseBaseYear + StringToNumber(AttrS(sDim, sEl, 'Year')) -2 );
+		ELSEIF(BaseNameYear@='FY');
+			NameYear_Month=Numbertostring(LeaseBaseYear + StringToNumber(AttrS(sDim, sEl, 'Year'))-1);
+			NameYear_Year=Numbertostring(LeaseBaseYear + StringToNumber(AttrS(sDim, sEl, 'Year'))-1);
+		ENDIF;
+		AttrPutS(NameYear_Month, sDim, sEl, 'YearCalendar');		
+		AttrPutS(NameYear_Year, sDim, ElPar(sDim, sEl, 1),'YearCalendar');
+        
+        		vName=NameMonth|' '|NameYear_Month;
+       		 AttrPutS(vName,sDim,sEl,'DisplayName');
+  
+	ENDIF;
+	
+	IF(sLev=0 % sLev=1);		
+		SubsetElementInsert(sDim, sSub2, sEl, 0);
+	ENDIF;
+	SubsetElementInsert(sDim, sSub3, sEl, 0);
+		
+
+	nCtr = nCtr + 1;
+END;
+	
+sDim = 'Fiscal Month Year';
+nMax = LeaseNumberofYears * 12 + LeaseNumberOfYears + 2;
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sEl = DIMNM(sDim, nCtr);
+  	sLev=ELLEV(sDim, sEl);
+	
+	IF(sLev=1);
+
+		IF(CellGetS('}ElementAttributes_Fiscal Months','M01','Year')@='PY' & CellGetS('}ElementAttributes_Fiscal Month Year',sEl,'YearCalendar')@<>'');
+			vName='FY'|SUBST(CellGetS('}ElementAttributes_Fiscal Month Year','M01 '|sEl,'YearCalendar'),3,2)|'-'|SUBST(CellGetS('}ElementAttributes_Fiscal Month Year','M12 '|sEl,'YearCalendar'),3,2);
+		ELSE;
+		        	IF(CellGetS('}ElementAttributes_Fiscal Month Year',sEl,'YearCalendar')@<>'');
+				vName=CellGetS('}ElementAttributes_Fiscal Month Year',sEl,'YearCalendar');
+			ENDIF;
+		ENDIF;
+
+        		AttrPutS(vName, sDim, sEl,'DisplayName');
+	ENDIF;
+	
+
+	nCtr = nCtr + 1;
+END;
+	
+
+
+sAlias='DisplayName';
+SubsetAliasSet( sDim, sSub1, sAlias );
+SubsetAliasSet( sDim, sSub2, sAlias );
+SubsetAliasSet( sDim, sSub3, sAlias );
+
+
+## Forecast ##
+LeaseBaseYear=StringtoNumber(CellGetS('Global Control', 'Lease Forecast Year', 'String')); 
+
+sDim = 'Fiscal Month Year';
+sSub1='FiscalMonthsDetailF';
+sSub2='FiscalMonthsExpandedF';
+sSub3='FiscalMonthswithTotalF';
+
+IF(SubsetExists(sDim, sSub1)=0);
+	SubsetCreate(sDim, sSub1);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub1);
+ENDIF;
+
+IF(SubsetExists(sDim, sSub2)=0);
+	SubsetCreate(sDim, sSub2);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub2);
+ENDIF;
+
+IF(SubsetExists(sDim, sSub3)=0);
+	SubsetCreate(sDim, sSub3);
+ELSE;
+	SubsetDeleteAllElements(sDim, sSub3);
+ENDIF;
+
+#count nbr year * 12 + nbr years + 1 to set subset enduser and level0
+#put name as alias in attr cube
+
+sDim = 'Fiscal Month Year';
+nMax = LeaseNumberofYears * 12 + LeaseNumberOfYears + 2;
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sEl = DIMNM(sDim, nCtr);
+  	sLev=ELLEV(sDim, sEl);
+	IF(sLev=0 & sEL@<>'Attribute');
+		SubsetElementInsert(sDim, sSub1, sEl, 0);
+		NameMonth=AttrS('Fiscal Months', 'M'|AttrS(sDim, sEl, 'Month'), 'Name');
+		AttrPutS(NameMonth, sDim, sEl, 'MonthCalendarF');
+		BaseNameYear=AttrS('Fiscal Months', 'M'|AttrS(sDim, sEl, 'Month'), 'Year');
+		IF(BaseNameYear@='PY');		
+			NameYear_Month=Numbertostring(LeaseBaseYear + StringToNumber(AttrS(sDim, sEl, 'Year')) -2 );
+		ELSEIF(BaseNameYear@='FY');
+			NameYear_Month=Numbertostring(LeaseBaseYear + StringToNumber(AttrS(sDim, sEl, 'Year'))-1);
+			NameYear_Year=Numbertostring(LeaseBaseYear + StringToNumber(AttrS(sDim, sEl, 'Year'))-1);
+		ENDIF;
+		AttrPutS(NameYear_Month, sDim, sEl, 'YearCalendarF');
+		AttrPutS(NameYear_Year, sDim, ElPar(sDim, sEl, 1),'YearCalendarF');
+       		vName=NameMonth|' '|NameYear_Month|'F';
+       		AttrPutS(vName,sDim,sEl,'DisplayNameForecast');
+        		vName_S=NameMonth|'-'|NameYear_Month;
+        		AttrPutS(vName_S,sDim,sEl,'DisplayNameStrategic');
+	ENDIF;
+
+	IF(sLev=0 % sLev=1);		
+		SubsetElementInsert(sDim, sSub2, sEl, 0);
+	ENDIF;
+	SubsetElementInsert(sDim, sSub3, sEl, 0);
+	
+	nCtr = nCtr + 1;
+END;
+	
+
+sDim = 'Fiscal Month Year';
+nMax = LeaseNumberofYears * 12 + LeaseNumberOfYears + 2;
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sEl = DIMNM(sDim, nCtr);
+  	sLev=ELLEV(sDim, sEl);
+	
+	IF( sLev=1);		
+		SubsetElementInsert(sDim, sSub2, sEl, 0);
+		SubsetElementInsert(sDim, sSub3, sEl, 0);
+
+	ENDIF;
+
+	IF(sLEv=1);
+		IF(CellGetS('}ElementAttributes_Fiscal Months','M01','Year')@='PY' & CellGetS('}ElementAttributes_Fiscal Month Year',sEl,'YearCalendarF')@<>'');
+			vName='FY'|SUBST(CellGetS('}ElementAttributes_Fiscal Month Year','M01 '|sEl,'YearCalendarF'),3,2)|'-'|SUBST(CellGetS('}ElementAttributes_Fiscal Month Year','M12 '|sEl,'YearCalendarF'),3,2)|'F';
+			vName_S='Y'|SUBST(CellGetS('}ElementAttributes_Fiscal Month Year','M01 '|sEl,'YearCalendarF'),3,2)|'-'|SUBST(CellGetS('}ElementAttributes_Fiscal Month Year','M12 '|sEl,'YearCalendarF'),3,2);
+		ELSE;
+        			IF(CellGetS('}ElementAttributes_Fiscal Month Year',sEl,'YearCalendar')@<>'');
+				vName=CellGetS('}ElementAttributes_Fiscal Month Year',sEl,'YearCalendarF')|'F';
+                			vName='Y'|CellGetS('}ElementAttributes_Fiscal Month Year',sEl,'YearCalendarF');
+            			ENDIF;
+		ENDIF;	
+		AttrPutS(vName, sDim, sEl,'DisplayNameForecast');
+	        	AttrPutS(vName_S, sDim, sEl,'DisplayNameStrategic');
+	ENDIF;
+    
+	nCtr = nCtr + 1;
+END;
+
+sAlias='DisplayNameForecast';
+SubsetAliasSet( sDim, sSub1, sAlias );
+SubsetAliasSet( sDim, sSub2, sAlias );
+SubsetAliasSet( sDim, sSub3, sAlias );
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ExecuteProcess('ProcessUpdateSubsetExpiryYears');
+ExecuteProcess('ProcessUpdateSubsetFiscalYear');
+#endregion

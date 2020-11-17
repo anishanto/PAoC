@@ -1,0 +1,275 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'Tenure ID';
+cTnode = UPPER(pHierarchy);
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_Tenure ID';
+cDimName2 = '}ElementAttributes_Tenure ID';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExport = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImport = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cMetadataFileName = 'TenureHierarchy.csv';
+cDataFileName = 'TenuredNames.csv';
+cMetadataPath = cExport | cMetadataFileName;
+cDataPath = cExport | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+
+
+####################################Ascii outputs - are these needed
+vHeaderInsert1 ='yes';
+vHeaderInsert2 ='yes';
+
+##############################################################Add Top Node Parent
+
+IF(DIMIX(cDimName, cTnode)=0);
+	DimensionElementInsert(cDimName,' ', cTnode ,'c');
+ENDIF;
+
+
+#######Create Consolidation for NA
+ DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,'NA',1);    
+
+############################################################Delete  Consolidations
+
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+	ElName = DIMNM( cDimName , x );
+	IF( DTYPE ( cDimName, ElName) @='C' & ELISANC( cDimName , cTnode  , ElName) = 1);
+		DimensionElementDelete(cDimName, ElName); 
+	ENDIF;
+
+	 x=x-1;
+END;
+
+
+
+#########################################Delete View Subsets if they Exists
+
+
+IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+	ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+	SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+	SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+################################################# Create Dimension Attribute Subset
+
+############Tenure Unit Dimension
+
+#Create Tenure
+ sMDX = '{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SORT( {TM1SUBSETALL( ['| cDimName |'] )}, ASC)}, 0)}, { ['| cDimName |'].[NA] }) }';
+ SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+
+############Business Units Attribute
+
+SUBSETCREATE(cDimName2,cViewNameTransfer);
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent1') > 0 );
+	SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent1',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent2') > 0 );
+	SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent2',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent3') > 0 );
+	SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent3',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent4') > 0 );
+	SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent4',1);
+EndIF;
+
+
+
+
+
+#############################################Create and assign View
+
+ViewCreate(cCubeName, cViewNameTransfer);
+
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName, cViewNameTransfer);
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName2, cViewNameTransfer);
+ViewRowDimensionSet (cCubeName, cViewNameTransfer, cDimName, 1);
+ViewColumnDimensionSet (cCubeName, cViewNameTransfer, cDimName2,1);
+
+ViewExtractSkipCalcsSet(cCubeName, cViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(cCubeName, cViewNameTransfer, 0);
+
+#Set dimension sort order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+###################DEFINE LOCAL VARIABLES
+DatasourceNameForServer = cCubeName;
+DatasourceNameForClient = cCubeName;
+DataSourceType = 'VIEW';
+DatasourceCubeview= cViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########################Metadata Constants Existing Code 1/4/17
+vElement = TenureID;
+vEnd = 'Unassigned Tenure '|cTnode;
+vUAP = 'Unassigned Tenure '|cTnode;
+
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent1') > 0 );
+        vP1 = ATTRS(cDimName,vElement,cTnode|'Parent1');
+EndIf;
+IF( DIMIX(cDimName2,pHierarchy|'Parent2') > 0 );
+        vP2 = ATTRS(cDimName,vElement,cTnode|'Parent2');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent3') > 0 );
+        vP3 = ATTRS(cDimName,vElement,cTnode|'Parent3');
+EndIf;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent4') > 0 );
+        vP4 = ATTRS(cDimName,vElement,cTnode|'Parent4');
+EndIf;
+
+
+
+###########################Create Hierarchy Existing Code 1/4/17
+
+# no parent1
+IF( vP1 @= '' );
+	#ATTRPUTS('Yes', cDimName, vElement, 'HierarchyStatus');
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,vElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vUAP,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &  vP2 @<> '' & vP3 @<> '' & vP4 @<> ''   );
+
+	DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP4,1.000000);
+
+
+ELSEIF( vP1 @= vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &   vP2 @<> '' & vP3 @<> '' & vP4 @<> '' );
+	DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP1,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP4,1.000000);
+
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @<> ''  & vP4 @= '' );
+	DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP3,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @= ''  & vP4 @= ''  );
+	DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+	DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP2,1.000000);
+
+ELSEIF( vP1 @<> vP2 & vP2 @= '' & vP3 @= ''  & vP4 @= '' );
+	DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP1,1.000000);
+
+ELSE;
+
+	DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+	#ATTRPUTS('Yes', cDimName, vElement, 'HierarchyStatus');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,vElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vUAP,1.000000);
+ENDIF;
+
+
+
+
+###########################ASCII Output Existing Code  1/4/17
+
+IF(1=1);
+IF(vHeaderInsert1 @='yes');
+	ASCIIOutput(cMetadataPath, 'DimID', 'P1',  'P2', 'P3', 'P4', 'TopNode');
+	vHeaderInsert1 = 'no';    
+ENDIF;
+	ASCIIOutput(cMetadataPath,vElement, vP1, vP2, vP3, vP4, cTnode);
+ENDIF;
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###############################email file....
+IF( cTnode@= 'AH1');
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmail TenurePM Update' ;
+    ExecuteProcess(vProcess,'pSendTo', pSendTo );
+ENDIF;
+ENDIF;
+
+
+#######Add code in for "NA" child
+#IF(BusUnits@='NA');
+#DIMENSIONELEMENTINSERT(cDimName,'','Global','c');
+#DIMENSIONELEMENTCOMPONENTADD(cDimName,'Global','NA',1.000000);
+#ATTRPUTS('Global Account',cDimName, 'NA','Name');
+#EndIf;
+
+
+
+##########Clean up View and Subset new code##########################
+
+ ViewDestroy(cCubeName, cViewNameTransfer  );
+
+i = 1;
+#loop through all dimensions of the cube
+WHILE (TABDIM(cCubeName,i) @<> '');
+	SubsetDestroy(tabdim(cCubeName,i), cViewNameTransfer );
+	i = i + 1;
+end;
+
+
+
+
+
+#endregion

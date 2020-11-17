@@ -1,0 +1,45 @@
+{
+	"@type":"Cube",
+	"Name":"Opex Analysis Cube",
+	"Rules@Code.link":"Opex Analysis Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('Currency')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Months')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('SubAccounts')"
+		},
+		{
+			"@id":"Dimensions('GL_Accounts')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')"
+		},
+		{
+			"@id":"Dimensions('Scale Measure')"
+		},
+		{
+			"@id":"Dimensions('Analysis Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Opex Analysis Cube.views/Analysis - Load Review.json",
+		"Opex Analysis Cube.views/Analysis - Reporting Currency.json",
+		"Opex Analysis Cube.views/Opex Analysis Cube.json",
+		"Opex Analysis Cube.views/Opex Analysis Cube - BU.json"
+	]
+}

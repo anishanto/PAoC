@@ -1,0 +1,151 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+### Process will only run if current month equals Global Control Retention Month
+
+	sMonth = CELLGETS('Global Control', 'Retention Month', 'String');
+	sMonthP = DimensionElementPrincipalName('Fiscal Months',sMonth);
+	sMonthName = ATTRS('Fiscal Months',sMonthP,'RetentionEnglishName');
+
+	sCurrentMonth =  SUBST(TODAY(1),6,2);
+
+	sCurrentMonthName = IF(sCurrentMonth@='01','Jan', 
+			IF(sCurrentMonth@='02','Feb', 
+			  IF(sCurrentMonth@='03','Mar', 
+			   IF(sCurrentMonth@='04','Apr', 
+			    IF(sCurrentMonth@='05','May',
+			     IF(sCurrentMonth@='06','Jun',
+			      IF(sCurrentMonth@='07', 'Jul', 
+			       IF(sCurrentMonth@='08','Aug', 
+			        IF(sCurrentMonth@='09','Sep', 
+			         IF(sCurrentMonth@='10','Oct', 
+			          IF(sCurrentMonth@='11','Nov',
+			           IF(sCurrentMonth@='12','Dec',''))))))))))));
+
+IF (sCurrentMonthName @= sMonthName);
+
+### Define variables
+
+	cDim = '}Cubes';
+	sProcess = 'update_data_delete_history_general';
+
+### If parameter pCube is empty, iterates on every cube that is Input or Analysis. 
+### Else, it runs only for the cube entered as a parameter.
+
+	vTopCount = IF (pCube@='', DIMSIZ(cDim),1);
+
+#ASCIIOUTPUT('..\update_data_delete_history_main.txt',sMonth,sMonthP,sMonthName,sCurrentMonth,sCurrentMonthName,NumberToString(vTopCount));
+
+	counterC = 1;
+	WHILE (counterC <= vTopCount);
+
+		sCube = IF (pCube@='', DimensionElementPrincipalName(cDim, DIMNM(cDim,counterC)), pCube);
+
+	        ### Processes the cube only if the cube attribute "Retention Type" matches the client type set in the Global Control Cube.
+
+		IF (AttrS(cDim,sCube,'Retention Type')@<>'');
+
+		       ### Obtains the cube Retention Type (Detail or Balance)
+
+			vType = AttrS('}Cubes',sCube, 'Retention Type');
+
+		      ### Initializes variables to store dim names:
+
+			vDim1='';
+			vDim2='';
+			vDim3='';
+			vDim4='';
+			vDim5='';
+			vDim6='';
+			vDim7='';
+			vDim8='';
+			vDim9='';
+			vDim10='';
+			vDim11='';
+			vDim12='';
+		
+		       ### Gets how many dimensions the cube has, and stores the name of each of them in the correct order.	
+		       ### Up to dimensions per cube
+
+			vDimCount = CubeDimensionCountGet(sCube);
+	
+			counterD = 1;
+			WHILE (counterD <=vDimCount);
+				vDimName=TABDIM(sCube,counterD);
+	
+				IF (counterD = 1);
+					vDim1 = vDimName;
+				ELSEIF (counterD = 2);
+					vDim2 = vDimName;
+				ELSEIF (counterD = 3);
+					vDim3 = vDimName;
+				ELSEIF (counterD = 4);
+					vDim4 = vDimName;
+				ELSEIF (counterD = 5);
+					vDim5 = vDimName;
+				ELSEIF (counterD = 6);
+					vDim6= vDimName;
+				ELSEIF (counterD = 7);
+					vDim7 = vDimName;
+				ELSEIF (counterD = 8);
+					vDim8D = vDimName;
+				ELSEIF (counterD = 9);
+					vDim9 = vDimName;
+				ELSEIF (counterD = 10);
+					vDim10 = vDimName;
+				ELSEIF (counterD = 11);
+					vDim11 = vDimName;
+				ELSEIF (counterD = 12);
+					vDim12 = vDimName;
+				ENDIF;
+
+				counterD = counterD + 1;
+			END;
+
+		        ### Executes the process to clean historical data for the current cube.
+
+			ExecuteProcess (sProcess, 
+			'pType',vType,
+			'pCube',sCube,
+			'pDim1',vDim1,
+			'pDim2',vDim2,
+			'pDim3',vDim3,
+			'pDim4',vDim4,
+			'pDim5',vDim5,
+			'pDim6',vDim6,
+			'pDim7',vDim7,
+			'pDim8',vDim8,
+			'pDim9',vDim9,
+			'pDim10',vDim10,
+			'pDim11',vDim11,
+			'pDim12',vDim12);
+
+
+		ENDIF;
+		
+		counterC = counterC + 1;
+
+	END;
+
+ENDIF;
+
+		
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

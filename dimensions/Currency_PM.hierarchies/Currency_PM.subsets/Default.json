@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"Default",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+		}
+	]
+}

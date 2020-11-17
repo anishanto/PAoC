@@ -1,0 +1,139 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Detail Measures",
+	"Elements":
+	[
+		{
+			"Name":"Assumptions",
+			"Type":"String"
+		},
+		{
+			"Name":"Total Amount",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Actuals to Date",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Adjustment",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Corrigo Work Orders",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Corrigo Closed WO",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Corrigo Open WO",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Value",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Census",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Rate",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Comments Std",
+			"Type":"String"
+		},
+		{
+			"Name":"Comments",
+			"Type":"String"
+		},
+		{
+			"Name":"Comments - Finance",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations Bud to Act",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations Bud to Bud",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations Bud to FCST",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations FCST to Act",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations FCST to Bud",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations FCST to FCST",
+			"Type":"String"
+		},
+		{
+			"Name":"Restatement",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"FX Variance",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Flag",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"Total Amount",
+			"ComponentName":"Actuals to Date",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Amount",
+			"ComponentName":"Adjustment",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Amount",
+			"ComponentName":"Corrigo Work Orders",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Amount",
+			"ComponentName":"Value",
+			"Weight":1
+		},
+		{
+			"ParentName":"Corrigo Work Orders",
+			"ComponentName":"Corrigo Closed WO",
+			"Weight":1
+		},
+		{
+			"ParentName":"Corrigo Work Orders",
+			"ComponentName":"Corrigo Open WO",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Detail Measures.subsets/Conversion Measures.json",
+		"Detail Measures.subsets/DrillDetailATD Measures.json",
+		"Detail Measures.subsets/DrillDetail Measures.json",
+		"Detail Measures.subsets/DrillSubledger.json",
+		"Detail Measures.subsets/Measures.json",
+		"Detail Measures.subsets/Source-ProcessLoadE1Detail_Test.json",
+		"Detail Measures.subsets/Value.json",
+		"Detail Measures.subsets/ViewZeroOutFlag.json"
+	]
+}

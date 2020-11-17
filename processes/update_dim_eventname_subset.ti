@@ -1,0 +1,100 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+TenureDim='Tenure ID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+FixedRatesCube='Leases Fixed Rates';
+
+## Set up view for zeroing at Data ##
+CubeName=FixedRatesCube ;
+ViewNameSource =  'VE-' | CubeName | '-zSource' ;
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Event Name', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Fixed Rates Measures', ViewNameSource);
+
+# Create views and subsets for SourceView
+
+#Create Version
+SubsetCreate ('Versions_PM', ViewNameSource);
+SubsetElementInsert ( 'Versions_PM',  ViewNameSource, pVersion, 1);
+
+#Create EventName
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Event Name] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Portfolio Assumptions
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+#Create Fixed Rates Measures
+SubsetCreate('Fixed Rates Measures', ViewNameSource);
+SubsetElementInsert('Fixed Rates Measures', ViewNameSource, 'Event Date',0);
+
+#Create View
+ViewCreate( CubeName, ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Versions_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Event Name', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Tenure ID', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Fixed Rates Measures', ViewNameSource);
+ViewExtractSkipZeroesSet (CubeName, ViewNameSource,1);
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource,1);
+ViewExtractSkipRuleValuesSet(CubeName, ViewNameSource,0);
+
+sDim = 'TenureID'; 
+sSub = 'level0';
+nMax = SubsetGetSize(sDim,sSub);
+nCtr = 1;
+WHILE(nCtr <= nMax);
+	sEl_Ten = SubsetGetElementName(sDim,sSub,nCtr);
+	sSub_Event='S'|sEl_Ten;
+	sDim_Event='Event Name';
+	IF(SubsetExists( sDim_Event, sSub_Event)=0);
+		SubsetDestroy(sDim_Event, sSub_Event);
+	ENDIF;
+ 	nCtr = nCtr + 1;
+END;
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDim_Event='Event Name';
+
+sSub='S'|TenureID;
+
+IF(SubsetExists( sDim_Event, sSub)=0);
+	SubsetCreate(sDim_Event, sSub);
+ENDIF;
+
+IF(Value@<>''); 
+	SubsetElementInsert(sDim_Event, sSub, EventName, 0 );
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Event Name', ViewNameSource);
+SubsetDestroy ('Tenure ID', ViewNameSource);
+SubsetDestroy ('Fixed Rates Measures', ViewNameSource);
+#endregion

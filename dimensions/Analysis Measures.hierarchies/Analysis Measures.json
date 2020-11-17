@@ -1,0 +1,98 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Analysis Measures",
+	"Elements":
+	[
+		{
+			"Name":"Total Amount",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Adjustment",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Value",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Census",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Rate",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Assumptions",
+			"Type":"String"
+		},
+		{
+			"Name":"Comments Std",
+			"Type":"String"
+		},
+		{
+			"Name":"Comments",
+			"Type":"String"
+		},
+		{
+			"Name":"Comments - Finance",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations Bud to Act",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations Bud to Bud",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations Bud to FCST",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations FCST to Act",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations FCST to Bud",
+			"Type":"String"
+		},
+		{
+			"Name":"Variance Explanations FCST to FCST",
+			"Type":"String"
+		},
+		{
+			"Name":"Restatement",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"FX Variance",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"Total Amount",
+			"ComponentName":"Adjustment",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Amount",
+			"ComponentName":"Value",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Analysis Measures.subsets/All Members.json",
+		"Analysis Measures.subsets/Analysis MeasuresMaint.json",
+		"Analysis Measures.subsets/AnalysisMeasuresText.json",
+		"Analysis Measures.subsets/AnalysisMeasuresValues.json",
+		"Analysis Measures.subsets/AnalysisMeasuresValuesTotal.json",
+		"Analysis Measures.subsets/Conversion Measures.json",
+		"Analysis Measures.subsets/VarianceExplanations.json"
+	]
+}

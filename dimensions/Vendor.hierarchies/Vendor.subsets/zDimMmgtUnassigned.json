@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zDimMmgtUnassigned",
+	"Expression":"{TM1FILTERBYLEVEL( {FILTER( {TM1SubsetBasis()}, [Vendor].[UnCount] = \"1\")}, 0)}"
+}

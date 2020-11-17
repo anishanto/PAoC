@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"AnalysisMeasuresValues",
+	"Expression":"{TM1SORT( {FILTER( {TM1SUBSETALL( [Analysis Measures] )}, [Analysis Measures].[MeasureType] = \"Value\")}, ASC)}"
+}

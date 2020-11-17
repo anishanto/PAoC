@@ -1,0 +1,81 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# The purpose of the process is to automatically change the TAT Environment in the Global Control cube to match the one in which the server is started.
+
+######################################################### Constants
+cImportPath = '..\..\Admin\Configs\'; 
+cFileName = 'Environment.txt';
+sFullPath = cImportPath|cFileName;
+
+cPA = '}Processes';
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp|'.txt';
+
+sDateAttr = 'CreationDate';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+
+######################################################### Check to make sure file path exists
+IF( FileExists ( sFullPath ) = 0);
+	nError = 1;
+	sMessage = 'TAT Environment Location or File does not exist: Please review';
+	AsciiOutput (cDebugFile, sMessage );
+	AttrPutS (sMessage,cPA,cProcessName,'Failure');
+	CubeSaveData('}ElementAttributes_Processes');
+	DataSourceType = 'NULL';
+	ProcessQuit();
+	ItemReject (sMessage);
+EndIf;
+
+
+
+DataSourceNameForServer = sFullPath;
+
+DimensionElementInsert('Global Control Items','', 'PRD Core Team Email', 'N');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+	
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vMail = CellGetS('Global Control','Core Team Email','String');
+vProdMail = CellGetS('Global Control','PRD Core Team Email','String');
+if (vMail @<>'TM1Admin@am.jll.com');
+	CellPutS(vMail,'Global Control','PRD Core Team Email','String');
+endif;
+
+IF (TATenvironment@='DEV' % TATenvironment@='TST' % TATenvironment@='PRD');
+	CellPutS(TATenvironment,'Global Control','TAT Environment','String');
+	IF(TATenvironment@<>'PRD');
+		CellPutS('TM1Admin@am.jll.com','Global Control','Core Team Email','String');
+	elseif (vProdMail@<>'');
+		CellPutS(vProdMail,'Global Control','Core Team Email','String');	
+	ENDIF;
+ELSE;
+	nError = 1;
+	sMessage = 'TAT Environment value is invalid. Expected DEV, TST or PRD. Please correct.';
+	AsciiOutput (cDebugFile, sMessage);
+	AttrPutS (sMessage,cPA,cProcessName,'Failure');
+	CubeSaveData('}ElementAttributes_Processes');
+	DataSourceType = 'NULL';
+	ProcessQuit();
+	ItemReject (sMessage);
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

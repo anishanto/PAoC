@@ -1,0 +1,313 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+if (pCopyAnaName@='Forecast' % pCopyAnaName@='Budget' % pCopyAnaName@='Actuals');
+	ProcessError;
+endif;
+
+
+vCube = 'Global Control';
+dVerPM = 'Versions_PM';
+dVer = 'Versions';
+dFiscalMon = 'Fiscal Months';
+dYear = 'Fiscal Years'; 
+vClientType = CellGetN(vCube, 'Client Model Type', 'Value');
+
+cConsolidationPlanning='No';
+IF(DIMIX('Global Control Items','Consolidated level planning')<>0);
+	cConsolidationPlanning=CellGetS('Global Control','Consolidated level planning','String');
+ENDIF;
+
+vClientCorrugo='No';
+IF(DIMIX('Global Control Items','Client Corrigo')<>0);
+	vClientCorrigo=CellGetS(vCube, 'Client Corrigo', 'String');
+ENDIF;
+
+sProcessNm = getProcessName();
+sLogFilePath = CellGetS(vCube, 'Export Folder', 'String');
+sLogFile = sLogFilePath | sProcessNm | '.csv';
+
+
+IF(pType @= 'Budget');
+     vActMonBud = STR((NUMBR(pYear) -1), 4, 0) | '12';
+     vGrp = 'Bud';
+
+######DFAT ONLY#############
+    # IF(pSubledgertoGL@= 'Yes' % pCopyPlan@='Yes' % pCopyDetailtoPlan@='Yes' % pCopyAnalysis@='Yes');
+      #    vCurrentYear = CellGetS(vCube, 'Budget Year', 'String');
+        #  ExecuteProcess('CopyVersion - OpexDetail Subledger-GL', 'pSourceVersion',pType, 'pTargetVersion',pType,'pSourceYear',vCurrentYear,'pTargetYear',vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', '12');
+     #ENDIF;
+
+	IF(pRunAllocation@='Yes' & cConsolidationPlanning@='Yes');
+		ExecuteProcess('update_data_allocate','pNode','AC1','pVersion','Budget','pYear',pYear);
+	ENDIF;
+
+
+     IF(pCopyPlan @= 'Yes');
+          vCurrentYear = CellGetS(vCube, 'Budget Year', 'String');
+          ExecuteProcess('CopyVersion - OpexDetail Values', 'pSourceVersion', pType, 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', '12');
+          ExecuteProcess('CopyVersion - OpexDetail Text', 'pSourceVersion', pType, 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear);
+          ExecuteProcess('CopyVersion - OpexPlan Values', 'pSourceVersion', pType, 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', '12');
+          ExecuteProcess('CopyVersion - OpexPlan Text', 'pSourceVersion', pType, 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear);
+
+     ENDIF;
+
+          
+     IF(pCopyDetailToPlan @= 'Yes');
+          vCurrentYear = CellGetS(vCube, 'Budget Year', 'String');
+          ExecuteProcess('CopyVersion - OpexDetail to OpexPlan Value', 'pSourceVersion',pType, 'pCompany','All Companies', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear,'pTargetVersion', pType);
+     ENDIF;
+
+
+     IF(pCopyAnalysis @= 'Yes' & (pCopyAnaName @<> '' & pCopyAnaName @<> 'Actuals'));
+          vCurrentYear = CellGetS(vCube, 'Budget Year', 'String');
+          vActFP = ATTRS(dVerPM, pType, 'ActualFiscalPeriod');
+          ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+
+
+          #Update Versions Attributes
+          AttrPutS(vActFP, dVer, pCopyAnaName, 'ActualFiscalPeriod');
+          AttrPutS(pYear, dVer, pCopyAnaName, 'CurrentFiscalYr');
+          AttrPutS(vGrp, dVer, pCopyAnaName, 'ForecastGrp');
+     ENDIF;
+
+     IF(pCopyAnalysis @= 'All' & (pCopyAnaName @<> '' & pCopyAnaName @<> 'Actuals'));
+          vCurrentYear = CellGetS(vCube, 'Budget Year', 'String');
+          vActFP = ATTRS(dVerPM, pType, 'ActualFiscalPeriod');
+     	  ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+
+          #Update Versions Attributes
+          AttrPutS(vActFP, dVer, pCopyAnaName, 'ActualFiscalPeriod');
+          AttrPutS(pYear, dVer, pCopyAnaName, 'CurrentFiscalYr');
+          AttrPutS(vGrp, dVer, pCopyAnaName, 'ForecastGrp');
+
+	sDim = 'Fiscal Years'; 
+	sSub = 'FiscalYearDetail';
+	nCtr = DIMIX(sDim,vCurrentYear)+1;
+	nMax = DIMSIZ(sDim)-1;
+	WHILE(nCtr <= nMax);
+		sYear = SubsetGetElementName(sDim,sSub,nCtr);
+		ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+		ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+		ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+		ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+		nCtr = nCtr + 1;
+	END;
+     ENDIF;
+	 
+
+    IF(pCopyLeasestoPlan@='Yes');
+	    vCurrentYear = CellGetS(vCube, 'Budget Year', 'String');
+          ExecuteProcess('CopyVersion - Leases to Plan Cube','pSourceVersion',pType,'pCompany',pCOmpany,'pSourceYear',vCurrentYear,'pTargetYear',vCUrrentYear);
+    ENDIF;
+
+     CellPutS(pYear, vCube, 'Budget Year', 'String');
+     CellPutS(pInputGLA, vCube, 'Bud Input GLA Subset', 'String');
+     CellPutS(pInputSubAcct, vCube, 'Bud Input SubAcct Subset', 'String');
+     CellPutS(pInputSubledger, vCube, 'Bud Input Subledger Subset', 'String');
+     CellPutS(pInputVendor, vCube, 'Bud Input Vendor Subset', 'String');
+     CellPutS(pReviewGLA, vCube, 'Bud Review GLA Subset', 'String');
+     CellPutS(pReviewSubAcct, vCube, 'Bud Review SubAcct Subset', 'String');
+     AttrPutS(pName, dVerPM, pType, 'AltName');
+     AttrPutS(vActMonBud, dVerPM, pType, 'ActualFiscalPeriod');
+     AttrPutS(pYear, dVerPM, pType, 'CurrentFiscalYr');
+
+ENDIF;
+
+IF(pType @= 'Forecast');
+	vMon = DimensionElementPrincipalName(dFiscalMon, pActMonth);
+	vActMon = pYear |  SUBST(vMon, 2, 2);
+	vGrp = 'Fcst';
+	
+	####DFAT ONLY
+	#  IF(pSubledgertoGL@= 'Yes' % pCopyPlan@='Yes' % pCopyDetailtoPlan@='Yes' % pCopyAnalysis@='Yes');
+	#     vFcstMonStart = NumberToString(CellGetN(vCube, 'Actuals Month', 'Value')+1);
+	#   vCurrentYear = CellGetS(vCube, 'Forecast Year', 'String');
+	# ExecuteProcess('CopyVersion - OpexDetail Subledger-GL', 'pSourceVersion',pType, 'pTargetVersion',pType,'pSourceYear',vCurrentYear,'pTargetYear',vCurrentYear, 'pMonthStart',vFcstMonStart, 'pMonthEnd', '12');
+	#ENDIF;
+	
+    IF(pRunAllocation@='Yes' & cConsolidationPlanning@='Yes');
+		ExecuteProcess('update_data_allocate','pNode','AC1','pVersion','Forecast','pYear',pYear);
+	ENDIF;
+	
+	
+	IF(pCopyPlan @= 'Yes');
+		vCurrentYear = CellGetS(vCube, 'Forecast Year', 'String');
+		ExecuteProcess('CopyVersion - OpexDetail Values', 'pSourceVersion', pType, 'pTargetVersion', 'PriorForecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', '12');
+		ExecuteProcess('CopyVersion - OpexDetail Text', 'pSourceVersion', pType, 'pTargetVersion', 'PriorForecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear);
+		ExecuteProcess('CopyVersion - OpexPlan Values', 'pSourceVersion', pType, 'pTargetVersion', 'PriorForecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', '12');
+		ExecuteProcess('CopyVersion - OpexPlan Text', 'pSourceVersion', pType, 'pTargetVersion', 'PriorForecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear);
+	
+	ENDIF;
+	
+	IF(pCopyDetailToPlan@= 'Yes');
+		vCurrentYear = CellGetS(vCube, 'Forecast Year', 'String');
+		ExecuteProcess('CopyVersion - OpexDetail to OpexPlan Value', 'pSourceVersion',pType, 'pCompany','All Companies', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear,'pTargetVersion',pType);
+	ENDIF;
+	
+	IF(pCopyAnalysis @= 'Yes');
+		vCurrentYear = CellGetS(vCube, 'Forecast Year', 'String');
+		vActFP = ATTRS(dVerPM, pType, 'ActualFiscalPeriod');
+		ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+		ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+		ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+		ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+		
+		
+		#Update Versions Attributes
+		AttrPutS(vActFP, dVer, pCopyAnaName, 'ActualFiscalPeriod');
+		AttrPutS(vCurrentYear, dVer, pCopyAnaName, 'CurrentFiscalYr');
+		AttrPutS(vGrp, dVer, pCopyAnaName, 'ForecastGrp');
+	ENDIF;
+
+	IF(pCopyAnalysis @= 'All' & (pCopyAnaName @<> '' & pCopyAnaName @<> 'Actuals'));
+          		vCurrentYear = CellGetS(vCube, 'Forecast Year', 'String');
+          		vActFP = ATTRS(dVerPM, pType, 'ActualFiscalPeriod');
+     	  	ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          		ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          		ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+          		ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pTargetVersion', pCopyAnaName);
+
+
+		 #Update Versions Attributes
+          		AttrPutS(vActFP, dVer, pCopyAnaName, 'ActualFiscalPeriod');
+          		AttrPutS(pYear, dVer, pCopyAnaName, 'CurrentFiscalYr');
+          		AttrPutS(vGrp, dVer, pCopyAnaName, 'ForecastGrp');
+
+			sDim = 'Fiscal Years'; 
+			sSub = 'FiscalYearDetail';
+			nCtr = DIMIX(sDim,vCurrentYear)+1;
+			nMax = DIMSIZ(sDim)-1;
+				WHILE(nCtr <= nMax);
+					sYear = SubsetGetElementName(sDim,sSub,nCtr);
+					 ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+					ExecuteProcess('CopyVersion - OpexDetail to OpexDetailAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+					ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Value', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+					ExecuteProcess('CopyVersion - OpexPlan to OpexAnalysis Text', 'pSourceVersion', pType, 'pCompany', pCompany, 'pSourceYear', sYear, 'pTargetYear', sYear, 'pTargetVersion', pCopyAnaName);
+
+				nCtr = nCtr + 1;
+			END;
+		  
+		  
+		  
+     ENDIF;
+	 
+
+
+
+	
+	CellPutS(pYear, vCube, 'Forecast Year', 'String');
+	CellPutS(vMon, vCube, 'Actuals Month', 'String');
+	CellPutS(pInputGLA, vCube, 'Fcst Input GLA Subset', 'String');
+	CellPutS(pInputSubAcct, vCube, 'Fcst Input SubAcct Subset', 'String');
+	CellPutS(pInputSubledger, vCube, 'Fcst Input Subledger Subset', 'String');
+	CellPutS(pInputVendor, vCube, 'Fcst Input Vendor Subset', 'String');
+	CellPutS(pReviewGLA, vCube, 'Fcst Review GLA Subset', 'String');
+	CellPutS(pReviewSubAcct, vCube, 'Fcst Review SubAcct Subset', 'String');
+	
+	#Update Versions_PM Attributes
+	AttrPutS(pName, dVerPM, pType, 'AltName');
+	AttrPutS(vActMon, dVerPM, pType, 'ActualFiscalPeriod');
+	AttrPutS(pYear, dVerPM, pType, 'CurrentFiscalYr');
+	
+IF(pUpdateActuals @= 'Yes');
+		vActEndMon = NumberToString(CellGetN(vCube, 'Actuals Month', 'Value'));
+
+		vFcstMon = ATTRS('Fiscal Months',CellGetS(vCube, 'Actuals Month', 'String'),'NextMonth');
+
+		IF(SUBST(vFcstMon,2,1)@='0');
+			vFcstMonN=SUBST(vFcstMon,3,1);
+		ELSE;
+			vFcstMonN=SUBST(vFcstMon,2,2);
+		ENDIF;
+		
+		vCurrentYear = CellGetS(vCube, 'Forecast Year', 'String');
+			
+		IF(vActEndMon@<>'0');
+		
+	
+			IF(vClientType=1);
+				#Opex Detail
+				ExecuteProcess('CopyVersion - OpexDetail Values', 'pSourceVersion', 'Actuals', 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', vActEndMon);
+			ELSE;
+				#Opex Plan
+				ExecuteProcess('CopyVersion - OpexDetail Values', 'pSourceVersion', 'Actuals', 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', vActEndMon);
+				ExecuteProcess('CopyVersion - OpexPlan Values', 'pSourceVersion', 'Actuals', 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart', '1', 'pMonthEnd', vActEndMon);
+			ENDIF;
+
+		ENDIF;
+
+		IF(vClientCorrigo@='Yes');
+			IF(vClientType=1);
+				#Opex Detail
+				ExecuteProcess('CopyVersion - OpexDetailMTDActuals', 'pSourceVersion', 'Actuals', 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart',vFcstMonN, 'pMonthEnd',vFcstMonN);
+				IF(DIMIX('Global Control Items','Client Corrigo Name')<>0 & CellGetS('Global Control','Client Corrigo Name','String')@<>'');
+					ExecuteProcess('CopyVersion - OpexWorkOrder to OpexDetail Values', 'pSourceVersion','Forecast','pCompany','All Companies', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear,'pTargetVersion', 'Forecast', 'pMonthStart',vFcstMonN, 'pMonthEnd', vFcstMonN);
+				ENDIF;
+			ELSE;
+				#Opex Plan
+				ExecuteProcess('CopyVersion - OpexDetailMTDActuals', 'pSourceVersion', 'Actuals', 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart',vFcstMonN, 'pMonthEnd',vFcstMonN);
+				ExecuteProcess('CopyVersion - OpexPlanMTDActuals', 'pSourceVersion', 'Actuals', 'pTargetVersion', 'Forecast', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear, 'pMonthStart',vFcstMonN, 'pMonthEnd',vFcstMonN);
+				IF(DIMIX('Global Control Items','Client Corrigo Name')<>0 & CellGetS('Global Control','Client Corrigo Name','String')@<>'');
+					ExecuteProcess('CopyVersion - OpexWorkOrder to OpexPlan Values', 'pSourceVersion','Forecast','pCompany','All Companies', 'pSourceYear', vCurrentYear, 'pTargetYear', vCurrentYear,'pTargetVersion', 'Forecast', 'pMonthStart',vFcstMonN, 'pMonthEnd', vFcstMonN);
+				ENDIF;
+			ENDIF;
+		ENDIF;
+	ENDIF;
+
+	IF(pCopyLeasestoPlan@='Yes');
+                     ExecuteProcess('CopyVersion - Leases to Plan Cube','pSourceVersion',pType,'pCompany',pCOmpany,'pSourceYear',vCurrentYear,'pTargetYear',vCUrrentYear);
+                ENDIF;
+
+ENDIF;
+
+IF(pType @= 'Reporting');
+     vMon = DimensionElementPrincipalName(dFiscalMon, pActMonth);
+     vCMon = DimensionElementPrincipalName(dFiscalMon, pChartMonth);
+
+     CellPutS(pYear, vCube, 'Reporting Year', 'String');
+     CellPutS(vMon, vCube, 'Reporting Actuals Month', 'String');
+     CellPutS(pFcstVer, vCube, 'Reporting Forecast Version', 'String');
+     CellPutS(pPrFcstVer, vCube, 'Reporting PriorForecast Version', 'String');
+     CellPutS(pFcstBudVer, vCube, 'Reporting Forecast Budget Version', 'String');
+     CellPutS(pCurrency, vCube, 'Reporting Currency', 'String');
+     CellPutS(pScale, vCube, 'Reporting Scale', 'String');
+     CellPutS(pMeasure, vCube, 'Reporting Measure', 'String');
+     CellPutS(pChartVer, vCube, 'Reporting Chart Version', 'String');
+     CellPutS(pChartCpVer, vCube, 'Reporting Chart Comparison Version', 'String');
+     CellPutS(vCMon, vCube, 'Reporting Chart Month', 'String');
+     CellPutS(pReportingGLA, vCube, 'Reporting GLA Subset', 'String');
+     CellPutS(pReportingSubledger, vCube, 'Reporting Subledger Subset', 'String');
+     CellPutS(pReportingSubAcct, vCube, 'Reporting SubAcct Subset', 'String');
+     CellPutS(pReportingVendor, vCube, 'Reporting Vendor Subset', 'String');
+
+    ExecuteProcess('ProcessUpdateReportSubsets','pReportingSubAcct',pReportingSubAcct,'pReportingSubledger',pReportingSubledger);
+
+ENDIF;
+
+ASCIIOutput(sLogFile, pType, vActMon, vActMonBud, vMon, pActMonth, pYear, pFcstVer, pPrFcstVer, pFcstBudVer);
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

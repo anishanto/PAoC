@@ -1,0 +1,95 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######################################Define Variables#######################################
+vDim='Post';
+
+####################################Define Datasource Tab#####################################
+IF (1=0);
+sSQL =  'Select
+ [Details: Property Details: E1 BU]
+,[Details: Property Details: In Country BU]
+,[Details: Property Details: Property ID]
+,[Details: Property Summary: Property Name]
+,[Details: Property Details: Occupied/Vacant]
+,[Details: Property Details: Leased/Owned]
+,[Details: Property Details: Campus]
+,[Details: Property Summary: City]
+,[Details: Property Details: Post]
+,[Details: Property Summary: Country]
+,[Details: Property Details: FM Hub]
+,[Details: Property Details: Property Type]
+,[Details: Property Details: Property SubType]
+,[Details: Property Details: Property Size]
+,[Details: Property Details: Property Status]
+FROM [CDW_DFAT].[ssdv].[vw_OneView_Client_Property_Custom] with (readuncommitted)
+WHERE ([Details: Property Details: E1 BU] is not null) AND ([Details: Property Details: Property Status] = "active")';
+EndIf;
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+IF(bDebug=1);
+ASCIIOUTPUT('..\logs\System\PHDebugCustomAPAC.sql.txt', sSQL);
+ENDIF;
+
+
+
+DIMENSIONSORTORDER('Post','','','BYINPUT','ASCENDING');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+IF( DIMIX(vDim,vPost)=0);
+    sParent = 'SH1';
+    DIMENSIONELEMENTINSERT(vDim,'',vPost,'n');
+    DIMENSIONELEMENTINSERT(vDim,'',sParent,'c');
+    DIMENSIONELEMENTCOMPONENTADD(vDim,sParent,vPost,1);
+EndIf;
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase); 
+
+
+
+#endregion

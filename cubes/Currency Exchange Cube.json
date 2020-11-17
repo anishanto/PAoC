@@ -1,0 +1,37 @@
+{
+	"@type":"Cube",
+	"Name":"Currency Exchange Cube",
+	"Rules@Code.link":"Currency Exchange Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('Currency Type')"
+		},
+		{
+			"@id":"Dimensions('Currency From')"
+		},
+		{
+			"@id":"Dimensions('Currency To')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Months')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('Currency Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Currency Exchange Cube.views/Input Exchange Rates.json",
+		"Currency Exchange Cube.views/Review Exchange Rates.json"
+	]
+}

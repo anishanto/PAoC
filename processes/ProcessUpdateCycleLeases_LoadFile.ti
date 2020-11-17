@@ -1,0 +1,56 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vProcess = GetProcessName();
+vPA = '}Processes';
+AttrPutS('',vPA,vProcess,'Failure');
+cClientTenureType = CellGetS('Global Control','Client Tenure Type','String');
+
+### Former Parameters
+pZeroCube = 0;
+pZeroCompany ='';
+pZeroBusUnits='';
+PZeroGL_Accounts='';
+pZeroFiscalMonths='';
+pZeroFiscalYears='';
+pEmail =  CellGetS('Global Control','Core Team Email','String');
+pIncrement = 1;
+
+### Processes
+vCheckFileProcessLeases = 'update_manual_leases_check';
+vLoadProcessLeases= 'update_manual_leases';
+vLoadProcess = vLoadProcessLeases;
+cFileName = 'Leases_Load.csv';
+### File Check
+return = ExecuteProcess(vCheckFileProcessLeases,'pVersion',pVersion,'cFileName',cFileName);
+IF(return = ProcessExitByQuit % return = ProcessExitMinorError());
+	vError = 1;
+ENDIF;
+
+### Cube Load
+IF (vError = 0);
+	ExecuteProcess(vLoadProcessLeases,'pDebug',pDebug,'pZeroCube',pZeroCube,'pZeroCompany',pZeroCompany,'pZeroBusUnits',pZeroBusUnits,'pZeroGL_Accounts',pZeroGL_Accounts,'pZeroFiscalMonths',pZeroFiscalMonths,'pZeroFiscalYears',pZeroFiscalYears,'pEmail',pEmail,'pEmailFile',pEmailFile,'pIncrement',pIncrement,'pVersion',pVersion);
+ELSE;
+	sMessage = 'The file has failed validation and has not uploaded. Please verify file content and start the file upload process again. Contact your FSL lead if you have any questions.';
+	AttrPutS (sMessage,vPA,vProcess,'Failure');
+	CubeSaveData('}ElementAttributes_Processes');
+	ProcessQuit();
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

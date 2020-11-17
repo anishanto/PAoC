@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"SecurityRefresh",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"SecurityRefresh.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

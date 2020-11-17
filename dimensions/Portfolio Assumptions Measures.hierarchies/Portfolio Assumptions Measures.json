@@ -1,0 +1,113 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Portfolio Assumptions Measures",
+	"Elements":
+	[
+		{
+			"Name":"Budget Region",
+			"Type":"String"
+		},
+		{
+			"Name":"Budget Building Type",
+			"Type":"String"
+		},
+		{
+			"Name":"Cost Category Type",
+			"Type":"String"
+		},
+		{
+			"Name":"Lease Type",
+			"Type":"String"
+		},
+		{
+			"Name":"Tenure Type",
+			"Type":"String"
+		},
+		{
+			"Name":"Event Type",
+			"Type":"String"
+		},
+		{
+			"Name":"GLA Category",
+			"Type":"String"
+		},
+		{
+			"Name":"Rates",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Check Rate",
+			"Type":"String"
+		},
+		{
+			"Name":"Valid Rate",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Total Validation",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Budget Region Validation",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Budget Building Type Validation",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Cost Category Type Validation",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Type Validation",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Tenure Type Validation",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Event Type Validation",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"Total Validation",
+			"ComponentName":"Budget Region Validation",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Validation",
+			"ComponentName":"Budget Building Type Validation",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Validation",
+			"ComponentName":"Cost Category Type Validation",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Validation",
+			"ComponentName":"Lease Type Validation",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Validation",
+			"ComponentName":"Tenure Type Validation",
+			"Weight":1
+		},
+		{
+			"ParentName":"Total Validation",
+			"ComponentName":"Event Type Validation",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Portfolio Assumptions Measures.subsets/All Members.json",
+		"Portfolio Assumptions Measures.subsets/PortfolioMeasures.json"
+	]
+}

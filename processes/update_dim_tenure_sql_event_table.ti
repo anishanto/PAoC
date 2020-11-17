@@ -1,0 +1,81 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+sClientID = CELLGETS(cubGlobalControl, 'Client ID OneView', 'String');
+vRecNo = 1;
+vdim = 'Vendor';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+vMetadataUpdate='';
+bKickouts = 0;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+
+
+####################################Define Datasource Tab#####################################
+sSQL='SELECT * FROM [DW_All_Clients].[OVLA].[vw_OVLA_Budget_APAC_Events] WHERE OneViewCLientID = '|sClientID;
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+ 
+
+
+
+
+
+
+
+
+ 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+TenureID = TenureID;
+##############Add Attributes
+cDim = 'Tenure ID';
+sEl =TenureID;
+
+IF(DIMIX(cDIm, sEl)<>0 & DIMIX('Event Type', JLLEventCategory)<>0);
+
+	ATTRPUTS(EventTypeKey,cDim,sEl,'EventTypeKey');
+	ATTRPUTS(JLLEventCategory,cDim,sEl,'EventType');
+	
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+
+
+
+
+#endregion

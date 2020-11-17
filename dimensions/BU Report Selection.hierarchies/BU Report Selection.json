@@ -1,0 +1,24 @@
+{
+	"@type":"Hierarchy",
+	"Name":"BU Report Selection",
+	"Elements":
+	[
+		{
+			"Name":"Standard",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Approval",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Leased\\Owned",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Property Type",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}

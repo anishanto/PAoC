@@ -1,0 +1,37 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cFileName='Delete_Groups.csv';
+sFullPath=cImportPath|cFileName;
+cDim='}Groups';
+
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+IF(DIMIX(cDim,vGroup)<>0);
+	DimensionElementDelete( cDim, vGroup );
+ENDIF;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

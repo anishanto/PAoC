@@ -1,0 +1,47 @@
+{
+	"@type":"Hierarchy",
+	"Name":"GL_Accounts_GLA_Category",
+	"Elements":
+	[
+		{
+			"Name":"Portfolio Rate",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Outgoings Increment 21_22",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Global Cleaning",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Global HVAC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Security Charges Increment",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Global Storage AL TEST",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Electricity Recovery Increment",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Global Parking TEST",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Global Rent",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"GL_Accounts_GLA_Category.subsets/level0.json"
+	]
+}

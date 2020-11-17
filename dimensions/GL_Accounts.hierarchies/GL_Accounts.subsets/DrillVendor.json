@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"DrillVendor",
+	"Expression":"{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({ [GL_Accounts].[All JLL Accounts] } ,ALL,RECURSIVE)},0)} "
+}

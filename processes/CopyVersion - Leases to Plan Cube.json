@@ -1,0 +1,127 @@
+{
+	"@type":"Process",
+	"Name":"CopyVersion - Leases to Plan Cube",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"CopyVersion - Leases to Plan Cube.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f_DeployParams={&quotdimensionConflictResolutions&quot:{}&#044&quotclass&quot:&quotDeployParams&quot&#044&quotdataAction&quot:&quotACCUMULATE&quot}\f_ParseParams={&quotskipRows&quot:&quot0&quot&#044&quotlocale&quot:{&quotlanguange&quot:&quoten&quot&#044&quotvariant&quot:&quot&quot&#044&quotcountry&quot:&quotUS&quot}&#044&quotdimensions&quot:[]&#044&quotmeasures&quot:[]&#044&quotnumColumns&quot:&quot10&quot&#044&quothasHeader&quot:&quottrue&quot}\f_importSourceDefinition={\"sourceType\":\"CUBE_VIEW\",\"originalColumns\":null,\"cubeViewSource\":{\"cubeName\":\"Opex Plan Cube\",\"originalColumns\":[],\"viewName\":\"\",\"excludedColumns\":[],\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vVer\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vVer\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCo\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCo\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":1},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCur\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCur\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":2},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vFM\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vFM\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":3},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vFY\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vFY\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":4},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vSub\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vSub\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":5},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vGLA\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vGLA\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":6},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vBU\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vBU\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":7},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vPM\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vPM\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":8},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vValue\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vValue\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":9}]},\"locale\":{\"localeIsDefault\":false,\"localeCurrencySymbol\":\"$\",\"languageCode\":\"en\",\"languageDisplay\":\"English\",\"thousandsSeparator\":\",\",\"localeCode\":\"en_US\",\"localeCurrencyCode\":\"$\",\"localeDisplay\":\"English (United States)\",\"countryDisplay\":\"United States\",\"countryCode\":\"US\",\"decimalSeparator\":\".\"},\"excludedColumns\":[],\"processName\":\"CopyVersion - OpexPlan to OpexAnalysis Text\",\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vVer\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vVer\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCo\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCo\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":1},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vCur\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vCur\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":2},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vFM\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vFM\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":3},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vFY\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vFY\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":4},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vSub\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vSub\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":5},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vGLA\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vGLA\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":6},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vBU\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vBU\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":7},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vPM\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vPM\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":8},{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vValue\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vValue\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":9}],\"sourceTypeHasBeenChanged\":false}\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f",
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"Leases Cube",
+		"dataSourceNameForServer":"Leases Cube",
+		"view":"VE-Leases Cube-CopyToAnalysis"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pSourceVersion",
+			"Prompt":"Version to copy",
+			"Value":"forecast",
+			"Type":"String"
+		},
+		{
+			"Name":"pCompany",
+			"Prompt":"Company to copy",
+			"Value":"47700",
+			"Type":"String"
+		},
+		{
+			"Name":"pSourceYear",
+			"Prompt":"Source Year",
+			"Value":"2019",
+			"Type":"String"
+		},
+		{
+			"Name":"pTargetYear",
+			"Prompt":"Target Year",
+			"Value":"2019",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"Version",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Currency",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"MOnthYear",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Company",
+			"Type":"String",
+			"Position":4,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"SubAccounts",
+			"Type":"String",
+			"Position":5,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"GL_Accounts",
+			"Type":"String",
+			"Position":6,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"BusUnits",
+			"Type":"String",
+			"Position":7,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"TenureID",
+			"Type":"String",
+			"Position":8,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Measures",
+			"Type":"String",
+			"Position":9,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Value",
+			"Type":"String",
+			"Position":10,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

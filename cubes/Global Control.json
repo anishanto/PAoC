@@ -1,0 +1,19 @@
+{
+	"@type":"Cube",
+	"Name":"Global Control",
+	"Rules@Code.link":"Global Control.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Global Control Items')"
+		},
+		{
+			"@id":"Dimensions('Global Control Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Global Control.views/DW Current Year.json",
+		"Global Control.views/Global Control.json"
+	]
+}

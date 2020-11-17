@@ -1,0 +1,34 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Portfolio Assumptions",
+	"Elements":
+	[
+		{
+			"Name":"Default Market",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Default CPI",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Default Scenario",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Resi Mkt North",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Default Demo",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Portfolio Assumptions.subsets/All Members.json",
+		"Portfolio Assumptions.subsets/level0.json",
+		"Portfolio Assumptions.subsets/PortfolioAssumptionsDetail.json",
+		"Portfolio Assumptions.subsets/ValuationPortfolio.json"
+	]
+}

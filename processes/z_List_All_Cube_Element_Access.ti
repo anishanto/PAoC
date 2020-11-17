@@ -1,0 +1,98 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+####Chris Malone New Code 111617 for client informatoin
+cServer = CELLGETS('Global Control', 'Client Server Name', 'String');
+cClientName = CELLGETS('Global Control', 'Client Name', 'String');
+
+
+
+
+
+# this process will list access for each Group for each Cube, its Dimensions & Elements 
+
+vOutputFile  = pOutputPath | '\'  | pFileName;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF ( SUBST ( vCube , 1, 1 ) @<> '}'  );
+
+sProcessNM = getProcessName();
+ViewTransfer = 'VE-' | sProcessNM;
+vGroupDim = '}Groups'  ;
+vNumGroups = DIMSIZ ( vGroupDim ) ;
+
+k = 1 ;
+
+WHILE ( k <= vNumGroups ) ;
+   vGroup = DIMNM ( vGroupDim, k )  ;
+   vUserGroup = ATTRS ( vGroupDim, vGroup , '}TM1_DefaultDisplayValue' ) ;
+   IF ( vUserGroup @='' ) ;
+              vUserGroup = vGroup ;
+   ENDIF;
+vExit_now = 'F' ;
+i = 1 ;
+ASCIIOUTPUT( vOutputFile,   'OBJECT', 'CUBE', 'DIMENSION', ' ELEMENT', 'LEVEL', 'GROUP', 'ACCESS' ) ;
+vAccess = CELLGETS ( '}CubeSecurity' , vCube, vUserGroup ) ;
+ASCIIOUTPUT( vOutputFile, 'Cube' ,vCube,  'NA', 'NA', 'NA', vUserGroup, vAccess ) ;
+WHILE ( vExit_now @= 'F' ) ;
+      vDimName = TABDIM ( vCube, i ) ;
+      IF ( vDimName @<> '' ) ;
+           vAccess = CELLGETS ( '}DimensionSecurity' , vDimName, vUserGroup ) ;
+          ASCIIOUTPUT( vOutputFile, 'Dimension',  vCube, vDimName, 'NA', 'NA', vUserGroup, vAccess ) ;          
+          vCurCube = '}ElementSecurity_'  | vDimName ;
+          sMDX = '{ TM1SUBSETALL( [' | vDimName | '] ) }';
+          IF ( SUBSETEXISTS ( vDimName,  ViewTransfer ) = 1 ) ;
+              SUBSETDESTROY ( vDimName,  ViewTransfer ) ;
+          ENDIF ;
+          SubsetCreatebyMDX( ViewTransfer, sMDX);
+           vSubSize = SUBSETGETSIZE ( vDimName,  ViewTransfer ) ;
+           j = 1 ;
+           WHILE ( j <= vSubSize ) ;
+                 vCurElem = DIMNM ( vDimName, j ) ;
+                 IF ( DIMIX ( '}ElementAttributes_' | vDimName , 'CodeName' ) <> 0 ) ;
+                            vAttrValue = ATTRS( vDimName, vCurElem , 'NameCode' ) ;               
+                 ELSE ;
+                            vAttrValue =  '' ;   
+                 ENDIF;
+                 IF ( vAttrValue @<>'' ) ;
+                      vCurElem = vAttrValue ;
+                 ENDIF;
+                vAccess = CELLGETS ( vCurCube, vCurElem, vUserGroup ) ;
+                 IF ( vAccess @= '' ) ;
+                     vAccess = 'NONE' ;
+                 ENDIF;
+                 ASCIIOUTPUT ( vOutputFile , 'Element' , vCube, vDimName, vCurElem, NUMBERTOSTRING(ELLEV( vDimName, vCurElem ) ) , vUserGroup, vAccess ) ;
+                 j = j + 1 ;
+           END ;
+          IF ( SUBSETEXISTS ( vDimName,  ViewTransfer ) = 1 ) ;
+              SUBSETDESTROY ( vDimName,  ViewTransfer ) ;
+          ENDIF ;
+      ELSE ;
+           vExit_now = 'T' ;
+      ENDIF;
+      i = i + 1 ;
+END;
+     k = k + 1 ;
+END;
+
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

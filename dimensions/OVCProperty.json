@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"OVCProperty",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('OVCProperty')/Hierarchies('OVCProperty')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"OVCProperty.hierarchies/OVCProperty.json"
+	]
+}

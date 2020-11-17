@@ -1,0 +1,370 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+cUnassignedElement = 'Unassigned BusUnits '|pHierarchy;
+cUnassignedAHElement = 'Unassigned BusUnits AH1';
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'BusUnits';
+cTnode = UPPER(pHierarchy);
+cTAHnode = 'AH1';
+cCubeName = '}ElementAttributes_BusUnits';
+cDimNameAttr = '}ElementAttributes_BusUnits';
+cProcessName = GetProcessName( );
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+pBase_Hierarchy='AH1';
+cAllocBusUnitDim = 'Allocation_BusUnits';
+
+####################################################Setup if Consolidation
+cPlanningLevel=CellGetS('Global Control','Select Level of Planning','String');
+cAllocation=DimensionElementPrincipalName('Allocation_Scenario', CellGetS('Global Control','Select Allocation','String'));
+
+#############################################################Delete all elements or only consolidations
+
+sSub = 'zACHierarchy';
+nMax = SubsetGetSize( cDimName, sSub );
+nCtr = 1;
+While( nCtr <= nMax );
+	sEle = SubsetGetElementName( cDimName, sSub, nCtr );
+	DimensionElementDelete(cDimName, sEle);
+	nCtr = nCtr + 1;
+End;
+
+
+##############################################################Add Top Node Parent
+DimensionElementInsert(cDimName,' ', cTnode ,'c');
+
+IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+	ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+	SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+IF(SubsetExists(cDimNameAttr, cViewNameTransfer) = 1);
+	SubsetDestroy(cDimNameAttr, cViewNameTransfer);
+EndIf;
+
+################################################# Create Dimension Attribute Subset
+
+############Business Unit Dimension
+#Create BusUnits
+sMDX = '{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SORT( {TM1SUBSETALL( ['| cDimName |'] )}, ASC)}, 0)}, { ['| cDimName |'].[NA] }) }';
+SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+############Business Units Attribute
+SUBSETCREATE(cDimNameAttr,cViewNameTransfer);
+
+pBase_Hierarchy='AH1';
+SubsetElementInsert(cDimNameAttr, cViewNameTransfer, pBase_Hierarchy|'Parent1',1);
+vTopLevel=1;
+vLastLevel=1;
+n = 1;
+While(n < 5);
+	nText = NumberToString(n);
+	IF( DIMIX(cDimNameAttr,pBase_Hierarchy|'Parent'|nText) > 0 );
+		vTopLevel=n;
+	endif;
+	if (cPlanningLevel@=pBase_Hierarchy|'Parent'|nText);
+		vLastLevel=n;
+	endif;
+	n = n + 1;
+End;
+
+######Che number of levels of AC1
+
+
+#############################################Create and assign View
+
+IF(ViewExists(cCubeName, cViewNameTransfer) = 0);
+	ViewCreate(cCubeName, cViewNameTransfer);
+EndIf;
+
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName, cViewNameTransfer);
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimNameAttr, cViewNameTransfer);
+ViewRowDimensionSet (cCubeName, cViewNameTransfer, cDimName, 1);
+ViewColumnDimensionSet (cCubeName, cViewNameTransfer, cDimNameAttr,1);
+ViewExtractSkipCalcsSet(cCubeName, cViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(cCubeName, cViewNameTransfer, 0);
+
+#Set dimension sort order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+################### DEFINE LOCAL VARIABLES
+DatasourceNameForServer = cCubeName;
+DatasourceNameForClient = cCubeName;
+DataSourceType = 'VIEW';
+DatasourceCubeview= cViewNameTransfer;
+
+
+if (DimensionExists(cAllocBusUnitDim)=1);
+	DimensionDestroy(cAllocBusUnitDim);
+endif;
+
+DimensionCreate(cAllocBusUnitDim);
+DimensionElementInsert(cAllocBusUnitDim,' ', cTAHnode ,'c');
+AttrInsert(cAllocBusUnitDim, '' , 'DisplayName', 'A');
+
+
+
+DIMENSIONSORTORDER(cAllocBusUnitDim,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF ( lower( ATTRS(cDimName,vBusUnits,'HierarchyStatus')) @<>'yes');
+  ITEMSKIP;
+EndIf;
+
+#Check if the element need to go to unassigned consolidation
+isUnassigned = 0;
+n = vTopLevel;
+While(n >= vLastLevel);
+	vnText = NumberToString(n);
+	vParent = ATTRS(cDimName,vBusUnits,pBase_Hierarchy|'Parent'|vnText);
+	if (vParent@='');
+		isUnassigned = 1;
+	endif;
+	n = n - 1;
+End;
+
+#If it was unassigned element, add it to the unassigned 
+if (isUnassigned=1);
+	DIMENSIONELEMENTINSERT(cDimName,'',vBusUnits,'n');
+	DIMENSIONELEMENTINSERT(cDimName,'',cUnassignedElement,'n');
+	DIMENSIONELEMENTCOMPONENTADD(cDimName,pHierarchy,cUnassignedElement,1.000000);
+else;
+	vParentAnt='';
+	n = vTopLevel;
+	While(n >= vLastLevel);
+		vnText = NumberToString(n);
+		vParent = ATTRS(cDimName,vBusUnits,pBase_Hierarchy|'Parent'|vnText)|' Hierarchy';
+		DIMENSIONELEMENTINSERT(cDimName,'',vParent,'n');
+		if (n=vTopLevel);
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,pHierarchy,vParent,1.000000);	
+		endif;
+		if (vParentAnt@<>'');
+			DIMENSIONELEMENTCOMPONENTADD(cDimName,vParentAnt,vParent,1.000000);	
+		endif;
+		vParentAnt = vParent;
+		n = n - 1;
+	End;
+endif;
+
+
+#If it was unassigned element, add it to the unassigned 
+if (isUnassigned=1);
+	DIMENSIONELEMENTINSERT(cAllocBusUnitDim,'',vBusUnits,'n');
+	DIMENSIONELEMENTINSERT(cAllocBusUnitDim,'',cUnassignedAHElement,'n');
+	DIMENSIONELEMENTCOMPONENTADD(cAllocBusUnitDim,cTAHnode,cUnassignedAHElement,1.000000);
+	DIMENSIONELEMENTCOMPONENTADD(cAllocBusUnitDim,cUnassignedAHElement,vBusUnits,1.000000);
+else;
+	vParentAnt='';
+	n = vTopLevel;
+	While(n >= 1);
+		vnText = NumberToString(n);
+		vParent = ATTRS(cDimName,vBusUnits,pBase_Hierarchy|'Parent'|vnText);
+		DIMENSIONELEMENTINSERT(cAllocBusUnitDim,'',vParent,'n');
+		DIMENSIONELEMENTINSERT(cAllocBusUnitDim,'',vBusUnits,'n');
+		if (n=vTopLevel);
+			DIMENSIONELEMENTCOMPONENTADD(cAllocBusUnitDim,cTAHnode,vParent,1.000000);	
+		endif;
+		if (vParentAnt@<>'');
+			DIMENSIONELEMENTCOMPONENTADD(cAllocBusUnitDim,vParentAnt,vParent,1.000000);	
+		endif;
+		
+		if (n = 1);
+			DIMENSIONELEMENTCOMPONENTADD(cAllocBusUnitDim,vParent,vBusUnits,1.000000);	
+		endif;
+		vParentAnt = vParent;
+		n = n - 1;
+	End;
+endif;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF ( lower( ATTRS(cDimName,vBusUnits,'HierarchyStatus')) @<>'yes');
+  ITEMSKIP;
+EndIf;
+
+
+
+
+#Check if the element need to go to unassigned consolidation
+isUnassigned = 0;
+n = vTopLevel;
+While(n >= vLastLevel);
+	vnText = NumberToString(n);
+	vParent = ATTRS(cDimName,vBusUnits,pBase_Hierarchy|'Parent'|vnText);
+	if (vParent@='');
+		isUnassigned = 1;
+	endif;
+	n = n - 1;
+End;
+
+#If it was unassigned element, add it to the unassigned 
+if (isUnassigned=1);
+	AttrPutS('Unassigned BusUnits AH1',cDimName, cUnassignedElement, 'Allocation Component');
+	AttrPutS('Y',cDimName, cUnassignedElement, 'Allocation');
+else;
+	vParentAnt='';
+	n = vTopLevel;
+	while (n>=vLastLevel);
+  	vnText = NumberToString(n);
+  	vAllocationComponent = ATTRS(cDimName,vBusUnits,pBase_Hierarchy|'Parent'|vnText);
+  	vParent = vAllocationComponent|' Hierarchy';
+  	AttrPutS(vAllocationComponent,cDimName, vParent, 'Allocation Component');
+  	AttrPutS('Y',cDimName, vParent, 'Allocation');
+  	vDisplayName = AttrS(cDimName, vAllocationComponent, 'DisplayName');
+  	AttrPutS(vDisplayName,cAllocBusUnitDim, vAllocationComponent, 'DisplayName');
+    if (n=vLastLevel);
+      vAllocationCompany  =  ATTRS(cDimName,vBusUnits,'Company');
+      AttrPutS(vAllocationCompany,cDimName, vParent, 'Allocation Company');
+    endif;
+    n=n - 1;
+  end;
+endif;
+
+vDisplayName = AttrS(cDimName, vBusUnits, 'DisplayName');
+AttrPutS(vDisplayName,cAllocBusUnitDim, vBusUnits, 'DisplayName');
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+AttrPutS('AH1', cDimName, 'AC1', 'Allocation Component');
+AttrPutS('Y',cDimName, 'AC1', 'Allocation');
+ViewDestroy(cCubeName, cViewNameTransfer  );
+
+vDisplayName = AttrS(cDimName, cTAHnode, 'DisplayName');
+AttrPutS(vDisplayName,cAllocBusUnitDim, cTAHnode, 'DisplayName');
+AttrPutS('Approval '|cClientName|' Hierarchy',cDimName, cTnode, 'Name');
+
+#Set up Template subsets
+sSub = 'zAcHierarchy';
+nMax = SubsetGetSize( cDimName, sSub );
+nCtr = 1;
+While( nCtr <= nMax );
+  sEleName = SubsetGetElementName( cDimName, sSub, nCtr );
+  sEle = AttrS(cDimName,sEleName,'DisplayName');
+  vSubHierarchy = 'zH-'|sEle;
+	IF(SubsetExists(cAllocBusUnitDim,vSubHierarchy)=1);
+		SubsetDeleteAllElements(cAllocBusUnitDim, vSubHierarchy);
+	else;
+		SubsetCreate(cAllocBusUnitDim, vSubHierarchy);	
+	ENDIF;
+	vAllocComponent = ATTRS(cDimName, sEle, 'Allocation Component');
+	vMDXQuery = '{TM1DRILLDOWNMEMBER( {[Allocation_BusUnits].['|vAllocComponent|']}, All, RECURSIVE )} ';
+	SubsetMDXSet(cAllocBusUnitDim, vSubHierarchy,vMDXQuery);
+	
+	vSubHierarchy = 'zH0-'|sEle;
+	IF(SubsetExists(cAllocBusUnitDim,vSubHierarchy)=1);
+		SubsetDeleteAllElements(cAllocBusUnitDim, vSubHierarchy);
+	else;
+		SubsetCreate(cAllocBusUnitDim, vSubHierarchy);	
+	ENDIF;
+	
+	vMDXQuery = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Allocation_BusUnits].['|vAllocComponent|']}, All, RECURSIVE )} ,0)} ';
+	SubsetMDXSet(cAllocBusUnitDim, vSubHierarchy,vMDXQuery);
+ 	nCtr = nCtr + 1;
+End;
+
+#Set up Template subsets
+sSub = 'zAHHierarchy';
+nMax = SubsetGetSize( cDimName, sSub );
+nCtr = 1;
+While( nCtr <= nMax );
+	sEleName = SubsetGetElementName( cDimName, sSub, nCtr );
+	vSubHierarchy = 'zH0-'|sEleName;
+	IF(SubsetExists(cAllocBusUnitDim,vSubHierarchy)=1);
+		SubsetDeleteAllElements(cAllocBusUnitDim, vSubHierarchy);
+	else;
+		SubsetCreate(cAllocBusUnitDim, vSubHierarchy);	
+	ENDIF;
+	
+	vMDXQuery = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Allocation_BusUnits].['|sEleName|']}, All, RECURSIVE )} ,0)} ';
+	SubsetMDXSet(cAllocBusUnitDim, vSubHierarchy,vMDXQuery);
+	nCtr = nCtr + 1;
+End;
+
+
+
+#Set up allocations subsets
+sSub = 'zAcHierarchy0';
+nMax = SubsetGetSize( cDimName, sSub );
+nCtr = 1;
+While( nCtr <= nMax );
+	sEle = SubsetGetElementName( cDimName, sSub, nCtr );
+	vSubsetName = sEle;
+	IF(SubsetExists(cAllocBusUnitDim,vSubsetName)=1);
+		SubsetDeleteAllElements(cAllocBusUnitDim, vSubsetName);
+	else;
+		SubsetCreate(cAllocBusUnitDim, vSubsetName);	
+	ENDIF;
+	vSubsetTemp = 'TempSubset';
+	IF(SubsetExists(cAllocBusUnitDim,vSubsetTemp)=1);
+		SubsetDeleteAllElements(cAllocBusUnitDim, vSubsetTemp);
+	else;
+		SubsetCreate(cAllocBusUnitDim, vSubsetTemp);	
+	ENDIF;
+
+	vAH1Element = ATTRS(cDimName, sEle, 'Allocation Component');
+	#vMDXQuery = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { [Allocation_BusUnits].['|vAH1Element|'] }, { [Allocation_BusUnits].['|vAH1Element|'] }, RECURSIVE ) }, 0)}';
+	
+	if (cAllocation@='Scenario 1');
+		vMDXQuery = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Allocation_BusUnits].['|vAH1Element|']}, All, RECURSIVE )} ,0)}';
+		SubsetMDXSet(cAllocBusUnitDim, vSubsetName,vMDXQuery);
+		SubsetMDXSet(cAllocBusUnitDim, vSubsetName,'');
+	elseif (cAllocation@='Scenario 2');
+		vAllocElement = ATTRS(cDimName, sEle, 'Allocation Element');
+		if (vAllocElement@<>'');
+			SubsetElementInsert(cAllocBusUnitDim, vSubsetName, vAllocElement, 0); 
+		endif;
+	elseif (cAllocation@='Scenario 3');
+		vMDXQuery = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Allocation_BusUnits].['|vAH1Element|']}, All, RECURSIVE )} ,1)}';
+		SubsetMDXSet(cAllocBusUnitDim, vSubsetTemp,vMDXQuery);
+		SubsetMDXSet(cAllocBusUnitDim, vSubsetName,'');
+		nMaxTemp = SubsetGetSize( cAllocBusUnitDim, vSubsetTemp );
+		nCtrTemp = 1;
+		While( nCtrTemp <= nMaxTemp );
+			sEle = SubsetGetElementName( cAllocBusUnitDim, vSubsetTemp, nCtrTemp );
+			vAllocElement = ATTRS(cDimName, sEle, 'Allocation Element');
+			if (vAllocElement@='');
+				SubsetElementInsert(cAllocBusUnitDim, vSubsetName, ElComp(cAllocBusUnitDim, sEle,1),0); 
+			else;
+				SubsetElementInsert(cAllocBusUnitDim, vSubsetName, vAllocElement,0); 
+			endif;
+			nCtrTemp = nCtrTemp + 1;
+		End;
+	elseif (cAllocation@='Scenario 4');
+		boolean = 0;
+		vLoopElement = vAH1Element;
+		While(boolean=0);
+			if (ellev(cAllocBusUnitDim, vLoopElement) =1);
+				boolean=1;
+			else;
+				vLoopElement = ElComp(cAllocBusUnitDim, vLoopElement,1);
+			endif;		
+		End;
+		vMDXQuery = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Allocation_BusUnits].['|vLoopElement|']}, All, RECURSIVE )} ,0)}';
+		SubsetMDXSet(cAllocBusUnitDim, vSubsetName,vMDXQuery);
+		SubsetMDXSet(cAllocBusUnitDim, vSubsetName,'');
+		
+	endif;
+	nCtr = nCtr + 1;
+End;
+
+#endregion

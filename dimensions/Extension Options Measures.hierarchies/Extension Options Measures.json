@@ -1,0 +1,28 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Extension Options Measures",
+	"Elements":
+	[
+		{
+			"Name":"Type",
+			"Type":"String"
+		},
+		{
+			"Name":"Rates",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Check Rate",
+			"Type":"String"
+		},
+		{
+			"Name":"Valid Rate",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Extension Options Measures.subsets/ExtensionOptionsMeasures.json",
+		"Extension Options Measures.subsets/level0.json"
+	]
+}

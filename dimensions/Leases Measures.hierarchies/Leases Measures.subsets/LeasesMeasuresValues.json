@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"LeasesMeasuresValues",
+	"Expression":"{FILTER( {TM1SUBSETALL( [Leases Measures] )}, [Leases Measures].[MeasureType] = \"Value\")}"
+}

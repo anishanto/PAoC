@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"ProcessUpdateCycleQtrlyReport",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessUpdateCycleQtrlyReport.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pComparison1",
+			"Prompt":"Quartely Reporting Comparison 1",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pComparison2",
+			"Prompt":"Quartely Reporting Comparison 2",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

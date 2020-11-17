@@ -1,0 +1,16 @@
+{
+	"@type":"Subset",
+	"Name":"ExtensionOptionsMeasures",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Extension Options Measures')/Hierarchies('Extension Options Measures')/Elements('Type')"
+		},
+		{
+			"@id":"Dimensions('Extension Options Measures')/Hierarchies('Extension Options Measures')/Elements('Rates')"
+		},
+		{
+			"@id":"Dimensions('Extension Options Measures')/Hierarchies('Extension Options Measures')/Elements('Check Rate')"
+		}
+	]
+}

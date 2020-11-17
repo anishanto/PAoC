@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zDimMgmtInput",
+	"Expression":" {TM1DRILLDOWNMEMBER( {[SubLedger].[SH1]}, ALL, RECURSIVE )}"
+}

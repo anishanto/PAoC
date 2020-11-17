@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"SubAccountsExpand1",
+	"Expression":"{ DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( { HIERARCHIZE( {TM1SUBSETALL( [SubAccounts] )} ) }, \"SH1*\")}, {[SubAccounts].[SH1]} ) }"
+}

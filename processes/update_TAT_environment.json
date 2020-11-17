@@ -1,0 +1,34 @@
+{
+	"@type":"Process",
+	"Name":"update_TAT_environment",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_TAT_environment.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ASCII",
+		"asciiDecimalSeparator":".",
+		"asciiDelimiterChar":",",
+		"asciiDelimiterType":"Character",
+		"asciiHeaderRecords":0,
+		"asciiQuoteCharacter":"\"",
+		"asciiThousandSeparator":",",
+		"dataSourceNameForClient":"\\\\USVDCVMPADEVA1\\e$\\TM1Models\\Admin\\Configs\\Environment.txt",
+		"dataSourceNameForServer":"\\\\USVDCVMPADEVA1\\e$\\TM1Models\\Admin\\Configs\\Environment.txt"
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"TATenvironment",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Frequency",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Frequency')/Hierarchies('Frequency')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Frequency.hierarchies/Frequency.json"
+	]
+}

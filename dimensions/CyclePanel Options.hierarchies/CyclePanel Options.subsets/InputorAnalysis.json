@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"InputorAnalysis",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('CyclePanel Options')/Hierarchies('CyclePanel Options')/Elements('Input')"
+		},
+		{
+			"@id":"Dimensions('CyclePanel Options')/Hierarchies('CyclePanel Options')/Elements('Analysis')"
+		}
+	]
+}

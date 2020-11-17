@@ -1,0 +1,40 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Fixed Rates Measures",
+	"Elements":
+	[
+		{
+			"Name":"Event Name",
+			"Type":"String"
+		},
+		{
+			"Name":"Status",
+			"Type":"String"
+		},
+		{
+			"Name":"Event Date",
+			"Type":"String"
+		},
+		{
+			"Name":"Event Notes",
+			"Type":"String"
+		},
+		{
+			"Name":"Rates",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Check Rate",
+			"Type":"String"
+		},
+		{
+			"Name":"Valid Rate",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Fixed Rates Measures.subsets/FixedRatesMeasures.json",
+		"Fixed Rates Measures.subsets/level0.json"
+	]
+}

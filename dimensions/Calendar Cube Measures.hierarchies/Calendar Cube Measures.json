@@ -1,0 +1,12 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Calendar Cube Measures",
+	"Elements":
+	[
+		{
+			"Name":"Days",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}

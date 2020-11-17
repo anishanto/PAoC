@@ -1,0 +1,27 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeProcessFeeders ('Calendar_JLL');
+CubeProcessFeeders ('}CubeSecurity');
+CubeProcessFeeders ('Opex Plan Cube');
+CubeProcessFeeders ('NewStaff Creation Cube');
+CubeProcessFeeders ('Staffing Information Cube');
+CubeProcessFeeders ('Compensation Cube');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

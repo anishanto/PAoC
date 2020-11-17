@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CompanyBU",
+	"Expression":"{FILTER( {TM1SUBSETALL( [BusUnits] )}, [BusUnits].[Company] = [Company].CurrentMember.Name OR \"All Companies\" = [Company].CurrentMember.Name)}"
+}

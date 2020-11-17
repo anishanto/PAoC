@@ -1,0 +1,32 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_eventtype_sql",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"update_dim_eventtype_sql.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f"
+	],
+	"DataSource":
+	{
+		"Type":"ODBC",
+		"dataSourceNameForClient":"tm1RODW",
+		"dataSourceNameForServer":"tm1RODW",
+		"password":"c1XlOM`6[u<_O?rBNc0eoiB^9[YJ]c^=e76slL1iuOTSwlm4:XG4Xdyv>xv@0hf4qM79ad`DLq<U[7D3uahx2ShU4:`Kp0zoMU_Sz7sW04CLfrIS?VHI__UxwOGL@P3Jzh~Peuw1sp3lstPWq=t>F0dsoN[5Bjh^g\\G_DAw?^;jq<dzP5[TBemgZ5jOfusd9fQ6i`q",
+		"query":"SELECT 1 ",
+		"userName":"TM1_Readonly",
+		"usesUnicode":true
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"EventType",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

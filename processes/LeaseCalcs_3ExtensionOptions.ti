@@ -1,0 +1,130 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+########### 08 - 2020  #  THIS PROCESS IS NOT BEING USED ANYMORE ##############
+
+
+###This code is for TA & DA to execute cycle panel jobs against contributor objects##
+CubeLockOverride(1);
+########################################################################
+
+TenureDim='Tenure ID';
+TenureAttrCube='}ElementAttributes_Tenure ID';
+ExtensionCube='Leases Extension Options';
+LeaseCube='Leases Cube';
+
+TenureID=pTenureID;
+Version=pVersion;
+Currency=pCurrency;
+Company=pCompany;
+SubAccount=pSubAccount;
+GLAccount=pGLAccount;
+BusUnits=pBusUnits;
+
+LeaseStartDate=AttrS(TenureDim, TenureID, 'LeaseStartDate');
+nLeaseStartYear=StringtoNumber(SubSt(LeaseStartDate,1,4));
+LeaseEndDate=AttrS(TenureDim, TenureID, 'LeaseEndDate');
+nLeaseEndYear=StringtoNumber(SubSt(LeaseEndDate,1,4));
+nLeaseEndMonth=StringtoNumber(SubSt(LeaseEndDate,6,2));
+
+sDim_Year='Fiscal Month Year';	
+		
+LeaseEndMonthName=AttrS('Calendar Months', Subst(LeaseEndDate,6,2), 'MonthName');
+LeaseEndYearName=Subst(LeaseEndDate,1,4);
+IF(pVersion@='Forecast');
+	LeaseEndMonthMap=LeaseEndMonthName|' '|LeaseEndYearName|'F';
+ELSE;
+	LeaseEndMonthMap=LeaseEndMonthName|' '|LeaseEndYearName;
+ENDIF;
+LeaseEndMonth=DimensionElementPrincipalName('Fiscal Month Year', LeaseEndMonthMap);
+LeaseEndYear=ElPar('Fiscal Month Year', LeaseEndMonth, 1);
+IF(pVersion@='Forecast');
+	nLeaseEndParent=AttrS('FIscal Month Year', LeaseENdYear,'YearCalendarF');
+ELSE;
+	nLeaseEndParent=AttrS('FIscal Month Year', LeaseENdYear,'YearCalendar');
+ENDIF;
+
+ExtensionOption=CellGetS(LeaseCube, Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BusUnits, TenureID, 'ExtensionOption');
+BudgetEnd=CellGetS(LeaseCube, Version, Currency, 'Attribute', Company, SubAccount, GLAccount, BusUnits, TenureID, 'BudgetEndDate');
+nBudgetEndYear=Stringtonumber(SubSt(BudgetEnd,1,4));
+nBudgetEndMonth=Stringtonumber(subst(BudgetEnd,6,2));
+
+CheckYear=CellGetS(LeaseCube, Version, Currency, LeaseEndYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Event Dates');
+nMax_Number=CellGetN('Global Control', 'Lease Number of Years Projection', 'Value');
+nCtr_Number=1;
+WHILE(nCtr_Number <= nMax_Number); 
+
+	IF(CheckYear@<>'');
+		EndYear=Numbertostring(StringtoNumber(nLeaseEndParent)+nCtr_Number);
+	ELSE;
+		EndYear=Numbertostring(StringtoNumber(nLeaseEndParent)+nCtr_Number-1);
+	ENDIF;
+
+	ExpiryYear='Year '|Numbertostring(nCtr_Number);
+	LeaseStartMonth=StringtoNumber(subst(LeaseStartDate,6,2));
+	Start_Month= StringtoNumber(DimensionElementPrincipalName('Calendar Months', AttrS('Fiscal Months', 'M01', 'Name')));
+	EventDate=EndYear|SubSt(LeaseStartDate, 5, 6); 
+	IF(Start_Month<=LeaseStartMonth & start_month<>1);
+		EndYear=NumbertoString( StringtoNumber(EndYear)-1);
+		EventDate=EndYear|SubSt(LeaseStartDate, 5, 6); 
+	ENDIF;
+
+	IF(pVersion@='Forecast');
+		EventMonth= AttrS('Calendar Months', SubSt(LeaseStartDate, 6, 2), 'MonthName')|' '|EndYear|'F';
+		BudgetEndMonth=AttrS('Calendar Months',SubSt(BudgetEnd,6,2),'MonthName')|' '|Subst(BudgetEnd,1,4)|'F';
+	ELSE;
+		EventMonth= AttrS('Calendar Months', SubSt(LeaseStartDate, 6, 2), 'MonthName')|' '|EndYear;
+		BudgetEndMonth= AttrS('Calendar Months',SubSt(BudgetEnd,6,2),'MonthName')|' '|Subst(BudgetEnd,1,4);
+	ENDIF;
+	nEventYear=StringtoNumber(SubSt(EventDate,1,4));
+	nEventMonth=StringtoNumber(SubSt(EventDate,6,2));
+
+	BudgetEndMapMonth=DImensionElementPrincipalName(sDim_YEar,BudgetEndMonth);
+	EventMapMonth=DimensionELementPrincipalName(sDim_Year,EventMOnth);
+
+
+	IF(BudgetEndMapMonth@=EventMapMonth);
+
+	ELSEIF(Dimix(sDim_Year, EventMonth)<>0
+		& (nLeaseEndYear <= nEventYear & (nBudgetEndYear>nEventYear % (nBudgetEndYear=nEventYear & nBUdgetEndMonth >nEventMonth)))
+		);
+		sYear=ElPar('Fiscal Month Year', EventMonth, 1);
+		sENdYear=AttrS(sDim_Year, sYear, 'YearCalendar');
+		Rate=CellGetN(ExtensionCube, Version, ExtensionOption, ExpiryYear, sEndYear, 'Valid Rate');
+		CellPutN(Rate, LeaseCube, Version, Currency, EventMonth, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Rate');	
+		EventDate=EndYear|SubSt(LeaseStartDate, 5, 6);
+		CellPutS(EventDate, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Event Dates');	
+		CellPutS(ExtensionOption, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Event Type');	
+		Type=CellGetS(ExtensionCube, Version, ExtensionOption, ExpiryYear, EndYear, 'Type');
+		CellPutS(Type, LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Assumption Category');
+		CellPutS(NUmbertostring(Rate*100)|'%', LeaseCube, Version, Currency, sYear, Company, SubAccount, GLAccount, BusUnits, TenureID, 'Assumption Rate');
+
+	ENDIF;
+
+	nCtr_Number=nCtr_Number+1;
+END;
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

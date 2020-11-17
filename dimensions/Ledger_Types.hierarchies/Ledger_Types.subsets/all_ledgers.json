@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"all_ledgers",
+	"Expression":"{TM1SUBSETALL( [Ledger_Types] )}"
+}

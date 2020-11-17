@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zACHierarchy",
+	"Expression":"{TM1DRILLDOWNMEMBER( {[BusUnits].[AC1]}, All, RECURSIVE )}"
+}

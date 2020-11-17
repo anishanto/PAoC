@@ -1,0 +1,141 @@
+{
+	"@type":"NativeView",
+	"Name":"Corrigo Work Orders",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthsWithTotal')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Total Amount')"
+					},
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Actuals to Date')"
+					},
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Adjustment')"
+					},
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Corrigo Work Orders')"
+					},
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Corrigo Closed WO')"
+					},
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Corrigo Open WO')"
+					},
+					{
+						"@id":"Dimensions('Detail Measures')/Hierarchies('Detail Measures')/Elements('Value')"
+					}
+				]
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Subsets('All Hierarchies CodeName')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyExpanded')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Subsets('TopParentGL')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('InputSubAccount')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Subledger')/Hierarchies('Subledger')/Subsets('InputSubLedger')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Subledger')/Hierarchies('Subledger')/Elements('All Subledger and Other')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Vendor')/Hierarchies('Vendor')/Subsets('InputVendor')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Vendor')/Hierarchies('Vendor')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail - AltName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2019')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')/Elements('Local')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Subsets('VersionsPMDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')/Elements('Forecast')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.#########"
+}

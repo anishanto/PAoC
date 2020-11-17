@@ -1,0 +1,144 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Updated with multi level text required month select to be removed tmk
+
+RC = 0;
+
+CubeName = 'Leases Portfolio Assumptions';
+ViewNameSource = 'VE-' | CubeName | '-zSource' ;
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+
+CUBESETLOGCHANGES(CubeName, 0);
+
+#  Destroy previous views and subsets for forecast transfer 
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Years', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions Measures', ViewNameTarget);
+
+# Create views and subsets to Zero out
+
+SubsetCreate ('Versions_PM', ViewNameTarget);
+SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, pTargetVersion, 1);
+
+# Create Year
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Years] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create Portfolio Assumptions
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Portfolio Assumptions] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create Portfolio Assumptions Measures
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Portfolio Assumptions Measures] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+ViewCreate( CubeName, ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Fiscal Years', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Portfolio Assumptions', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Portfolio Assumptions Measures', ViewNameTarget);
+ViewRowDimensionSet(CubeName, ViewNameTarget,  'Versions_PM', 1);
+ViewRowDimensionSet(CubeName, ViewNameTarget, 'Fiscal Years',4);
+ViewRowDimensionSet (CubeName, ViewNameTarget, 'Portfolio Assumptions', 2);
+ViewRowDimensionSet (CubeName, ViewNameTarget, 'Portoflio Assumptions Measures',5);
+
+# Zero out the Target values
+VIEWZEROOUT(CubeName, ViewNameTarget);
+
+#Delete view to create source version 
+
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Fiscal Years', ViewNameSource);
+SubsetDestroy ('Portfolio Assumptions', ViewNameSource);
+SubsetDestroy ('Portfolio Assumptions Measures', ViewNameSource);
+
+SubsetCreate ('Versions_PM', ViewNameSource);
+SubsetElementInsert ( 'Versions_PM',  ViewNameSource, pSourceVersion, 1);
+
+# Use Source year
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Fiscal Years] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+# Create Portfolio Assumptions
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Portfolio Assumptions] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+# Create Portfolio Assumptions Measures
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Portfolio Assumptions Measures] )}, 0)}';
+SubsetCreatebyMDX( ViewNameSource, sMDX);
+
+# Create the Source view
+ViewCreate( CubeName, ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Versions_PM', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Fiscal Years', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Portfolio Assumptions', ViewNameSource);
+ViewSubsetAssign (CubeName, ViewNameSource, 'Portfolio Assumptions Measures', ViewNameSource);
+ViewRowDimensionSet(CubeName, ViewNameSource,  'Versions_PM', 1);
+ViewRowDimensionSet(CubeName, ViewNameSource, 'Fiscal Years',4);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Portfolio Assumptions', 2);
+ViewRowDimensionSet (CubeName, ViewNameSource, 'Portfolio Assumptions Measures',5);
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameSource, 0);
+ViewExtractSkipZeroesSet(CubeName, ViewNameSource, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameSource;
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Copy from source Version to Target Version
+vMeasureType = DType('Portfolio Assumptions Measures',Measures);
+IF (vMeasureType @='S' & CellIsUpdateable(CubeName, pTargetVersion,FiscalYear,PortfolioAssumptions,Measures)=1);
+	CellPutS (Value, CubeName, pTargetVersion, FiscalYear,PortfolioAssumptions,Measures);
+ELSEIF (vMeasureType@='N' & CellIsUpdateable(CubeName,pTargetVersion,FiscalYear,PortfolioAssumptions,Measures)=1);
+	ValueN = StringtoNumber(Value);
+	CellPutN (ValueN, CubeName, pTargetVersion, FiscalYear,PortfolioAssumptions,Measures);
+ENDIF;
+
+# Copy Version Log
+IF (RC = 0);
+	asciioutput ( '..\datasources\exports\CopyVersion.csv', 'TargetVersion','TargetYear','PortfolioAssumptions', 'PortfolioAssumptionsMeasures','Value');
+	RC = RC+ 1;
+ENDIF;
+asciioutput ( '..\datasources\exports\CopyVersion.csv', pTargetVersion, FiscalYear, PortfolioAssumptions,Measures, Value);
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CUBESETLOGCHANGES(CubeName, 1);
+
+ViewDestroy (CubeName, ViewNameSource);
+SubsetDestroy ('Versions_PM', ViewNameSource);
+SubsetDestroy ('Fiscal Years', ViewNameSource);
+SubsetDestroy ('Portfolio Assumptions', ViewNameSource);
+SubsetDestroy ('Portfolio Assumptions Measures', ViewNameSource);
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Years', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions', ViewNameTarget);
+SubsetDestroy ('Portfolio Assumptions Measures', ViewNameTarget);
+#endregion

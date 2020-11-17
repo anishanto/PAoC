@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"CopyVersion - OpexDetail All_Wrapper",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"CopyVersion - OpexDetail All_Wrapper.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pVersion",
+			"Prompt":"",
+			"Value":"Budget",
+			"Type":"String"
+		},
+		{
+			"Name":"pFYear",
+			"Prompt":"",
+			"Value":"2018",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

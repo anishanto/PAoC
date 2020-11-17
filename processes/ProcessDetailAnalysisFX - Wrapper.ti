@@ -1,0 +1,46 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Set Company based on parameter
+vCompany = DimensionElementPrincipalName('Company', pCo);
+
+#Execute Currency processes based on cycle panel settings 
+###Currency Conversion
+IF(pCurrency @= 'Yes');
+     ExecuteProcess( 'ProcessDetailAnalysisFX - Company', 'pVersion', pVersion, 'pYear', pYear, 'pCo', vCompany, 'pCurrencyTo', pCurrencyTo, 'pExtractCalc', 'No');
+ENDIF;
+
+###Restatement Conversion
+IF(pRestatement @= 'Yes');
+     ExecuteProcess( 'ProcessDetailAnalysisFX - Restatement', 'pVersion', pVersion, 'pYear', pYear, 'pCo', vCompany, 'pCurrencyTo', pCurrencyTo, 'pExtractCalc', 'No');
+ENDIF;
+
+###FX Variance Calculation
+IF(pVariation @= 'Yes');
+     ExecuteProcess( 'ProcessDetailAnalysisFX - FX Variance', 'pVerSource', pVersion, 'pYear', pYear, 'pCo', vCompany, 'pCurTo',pCurrencyTo);
+ENDIF;
+
+
+#######Load Results to Opex Analysis################
+
+IF(pCurrency@='Yes' % pRestatement@='Yes' % pVariation@='Yes');
+ExecuteProcess( 'CopyVersion - OpexDetailAnalysis to OpexAnalysis Values', 'pSourceVersion', pVersion, 'pCompany','All Companies', 'pSourceYear', pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

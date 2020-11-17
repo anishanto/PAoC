@@ -1,0 +1,149 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vProcess = GetProcessName();
+vPA = '}Processes';
+AttrPutS('',vPA,vProcess,'Failure');
+
+pIncrement = 0;
+pEmail =  CellGetS('Global Control','Core Team Email','String');
+cClientType =  CellGetS('Global Control','Client Model Type','String');
+
+cClientSubAcctType = CellGetS('Global Control','Client SubAcct Type','String');
+
+# Processes
+
+vCheckFileProcessBalance = 'update_manual_opex_plan_check';
+vLoadProcessOpexPlanZeroOut='update_manual_opex_plan_zeroout';
+vLoadProcessOpexPlan = 'update_manual_opex_plan';
+
+vCheckFileProcessDetail = 'update_manual_opex_detail_check';
+vLoadProcessOpexDetailZeroOut='update_manual_opex_detail_zeroout';
+vLoadProcessOpexDetail = 'update_manual_opex_detail';
+
+pZeroCube=0;
+pZeroCompany ='';
+pZeroBusUnits='';
+pZeroGL_Accounts='';
+pZeroFiscalMonths='';
+pZeroFiscalYears='';
+pZeroSubLedger='';
+pZeroVendor='';
+pEmail = CellGetS('Global Control','Core Team Email','String');
+pZeroAssumptions=0;
+pIncrement=1;
+
+IF (cClientType@='Balances');
+	IF (pVersion@='Actuals');
+		vCheckProcess = vCheckFileProcessDetail;
+		vZeroProcess= vLoadProcessOpexDetailZeroOut;
+		vLoadProcess = vLoadProcessOpexDetail;
+		cFileName = 'Opex_Actual_Load.csv';
+	ELSE;
+		vCheckProcess = vCheckFileProcessBalance;
+		vZeroProcess= vLoadProcessOpexPlanZeroOut;
+		vLoadProcess = vLoadProcessOpexPlan;
+		cFileName = 'Opex_Plan_Load.csv';
+	ENDIF;	
+ELSEIF (cClientType@='Detail');
+	IF (pVersion@='Actuals');
+		vCheckProcess = vCheckFileProcessDetail;
+		vZeroProcess= vLoadProcessOpexDetailZeroOut;
+		vLoadProcess = vLoadProcessOpexDetail;
+		cFileName = 'Opex_Actual_Load.csv';
+	ELSE;
+		vCheckProcess = vCheckFileProcessDetail;
+		vZeroProcess= vLoadProcessOpexDetailZeroOut;
+		vLoadProcess = vLoadProcessOpexDetail;
+		cFileName = 'Opex_Detail_Load.csv';
+	endif;
+ENDIF;
+
+	#################### File Check
+return = ExecuteProcess(vCheckProcess,'pVersion',pVersion,'cFileName',cFileName,'pYear',pYear);
+
+IF(return = ProcessExitByQuit % return = ProcessExitMinorError());
+	vError = 1;
+ENDIF;
+
+####### Cube Load
+IF (vError = 0);
+	ExecuteProcess(vZeroProcess,'pVersion',pVersion,'pFileName',cFileName);
+	ExecuteProcess(vLoadProcess,'pDebug',pDebug,'pZeroCube',pZeroCube,'pZeroCompany',pZeroCompany,'pZeroBusUnits',pZeroBusUnits,'pZeroGL_Accounts',pZeroGL_Accounts,'pZeroFiscalMonths',pZeroFiscalMonths,'pZeroFiscalYears',pZeroFiscalYears,'pEmail',pEmail,'pEmailFile',pEmailFile,'pZeroAssumptions',pZeroAssumptions,'pIncrement',pIncrement,'pVersion',pVersion
+	,'pFileName',cFileName);
+ELSE;
+	sMessage = 'The file has failed validation and has not uploaded. Please verify file content and start the file upload process again. Contact your FSL lead if you have any questions.';
+	AttrPutS (sMessage,vPA,vProcess,'Failure');
+	CubeSaveData('}ElementAttributes_Processes'); 
+	ProcessQuit;
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#if the version is Actuals, the process to transfer data to the cubes must be executed.
+if (pVersion@='Actuals');
+	#####################################Populate All Vendors & Other #################################################
+	sProcessName='CopyActuals - OpexDetail All Vendor and Other';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+
+	#####################################Populate All Subledger & Other #################################################
+	sProcessName='CopyActuals - OpexDetail All Subledger and Other';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+
+	#####################################Populate All GL & Other #################################################
+	sProcessName='CopyActuals - OpexDetail All GL and Other';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+
+	#####################################Populate Detail Analysis cube#################################################
+	sProcessName='CopyVersion - OpexDetail to OpexDetailAnalysis Value';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+
+	#####################################Populate Detail Analysis cube#################################################
+	sProcessName='CopyVersion - OpexDetail to OpexDetailAnalysis Text';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+	
+	#####################################Populate Opex Plan cube#################################################
+	sProcessName='CopyVersion - OpexDetail to OpexPlan Value';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+
+	#####################################Populate Opex Analysis cube#################################################
+	sProcessName='CopyVersion - OpexPlan to OpexAnalysis Value';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+	
+
+	#####################################Populate Opex Analysis cube#################################################
+	sProcessName='CopyVersion - OpexPlan to OpexAnalysis Text';
+	EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pYear,'pTargetYear',pYear,'pTargetVersion',pVersion);
+	
+	cFMorLeases='FM';
+	IF(DIMIX('Global Control Items', 'Client Tenure Type')<>0);
+		cClientIsLease=CellGetS('Global Control', 'Client Tenure Type', 'String');
+		IF(cClientIsLease@='Tenure');
+			cFMorLeases='Leases';
+		ENDIF;
+	ENDIF;
+	
+	if (cFMorLeases@='Leases');
+		sProcessName='LeaseE1Actuals - LeasesCube';
+		EXECUTEPROCESS(sProcessName);
+	
+	endif;
+
+endif;
+#endregion

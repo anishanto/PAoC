@@ -1,0 +1,25 @@
+{
+	"@type":"Cube",
+	"Name":"Leases Portfolio Assumptions",
+	"Rules@Code.link":"Leases Portfolio Assumptions.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions')"
+		},
+		{
+			"@id":"Dimensions('Portfolio Assumptions Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Leases Portfolio Assumptions.views/Leases Portfolio Assumptions.json",
+		"Leases Portfolio Assumptions.views/Portfolio Assumptions Matrix.json"
+	]
+}

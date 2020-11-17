@@ -1,0 +1,61 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vDim = '}ElementAttributes_GL_Accounts';
+vSub = 'zDimMgmt';
+AttrInsert('GL_Accounts', '', 'InputFlag', 'S');
+
+vClientType = CellGetS('Global Control', 'Client Model Type', 'String');
+vSubAccount = CellGetN('Global Control', 'Client Model Type', 'Value');
+
+if (vSubAccount = 1);
+	SubsetMDXSet('SubAccounts', 'InputSubAccount', '{TM1DRILLDOWNMEMBER( {[SubAccounts].[SH1]}, ALL, RECURSIVE )}');
+else;
+	SubsetMDXSet('SubAccounts', 'InputSubAccount', '{[SubAccounts].[NA]}');
+endif;
+
+vSubLedger = CellGetN('Global Control', 'Client Subledger Type', 'Value');
+
+if (vSubLedger = 1);
+	SubsetMDXSet('Subledger', 'InputSubLedger', '{TM1DRILLDOWNMEMBER( {[Subledger].[SH1]}, ALL, RECURSIVE )}');
+else;
+	SubsetMDXSet('Subledger', 'InputSubLedger', '{[Subledger].[All Subledger and Other]}');
+endif;
+
+vVendor = CellGetN('Global Control', 'Client Vendor Type', 'Value');
+
+if (vVendor = 1);
+	SubsetMDXSet('Vendor', 'InputVendor', '{TM1DRILLDOWNMEMBER( {[Vendor].[SH1]}, ALL, RECURSIVE )}');
+else;
+	SubsetMDXSet('Vendor', 'InputVendor', '{[Vendor].[All Vendor and Other]}');
+endif;
+
+
+ExecuteProcess('update_dim_business_units_3_WF_hierarchy_build');
+ViewSubsetAssign('Opex Detail Cube', 'Suppression Flag', 'BUsUnits', 'Approval WF');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+vDim = '}ElementAttributes_GL_Accounts';
+vSub = 'zDimMgmt';
+vSize = SubsetGetSize(vDim, vSub);
+vSubsetElement = SubsetGetElementName(vDim, vSub, vSize);
+vSortNum = AttrN(vDim, vSubsetElement, 'SortAttr');
+AttrPutN(vSortNum+1, vDim, 'InputFlag', 'SortAttr');
+#endregion

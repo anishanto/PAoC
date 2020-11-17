@@ -1,0 +1,1204 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Fiscal Month Year",
+	"Elements":
+	[
+		{
+			"Name":"Attribute",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"All Month Years",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Y01",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y01",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y02",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y02",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y03",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y03",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y04",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y04",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y05",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y05",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y06",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y06",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y07",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y07",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y08",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y08",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y09",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y09",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Y10",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"M01 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M02 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M03 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M04 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M05 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M06 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M07 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M08 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M09 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M10 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M11 Y10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"M12 Y10",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Month Years",
+			"ComponentName":"Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M01 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M02 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M03 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M04 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M05 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M06 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M07 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M08 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M09 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M10 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M11 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y01",
+			"ComponentName":"M12 Y01",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M01 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M02 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M03 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M04 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M05 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M06 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M07 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M08 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M09 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M10 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M11 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y02",
+			"ComponentName":"M12 Y02",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M01 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M02 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M03 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M04 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M05 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M06 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M07 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M08 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M09 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M10 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M11 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y03",
+			"ComponentName":"M12 Y03",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M01 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M02 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M03 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M04 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M05 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M06 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M07 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M08 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M09 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M10 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M11 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y04",
+			"ComponentName":"M12 Y04",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M01 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M02 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M03 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M04 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M05 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M06 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M07 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M08 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M09 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M10 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M11 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y05",
+			"ComponentName":"M12 Y05",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M01 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M02 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M03 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M04 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M05 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M06 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M07 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M08 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M09 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M10 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M11 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y06",
+			"ComponentName":"M12 Y06",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M01 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M02 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M03 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M04 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M05 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M06 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M07 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M08 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M09 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M10 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M11 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y07",
+			"ComponentName":"M12 Y07",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M01 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M02 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M03 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M04 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M05 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M06 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M07 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M08 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M09 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M10 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M11 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y08",
+			"ComponentName":"M12 Y08",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M01 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M02 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M03 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M04 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M05 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M06 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M07 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M08 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M09 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M10 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M11 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y09",
+			"ComponentName":"M12 Y09",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M01 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M02 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M03 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M04 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M05 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M06 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M07 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M08 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M09 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M10 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M11 Y10",
+			"Weight":1
+		},
+		{
+			"ParentName":"Y10",
+			"ComponentName":"M12 Y10",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Fiscal Month Year.subsets/All Members.json",
+		"Fiscal Month Year.subsets/FiscalMonthsDetail.json",
+		"Fiscal Month Year.subsets/FiscalMonthsDetailF.json",
+		"Fiscal Month Year.subsets/FiscalMonthsExpanded.json",
+		"Fiscal Month Year.subsets/FiscalMonthsExpandedF.json",
+		"Fiscal Month Year.subsets/FiscalMonthswithTotal.json",
+		"Fiscal Month Year.subsets/FiscalMonthswithTotalF.json",
+		"Fiscal Month Year.subsets/FiscalMonthYear.json",
+		"Fiscal Month Year.subsets/FiscalMonthYearF.json",
+		"Fiscal Month Year.subsets/FiscalYear.json",
+		"Fiscal Month Year.subsets/LeaseCubeView.json",
+		"Fiscal Month Year.subsets/Level 0.json",
+		"Fiscal Month Year.subsets/Level 1.json"
+	]
+}

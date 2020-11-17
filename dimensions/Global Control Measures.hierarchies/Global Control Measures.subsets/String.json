@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"String",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Global Control Measures')/Hierarchies('Global Control Measures')/Elements('String')"
+		}
+	]
+}

@@ -1,0 +1,157 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##############Create Constants
+
+cDim = 'Cost Type';
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');           
+vFileName = 'Leases_GLAccount_Mapping.csv';
+sFullExportPath = cExportPath|vFileName;
+cFileName =pFileName;
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+nRecordProcessedCount = 0;
+nRecordPostedCount = 0;
+sViewZero = cProcessName|' Zero';
+pSubsetZero = cProcessName|' Zero';
+
+#sBU = 'BusUnits';
+#sUnassignedBU = 'Unassigned BusUnits' ;
+#pBusAH = CELLGETN('Global Control', 'BusUnits AH Hierarchies', 'Value');
+#pGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+#pSubAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+#sGL ='GL_Accounts' ;
+#sUnassignedAcct = 'Unassigned GL' ;
+#sUnassignedAcctBS = 'Unassigned GL Balance Sheet' ;
+#sUnassignedAcctPL = 'Unassigned GL PL Account' ;
+#sUnassignedAcctST = 'Unassigned GL Statistical' ;
+#sCO ='Company';
+#sSA ='SubAccounts' ;
+#sUnassignedSub = 'Unassigned SubAccount';  
+#######################################Set Debug
+
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+
+   #Log Variables, Constants and Strings
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '           cFileName                           : '| cFileName);
+   AsciiOutput( sDebugFile, '           sFullPath                             : '| sFullPath);
+   AsciiOutput( sDebugFile, '           cCube                                  : '| cDim);
+
+EndIf; 
+##############################################################Check to make sure file path exists
+
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+ 
+############################################################ Assign DataSource 
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+ 
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+############################Continue Debug
+
+If( pDebug >=1 );
+   #Set Debug File
+   sDebugFile = cDebugFile | 'MetaData.debug';
+EndIf;
+
+##########################Update Elements in Dimension Cost Type
+
+IF(JLLKey@<>' ');
+   	IF(DIMIX('Cost Type', JLLKey ) = 0);
+      		DIMENSIONELEMENTINSERT('Cost Type','',JLLKey,'n');
+      		DIMENSIONELEMENTCOMPONENTADD('Cost Type','All Cost Type',JLLKey,1);
+	ENDIF;
+EndIf;
+
+If( pDebug >=1 );
+   
+   ASCIIOUTPUT (sDebugFile, 'Review Cost Type Elements.','Cost Type',JLLKey);
+   
+ENDIF;
+
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(Dimix('Cost Type', JLLKey)<>0);
+	AttrPutS(CostType, cDim, JLLkey, 'Name');
+	AttrPutS(CostCategory, cDim, JLLKey, 'CostCategory');
+	AttrPutS(StandardAP, cDim, JLLKey, 'AccountsPayable');
+	AttrPutS(StandardAR, cDim, JLLKey, 'AccountsReceivable');
+ENDIF;
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+If( pDebug >=1 );
+
+################Log Finish Time
+          AsciiOutput ( sDebugFile, 'Record Processed: ' | NumberToString ( nRecordProcessedCount ) );
+          AsciiOutput ( sDebugFile, 'Record Load: ' |  NumberToString ( nRecordPostedCount) );
+          AsciiOutPut ( sDebugFile, 'Process Finished: ' | TimSt ( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+
+
+
+
+#endregion

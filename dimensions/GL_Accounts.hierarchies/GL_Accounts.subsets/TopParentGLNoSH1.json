@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"TopParentGLNoSH1",
+	"Expression":"{[GL_Accounts].[AH1] , [GL_Accounts].[AH2] , [GL_Accounts].[AH3] , [GL_Accounts].[Total Statistics] , [GL_Accounts].[AH4]  , [GL_Accounts].[AH5]  , [GL_Accounts].[AH6]  , [GL_Accounts].[AH7] }"
+}

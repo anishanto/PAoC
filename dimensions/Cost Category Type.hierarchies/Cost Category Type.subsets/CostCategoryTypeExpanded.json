@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CostCategoryTypeExpanded",
+	"Expression":"{TM1SUBSETALL( [Cost Category Type] )}"
+}

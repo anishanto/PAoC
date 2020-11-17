@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"Utility_ApacLease",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Utility_ApacLease.ti",
+	"UIData":"_ParameterConstraints=e30=\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

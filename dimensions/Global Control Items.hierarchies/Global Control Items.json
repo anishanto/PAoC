@@ -1,0 +1,461 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Global Control Items",
+	"Elements":
+	[
+		{
+			"Name":"E1 Actuals Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"TM1 Client Actuals Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DW Push Default Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Extract Year",
+			"Type":"String"
+		},
+		{
+			"Name":"DW Current Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"TAT Environment",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Environment",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client Name",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client ID OneView",
+			"Type":"String"
+		},
+		{
+			"Name":"Client Corrigo",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client Corrigo Name",
+			"Type":"String"
+		},
+		{
+			"Name":"Client Server Name",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client SubAcct Type",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client Subledger Type",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client Vendor Type",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client Tenure Type",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Client Model Type",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Backup Folder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Import Folder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Export Folder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Import Shared Folder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Export Shared Folder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Log Folder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Security Folder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Security Group 1",
+			"Type":"String"
+		},
+		{
+			"Name":"Security Group 2",
+			"Type":"String"
+		},
+		{
+			"Name":"Security Group 3",
+			"Type":"String"
+		},
+		{
+			"Name":"Core Team Email",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Retention Month",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Detail Cube - Retention Number of Years",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Balance Cube - Retention Number of Years",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Consolidated level planning",
+			"Type":"String"
+		},
+		{
+			"Name":"Select Level of Planning",
+			"Type":"String"
+		},
+		{
+			"Name":"Select Allocation",
+			"Type":"String"
+		},
+		{
+			"Name":"E1 Calendar",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Budget Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Bud Input GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Bud Input SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Bud Review GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Bud Review SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Bud Input Subledger Subset",
+			"Type":"String"
+		},
+		{
+			"Name":"Bud Input Vendor Subset",
+			"Type":"String"
+		},
+		{
+			"Name":"Forecast Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Actuals Month",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Fcst Input GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Fcst Input SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Fcst Review GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Fcst Review SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Fcst Input Subledger Subset",
+			"Type":"String"
+		},
+		{
+			"Name":"Fcst Input Vendor Subset",
+			"Type":"String"
+		},
+		{
+			"Name":"Reporting Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Actuals Month",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Forecast Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting PriorForecast Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Forecast Budget Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Qtrly Version 1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Qtrly Version 2",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Currency",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Scale",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Measure",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Chart Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Chart Comparison Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Chart Month",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Subledger Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Reporting Vendor Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BusUnits AH Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BusUnits AL Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BusUnits AO Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"GA Accounts AH Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"GA Accounts AL Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"GA Accounts AO Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"SubAccounts AH Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"SubAccounts AL Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"SubAccounts AO Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"SubLedger AH Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Vendor AH Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Tenure AH Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Tenure AL Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Tenure AO Hierarchies",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Base Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Number of Years Projection",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Actuals Month",
+			"Type":"String"
+		},
+		{
+			"Name":"Lease Forecast Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Budget Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Currency Filter",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Year",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Actuals Month",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Comparison Version 1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Comparison Version 2",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Budget Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Currency",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Scale",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Measure",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting BusUnits Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting TenureID Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Bud Input GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Bud Input SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Bud Input TenureID Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Fcst Input GLA Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Fcst Input SubAcct Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Fcst Input TenureID Subset",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Chart Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Chart Comparison Version",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Reporting Chart Month",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Load Budget File",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Lease Load Forecast File",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"PRD Core Team Email",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Security Group TAT",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Global Control Items.subsets/All Members.json",
+		"Global Control Items.subsets/DW Current Year.json",
+		"Global Control Items.subsets/E1 Actuals Load.json"
+	]
+}

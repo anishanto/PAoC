@@ -1,0 +1,893 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Cost Type",
+	"Elements":
+	[
+		{
+			"Name":"All Cost Type",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"104",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"114",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"115",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"116",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"118",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"119",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"120",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"122",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"123",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"124",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"125",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"126",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"127",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"130",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"131",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"132",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"133",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"135",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"137",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"138",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"140",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"142",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"143",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"146",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"147",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"149",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"151",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"152",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"153",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"155",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"156",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"157",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"158",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"160",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"161",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"162",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"163",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"166",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"167",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"177",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"179",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"180",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"181",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"182",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"183",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"184",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"185",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"186",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"187",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"188",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"189",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"190",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"191",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"192",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"193",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"194",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"195",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"196",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"197",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"198",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"199",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"200",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"201",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"202",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"203",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"205",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"207",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"210",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"213",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"214",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"218",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"219",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"220",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"221",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"222",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"223",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"224",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"225",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"226",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"227",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"228",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"229",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"230",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"231",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"233",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"234",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"235",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"236",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"237",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"238",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"239",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"240",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"241",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"244",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"245",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"246",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"75",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"104",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"114",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"115",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"116",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"118",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"119",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"120",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"122",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"123",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"124",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"125",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"126",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"127",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"130",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"131",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"132",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"133",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"135",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"137",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"138",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"140",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"142",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"143",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"146",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"147",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"149",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"151",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"152",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"153",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"155",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"156",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"157",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"158",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"160",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"161",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"162",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"163",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"166",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"167",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"177",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"179",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"180",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"181",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"182",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"183",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"184",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"185",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"186",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"187",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"188",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"189",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"190",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"191",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"192",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"193",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"194",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"195",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"196",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"197",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"198",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"199",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"200",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"201",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"202",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"203",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"205",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"207",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"210",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"213",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"214",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"218",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"219",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"220",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"221",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"222",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"223",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"224",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"225",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"226",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"227",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"228",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"229",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"230",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"231",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"233",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"234",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"235",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"236",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"237",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"238",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"239",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"240",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"241",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"244",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"245",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"246",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Cost Type",
+			"ComponentName":"75",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Cost Type.subsets/CostTypeDetail.json",
+		"Cost Type.subsets/CostTypeExpanded.json",
+		"Cost Type.subsets/level0.json"
+	]
+}

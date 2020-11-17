@@ -1,0 +1,615 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(pVersion@='Budget' % pVersion@='Forecast');
+	sCheck=CellGetS('Global Control', 'Lease Load '|pVersion|' File', 'String');
+	cProcess = GETPROCESSNAME ;
+	cubMessages = '}ElementAttributes_}Processes';
+	elmFailureMessage = 'Failure' ;
+	CellPutS('',cubMessages,cProcess,elmfailureMessage);
+	
+	IF(sCheck@<>'Yes');
+		vMessage='Process failed: Leases values for '|pVersion|' are calculated.';
+		CellPutS(vMessage,cubMessages,cProcess,elmfailureMessage);
+		ProcessQuit;
+	ENDIF;
+ENDIF;
+
+
+##############Create Constants
+
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');           
+vFileName = 'Leases_'|pVersion|'.csv';
+sFullExportPath = cExportPath|vFileName;
+cFileName =vFileName;
+sFullPath = cImportPath|cFileName;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+nRecordProcessedCount = 0;
+nRecordPostedCount = 0;
+cCube='Leases Cube';
+cDim='Fiscal Month Year';
+sViewZero = cProcessName|' Zero';
+pSubsetZero = cProcessName|' Zero';
+Version=pVersion;
+Currency='Local';
+sSub=CellGetS('Global Control', 'Client SubAcct Type', 'String');
+
+pBusAH = CELLGETN('Global Control', 'BusUnits AH Hierarchies', 'Value');
+pGLAH = CELLGETN('Global Control', 'GA Accounts AH Hierarchies', 'Value');
+pSubAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+pLeaseAH=CELLGETN('Global Control', 'Tenure AH Hierarchies', 'Value');
+sBU = 'BusUnits';
+sABU = '}ElementAttributes_BusUnits';
+sUnassignedBU = 'Unassigned BusUnits' ;
+sGL ='GL_Accounts' ;
+sAGL = '}ElementAttributes_GL_Accounts';
+sUnassignedAcct = 'Unassigned GL' ;
+sUnassignedAcctBS = 'Unassigned GL Balance Sheet' ;
+sUnassignedAcctPL = 'Unassigned GL PL Account' ;
+sUnassignedAcctST = 'Unassigned GL Statistical' ;
+sSA ='SubAccounts' ;
+sASA = '}ElementAttributes_SubAccounts';
+sUnassignedSub = 'Unassigned SubAccount';  
+sLease='Tenure ID';
+sUnassignedLease='Unnasigned Lease';
+sDateAttr = 'CreationDate';
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+cDim= 'Tenure ID';
+LeaseCube='Leases Cube';
+
+
+#######################################Set Debug
+
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+   
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+
+   #Log Variables, Constants and Strings
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '           cFileName                           : '| cFileName);
+   AsciiOutput( sDebugFile, '           sFullPath                             : '| sFullPath);
+   AsciiOutput( sDebugFile, '           cCube                                  : '| cDim);
+
+EndIf; 
+##############################################################Check to make sure file path exists
+
+  IF( FileExists ( sFullPath ) = 0);
+    nError = 1;
+    sMessage = 'Location or File does not exist: Please review';
+    If( pDebug >=1 );
+      AsciiOutput ( sDebugFile, sMessage );
+    EndIf;
+    DataSourceType = 'NULL';
+    ItemReject ( sMessage );
+  EndIf;
+ 
+############################################################ Assign DataSource 
+
+DataSourceType = 'CHARACTERDELIMITED';
+DataSourceNameForServer = sFullPath;
+DataSourceNameForClient = sFullPath;
+DataSourceASCIIHeaderRows = 1;
+
+ 
+##########Clean Leases Cube
+
+IF(pZeroView=1);
+	CubeName = 'Leases Cube';
+	ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+
+	#  Destroy previous views and subsets for forecast transfer 
+
+	ViewDestroy (CubeName, ViewNameTarget);
+	SubsetDestroy ('Versions_PM', ViewNameTarget);
+	SubsetDestroy ('Currency_PM', ViewNameTarget);
+	SubsetDestroy ('Fiscal Month Year', ViewNameTarget);
+	SubsetDestroy ('Company', ViewNameTarget);
+	SubsetDestroy ('SubAccounts', ViewNameTarget);
+	SubsetDestroy ('GL_Accounts', ViewNameTarget);
+	SubsetDestroy ('BusUnits', ViewNameTarget);
+	SubsetDestroy ('Tenure ID', ViewNameTarget);
+	SubsetDestroy ('Leases Measures', ViewNameTarget);
+
+	# Create views and subsets to Zero out
+
+	SubsetCreate ('Versions_PM', ViewNameTarget);
+	SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, pVersion, 1);
+
+	# Create Currency
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency_PM] )}, 0)}';
+	SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+	# Create Fiscal Month Year
+	sMDX = '{TM1SUBSETALL( [Fiscal Month Year] )}';
+	SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+	# Create Company
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}';
+	SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+	# Create SubAccounts
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [SubAccounts] )}, 0)}';
+	SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+	# Create GL Accounts
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [GL_Accounts] )}, 0)}';
+	SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+	# Create BusUnits
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [BusUnits] )}, 0)}';
+	SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+	# Create Tenure ID
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Tenure ID] )}, 0)}';
+	SubsetCreatebyMDX(ViewNameTarget, sMDX);
+
+	# Create Leases Measures
+	sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Leases Measures] )}, 0)}';
+	SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+	ViewCreate( CubeName, ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'Currency_PM', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'Fiscal Month Year', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'Company', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'SubAccounts', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'GL_Accounts', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'BusUnits', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'Tenure ID', ViewNameTarget);
+	ViewSubsetAssign (CubeName, ViewNameTarget, 'Leases Measures', ViewNameTarget);
+
+	# Zero out the Target values
+	VIEWZEROOUT(CubeName, ViewNameTarget); 
+
+ENDIF;
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+###########Constants
+sBU = 'BusUnits';
+vBusUnits=BusUnits;
+vUnassignedBU = 'Unassigned BusUnits SH1' ;
+
+#Insert unassigned BusUnit
+IF(DIMIX(sBU, vBusUnits ) = 0);
+	DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+	IF(DIMIX(sBU, vUnassignedBU ) = 0);
+		DimensionElementInsert(sBU, '', vUnassignedBU , 'C');   
+	EndIf;
+	DimensionElementComponentAdd(sBU, vUnassignedBU, vBusUnits, 1);
+ENDIF;
+
+###########Update General Ledger
+sSubType = CELLGETS('Global Control','Client SubAcct Type', 'String');
+
+IF(sSub@='No Sub');
+	SubAccount='NA';
+ELSE;
+	SubAccount=SubSt(GLAccounts, 8, 3);
+	GLAccounts=SubSt(GLAccounts, 1, 6);
+ENDIF;
+
+#cTrimSubAccountNumber=SubAccount;
+#vAccountNumber=GLAccounts;
+
+sGL ='GL_Accounts' ;
+sSA ='SubAccounts' ;
+vUnassignedSub = 'Unassigned SubAccount SH1';  
+
+vDim = 'GL_Accounts';
+vElement=GLAccounts;
+
+IF(STRINGTONUMBER(SUBST(vElement,1,1))>=4);
+	vUnassignedAcct = 'Unassigned GL PL Account SH1' ;
+	vParent='PL';
+ELSEIF(STRINGTONUMBER(SUBST(vElement,1,1))<=3);
+	vUnassignedAcct = 'Unassigned GL Balance Sheet SH1' ;
+	vParent='BS';
+ELSE;
+	vUnassignedAcct = 'Unassigned GL Statistical SH1' ;
+	vParent='ST';
+ENDIF;
+
+#Insert unassigned General Ledger
+IF(DIMIX(sGL, vElement ) = 0);
+	DimensionElementInsert(sGL, '', vElement, 'N');
+	IF(DIMIX(sGL, vUnassignedAcct ) = 0);
+      		DimensionElementInsert(sGL, '', vUnassignedAcct , 'C'); 
+      		DimensionElementComponentAdd(sGL, vParent,vUnassignedAcct, 1); 
+   	EndIf;
+  	DimensionElementComponentAdd(sGL, vUnassignedAcct,vElement, 1);
+ENDIF;
+
+###########Update SubAccount
+
+IF(sSub@='No Sub');
+ELSE;
+	IF(DIMIX(sSA, SubAccount ) = 0);
+		DIMENSIONELEMENTINSERT(sSA,'',SubAccount,'n');
+		IF(DIMIX(sSA, vUnassignedSub ) = 0);
+			DimensionElementInsert(sSA, '', vUnassignedSub , 'C');  
+		EndIf;
+		DimensionElementComponentAdd(sSA, vUnassignedSub,SubAccount, 1);
+	ENDIF;
+ENDIF;
+
+###########Update Lease
+
+sTenure='Tenure ID';
+IF(DIMIX(sLease, TenureID ) = 0 & TenureID@<> '');
+    DimensionElementInsert(sLease, '', sUnassignedLease|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(sLease, 'SH1', sUnassignedLease|' '|'SH1', 1);
+    DimensionElementInsert(sLease, '',  TenureID, 'N');
+    DimensionElementComponentAdd(sLease, sUnassignedLease|' '|'SH1',TenureID,1);
+ENDIF;
+
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+Version=pVersion;
+
+IF(sSub@='No Sub');
+	SubAccount='NA';
+ELSE;
+	SubAccount=SubSt(GLAccounts, 8, 3);
+	GLAccounts=SubSt(GLAccounts, 1, 6);
+ENDIF;
+
+## zero
+
+IF(pZeroView=0);
+
+##########Clean Leases Cube
+
+CubeName = 'Leases Cube';
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+
+#  Destroy previous views and subsets for forecast transfer 
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Currency_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Month Year', ViewNameTarget);
+SubsetDestroy ('Company', ViewNameTarget);
+SubsetDestroy ('SubAccounts', ViewNameTarget);
+SubsetDestroy ('GL_Accounts', ViewNameTarget);
+SubsetDestroy ('BusUnits', ViewNameTarget);
+SubsetDestroy ('Tenure ID', ViewNameTarget);
+SubsetDestroy ('Leases Measures', ViewNameTarget);
+
+# Create views and subsets to Zero out
+SubsetCreate ('Versions_PM', ViewNameTarget);
+SubsetElementInsert ( 'Versions_PM',  ViewNameTarget, Version, 1);
+
+# Create Currency
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Currency_PM] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create Fiscal Month Year
+sMDX = '{TM1SUBSETALL( [Fiscal Month Year] )}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+# Create Company
+SubsetCreate ('Company', ViewNameTarget);
+SubsetElementInsert ( 'Company',  ViewNameTarget, Company, 1);
+
+# Create SubAccounts
+SubsetCreate ('SubAccounts', ViewNameTarget);
+SubsetElementInsert ( 'SubAccounts',  ViewNameTarget, SubAccount, 1);
+
+# Create GL Accounts
+SubsetCreate ('GL_Accounts', ViewNameTarget);
+SubsetElementInsert ( 'GL_Accounts',  ViewNameTarget, GLAccounts, 1);
+
+# Create BusUnits
+SubsetCreate ('BusUnits', ViewNameTarget);
+SubsetElementInsert ( 'BusUnits',  ViewNameTarget, BusUnits, 1);
+
+# Create Tenure ID
+IF(TenureID@<>'');
+SubsetCreate ('Tenure ID', ViewNameTarget);
+SubsetElementInsert ( 'Tenure ID',  ViewNameTarget, TenureID, 1);
+ELSE;
+itemskip;
+ENDIF;
+
+# Create Leases Measures
+sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Leases Measures] )}, 0)}';
+SubsetCreatebyMDX( ViewNameTarget, sMDX);
+
+ViewCreate( CubeName, ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Versions_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Currency_PM', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Fiscal Month Year', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Company', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'SubAccounts', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'GL_Accounts', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'BusUnits', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Tenure ID', ViewNameTarget);
+ViewSubsetAssign (CubeName, ViewNameTarget, 'Leases Measures', ViewNameTarget);
+
+# Zero out the Target values
+VIEWZEROOUT(CubeName, ViewNameTarget); 
+
+ENDIF;			
+
+## value
+
+IF(TenureID@='');			
+	TenureID='NA';
+ENDIF;
+
+	CellIncrementN(V6, cCube, Version, Currency, 'M01 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V7, cCube, Version, Currency, 'M02 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V8, cCube, Version, Currency, 'M03 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V9, cCube, Version, Currency, 'M04 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V10, cCube, Version, Currency, 'M05 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V11, cCube, Version, Currency, 'M06 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V12, cCube, Version, Currency, 'M07 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V13, cCube, Version, Currency, 'M08 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V14, cCube, Version, Currency, 'M09 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V15, cCube, Version, Currency, 'M10 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V16, cCube, Version, Currency, 'M11 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V17, cCube, Version, Currency, 'M12 Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V18, cCube, Version, Currency, 'M01 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V19, cCube, Version, Currency, 'M02 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V20, cCube, Version, Currency, 'M03 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V21, cCube, Version, Currency, 'M04 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V22, cCube, Version, Currency, 'M05 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V23, cCube, Version, Currency, 'M06 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V24, cCube, Version, Currency, 'M07 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V25, cCube, Version, Currency, 'M08 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V26, cCube, Version, Currency, 'M09 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V27, cCube, Version, Currency, 'M10 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V28, cCube, Version, Currency, 'M11 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V29, cCube, Version, Currency, 'M12 Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+
+	CellIncrementN(V30, cCube, Version, Currency, 'M01 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V31, cCube, Version, Currency, 'M02 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V32, cCube, Version, Currency, 'M03 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V33, cCube, Version, Currency, 'M04 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V34, cCube, Version, Currency, 'M05 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V35, cCube, Version, Currency, 'M06 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V36, cCube, Version, Currency, 'M07 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V37, cCube, Version, Currency, 'M08 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V38, cCube, Version, Currency, 'M09 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V39, cCube, Version, Currency, 'M10 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V40, cCube, Version, Currency, 'M11 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V41, cCube, Version, Currency, 'M12 Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V42, cCube, Version, Currency, 'M01 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V43, cCube, Version, Currency, 'M02 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V44, cCube, Version, Currency, 'M03 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V45, cCube, Version, Currency, 'M04 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V46, cCube, Version, Currency, 'M05 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V47, cCube, Version, Currency, 'M06 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V48, cCube, Version, Currency, 'M07 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V49, cCube, Version, Currency, 'M08 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V50, cCube, Version, Currency, 'M09 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V51, cCube, Version, Currency, 'M10 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V52, cCube, Version, Currency, 'M11 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V53, cCube, Version, Currency, 'M12 Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V54, cCube, Version, Currency, 'M01 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V55, cCube, Version, Currency, 'M02 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V56, cCube, Version, Currency, 'M03 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V57, cCube, Version, Currency, 'M04 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V58, cCube, Version, Currency, 'M05 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V59, cCube, Version, Currency, 'M06 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V60, cCube, Version, Currency, 'M07 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V61, cCube, Version, Currency, 'M08 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V62, cCube, Version, Currency, 'M09 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V63, cCube, Version, Currency, 'M10 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V64, cCube, Version, Currency, 'M11 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V65, cCube, Version, Currency, 'M12 Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V66, cCube, Version, Currency, 'M01 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V67, cCube, Version, Currency, 'M02 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V68, cCube, Version, Currency, 'M03 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V69, cCube, Version, Currency, 'M04 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V70, cCube, Version, Currency, 'M05 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V71, cCube, Version, Currency, 'M06 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V72, cCube, Version, Currency, 'M07 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V73, cCube, Version, Currency, 'M08 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V74, cCube, Version, Currency, 'M09 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V75, cCube, Version, Currency, 'M10 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V76, cCube, Version, Currency, 'M11 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V77, cCube, Version, Currency, 'M12 Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V78, cCube, Version, Currency, 'M01 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V79, cCube, Version, Currency, 'M02 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V80, cCube, Version, Currency, 'M03 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V81, cCube, Version, Currency, 'M04 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V82, cCube, Version, Currency, 'M05 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V83, cCube, Version, Currency, 'M06 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V84, cCube, Version, Currency, 'M07 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V85, cCube, Version, Currency, 'M08 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V86, cCube, Version, Currency, 'M09 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V87, cCube, Version, Currency, 'M10 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V88, cCube, Version, Currency, 'M11 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V89, cCube, Version, Currency, 'M12 Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V90, cCube, Version, Currency, 'M01 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V91, cCube, Version, Currency, 'M02 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V92, cCube, Version, Currency, 'M03 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V93, cCube, Version, Currency, 'M04 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V94, cCube, Version, Currency, 'M05 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V95, cCube, Version, Currency, 'M06 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V96, cCube, Version, Currency, 'M07 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V97, cCube, Version, Currency, 'M08 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V98, cCube, Version, Currency, 'M09 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V99, cCube, Version, Currency, 'M10 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V100, cCube, Version, Currency, 'M11 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V101, cCube, Version, Currency, 'M12 Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V102, cCube, Version, Currency, 'M01 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V103, cCube, Version, Currency, 'M02 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V104, cCube, Version, Currency, 'M03 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V105, cCube, Version, Currency, 'M04 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V106, cCube, Version, Currency, 'M05 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V107, cCube, Version, Currency, 'M06 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V108, cCube, Version, Currency, 'M07 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V109, cCube, Version, Currency, 'M08 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V110, cCube, Version, Currency, 'M09 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V111, cCube, Version, Currency, 'M10 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V112, cCube, Version, Currency, 'M11 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V113, cCube, Version, Currency, 'M12 Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	
+	CellIncrementN(V114, cCube, Version, Currency, 'M01 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V115, cCube, Version, Currency, 'M02 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V116, cCube, Version, Currency, 'M03 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V117, cCube, Version, Currency, 'M04 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V118, cCube, Version, Currency, 'M05 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V119, cCube, Version, Currency, 'M06 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V120, cCube, Version, Currency, 'M07 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V121, cCube, Version, Currency, 'M08 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V122, cCube, Version, Currency, 'M09 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V123, cCube, Version, Currency, 'M10 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V124, cCube, Version, Currency, 'M11 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+	CellIncrementN(V125, cCube, Version, Currency, 'M12 Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Lease Value');
+
+
+	#######     Only fill in attributes if there's no data from DW
+
+	vDatafromDW=AttrS(cDim,TenureID,'LeaseStartDate');
+	IF(vDatafromDW@='');
+		ATTRPUTS(LeaseStartDate,cDim,TenureID,'LeaseStartDate');
+	 	ATTRPUTS(LeaseEndDate,cDim,TenureID,'LeaseEndDate');
+
+		ATTRPUTS(BudgetRegion,cDim,TenureID,'Region');
+		ATTRPUTS(BudgetBuildingType,cDim,TenureID,'BUType');
+		ATTRPUTS(LeaseType,cDim,TenureID,'LeaseType');
+	ENDIF;
+
+	#######################################
+
+	CellPutN(StartAmount, LeaseCube, Version, Currency, 'Attribute', Company, SubAccount, GLAccounts, BUsUnits, TenureID, 'Cost Amount');
+	
+	CellPutS(CategoryY01, LeaseCube, Version, Currency, 'Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY01, LeaseCube, Version, Currency, 'Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY01, LeaseCube, Version, Currency, 'Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY01, LeaseCube, Version, Currency, 'Y01', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY02, LeaseCube, Version, Currency, 'Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY02, LeaseCube, Version, Currency, 'Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY02, LeaseCube, Version, Currency, 'Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY02, LeaseCube, Version, Currency, 'Y02', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY03, LeaseCube, Version, Currency, 'Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY03, LeaseCube, Version, Currency, 'Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY03, LeaseCube, Version, Currency, 'Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY03, LeaseCube, Version, Currency, 'Y03', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY04, LeaseCube, Version, Currency, 'Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY04, LeaseCube, Version, Currency, 'Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY04, LeaseCube, Version, Currency, 'Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY04, LeaseCube, Version, Currency, 'Y04', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY05, LeaseCube, Version, Currency, 'Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY05, LeaseCube, Version, Currency, 'Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY05, LeaseCube, Version, Currency, 'Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY05, LeaseCube, Version, Currency, 'Y05', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY06, LeaseCube, Version, Currency, 'Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY06, LeaseCube, Version, Currency, 'Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY06, LeaseCube, Version, Currency, 'Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY06, LeaseCube, Version, Currency, 'Y06', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY07, LeaseCube, Version, Currency, 'Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY07, LeaseCube, Version, Currency, 'Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY07, LeaseCube, Version, Currency, 'Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY07, LeaseCube, Version, Currency, 'Y07', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY08, LeaseCube, Version, Currency, 'Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY08, LeaseCube, Version, Currency, 'Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY08, LeaseCube, Version, Currency, 'Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY08, LeaseCube, Version, Currency, 'Y08', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY09, LeaseCube, Version, Currency, 'Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY09, LeaseCube, Version, Currency, 'Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY09, LeaseCube, Version, Currency, 'Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY09, LeaseCube, Version, Currency, 'Y09', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+	CellPutS(CategoryY10, LeaseCube, Version, Currency, 'Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Category');  	
+	CellPutS(EventTypeY10, LeaseCube, Version, Currency, 'Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Type');
+	CellPutS(EventDateY10, LeaseCube, Version, Currency, 'Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Event Dates');
+	CellPutS(RateY10, LeaseCube, Version, Currency, 'Y10', Company, SubAccount, GLAccounts, BusUnits, TenureID, 'Assumption Rate');
+
+
+############################Continue Debug
+
+	If( pDebug >=1 );
+		#Set Debug File
+		sDebugFile = cDebugFile | 'Data.debug';
+	EndIf;
+
+##########################Update Elements in Dimension
+
+	If( pDebug >=1 );
+   
+#		ASCIIOUTPUT (sDebugFile, 'Review Budget Load.',Version, Currency, FiscalMonthYear, Company, SubAccount, GLAccounts, BusUnits, TenureID, numbertostring(VALUE));
+   
+	ENDIF;
+
+
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+If( pDebug >=1 );
+
+################Log Finish Time
+          AsciiOutput ( sDebugFile, 'Record Processed: ' | NumberToString ( nRecordProcessedCount ) );
+          AsciiOutput ( sDebugFile, 'Record Load: ' |  NumberToString ( nRecordPostedCount) );
+          AsciiOutPut ( sDebugFile, 'Process Finished: ' | TimSt ( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+
+CubeName = 'Leases Cube';
+ViewNameTarget =  'VE-' | CubeName | '-zLoad' ;
+
+ViewDestroy (CubeName, ViewNameTarget);
+SubsetDestroy ('Versions_PM', ViewNameTarget);
+SubsetDestroy ('Currency_PM', ViewNameTarget);
+SubsetDestroy ('Fiscal Month Year', ViewNameTarget);
+SubsetDestroy ('Company', ViewNameTarget);
+SubsetDestroy ('SubAccounts', ViewNameTarget);
+SubsetDestroy ('GL_Accounts', ViewNameTarget);
+SubsetDestroy ('BusUnits', ViewNameTarget);
+SubsetDestroy ('Tenure ID', ViewNameTarget);
+SubsetDestroy ('Leases Measures', ViewNameTarget);
+#endregion

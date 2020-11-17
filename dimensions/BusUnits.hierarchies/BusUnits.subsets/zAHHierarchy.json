@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"zAHHierarchy",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[BusUnits].[AH1]}, All, RECURSIVE )}, 1)}"
+}

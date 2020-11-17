@@ -1,0 +1,22 @@
+{
+	"@type":"Cube",
+	"Name":"Calendar Cube",
+	"Rules@Code.link":"Calendar Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('Calendar Months')"
+		},
+		{
+			"@id":"Dimensions('Calendar Cube Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Calendar Cube.views/All.json",
+		"Calendar Cube.views/Calendar Cube.json"
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"JLL Expand1",
+	"Expression":"{ HIERARCHIZE( {TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [GL_Accounts] )}, \"All JLL*\")}, ALL, RECURSIVE )} ) }"
+}

@@ -1,0 +1,210 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#############################################################Constants
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');  
+cSubType = CELLGETS('Global Control', 'Client SubAcct Type', 'String');
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp| '.' | sRandomInt ;
+cDimName = 'SubAccounts';
+cDimName1 =  '}ElementAttributes_'|cDimName; 
+pSubAH = CELLGETN('Global Control', 'SubAccounts AH Hierarchies', 'Value');
+sUnassignedSub = 'Unassigned SubAccount';  
+sTM1E1 = 'TM1E1';
+sDateAttr = 'CreationDate';
+sDateAdd = TimST(Now,'\M\D\Y'); 
+
+
+
+### Initialize Debug ###
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Prolog.debug';
+
+  # Log start time
+  AsciiOutput( sDebugFile, 'Process Started: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+  # Log parametersi
+  AsciiOutput( sDebugFile, '            SubAccount       : ' | SubAcct );
+  AsciiOutput( sDebugFile, '            Company            : ' | Company );
+
+
+
+##############################################################################################Debug
+nErrors = 0;
+# Validate source file
+IF(DimensionExists(cDimName) = 0);
+nErrors = 1;
+  If( pDebug >= 1 );
+    sMessage = 'Dimension does not exists. Please review';
+    AsciiOutput( sDebugFile, sMessage );
+  EndIf;
+  ProcessQuit;
+EndIf;
+EndIf;
+
+
+######################################Create Company Loop####################################
+ 
+dimCompany = 'Company';
+subCompanyLevel0 = 'zCompanyLevel0';
+
+SUBSETDESTROY(dimCompany, subCompanyLevel0);
+     SUBSETCREATEBYMDX(subCompanyLevel0, '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}, ASC)}');
+     # loop through the elements of the subset
+      j=1;
+      sCompanyString = '';
+     WHILE(j<=SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+
+         vElem=SUBSETGETELEMENTNAME(dimCompany, subCompanyLevel0,j);
+        IF(  j =SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+         sCompanyString = sCompanyString | '''' | vElem  | '''';
+         ELSE;
+         sCompanyString = sCompanyString | '''' | vElem  | ''',';
+        ENDIF;
+         j=j+1;
+     END;
+
+################################################SQL
+
+sSQL =  '
+
+
+SELECT 
+      DISTINCT[acct_cd_2] As ''SubAcct''
+      ,[companyid] AS ''Company'' 
+  FROM [Stage_E1].[dbo].[tblrawe1COAclientstd]
+  WHERE
+        ltrim(rtrim([companyid])) in (' | sCompanyString | ')
+';
+
+#####################################Local Variables
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+
+
+
+
+
+ 
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+####Trim leading and trailing from SubAccounts cm 22818
+SubAcct = TRIM(SubAcct);
+
+
+
+################Build Sub for Sub Clients Only
+
+###########Check if Sub is blank
+IF(SubAcct@=' ');
+    ITEMSKIP;
+EndIF;
+
+###########Update SubAccount
+  IF(cSubType @='Sub');
+   IF(DIMIX(cDimName, SubAcct ) = 0 & pSubAH = 1);
+    DimensionElementInsert(cDimName, '',  SubAcct, 'N');
+    DimensionElementInsert(cDimName, '', sUnassignedSub|' '|'SH1' , 'C');
+    DimensionElementInsert(cDimName, '', sUnassignedSub|' '|'AH1' , 'C');
+    DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedSub|' '|'SH1', 1);
+    DimensionElementComponentAdd(cDimName, 'AH1', sUnassignedSub|' '|'AH1', 1);
+    DimensionElementComponentAdd(cDimName, sUnassignedSub|' '|'SH1',SubAcct,1);
+    DimensionElementComponentAdd(cDimName, sUnassignedSub|' '|'AH1',SubAcct,1);
+
+   ELSEIF(DIMIX(cDimName, SubAcct ) = 0 & pSubAH = 0);
+    DimensionElementInsert(cDimName, '',  SubAcct, 'N');
+    DimensionElementInsert(cDimName, '', sUnassignedSub|' '|'SH1' , 'C');
+    DimensionElementComponentAdd(cDimName, 'SH1', sUnassignedSub|' '|'SH1', 1);
+    DimensionElementComponentAdd(cDimName, sUnassignedSub|' '|'SH1',SubAcct,1);
+  ENDIF;
+ENDIF;
+
+
+
+#####################################################################################Add Attributes
+IF(DIMIX(cDimName1,sDateAttr) = 0);
+   AttrInsert(cDimName,'Name' ,sDateAttr,'S');
+EndIf;
+
+IF(DIMIX(cDimName1,sTM1E1) = 0);
+   AttrInsert(cDimName,sDateAttr,sTM1E1,'S');
+EndIf;
+
+############################################################################Debug
+
+If( pDebug >= 1 );
+sMessage = 'Component: ' | SubAcct | ' has been added in' | cDimName | ' dimension.';
+  AsciiOutput( sDebugFile, sMessage );
+EndIf;
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+################### Debug
+
+If( pDebug >= 1 );
+
+  # Set debug file name
+  sDebugFile = cDebugFile | 'Epilog.debug';
+
+  # Log errors
+  If( nErrors <> 0 );
+    AsciiOutput( sDebugFile, 'Errors Occurred' );
+  EndIf;
+
+  # Log finish time
+  AsciiOutput( sDebugFile, 'Process Finished: ' | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+
+EndIf;
+
+###############Email File
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFileUnassignedSUBACCTSQL';
+    ExecuteProcess(vProcess,'pSendTo', pEmail);
+ENDIF;
+
+
+
+### If errors occurred terminate process with a major error status ###
+
+If( nErrors <> 0 );
+  ProcessQuit;
+EndIf;
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+#endregion

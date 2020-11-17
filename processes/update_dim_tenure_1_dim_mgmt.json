@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"update_dim_tenure_1_dim_mgmt",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"update_dim_tenure_1_dim_mgmt.ti",
+	"UIData":"_ParameterConstraints=e30=\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

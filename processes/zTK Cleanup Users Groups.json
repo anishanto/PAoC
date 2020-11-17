@@ -1,0 +1,49 @@
+{
+	"@type":"Process",
+	"Name":"zTK Cleanup Users Groups",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"zTK Cleanup Users Groups.ti",
+	"UIData":"ReplaceEmptyValues=0\f_ParseParams={&quotskipRows&quot:&quot0&quot&#044&quotlocale&quot:{&quotlanguange&quot:&quoten&quot&#044&quotvariant&quot:&quot&quot&#044&quotcountry&quot:&quotUS&quot}&#044&quotdimensions&quot:[]&#044&quotmeasures&quot:[]&#044&quotnumColumns&quot:&quot1&quot&#044&quothasHeader&quot:&quotfalse&quot}\f_DeployParams={&quotdimensionConflictResolutions&quot:{}&#044&quotclass&quot:&quotDeployParams&quot&#044&quotdataAction&quot:&quotACCUMULATE&quot}\f_importSourceDefinition={\"sourceType\":\"TM1DIMENSIONSUBSET\",\"originalColumns\":null,\"tm1DimensionSubsetSource\":{\"dimensionCaption\":\"}Groups\",\"originalColumns\":[],\"dimensionSubsetName\":\"All\",\"excludedColumns\":[],\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vDim\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vDim\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0}],\"dimensionName\":\"}Groups\"},\"locale\":{\"localeIsDefault\":false,\"localeCurrencySymbol\":\"$\",\"languageCode\":\"en\",\"languageDisplay\":\"English\",\"thousandsSeparator\":\",\",\"localeCode\":\"en_US\",\"localeCurrencyCode\":\"$\",\"localeDisplay\":\"English (United States)\",\"countryDisplay\":\"United States\",\"countryCode\":\"US\",\"decimalSeparator\":\".\"},\"excludedColumns\":[],\"processName\":\"zTK Cleanup Users Groups\",\"columns\":[{\"expression\":null,\"numberOfLongItems\":0,\"columnType\":\"STRING\",\"columnKind\":\"Dimension\",\"totalItemsNum\":0,\"totalValuesLength\":0,\"varName\":\"vDim\",\"maxLength\":0,\"minLength\":10,\"columnName\":\"vDim\",\"isMeasure\":false,\"numberOfEmptyItems\":0,\"sourceColumn\":0}],\"sourceTypeHasBeenChanged\":false}\f",
+	"VariablesUIData":
+	[
+		"VarType=32\fColType=827\f_UserVisible=vDim\f_UILabel=vDim\f_DataType=STRING\f_SourceIndex=0\f"
+	],
+	"DataSource":
+	{
+		"Type":"TM1DimensionSubset",
+		"dataSourceNameForClient":"}Groups",
+		"dataSourceNameForServer":"}Groups",
+		"subset":"All"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pRun",
+			"Prompt":"Input 1 to run",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pDimName",
+			"Prompt":"Do Not Change",
+			"Value":"}Groups",
+			"Type":"String"
+		},
+		{
+			"Name":"pRunDC",
+			"Prompt":"Delete client list",
+			"Value":0,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"vDim",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

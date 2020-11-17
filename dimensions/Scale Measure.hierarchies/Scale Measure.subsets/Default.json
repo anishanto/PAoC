@@ -1,0 +1,16 @@
+{
+	"@type":"Subset",
+	"Name":"Default",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Elements('No Scale')"
+		},
+		{
+			"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Elements('Thousands')"
+		},
+		{
+			"@id":"Dimensions('Scale Measure')/Hierarchies('Scale Measure')/Elements('Millions')"
+		}
+	]
+}

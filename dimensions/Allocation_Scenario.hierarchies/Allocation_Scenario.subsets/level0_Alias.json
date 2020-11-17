@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"level0_Alias",
+	"Expression":"TM1SubsetAll([Allocation_Scenario])"
+}

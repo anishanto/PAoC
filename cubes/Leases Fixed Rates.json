@@ -1,0 +1,25 @@
+{
+	"@type":"Cube",
+	"Name":"Leases Fixed Rates",
+	"Rules@Code.link":"Leases Fixed Rates.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions_PM')"
+		},
+		{
+			"@id":"Dimensions('Event Name')"
+		},
+		{
+			"@id":"Dimensions('Tenure ID')"
+		},
+		{
+			"@id":"Dimensions('Fixed Rates Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Leases Fixed Rates.views/Fixed Rates.json",
+		"Leases Fixed Rates.views/Fixed Rates Matrix.json"
+	]
+}

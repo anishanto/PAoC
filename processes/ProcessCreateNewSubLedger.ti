@@ -1,0 +1,161 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#============================        NOTES     =================================================
+#    Date                   Initials        Note
+#    2016-06-06           John Petrovik           		Initial Build
+#
+#  Adds new dimension element in appropriate hierarchies
+#
+#==========================================================================================
+
+#==========================================================================================
+
+#===============================    Process statistics  ===========================================
+cProcess = GETPROCESSNAME ;
+sProcess = TRIM (cProcess);
+WHILE ( SCAN ( ' ', sProcess )  > 0 );
+    sProcess = DELET ( sProcess, SCAN ( ' ' , sProcess ) , 1 ) ;
+END ;
+
+sUser = TM1USER() ;
+
+sNow = TIMST( NOW , '\M \D, \Y at \H \p \i min \s sec' ) ;
+vNowStart = NOW ;
+
+cubMessages = '}ElementAttributes_}Processes';
+
+#========================================================================================
+
+#============================= Define User Log =============================================
+cubGblCube = 'Global Settings';
+logPath = '..\logs\tunit\';
+exportPath = '..\DataSources\Exports\';
+
+IF ( SUBST ( logPath , LONG ( logPath ) - 1 , 1 ) @<> '\' ) ;
+    logPath = logPath | '\' ;
+ENDIF;
+
+logName = TRIM ( sProcess ) | '_' | sNow | '.log' ;
+errName =  TRIM ( sProcess ) | '_' | sNow | '.err' ;
+logNameMeta = TRIM ( sProcess ) | '_' | sNow | '-KICKOUT.csv' ;
+errNameMeta = TRIM ( sProcess ) | '_' | sNow | '-META.err' ;
+logFile = logPath | logName ;
+errFile = logPath | errName ;
+logFileMeta = logPath | logNameMeta ;
+errFileMeta = logPath | errNameMeta ;
+
+#===================================================================================
+
+
+#===============================   Process Variables  ====================================
+
+elmSuccessMessage = 'Success' ;
+elmFailureMessage = 'Failure' ;
+
+vProcessStatusCube = 'Process Status';
+vDimension = 'SubLedger';
+pElement = pSL;
+
+vFlag = 0;
+vExists = 0;
+
+vTimeStamp = TIMST(NOW, '\m-\d-\Y @ \H:\i \p PST');
+vMessage = 'No Message';
+
+
+
+###################################################Check Alias has been added
+sElement = pSLName;
+IF(sElement@=' ');
+      vFlag = 1;
+      vMessage = 'ERROR: The SubLedger Name is Blank.';
+       CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+      PROCESSQUIT;
+ENDIF;
+
+
+
+
+
+#Insert new SubLedger
+vDimension = 'SubLedger';
+sElement = pSL;
+sDimParent = 'SH1';
+sDimParent2 ='AH1';
+sDimParentSH1 = 'Unassigned SubLedger SH1';
+sDimParentAH1 = 'Unassigned SubLedger AH1';
+
+IF(DIMIX(vDimension, sElement ) = 0);
+IF(DIMIX(vDimension, sDimParent ) > 0);
+       DimensionElementInsert(vDimension, '', sElement, 'N');
+       DimensionElementInsert(vDimension, '', sDimParentSH1, 'C');
+       DimensionElementComponentAdd(vDimension, sDimParentSH1, sElement, 1);
+       DimensionElementComponentAdd(vDimension, sDimParent, sDimParentSH1, 1);
+ENDIF;
+IF(DIMIX(vDimension, sDimParent2 ) > 0);
+       DimensionElementInsert(vDimension, '', sDimParentAH1, 'C');
+       DimensionElementComponentAdd(vDimension, sDimParentAH1, sElement, 1);
+       DimensionElementComponentAdd(vDimension, sDimParent2, sDimParentAH1, 1);
+ENDIF;
+       vMessageSuccess = 'SUCCESS: Element ' | sElement | ' added to the ' | vDimension | ' hierarchy.  Navigate to Dimension Management Unassigned View to update';
+ELSE;
+      vFlag = 1;
+      vMessage = 'ERROR: The "'| sElement | ' "already exists.';
+      PROCESSBREAK();
+ENDIF;
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ATTRPUTS(pSLName,'SubLedger',pSL,'Name');
+
+
+vDimension = 'SubLedger';
+sDimParent = 'SH1';
+sDimParent2 ='AH1';
+sDimParentSH1 = 'Unassigned SubLedger SH1';
+sDimParentAH1 = 'Unassigned SubLedger AH1';
+
+IF(DIMIX(vDimension, sDimParent ) > 0);
+ATTRPUTS(sDimParentSH1,vDimension,pSL,sDimParent|'Parent1');
+EndIf;
+
+IF(DIMIX(vDimension, sDimParent2 ) > 0);
+ATTRPUTS(sDimParentAH1,vDimension,pSL,sDimParent2|'Parent1');
+EndIf;
+
+
+
+
+#Update Process Status cube with messages
+CELLPUTS ( vMessageSuccess , cubMessages, cProcess, elmSuccessMessage);
+CELLPUTS ( vMessage, cubMessages, cProcess, elmFailureMessage);
+
+IF(vFlag = 1);
+   ProcessQuit;
+ENDIF;
+
+#Update Security
+pDim='Subledger';
+sSecurityUpdate = 'sProcessElementSecurity';
+ExecuteProcess( sSecurityUpdate, 'pDim', pDim);
+
+#endregion

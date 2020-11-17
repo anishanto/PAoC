@@ -1,0 +1,84 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+cClient = CELLGETS('Global Control', 'Client Name', 'String');
+cClientServerName = CELLGETS('Global Control', 'Client Server Name', 'String');
+cImportPath = CELLGETS('Global Control','Import Folder', 'String');  
+cExportPath = CELLGETS('Global Control','Export Folder', 'String');  
+sDateAttr = 'CreationDate';
+
+
+
+##########Delete Files
+
+   ASCIIDELETE ( cExportPath| 'UnassignedBusUnits.csv');
+		
+
+
+##############################BusUnits
+IF(1=1);
+################################
+vSendN = 0;
+DimCnt1 = 1;
+WHILE(DIMSIZ('BusUnits') >=DimCnt1);
+          sFileBU = 'UnassignedBusUnits.csv';
+          sFullPath = cExportPath|sFileBU;
+           sDIM = DIMNM('BusUnits',DimCnt1);
+           sUnCount = ATTRS('BusUnits',sDim,'UnCount');
+           IF(sUnCount @='1');
+	ASCIIOUTPUT ( sFullPath, 'Please go to TM1 Web dimension management and update BusUnits '|sDim|'. This BusUnit was created on '|ATTRS('BusUnits',sDim,sDateAttr));	
+	vSendN = 1;
+          EndIf;
+     DimCnt1 = DimCnt1 + 1;
+END;
+ENDIF;
+
+
+####Define String Path
+sPath = cExportPath;
+vEmailcmd = 'cmd /c  E:\TM1Models\sendemail\Blat -t 3';
+pSendTo  = pSendTo;
+sBU = 'BusUnits';
+sHeader = 'Data Administrator - Please take appropriate action to update records for ';
+sSubjectBU = sHeader|sBU;
+sBodyBU = 'Action Required! The dimension '| sBU|' need attention. Please log into into TM1 web dimension management unassigned views to update.';
+vSend = vEmailcmd | ' -to ' | pSendTo | ' -subject "' | sSubjectBU | ' " -body "' | sBodyBU | '" -attacht ' | sPath|sFileBU;
+
+
+ 
+DataSourceAsciiQuoteCharacter='';
+cClientServerName = CellGetS('Global Control', 'Client Server Name','String');
+cEnvironment = CellGetS('Global Control','TAT Environment', 'String');
+if (cEnvironment@='PRD');
+	vCCCFolder = 'PROD';
+else;
+	vCCCFolder = 'NPR';
+endif;
+vFileName = 'S:\CCC\'|vCCCFolder|'\'| cClientServerName | '\info.mail';
+
+if (vSendN=1);
+	Sleep(4000);
+	ASciioutput(vFileName, pSendTo);
+	ASciioutput(vFileName, sSubjectBU);
+	ASciioutput(vFileName, sBodyBU);
+	ASciioutput(vFileName, sFileBU);
+endif;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

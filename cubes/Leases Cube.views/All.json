@@ -1,0 +1,122 @@
+{
+	"@type":"NativeView",
+	"Name":"All",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency_PM')/Hierarchies('Currency_PM')"
+				},
+				"Expression":"[Currency_PM].MEMBERS"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Versions_PM')/Hierarchies('Versions_PM')"
+				},
+				"Expression":"[Versions_PM].MEMBERS"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Month Year')/Hierarchies('Fiscal Month Year')/Elements('Attribute')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Company')/Hierarchies('Company')"
+				},
+				"Expression":"[Company].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Elements('All Companies')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('SubAccounts')/Hierarchies('SubAccounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')"
+				},
+				"Expression":"[GL_Accounts].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('GL_Accounts')/Hierarchies('GL_Accounts')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')"
+				},
+				"Expression":"[BusUnits].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('BusUnits')/Hierarchies('BusUnits')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')"
+				},
+				"Expression":"[Tenure ID].MEMBERS"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Tenure ID')/Hierarchies('Tenure ID')/Elements('SH1')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Subsets('All Members')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Leases Measures')/Hierarchies('Leases Measures')/Elements('Restatement')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

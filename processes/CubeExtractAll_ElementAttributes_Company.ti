@@ -1,0 +1,100 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CubeName ='}ElementAttributes_'|pDim;
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+vUseHeader= 'yes' ;
+vDim='}ElementAttributes_'|pDim;
+
+DATASOURCEASCIIQUOTECHARACTER = '';
+
+
+#  Destroy previous views and subsets for forecast transfer (in case they currently exist)
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+# Create views and subsets for Export
+#Create Company
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( ['| pDim |'] )} ) }, 0)}, ASC)}';
+SubsetCreatebyMDX( ViewNameTransfer, sMDX);
+
+
+#Create }ElementAttributes_Company
+SubsetCreate (vDim, ViewNameTransfer);
+SubsetElementInsert ( vDim,  ViewNameTransfer, 'CodeName' , 1);
+
+ViewCreate( CubeName, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,pDim, ViewNameTransfer);
+ViewSubsetAssign (CubeName, ViewNameTransfer,vDim, ViewNameTransfer);
+
+ViewColumnDimensionSet(CubeName, ViewNameTransfer,vDim,1);
+ViewRowDimensionSet(CubeName, ViewNameTransfer, pDim, 1);
+
+
+ViewExtractSkipCalcsSet(CubeName, ViewNameTransfer, 1);
+ViewExtractSkipZeroesSet(CubeName, ViewNameTransfer, 1);
+
+# Set new views as the datasource:
+    DatasourceNameForServer = CubeName;
+    DatasourceCubeView = ViewNameTransfer;
+
+#############Set Delimiter
+DataSourceAsciiDelimiter = ';';
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+vCubeName ='}ElementAttributes_'|pDim;
+vName=CellGetS (vCubeName, Dim, 'Name' );
+vCurrency=CellGetS (vCubeName, Dim, 'Currency' );
+vLedger=IF(DIMIX(vCubeName,'Ledger')<>0, CellGetS (vCubeName, Dim, 'Ledger' ),'');
+
+###############CM Changed file to .txt for comma export issues 21418
+vBlank = '';
+vFileName = pDim|' Export.txt';
+vLocation = '..\DataSources\Exports\' ;
+
+IF( vUseHeader @= 'yes' ) ;
+    vUseHeader = 'no';
+   ASCIIOUTPUT(vLocation|vFilename, 'CoID','Name','Currency') ;
+
+
+ENDIF ;
+
+   ASCIIOUTPUT(vLocation|vFilename,Dim,vName,vCurrency) ;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+ViewNameTransfer =  'VE-' | CubeName | '-Export' ;
+
+#  Destroy previous views and subsets for forecast transfer
+ViewDestroy (CubeName, ViewNameTransfer);
+SubsetDestroy (pDim, ViewNameTransfer);
+SubsetDestroy (vDim, ViewNameTransfer);
+
+
+
+
+#email file
+IF( Lower( pEmailFile) @='yes'  ) ;
+    vProcess = 'ProcessEmailWFile' ;
+    ExecuteProcess(vProcess,'pSendTo', pSendTo,'pFilename',vFileName );
+ENDIF;
+#endregion

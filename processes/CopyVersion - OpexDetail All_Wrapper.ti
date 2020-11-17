@@ -1,0 +1,48 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#####################################Populate All Vendors & Other #################################################
+sProcessName='CopyActuals - OpexDetail All Vendor and Other';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate All Subledger & Other #################################################
+sProcessName='CopyActuals - OpexDetail All Subledger and Other';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate All GL & Other #################################################
+sProcessName='CopyActuals - OpexDetail All GL and Other';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+
+#####################################Populate Detail Analysis cube#################################################
+sProcessName='CopyVersion - OpexDetail to OpexDetailAnalysis Value';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate Opex Plan cube#################################################
+sProcessName='CopyVersion - OpexDetail to OpexPlan Value';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate Opex Analysis cube#################################################
+sProcessName='CopyVersion - OpexPlan to OpexAnalysis Value';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

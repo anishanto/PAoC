@@ -1,0 +1,22 @@
+#Region System
+FEEDSTRINGS;
+SKIPCHECK;
+#EndRegion
+
+
+#Region Scaling
+[ 'Scale Measure':'Thousands' ]  = N: IF ( LOWER(ATTRS('Detail Measures', !Detail Measures , 'ScaleCalc')) @= 'yes' &
+DB('Opex Detail Analysis Cube',!Versions,!Currency,!Fiscal Years,!Fiscal Months,!Company,!SubAccounts,!GL_Accounts,!Subledger,!BusUnits,!Vendor, 'No Scale',!Detail Measures) <> 0, DB('Opex Detail Analysis Cube',!Versions,!Currency,!Fiscal Years,!Fiscal Months,!Company,!SubAccounts,!GL_Accounts,!Subledger,!BusUnits,!Vendor, 'No Scale',!Detail Measures) \ 1000 , Continue );
+[ 'Scale Measure':'Millions' ]  = N: IF ( LOWER(ATTRS('Detail Measures', !Detail Measures , 'ScaleCalc')) @= 'yes' &
+
+DB('Opex Detail Analysis Cube',!Versions,!Currency,!Fiscal Years,!Fiscal Months,!Company,!SubAccounts,!GL_Accounts,!Subledger,!BusUnits,!Vendor, 'No Scale',!Detail Measures) <> 0, DB('Opex Detail Analysis Cube',!Versions,!Currency,!Fiscal Years,!Fiscal Months,!Company,!SubAccounts,!GL_Accounts,!Subledger,!BusUnits,!Vendor, 'No Scale',!Detail Measures) \ 1000000 , Continue );
+#EndRegion
+
+FEEDERS;
+
+['Value']  =>  [ 'Scale Measure':'Thousands' ];
+['Adjustment']  =>  [ 'Scale Measure':'Thousands' ];
+
+
+['Value']  =>  [ 'Scale Measure':'Millions' ];
+['Adjustment']  =>  [ 'Scale Measure':'Millions' ];

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"VE-Opex Work Order Cube-CopyToPlan",
+	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( { HIERARCHIZE( {TM1SUBSETALL( [WO Status] )} ) }, 0)}, ASC)}"
+}

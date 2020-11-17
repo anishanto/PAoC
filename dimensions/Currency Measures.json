@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Currency Measures",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Currency Measures.hierarchies/Currency Measures.json"
+	]
+}

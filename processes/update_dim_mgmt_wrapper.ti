@@ -1,0 +1,203 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#######################################Business Units
+
+IF(pDimension@='BusUnits');
+cProcess = 'update_dim_business_units_2_hierarchy_build';
+cDimName2 = '}ElementAttributes_BusUnits';
+ 
+IF( DIMIX(cDimName2,'SH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','SH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;    
+
+IF( DIMIX(cDimName2,'AH2Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH2','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH3Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH3','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH4Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH4','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH5Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH5','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH6Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH6','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH7Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH7','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH8Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH8','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH9Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH9','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH10Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH10','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+EndIf; 
+
+#######################################GL_Accounts
+
+IF(pDimension@='GL_Accounts');
+
+cProcess = 'update_dim_accounts_2_hierarchy_build';
+cDimName2 = '}ElementAttributes_GL_Accounts';
+
+IF( DIMIX(cDimName2,'SH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','SH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;    
+
+IF( DIMIX(cDimName2,'AH2Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH2','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH3Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH3','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH4Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH4','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH5Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH5','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+EndIf;
+
+#######################################SubAccounts
+
+IF(pDimension@='SubAccounts');
+
+cProcess = 'update_dim_sub_accounts_2_hierarchy_build';
+cDimName2 = '}ElementAttributes_SubAccounts';
+
+IF( DIMIX(cDimName2,'SH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','SH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;    
+
+IF( DIMIX(cDimName2,'AH2Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH2','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH3Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH3','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH4Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH4','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH5Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH5','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+EndIf;
+
+
+#######################################SubLedger###################TBD
+
+IF(pDimension@='SubLedger');
+
+######cProcess = 'update_dim_sub_accounts_2_hierarchy_build';
+cDimName2 = '}ElementAttributes_SubLedger';
+
+IF( DIMIX(cDimName2,'SH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','SH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;    
+
+IF( DIMIX(cDimName2,'AH2Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH2','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH3Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH3','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH4Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH4','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH5Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH5','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+EndIf;
+
+#######################################Vendor###################TBD
+
+IF(pDimension@='Vendor');
+
+######cProcess = 'update_dim_sub_accounts_2_hierarchy_build';###########################TBD
+cDimName2 = '}ElementAttributes_Vendor';
+
+IF( DIMIX(cDimName2,'SH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','SH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH1Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH1','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;    
+
+IF( DIMIX(cDimName2,'AH2Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH2','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH3Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH3','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH4Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH4','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+
+IF( DIMIX(cDimName2,'AH5Parent1') > 0 );
+ExecuteProcess(cProcess,'pHierarchy','AH5','pEmailFile','Yes','pSendTo','ChrisA.Malone@am.jll.com');
+EndIf;
+EndIf;
+ 
+
+#endregion

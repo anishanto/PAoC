@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Indicator",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Indicator')/Hierarchies('Indicator')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Indicator.hierarchies/Indicator.json"
+	]
+}

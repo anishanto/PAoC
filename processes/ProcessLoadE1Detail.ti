@@ -1,0 +1,573 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#######################################Define Variables#######################################
+cubGlobalControl = 'Global Control';
+vServer=CELLGETS(cubGlobalControl, 'Client Server Name', 'String');
+vClientModel=CELLGETN(cubGlobalControl, 'Client Model Type', 'Value');
+vClientName=CELLGETS(cubGlobalControl, 'Client Name', 'String');
+vReportCurrency=CELLGETS(cubGlobalControl, 'Reporting Currency', 'String');
+vRecNo = 1;
+vCubeName = 'Opex Detail Cube';
+sProcess = getProcessName();
+ViewTransfer = 'Source-' | sProcess;
+CubeSetLogChanges(vCubeName, 0);
+vMeasure = 'Value';
+vYear = pCYear;
+vMetadataUpdate='';
+bKickouts = 0;
+cConsolidatedPlanning=CellGetS('Global Control','Consolidated level planning','String');
+cLevel=CellGetS('Global Control','Select level of planning','String');
+cUnassignedElement = 'Unassigned BusUnits AC1';
+
+########################################Check if Version Exists#################################
+vDim='Versions_PM';
+vElement=pVersion;
+IF(DIMIX(vDim, vElement)=0);
+	sMessage = 'Version does not exist';  
+	ItemReject (sMessage);
+	ProcessQuit;
+EndIf;
+
+
+vDim='Versions';
+vElement=pVersion;
+IF(DIMIX(vDim, vElement)=0);
+	sMessage = 'Version does not exist';  
+	ItemReject (sMessage);
+	ProcessQuit;
+EndIf;
+
+######################################Define Version & Year####################################
+
+vYear = IF(pFYear @= '', CELLGETS(cubGlobalControl, 'Forecast Year', 'String'), pFYear);
+
+sYear = SUBST(pCYear, 3,2);
+
+sVersion = pLedger;
+
+
+######################################Create Company Loop####################################
+dimCompany = 'Company';
+subCompanyLevel0 = 'zCompanyLevel0';
+
+SUBSETDESTROY(dimCompany, subCompanyLevel0);
+SUBSETCREATEBYMDX(subCompanyLevel0, '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Company] )}, 0)}, ASC)}');
+# loop through the elements of the subset
+ j=1;
+sCompanyString = '';
+WHILE(j<=SUBSETGETSIZE(dimCompany, subCompanyLevel0));
+
+	vElem=SUBSETGETELEMENTNAME(dimCompany, subCompanyLevel0,j);
+	sCompanyString = sCompanyString | '''' | vElem  | ''' ,';
+	 j=j+1;
+END;
+
+IF(pCompany@='All Companies');
+	sCompanyString = SUBST(sCompanyString , 1, LONG(sCompanyString) - 1);
+ELSE;
+	sCompanyString=pCompany;
+ENDIF;
+
+IF(bDebug=1);
+	ASCIIOUTPUT('..\logs\System\Debug.Company.txt' ,vYear, sCompanyString, sVersion);
+ENDIF;
+
+#####################################Cleanup Views & Subsets###################################
+ViewDestroy (vCubeName, ViewTransfer);
+SubsetDestroy ('Versions_PM', ViewTransfer);
+SubsetDestroy ('Fiscal Years', ViewTransfer);
+SubsetDestroy ('Detail Measures', ViewTransfer);
+SubsetDestroy ('Company', ViewTransfer);
+SubsetDestroy ('Fiscal Months', ViewTransfer);
+
+###################################Create View & Subsets#######################################
+# Create views and subsets for Export
+#Create Versions_PM
+SubsetCreate ('Versions_PM', ViewTransfer);
+SubsetElementInsert ( 'Versions_PM',  ViewTransfer, pVersion, 1);
+
+#Create Year
+SubsetCreate ('Fiscal Years', ViewTransfer);
+SubsetElementInsert ( 'Fiscal Years',  ViewTransfer, vYear, 1);
+
+#Create Measure
+SubsetCreate ('Detail Measures', ViewTransfer);
+SubsetElementInsert ( 'Detail Measures',  ViewTransfer, vMeasure, 1);
+
+#Create Company
+SubsetCreate ('Company', ViewTransfer);
+IF(pCompany@<>'All Companies');
+	SubsetElementInsert ( 'Company',  ViewTransfer, pCompany, 1);
+ELSE;
+	SubsetIsAllSet( 'Company', ViewTransfer, 1 );
+ENDIF;
+
+#Create Fiscal Months
+
+vMonthStart = STRINGTONUMBER ( pMonthStart ) ;
+vMonthEnd = STRINGTONUMBER ( pMonthEnd ) ;
+
+#Create Months
+i = vMonthStart ;
+vMonthNum ='' ;
+sMDX = '{ ' ;
+WHILE ( i<= vMonthEnd ) ;
+	IF ( i <10 ) ;
+		vMonthNum = 'M0' | NUMBERTOSTRING ( i ) ;
+	ELSE ;
+		vMonthNum = 'M' | NUMBERTOSTRING ( i ) ;
+	ENDIF;
+	sMDX = sMDX | '[Fiscal Months].[' | vMonthNum  | '] ' ;
+
+	i = i + 1 ;
+	IF ( i <= vMonthEnd ) ;
+		sMDX = sMDX | ' , ' ; 
+	ENDIF ;
+END;
+sMDX = sMDX | ' } ' ;
+SubsetCreatebyMDX(ViewTransfer, sMDX);
+
+
+######################################Create Month Loop####################################
+vDim = 'Fiscal Months';
+
+# loop through the elements of the subset
+ j=1;
+sPeriod = '';
+WHILE(j<=SUBSETGETSIZE(vDim,ViewTransfer ));
+	vElem=SUBSETGETELEMENTNAME(vDim,ViewTransfer,j);
+
+	IF(SCAN('M0',vElem)<>0);
+		vElem=SUBST(SUBSETGETELEMENTNAME(vDim,ViewTransfer,j),3,1);
+	ELSE;
+	         vElem=SUBST(SUBSETGETELEMENTNAME(vDim,ViewTransfer,j),2,2);
+	ENDIF;
+	sPeriod =sPeriod | '''' | vElem  | ''', ';
+	 j=j+1;
+END;
+
+sPeriod = SUBST(sPeriod , 1, LONG(sPeriod) - 2);
+
+
+IF(bDebug=1);
+	ASCIIOUTPUT('..\logs\System\Debug.Period.txt' , sPeriod);
+ENDIF;
+
+
+#ViewSubsetAssign(Cube, ViewName, DimName, SubName);
+ViewCreate( vCubeName, ViewTransfer);
+ViewSubsetAssign (vCubeName, ViewTransfer, 'Versions_PM', ViewTransfer);
+ViewSubsetAssign (vCubeName, ViewTransfer, 'Fiscal Years', ViewTransfer);
+ViewSubsetAssign (vCubeName, ViewTransfer, 'Detail Measures', ViewTransfer);
+ViewSubsetAssign (vCubeName, ViewTransfer, 'Company', ViewTransfer);
+ViewSubsetAssign (vCubeName, ViewTransfer, 'Fiscal Months', ViewTransfer);
+
+ViewZeroOut(vCubeName, ViewTransfer);
+
+
+####################################Define Datasource Tab#####################################
+sSQL =  'select  
+[GLCO],[GLMCU],[GLOBJ],[GLSUB],[GLSBL],[GLSBLT],[GLLT],[GLPN],[GLFY],[GLCRCD],[GLCRR],[GLAN8],[GLEXA],[GLAA]
+from [Stage_E1].[PRODDTA].[F0911] with (readuncommitted)
+where ltrim(rtrim([GLCO])) in ('| sCompanyString| ')
+and ltrim(rtrim([GLPN])) in ('| sPeriod| ')
+and ltrim(rtrim([GLFY])) =  ''' | sYear | '''  
+and  ltrim(rtrim([GLLT])) = '''| sVersion |''' 
+and (([GLAA]) <>0)';
+
+DataSourceType = 'ODBC';
+DataSourceNameForServer = 'TM1RODW';
+DataSourceUserName = 'TM1_Readonly';
+DataSourcePassword = 'tm1readonly';
+DataSourceQuery = sSQL;
+
+IF(bDebug=1);
+	ASCIIOUTPUT('..\logs\System\Debug.sql.txt',vYear, sCompanyString, sVersion, sSQL);
+ENDIF;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+##############Trim Dimension Elements cm 22818
+vBusUnits = TRIM(vBusUnits);
+vGLA = TRIM(vGLA);
+vCompany = TRIM(vCompany);
+vGLSub = TRIM(vGLSub);
+vE1Subledger = TRIM(vE1Subledger);
+vJLLVendor = TRIM(vJLLVendor);
+
+
+vSubAccounts=IF(vGLSub@='','NA',vGLSub);
+vVendor=IF(vJLLVendor@='','NA',
+IF(vJLLVendor@='0','NA',vJLLVendor));
+vSubledger=IF(vE1Subledger@='' % ELLEV('Subledger',vE1Subledger)<>0,'NA',vE1Subledger);
+vGLASub=IF(vSubAccounts@='NA',
+vGLA,vGLA|'-'|vSubAccounts);
+vFiscalMonths=IF(vCalendarMonths<=9,
+'M0'|NUMBERTOSTRING(vCalendarMonths),
+'M'|NUMBERTOSTRING(vCalendarMonths));
+
+
+##############################################Unassigned Elements
+
+
+###########Constants
+sBU = 'BusUnits';
+vUnassignedBU = 'Unassigned BusUnits SH1' ;
+sGL ='GL_Accounts' ;
+sSA ='SubAccounts' ;
+vUnassignedSub = 'Unassigned SubAccount SH1';  
+sSL ='Subledger' ;
+vUnassignedSubledger = 'Unassigned Subledger SH1';  
+sVD='Vendor' ;
+vUnassignedVendor = 'SH1';  
+
+
+###########Update Business Units
+#SKIP when BU = Company
+IF (vBusUnits@=vCompany) ;
+   ITEMSKIP; 
+ENDIF;
+
+#Insert unassigned BusUnit
+IF(DIMIX(sBU, vBusUnits ) = 0);
+  DimensionElementInsert(sBU, '',  vBusUnits, 'N');
+  IF(DIMIX(sBU, vUnassignedBU ) = 0);
+  DimensionElementInsert(sBU, '', vUnassignedBU , 'C');   
+  EndIf;
+  DimensionElementComponentAdd(sBU, vUnassignedBU, vBusUnits, 1);
+  ENDIF;
+
+###########Update Subledger
+IF(DIMIX(sSL, vSubledger ) = 0);
+   DimensionElementInsert(sSL,'',vSubledger,'n');
+  IF(DIMIX(sSL, vUnassignedSubledger ) = 0);
+  DimensionElementInsert(sSL, '', vUnassignedSubledger, 'C');  
+  EndIf;
+  DimensionElementComponentAdd(sSL, vUnassignedSubledger,vSubledger, 1);
+ENDIF;
+
+  DimensionElementInsert(sSL,'','NA','n');
+  DimensionElementComponentAdd(sSL,'SH1','NA', 1);
+  DimensionElementInsert(sSL,'','All Subledger and Other','n');
+
+
+###########Update Vendor
+#Set dimension sort order
+DIMENSIONSORTORDER(sVD,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+IF(DIMIX(sVD, vVendor ) = 0);
+   DimensionElementInsert(sVD,'',vVendor,'n');
+  IF(DIMIX(sVD, vUnassignedVendor ) = 0);
+  DimensionElementInsert(sVD, '', vUnassignedVendor, 'C');  
+  EndIf;
+  DimensionElementComponentAdd(sVD, vUnassignedVendor,vVendor, 1);
+ENDIF;
+  DimensionElementInsert(sVD,'','NA','n');
+  DimensionElementComponentAdd(sVD,vUnassignedVendor,'NA', 1);
+  DimensionElementInsert(sVD,'','All Vendor and Other','n');
+  DimensionElementInsert(sVD,'','AHIT','C');
+
+
+###########Update General Ledger
+vDim = 'GL_Accounts';
+IF(pSubAccount=0);
+vElement=vGLASub;
+ELSE;
+vElement = vGLA;
+ENDIF;
+
+IF(STRINGTONUMBER(SUBST(vElement,1,1))>=4);
+vUnassignedAcct = 'Unassigned GL PL Account SH1' ;
+vParent='PL';
+ELSEIF(STRINGTONUMBER(SUBST(vElement,1,1))<=3);
+vUnassignedAcct = 'Unassigned GL Balance Sheet SH1' ;
+vParent='BS';
+ELSE;
+vUnassignedAcct = 'Unassigned GL Statistical SH1' ;
+vParent='ST';
+ENDIF;
+
+#Insert unassigned General Ledger
+IF(DIMIX(sGL, vElement ) = 0);
+  DimensionElementInsert(sGL, '', vElement, 'N');
+  IF(DIMIX(sGL, vUnassignedAcct ) = 0);
+      DimensionElementInsert(sGL, '', vUnassignedAcct , 'C'); 
+      DimensionElementComponentAdd(sGL, vParent,vUnassignedAcct, 1); 
+   EndIf;
+  DimensionElementComponentAdd(sGL, vUnassignedAcct,vElement, 1);
+ENDIF;
+
+###########Update SubAccount
+#SKIP if client is no sub
+vDim = 'SubAccounts';
+IF(pSubAccount=0);
+ITEMSKIP;
+ENDIF;
+
+IF(DIMIX(sSA, vSubAccounts ) = 0);
+    DIMENSIONELEMENTINSERT(sSA,'',vSubAccounts,'n');
+  IF(DIMIX(sSA, vUnassignedSub ) = 0);
+      DimensionElementInsert(sSA, '', vUnassignedSub , 'C');  
+  EndIf;
+  DimensionElementComponentAdd(sSA, vUnassignedSub,vSubAccounts, 1);
+ENDIF;
+
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##############Trim Dimension Elements cm 22818
+vBusUnits = TRIM(vBusUnits);
+vGLA = TRIM(vGLA);
+vCompany = TRIM(vCompany);
+vGLSub = TRIM(vGLSub);
+vE1Subledger = TRIM(vE1Subledger);
+vJLLVendor = TRIM(vJLLVendor);
+
+
+vSubAccount=IF(vGLSub@='','NA',vGLSub);
+vGLASub=IF(vSubAccount@='NA',vGLA,vGLA|'-'|vSubAccount);
+vAccountNumber=vGLA;
+vVendor=IF(vJLLVendor@='','NA',IF(vJLLVendor@='0','NA',vJLLVendor));
+vSubledger=IF(vE1Subledger@='' % ELLEV('Subledger',vE1Subledger)<>0,'NA',vE1Subledger);
+vFiscalMonths=IF(vCalendarMonths<=9,
+'M0'|NUMBERTOSTRING(vCalendarMonths),
+'M'|NUMBERTOSTRING(vCalendarMonths));
+
+
+################################Define Variables##########################################################
+
+######SKIP when BU = Company
+IF (vBusUnits@=vCompany) ;
+	ITEMSKIP; 
+ENDIF;
+
+###########################Create Error Reports for new elements##################################################
+vCurrency= pCurrency;
+vFY = pFYear;
+
+vDim = 'Company';
+vElement = vCompany;
+IF(DIMIX(vDim, vElement)=0);
+	bKickouts = 1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vDim, vElement);
+ENDIF;
+
+vDim = 'Currency_PM';
+vElement = vCurrency;
+IF(DIMIX(vDim, vElement)=0);
+	bKickouts = 1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vDim, vElement);
+ENDIF;
+
+vDim = 'Fiscal Years';
+vElement = pFYear;
+IF(DIMIX(vDim, vElement)=0);
+	bKickouts = 1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vDim, vElement);
+ENDIF;
+
+vDim = 'SubAccounts';
+vElement = vSubAccount;
+IF(pSubAccount=1 & DIMIX(vDim, vElement)=0);
+	bKickouts = 1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vCompany, vDim, vElement);
+ENDIF;
+
+vDim = 'GL_Accounts';
+IF(pSubAccount=0);
+	vElement = vGLASub;
+ELSE;
+	vElement= vGLA;
+ENDIF;
+
+IF(DIMIX(vDim, vElement)=0);
+	bKickouts = 1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vDim, vElement);
+ENDIF;
+
+
+vDim = 'Subledger';
+vElement = vE1Subledger;
+IF(vElement@<>'' & DIMIX(vDim, vElement)=0);
+	bKickouts = 1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vDim, vElement);
+ENDIF;
+
+
+vDim = 'Vendor';
+vElement = vJLLVendor;
+IF(vJLLVendor@<>'0' & DIMIX(vDim, vElement)=0);
+	bKickouts = 1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vDim, vElement);
+ENDIF;
+
+
+vDim = 'BusUnits';
+vElement = vBusUnits;
+IF(DIMIX(vDim, vElement)=0);
+	bKickouts =1;
+	ASCIIOUTPUT('..\DataSources\Exports\LoadKickout.txt', NUMBERTOSTRING(vRecNo), vDim, vElement);
+ENDIF;
+
+
+#####################################Load Data################################################
+
+#If the client is a no sub client, then concatenate GL Account & Sub Account as vGLA and set vSubAccount to load to 'NA'
+IF(pSubAccount=0);
+	vSubAccount='NA';
+	vAccountNumber=vGLASub;
+ENDIF;
+
+#If client is allocation, then values are pasted at planning level
+
+IF(cConsolidatedPlanning@='Yes');
+	vConsolidate=AttrS('BusUnits',vBusUnits,cLevel);
+ENDIF;
+
+vDim='Company';
+IF(Attrs(vDim,vCompany,'Scale') @= 'No' );
+	CellIncrementN(vAmt,vCubeName,pVersion,vCurrency,vFY,vFiscalMonths,vCompany,vSubAccount,vAccountNumber,vSubledger,vBusUnits,vVendor,vMeasure);
+	IF (lower( ATTRS('BusUnits',vBusUnits,'HierarchyStatus')) @='yes' & cConsolidatedPlanning@='Yes');
+		IF(vConsolidate@='');
+			vConsolidateBU=cUnassignedElement;
+		ELSE;
+			vConsolidateBU=vConsolidate|' Hierarchy';
+		ENDIF;
+		CellIncrementN(vAmt,vCubeName,pVersion,vCurrency,vFY,vFiscalMonths,vCompany,vSubAccount,vAccountNumber,vSubledger,vConsolidateBU,vVendor,vMeasure);
+	ENDIF;
+ELSEIF(Attrs(vDim,vCompany,'Scale') @= 'Th' );
+	CellIncrementN(vAmt/1000,vCubeName,pVersion,vCurrency,vFY,vFiscalMonths,vCompany,vSubAccount,vAccountNumber,vSubledger,vBusUnits,vVendor,vMeasure);
+	IF ( lower( ATTRS('BusUnits',vBusUnits,'HierarchyStatus')) @='yes' & cConsolidatedPlanning@='Yes');
+		IF(vConsolidate@='');
+			vConsolidateBU=cUnassignedElement;
+		ELSE;
+			vConsolidateBU=vConsolidate|' Hierarchy';
+		ENDIF;
+		CellIncrementN(vAmt/1000,vCubeName,pVersion,vCurrency,vFY,vFiscalMonths,vCompany,vSubAccount,vAccountNumber,vSubledger,vConsolidateBU,vVendor,vMeasure);
+	ENDIF;
+
+ELSE;
+	CellIncrementN(vAmt/100,vCubeName,pVersion,vCurrency,vFY,vFiscalMonths,vCompany,vSubAccount,vAccountNumber,vSubledger,vBusUnits,vVendor,vMeasure);
+	IF ( lower( ATTRS('BusUnits',vBusUnits,'HierarchyStatus')) @='yes' & cConsolidatedPlanning@='Yes');
+		IF(vConsolidate@='');
+			vConsolidateBU=cUnassignedElement;
+		ELSE;
+			vConsolidateBU=vConsolidate|' Hierarchy';
+		ENDIF;
+		CellIncrementN(vAmt/100,vCubeName,pVersion,vCurrency,vFY,vFiscalMonths,vCompany,vSubAccount,vAccountNumber,vSubledger,vConsolidateBU,vVendor,vMeasure);
+	ENDIF;
+ENDIF;
+
+##############################Export DW Records###############################################################
+IF(bDebug=1);
+	ASCIIOUTPUT('..\logs\System\F0911DebugLoad.txt',vCompany,vBusUnits,vGLA,vGLSub,vE1Subledger,vLedgerType,NUMBERTOSTRING(vCalendarMonths),vCalendarYear,vCurrency,NUMBERTOSTRING(vSpotRate),vJLLVendor,vVendorName,NUMBERTOSTRING(vAmt)); 
+ENDIF;
+
+vRecNo = vRecNo +1;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####################################Messages displayed in Emails##################################################
+#Set Email Address
+#Execute Email Process
+
+IF (vMetadataUpdate @<>'');
+   IF (vMetadataUpdate @='BU');
+       vSubject = ' BusUnits Hierarchy - New element added under Unassigned BusUnits parent ';
+   ENDIF;
+   IF (vMetadataUpdate @='GL');
+       vSubject = ' GLAccount Hierarchy - New element added under Unassigned GL  parent ';
+   ENDIF;
+   IF (vMetadataUpdate @='SUBGL');
+       vSubject = ' SubAccount Hierarchy - New element added under Unassigned Sub parent ';
+   ENDIF;
+   IF (vMetadataUpdate @='SBL');
+       vSubject = ' Subledger Hierarchy - New element added under Unassigned Subledger parent ';
+   ENDIF;
+
+
+   vBody = 'During the data load a new element was added. Please review the hierarchy, reposition the element and assign attributes.';
+   sProcessName = 'ProcessEmail BUPM Update';
+ASCIIOUTPUT('..\logs\System\DebugLoad.txt', sProcessName, 'pSendTo', pEmail, 'pSubject', vSubject, 'pBody', vBody, 'pLocation', '', 'pFileName', '');
+   EXECUTEPROCESS(sProcessName, 'pSendTo', pEmail, 'pSubject', vSubject, 'pBody', vBody, 'pLocation', '..\DataSources\Exports\', 'pFileName', 'NewElements.csv');
+ENDIF;
+
+IF (bKickouts = 1);
+   vSubject = 'TM1 data load issue';
+   vBody = 'There is an issue with unmatched dimension elements during the data load. Please review the file attached and proceed with updating the dimension elements.';
+   sProcessName = 'ProcessEmail BUPM Update';
+   EXECUTEPROCESS(sProcessName, 'pSendTo', pEmail, 'pSubject', vSubject, 'pBody', vBody, 'pLocation', '..\DataSources\Exports\', 'pFileName', 'LoadKickout.txt');
+ENDIF;
+
+IF (ProcessExists('update_manual_actual_wrapper')<>0);
+	ExecuteProcess('update_manual_actual_wrapper','pDebug',0,'pEmailFile','Yes');
+ENDIF;
+
+#####################################DFAT ONLY Convert AUD Actuals to LC #################################################
+#sProcessName='ProcessDetailFX - Post';
+#EXECUTEPROCESS(sProcessName,'pVersion',pVersion,'pYear',pFYear,'pPost','All Posts','pExtractCalc','No','pConversion',1,'pCurReporting','AUD');
+
+#####################################Populate All Vendors & Other #################################################
+sProcessName='CopyActuals - OpexDetail All Vendor and Other';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate All Subledger & Other #################################################
+sProcessName='CopyActuals - OpexDetail All Subledger and Other';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate All GL & Other #################################################
+sProcessName='CopyActuals - OpexDetail All GL and Other';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate Detail Analysis cube#################################################
+sProcessName='CopyVersion - OpexDetail to OpexDetailAnalysis Value';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate Opex Plan cube#################################################
+sProcessName='CopyVersion - OpexDetail to OpexPlan Value';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Populate Opex Analysis cube#################################################
+sProcessName='CopyVersion - OpexPlan to OpexAnalysis Value';
+EXECUTEPROCESS(sProcessName,'pSourceVersion',pVersion,'pCompany','All Companies','pSourceYear',pFYear,'pTargetYear',pFYear,'pTargetVersion',pVersion);
+
+#####################################Trigger ProcessAnalysisFX_Wrapper#################################################
+
+####DFAT ONLY#######################
+#sProcessName='ProcessAnalysisFX - Post Wrapper';
+#EXECUTEPROCESS(sProcessName,'pVersion','Actuals', 'pYear',pFYear,'pCurrency','Yes','pRestatement','No','pVariation','No','pCurrencyTo','AUD', 'pPost','All Posts');
+
+####OTHER CLIENTS######################
+#sProcessName='ProcessDetailAnalysisFX - Wrapper';
+#EXECUTEPROCESS(sProcessName,'pVersion','Actuals', 'pYear',pFYear,'pCurrency','Yes','pRestatement','No','pVariation','No','pCurrencyTo',vReportCurrency,'pCo','All Companies');
+
+
+
+ViewDestroy (vCubeName, ViewTransfer);
+SubsetDestroy ('Versions_PM', ViewTransfer);
+SubsetDestroy ('Fiscal Years', ViewTransfer);
+SubsetDestroy ('Detail Measures', ViewTransfer);
+SubsetDestroy ('Company', ViewTransfer);
+SubsetDestroy ('Fiscal Months', ViewTransfer);
+
+
+
+#Close Database Connection
+vDataBase= 'tm1RODW';
+ODBCClose(vDataBase);
+#endregion

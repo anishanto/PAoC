@@ -1,0 +1,28 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CellPutS(pYearE1, 'Global Control', 'E1 Calendar', 'String');
+
+CellPutS(pYearActual, 'Global Control', 'Budget Year', 'String');
+CellPutS(pYearActual, 'Global Control', 'Forecast Year', 'String');
+
+CellPutS(pYearDWPushCurrent, 'Global Control', 'DW Current Year', 'String');
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

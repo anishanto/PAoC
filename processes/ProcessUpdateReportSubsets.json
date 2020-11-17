@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"ProcessUpdateReportSubsets",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ProcessUpdateReportSubsets.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pReportingSubAcct",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pReportingSubledger",
+			"Prompt":"",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

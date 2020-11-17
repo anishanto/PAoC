@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Subledger",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Subledger')/Hierarchies('Subledger')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Subledger.hierarchies/Subledger.json"
+	]
+}

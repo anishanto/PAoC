@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"Allocation_BusUnits",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Allocation_BusUnits')/Hierarchies('Allocation_BusUnits')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"Allocation_BusUnits.hierarchies/Allocation_BusUnits.json"
+	]
+}

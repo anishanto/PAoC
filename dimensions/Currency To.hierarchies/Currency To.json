@@ -1,0 +1,100 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Currency To",
+	"Elements":
+	[
+		{
+			"Name":"All Currency",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ARS",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"AUD",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CAD",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"EUR",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"GBP",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"JPY",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"MXN",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"RUB",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"USD",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"ARS",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"AUD",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"CAD",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"EUR",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"GBP",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"JPY",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"MXN",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"RUB",
+			"Weight":1
+		},
+		{
+			"ParentName":"All Currency",
+			"ComponentName":"USD",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Currency To.subsets/CurrencyToDetail.json",
+		"Currency To.subsets/CurrencyToUSD.json"
+	]
+}

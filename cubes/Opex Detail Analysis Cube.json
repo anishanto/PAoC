@@ -1,0 +1,51 @@
+{
+	"@type":"Cube",
+	"Name":"Opex Detail Analysis Cube",
+	"Rules@Code.link":"Opex Detail Analysis Cube.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Versions')"
+		},
+		{
+			"@id":"Dimensions('Currency')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Years')"
+		},
+		{
+			"@id":"Dimensions('Fiscal Months')"
+		},
+		{
+			"@id":"Dimensions('Company')"
+		},
+		{
+			"@id":"Dimensions('SubAccounts')"
+		},
+		{
+			"@id":"Dimensions('GL_Accounts')"
+		},
+		{
+			"@id":"Dimensions('Subledger')"
+		},
+		{
+			"@id":"Dimensions('BusUnits')"
+		},
+		{
+			"@id":"Dimensions('Vendor')"
+		},
+		{
+			"@id":"Dimensions('Scale Measure')"
+		},
+		{
+			"@id":"Dimensions('Detail Measures')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Opex Detail Analysis Cube.views/Detail Analysis - Load Review.json",
+		"Opex Detail Analysis Cube.views/Detail Analysis - Reporting Currency.json",
+		"Opex Detail Analysis Cube.views/Opex Detail Analysis Cube.json",
+		"Opex Detail Analysis Cube.views/Opex Detail Analysis Cube - BU.json"
+	]
+}

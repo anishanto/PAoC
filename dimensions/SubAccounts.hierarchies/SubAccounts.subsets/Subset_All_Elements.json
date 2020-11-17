@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Subset_All_Elements",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1SUBSETALL( [SubAccounts] )}, ALL, RECURSIVE )}"
+}

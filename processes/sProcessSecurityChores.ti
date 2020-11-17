@@ -1,0 +1,158 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####Define Variables#####
+sProcessNm = getProcessName();
+sView = 'VE-' | sProcessNm;
+sSub = 'VE-' | sProcessNm;
+cCube = '}ChoreSecurity';
+dGrp = '}Groups';
+dDim='}Chores';
+
+CubeSetLogChanges(cCube, 0);
+
+#####Destroy previous views and subsets#####
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1) @<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+#####Create Dim Subset#####
+sMDX = '{TM1SORT( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [' | dDim | '] )}, 0)}, ASC)}';
+SubsetCreatebyMDX(sSub, sMDX);
+
+
+######Create Groups#####
+sMDX= '{ EXCEPT( {TM1SUBSETALL( ['|dGrp|'] )}, { ['|dGrp|'].[ADMIN], ['|dGrp|'].[SecurityAdmin], ['|dGrp|'].[DataAdmin], ['|dGrp|'].[OperationsAdmin] }) }';
+SubsetCreatebyMDX(sSub, sMDX);
+
+#####Create View#####
+ViewCreate(cCube, sView);
+ViewSubsetAssign(cCube, sView,dDim, sView);
+ViewSubsetAssign(cCube, sView,dGrp, sView);
+ViewRowDimensionSet(cCube, sView,dDim, 1);
+ViewColumnDimensionSet(cCube, sView,dGrp,1);
+
+
+#####Set View Filters#####
+ViewExtractSkipCalcsSet(cCube, sView, 0);
+ViewExtractSkipZeroesSet(cCube, sView, 0);
+
+
+#####Zero Out View#####
+VIEWZEROOUT(cCube, sView ) ;
+
+
+#####Set new views as the datasource#####
+    DatasourceNameForServer = cCube;
+    DatasourceCubeView = sView;
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#####PROCESS SUMMARY#####
+#Allow Read Only access for Opex Process Group (this allows you to execute the chore)
+#Default balance to NONE including the 'Everyone' group
+
+
+#####DEFINE VARIABLES#####
+cCube='Global Control';
+vClient = LOWER(CellGetS(cCube, 'Client Name', 'String'));
+vSecurityGroup1 = LOWER(CellGetS(cCube, 'Security Group 1', 'String'));
+vSecurityGroup2 = LOWER(CellGetS(cCube, 'Security Group 2', 'String'));
+vSecurityGroup3 = LOWER(CellGetS(cCube, 'Security Group 3', 'String'));
+vCorp = LOWER('CorpTM1 PlanOpex');
+eGrp = LOWER(ATTRS(dGrp, vGrp, '}TM1_DefaultDisplayValue'));
+
+
+#####DEFINE PATH#####
+vPath = LOWER(CellGetS(cCube, 'Export Folder', 'String'));
+vFile = vPath | vClient | sProcessNm | '.csv';
+
+#####ASSIGN SECURITY#####
+
+cCube = '}ChoreSecurity';
+
+
+#####Assign READ Access#####
+IF((SCAN(vClient, eGrp) <> 0 
+% SCAN(vCorp, eGrp) <> 0
+% SCAN(vSecurityGroup1, eGrp) <> 0
+% SCAN(vSecurityGroup2, eGrp) <> 0
+% SCAN(vSecurityGroup3, eGrp) <> 0)
+& SCAN('opexprocr_', eGrp ) <> 0);
+    CELLPUTS( 'READ', cCube, vDimElements, vGrp);
+ELSE;
+    CELLPUTS( 'NONE', cCube, vDimElements, vGrp);
+ENDIF;
+
+
+#####EXPORT ISSUE LOG#####
+IF(pDebug = 1);
+ASCIIOUTPUT(vFile, vClient, eGrp, cCube, vGrp, vAccess);
+ENDIF;
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#####Cleanup Views & Subsets#####
+
+CubeSetLogChanges(cCube, 1);
+
+IF(pDebug <> 1);
+IF(ViewExists(cCube, sView)= 1); 
+     ViewDestroy(cCube, sView);
+ENDIF;
+
+#ViewCreate( cCube, sView);
+
+iDimCnt1 = 1;
+
+WHILE(TABDIM(cCube, iDimCnt1) @<> '');
+     vDim = TABDIM(cCube, iDimCnt1);
+     IF(SubsetExists(vDim, sSub)=1);
+          SubsetDestroy(vDim, sSub);
+     ENDIF;
+     iDimCnt1 = iDimCnt1 + 1;
+END;
+
+ENDIF;
+
+
+
+
+
+
+
+
+
+
+#endregion

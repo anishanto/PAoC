@@ -1,0 +1,109 @@
+{
+	"@type":"NativeView",
+	"Name":"Input Exchange Rates",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Subsets('FiscalMonthDetail')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency From')/Hierarchies('Currency From')/Subsets('CurrencyFromDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Post')/Hierarchies('Post')/Subsets('children.post')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Post')/Hierarchies('Post')/Elements('Abu Dhabi')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Subsets('VersionDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Elements('Actuals')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail - AltName')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Elements('2018')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Elements('Opex')"
+					},
+					{
+						"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Elements('Restatement')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Elements('Opex')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')/Elements('Rate')"
+					}
+				]
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')/Elements('Rate')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency To')/Hierarchies('Currency To')/Subsets('CurrencyToDetail')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency To')/Hierarchies('Currency To')/Elements('AUD')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.#########"
+}

@@ -1,0 +1,499 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#############################################Prolog relaced Dynamic Subsets with Static to allow delete to be added. 1/4/17
+###########################Constants 1/4/17
+
+cClientName = CELLGETS( 'Global Control', 'Client Name' , 'String' );
+cDimName = 'Subledger';
+cControlCube = '}ElementAttributes_';
+cCubeName = '}ElementAttributes_Subledger';
+cDimName2 = '}ElementAttributes_Subledger';
+cProcessName = GetProcessName( );
+cTnode = UPPER(pHierarchy);
+cViewNameTransfer =  'VE-'  | cProcessName | '-Get' ;
+cExportPath = CELLGETS( 'Global Control', 'Export Folder' , 'String' );
+cImportPath = CELLGETS( 'Global Control', 'Import Folder' , 'String' );
+cFileName = 'Subledger.csv';
+cMetadataFileName = 'Subledger_Load.csv';
+cDataFileName = 'Subledger_Load.csv';
+cMetadataPath = cExportPath | cMetadataFileName;
+cDataPath = cExportPath | cDataFileName;
+cViewNameTransfer  =   'VE-'  | cProcessName | '-Get' ;
+cProcessName = GetProcessName();
+cTimeStamp = TimST(Now,'\Y\m\d\h\i\s');
+sRandomInt = NumbertoString( INT( RAND() * 1000));
+cDebugFile  = GetProcessErrorFileDirectory|cProcessName|'.'|cTimeStamp;
+cSubset1 = 'Global SubAccount Selection';
+vHeaderInsert1 ='yes';
+vHeaderInsert2 ='yes';
+sSubledgerType = CELLGETS( 'Global Control', 'Client Subledger Type' , 'String' );
+
+#############################################################Debug
+nMetaCount = 0;
+nDataCount  = 0;
+
+IF( pDebug >=1);
+   sFulPath = cImportPath|cFileName;
+   #Set Debug file name
+   sDebugFile = cDebugFile|'Prolog.debug';
+
+   #Log start time
+   AsciiOutput( sDebugFile,'Process Started: '|Timst( Now, '\d-\m-\Y\h:\i:\s') );
+
+   AsciiOutput( sDebugFile, 'Constants: cClientServerName      : '|cImportPath|cFileName);
+   AsciiOutput( sDebugFile, '            Subledger        : '| Subledger);
+   AsciiOutput( sDebugFile, '            V2                  : '| V2);
+   AsciiOutput( sDebugFile, '            Value              :'| Value);
+EndIf;
+
+ 
+
+##############Validate Constants
+nErrors = 0;
+
+##############################################################Check if Dimension Constant Exists
+   IF( Trim( cDimName ) @=' ');
+     nErrors = 1;
+     sMessage = 'No dimension named in Constant Section of Process';
+     If( pDebug >= 1);
+      AsciiOutput ( sDebugFile, sMessage );
+     EndIf;    
+     DatSourceType = 'NULL';   
+     ItemReject (sMessage);
+   EndIf;
+
+##############################################################Add Top Node Parent
+
+  IF(DIMIX(cDimName, cTnode)=0);
+    DimensionElementInsert(cDimName,' ', cTnode ,'c');
+  ENDIF;
+
+
+#############################################################Delete  Consolidations
+
+eCnt = DIMSIZ( cDimName );
+x = eCnt;
+
+WHILE( x >=1);
+   ElName = DIMNM( cDimName , x );
+   IF( DTYPE ( cDimName, ElName) @='C' & ELISANC( cDimName , cTnode  , ElName) = 1);
+      DimensionElementDelete(cDimName, ElName); 
+   ENDIF;
+    x=x-1;
+END;
+
+
+#######################Delete View Subsets if they Exists
+
+ IF(ViewExists(cCubeName, cViewNameTransfer) = 1);
+ViewDestroy(cCubeName, cViewNameTransfer);
+EndIf;
+
+
+ IF(SubsetExists(cDimName, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName, cViewNameTransfer);
+EndIf;
+
+ IF(SubsetExists(cDimName2, cViewNameTransfer) = 1);
+     SubsetDestroy(cDimName2, cViewNameTransfer);
+EndIf;
+
+################################################# Create Dimension Attribute Subset
+
+############Business Unit Dimension
+
+#Create Subledger
+IF(sSubledgerType @='No Subledger');
+    sMDX = '{TM1FILTERBYLEVEL( {TM1SORT( {TM1SUBSETALL( ['| cDimName |'] )}, ASC)}, 0)}';
+ElseIF(sSubledgerType @='Subledger');
+    sMDX = '{ EXCEPT( {TM1FILTERBYLEVEL( {TM1SORT( {TM1SUBSETALL( ['| cDimName |'] )}, ASC)}, 0)}, { ['| cDimName |'].[All Subledger and Other],['| cDimName |'].[NA] }) }';
+EndIf;
+ SubsetCreatebyMDX( cViewNameTransfer, sMDX);
+
+
+############Business Units Attribute
+
+
+SUBSETCREATE(cDimName2,cViewNameTransfer);
+
+IF(cTnode@='AHIT');
+   SubsetElementInsert(cDimName2, cViewNameTransfer, 'InputTemplate',1);
+EndIf;
+
+IF( DIMIX(cDimName2,cTnode|'Parent1') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent1',1);
+EndIF;
+
+IF( DIMIX(cDimName2,cTnode|'Parent2') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent2',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent3') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent3',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent4') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent4',1);
+EndIF;
+
+IF( DIMIX(cDimName2,pHierarchy|'Parent5') > 0 );
+  SubsetElementInsert(cDimName2, cViewNameTransfer, cTnode|'Parent5',1);
+EndIF;
+
+#############################################Create and assign View
+
+# IF(ViewExists(cCubeName, cViewNameTransfer) = 0);
+ViewCreate(cCubeName, cViewNameTransfer);
+#EndIf;
+
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName, cViewNameTransfer);
+ViewSubsetAssign (cCubeName, cViewNameTransfer, cDimName2, cViewNameTransfer);
+ViewRowDimensionSet (cCubeName, cViewNameTransfer, cDimName, 1);
+ViewColumnDimensionSet (cCubeName, cViewNameTransfer, cDimName2,1);
+
+ViewExtractSkipCalcsSet(cCubeName, cViewNameTransfer, 0);
+ViewExtractSkipZeroesSet(cCubeName, cViewNameTransfer, 0);
+
+
+#Set dimension sort order
+DIMENSIONSORTORDER(cDimName,'ByName','ASCENDING','ByHierarchy','ASCENDING');
+
+
+###################DEFINE LOCAL VARIABLES
+DatasourceNameForServer = cCubeName;
+DatasourceNameForClient = cCubeName;
+DataSourceType = 'VIEW';
+DatasourceCubeview= cViewNameTransfer;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+######Continue Debug
+IF( pDebug >=1 );
+
+   #Set Debug File
+   sDebugFile = cDebugFile | 'Metadata.debug';
+ENDIF;
+
+#####Continue Check from Prolog
+
+IF( nErrors > 0 );
+   ProcessBreak;
+ENDIF;
+
+ 
+ 
+
+############CREATE AHIT
+cParent = 'AHIT';
+       IF(cTnode @='SH1');
+       IF(Lower(ATTRS(cDimName,Subledger,'InputTemplate')) @= 'yes');
+        DIMENSIONELEMENTINSERT(cDimName,'',cParent,'c');
+        DIMENSIONELEMENTCOMPONENTADD(cDimName,cParent,Subledger,1.000000);
+ENDIF;
+ENDIF;
+
+
+IF( pDebug >=1 );
+      ASCIIOUTPUT(  sDebugFile , 'AHIT' , Subledger,'Input Template Value:  ',ATTRS(cDimName,Subledger,'InputTemplate') , 'For Dimension ',cDimName);
+Endif;
+
+
+
+########################Metadata Constants Existing Code 1/4/17
+vElement = Subledger;
+
+vUAP = 'Unassigned SubLedger '|cTnode ;
+vEnd = vUAP; 
+
+IF( pDebug <=1 );
+
+IF(DIMIX(cDimName2,cTnode|'Parent1')<>0);
+        vP1 = ATTRS(cDimName,vElement,cTnode|'Parent1');
+EndIf;
+ 
+IF(DIMIX(cDimName2,cTnode|'Parent2')<>0);
+        vP2 = ATTRS(cDimName,vElement,cTnode|'Parent2');
+EndIf;
+ 
+IF(DIMIX(cDimName2,cTnode|'Parent3')<>0);
+        vP3 = ATTRS(cDimName,vElement,cTnode|'Parent3');
+EndIf;
+ 
+IF(DIMIX(cDimName2,cTnode|'Parent4')<>0);
+        vP4 = ATTRS(cDimName,vElement,cTnode|'Parent4');
+EndIf;
+
+IF(DIMIX(cDimName2,cTnode|'Parent5')<>0);
+        vP5 = ATTRS(cDimName,vElement,cTnode|'Parent5');
+EndIf;
+EndIf;
+
+IF( pDebug >=1 );
+      ASCIIOUTPUT(  sDebugFile , 'Parent1: ' ,vP1,  'Parent2: ' ,vP2, 'Parent3: ' ,vP3, 'Parent4: ' ,vP4, 'Parent5: ' ,vP5,' For Dimension ',cDimName);
+ENDIF;
+ 
+#######Create Consolidation for NA
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTNode,'NA',1);     
+
+ 
+
+#############Create Hardcoded Elements Cm 11817
+
+IF(vElement@='NA' % vElement@='All Subledger and Other');
+   ITEMSKIP;
+ENDIF;
+
+# no parent1
+IF( vP1 @= ' ' );
+     DIMENSIONELEMENTINSERT(cDimName,'',vUAP,'c');
+     DIMENSIONELEMENTCOMPONENTADD(cDimName,vUAP,vElement,1.000000);
+     IF(vElement@='NA');
+         DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vElement,1.000000);
+     ElseIF(vElement@='All Subledger and Other');
+          ITEMSKIP;
+     ELSE;
+         DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vUAP,1.000000);
+     ENDIF;
+
+# parents exists and are not equal
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &  vP4 @<> vP5 & vP2 @<> '' & vP3 @<> '' & vP4 @<> ''  & vP5 @<> '');
+
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP5,'c');
+
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP5,vP4,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP5,1.000000);
+
+
+ELSEIF( vP1 @= vP2 & vP2 @<> vP3 &  vP3 @<> vP4  &  vP4 @<> vP5 & vP2 @<> '' & vP3 @<> '' & vP4 @<> '' & vP5 @<> '');
+
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP5,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP5,vP4,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP5,1.000000);
+
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3  &  vP3 @<> vP4  &  vP2 @<> '' & vP3 @<> ''  & vP4 @<> ''  & vP5 @= '');
+
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP4,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP4,vP3,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP4,1.000000);
+ 
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @<> ''  & vP4 @= ''  & vP5 @= '');
+
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP3,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP3,vP2,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP3,1.000000);
+ 
+
+ELSEIF( vP1 @<> vP2 & vP2 @<> vP3 &  vP2 @<> '' & vP3 @= ''  & vP4 @= ''  & vP5 @= '');
+
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTINSERT(cDimName,'',vP2,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP2,vP1,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP2,1.000000);
+ 
+
+
+ELSEIF( vP1 @<> vP2 & vP2 @= '' & vP3 @= ''  & vP4 @= ''  & vP5 @= '' );
+
+DIMENSIONELEMENTINSERT(cDimName,'',vP1,'c');
+DIMENSIONELEMENTCOMPONENTADD(cDimName,vP1,vElement,1.000000);
+DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vP1,1.000000);
+
+
+ELSE;
+    DIMENSIONELEMENTINSERT(cDimName,'',vEnd,'c');
+     IF(vElement@='NA');
+         DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vElement,1.000000);
+     ElseIF(vElement@='All Subledger and Other');
+          ITEMSKIP;
+    DIMENSIONELEMENTCOMPONENTADD(cDimName,vEnd,vElement,1.000000);
+    DIMENSIONELEMENTCOMPONENTADD(cDimName,cTnode,vEnd,1.000000);
+  ENDIF;
+ENDIF;
+ 
+ 
+
+ 
+
+
+#####ASSIGN NA####
+#DIMENSIONELEMENTCOMPONENTADD(cDimName,'SH1','NA',1.000000);
+
+
+
+
+###########################ASCII Output Existing Code  1/4/17
+
+IF(1=1);
+IF(vHeaderInsert1 @='yes');
+ASCIIOutput(cMetadataPath, 'DimID', 'P1',  'P2', 'P3', 'P4', 'P5' , 'TopNode');
+vHeaderInsert1 = 'no';    
+ENDIF;
+ ASCIIOutput(cMetadataPath,vElement, vP1, vP2, vP3, vP4,  vP5, cTnode);
+ENDIF;
+
+
+
+
+
+
+
+ 
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+ 
+
+ 
+ 
+
+ 
+IF(pDebug >= 1 );  
+
+   #Set the Debug File for Epilog
+   sDebugFile = cDebugFile | 'Epilog.debug';
+
+   #Check for Errors
+   IF( nErrors <> 0 );
+      ASCIIOUTPUT ( sDebugFile, 'Errors Occurred' );
+   EndIf;
+
+  #Log Finish Time
+  ASCIIOUTPUT( sDebugFile, 'Process Finished: '  | TimSt( Now, '\d-\m-\Y \h:\i:\s' ) );
+EndIf;
+
+####### If Errors occurred terminate process with error status
+  IF( nErrors <> 0 );
+       ProcessQuit;
+Endif;
+
+
+####################################Define Top Node Alias
+
+
+#Subledger dimension is missing the parent rollup element SH1 and the name should be Total.  
+#AH1 name should be Total
+#AHIT name should be Total Input
+
+
+
+
+######################Existing Code Alias for Top Node 1/4/17
+
+
+#SubAccounts dimension is missing the parent rollup element SH1 and the name should be Total Subs.  
+#AH1 name should be SubAccounts Total
+#AHIT name should be Total SubAccounts Input
+
+
+      IF(cTnode@='SH1');
+      IF(ATTRS(cDimName,cTnode,'Name')@=' ');
+          ATTRPUTS('Total',cDimName, 'SH1','Name');  
+          ATTRPUTS('Total Input',cDimName, 'AHIT','Name');  
+      EndIf;
+      EndIf;
+
+      IF(cTnode@='AH1');
+      IF(ATTRS(cDimName,cTnode,'Name')@=' ');
+          ATTRPUTS('Total '|cTnode,cDimName, 'AH1','Name');  
+      EndIf;
+      EndIf;
+
+      IF(cTnode@='AH2');
+      IF(ATTRS(cDimName,cTnode,'Name')@=' ');
+          ATTRPUTS(cClientName|' '|'AH2',cDimName, cTnode,'Name');  
+      EndIf;
+      EndIf;
+
+      IF(cTnode@='AH3');      
+      IF(ATTRS(cDimName,cTnode,'Name')@=' ');
+          ATTRPUTS(cClientName|' '|'AH3',cDimName, cTnode,'Name');  
+      EndIf;
+      EndIf;
+
+      IF(cTnode@='AH4');
+      IF(ATTRS(cDimName,cTnode,'Name')@=' ');
+          ATTRPUTS(cClientName|' '|'AH4',cDimName, cTnode,'Name');  
+      EndIf;
+      EndIf;
+
+      IF(cTnode@='AH5');
+      IF(ATTRS(cDimName,cTnode,'Name')@=' ');
+          ATTRPUTS(cClientName|' '|'AH5',cDimName, cTnode,'Name');  
+      EndIF;
+      EndIf;
+
+      IF(ATTRS(cDimName,'NA','Name')@=' ');
+          ATTRPUTS('No Subledger Assigned',cDimName, 'NA' ,'Name');  
+      EndIF;
+
+
+
+
+
+######################Build Global Control Subset
+
+If(SubsetExists(cDimName,cSubset1)=0);
+   sMDX = '{[Subledger].[SH1]}+{[Subledger].[AH1]}+{[Subledger].[AHIT]}';
+   SubsetCreatebyMDX( cSubset1, sMDX);
+EndIf;
+
+
+#############Refresh Security CM 11317 - Per Jenn's request on 11.2.17
+sProcessName = 'sProcessSecurityUpdate';
+EXECUTEPROCESS(sProcessName);
+
+##########Clean up View and Subset new code 1/4/17
+
+ ViewDestroy(cCubeName, cViewNameTransfer  );
+
+i = 1;
+#loop through all dimensions of the cube
+WHILE (TABDIM(cCubeName,i) @<> '');
+ SubsetDestroy(tabdim(cCubeName,i), cViewNameTransfer );
+ i = i + 1;
+end;
+#endregion

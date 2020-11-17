@@ -1,0 +1,25 @@
+{
+	"@type":"Chore",
+	"Name":"ChoreSecurityApplicationFolders",
+	"StartTime":"2018-07-19T23:00Z",
+	"DSTSensitive":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P1DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"pDebug",
+					"Value":0
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('sProcessSecurityApplication')"
+			}
+		}
+	]
+}

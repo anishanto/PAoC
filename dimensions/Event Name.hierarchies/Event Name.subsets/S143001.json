@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"S143001",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17982')"
+		},
+		{
+			"@id":"Dimensions('Event Name')/Hierarchies('Event Name')/Elements('17982')"
+		}
+	]
+}

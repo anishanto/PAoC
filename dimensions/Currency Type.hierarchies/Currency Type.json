@@ -1,0 +1,19 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Currency Type",
+	"Elements":
+	[
+		{
+			"Name":"Opex",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Restatement",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Currency Type.subsets/DetailTypes.json"
+	]
+}

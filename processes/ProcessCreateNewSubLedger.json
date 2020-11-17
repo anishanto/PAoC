@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"ProcessCreateNewSubLedger",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"ProcessCreateNewSubLedger.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pSL",
+			"Prompt":"Input New SubLedger",
+			"Value":" ",
+			"Type":"String"
+		},
+		{
+			"Name":"pSLName",
+			"Prompt":"Input name",
+			"Value":" ",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

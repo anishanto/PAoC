@@ -1,0 +1,114 @@
+{
+	"@type":"NativeView",
+	"Name":"Review Exchange Rates",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M01')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M02')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M03')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M04')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M05')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M06')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M07')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M08')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M09')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M10')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M11')"
+					},
+					{
+						"@id":"Dimensions('Fiscal Months')/Hierarchies('Fiscal Months')/Elements('M12')"
+					}
+				]
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Versions')/Hierarchies('Versions')/Subsets('VersionsDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Company')/Hierarchies('Company')/Subsets('CompanyDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency From')/Hierarchies('Currency From')/Subsets('CurrencyFromDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency To')/Hierarchies('Currency To')/Subsets('CurrencyToDetail')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Fiscal Years')/Hierarchies('Fiscal Years')/Subsets('FiscalYearDetail')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Subsets('DetailTypes')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency Type')/Hierarchies('Currency Type')/Elements('Opex')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Currency Measures')/Hierarchies('Currency Measures')/Elements('Rate')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.#########"
+}
